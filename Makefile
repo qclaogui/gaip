@@ -9,7 +9,7 @@
 GOOS             ?= $(shell go env GOOS)
 GOARCH           ?= $(shell go env GOARCH)
 GOARM            ?= $(shell go env GOARM)
-CGO_ENABLED      ?= 0
+CGO_ENABLED      ?= 1
 
 GO_ENV := GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) CGO_ENABLED=$(CGO_ENABLED)
 
