@@ -24,7 +24,7 @@ function release_generate() {
 }
 
 function check_origin() {
-  if [[ ! "$(git remote get-url origin)" =~ qclaogui/mirctl(\.git)?$ ]] ; then
+  if [[ ! "$(git remote get-url origin)" =~ qclaogui/golang-api-server(\.git)?$ ]] ; then
     echo "Invalid origin: $(git remote get-url origin)"
     exit 3
   fi
