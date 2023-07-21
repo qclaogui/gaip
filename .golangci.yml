@@ -1,0 +1,35 @@
+output:
+  format: colored-line-number
+
+linters:
+  enable:
+    - goimports
+    - revive
+    - gofmt
+    - misspell
+    - errorlint
+
+linters-settings:
+  errcheck:
+    # List of functions to exclude from checking, where each entry is a single function to exclude.
+    # See https://github.com/kisielk/errcheck#excluding-functions for details.
+    exclude-functions:
+      - io/ioutil.ReadFile
+      - io.Copy(*bytes.Buffer)
+      - io.Copy(os.Stdout)
+
+  errorlint:
+    # Do not check for plain type assertions and type switches.
+    asserts: false
+    # Check whether fmt.Errorf uses the %w verb for formatting errors.
+    # See the https://github.com/polyfloyd/go-errorlint for caveats.
+    # Default: true
+    errorf: false
+
+run:
+  timeout: 5m
+
+issues:
+  exclude-rules:
+    - linters: [revive]
+      text: "if-return"

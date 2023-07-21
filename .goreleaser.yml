@@ -1,0 +1,41 @@
+release:
+  name_template: "{{ .ProjectName }} {{ .Env.RELEASE_DESCRIPTION }}"
+  prerelease: auto # this should detect a release candidate and mark it as pre-release in GitHub
+  skip_upload: true
+
+builds:
+  - main: ./cmd
+    binary: golang-api-server
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -extldflags "-static"
+      - -X github.com/qclaogui/golang-api-server/pkg/version.Version={{.Version}}
+      - -X github.com/qclaogui/golang-api-server/pkg/version.GitCommit={{.ShortCommit}}
+      - -X github.com/qclaogui/golang-api-server/pkg/version.BuildDate={{.Date}}
+      - -X github.com/qclaogui/golang-api-server/pkg/version.PreReleaseID={{.Env.PRE_RELEASE_ID}}
+    goos:
+      - linux
+    
+    # GOARCH to build for
+    # For more info refer to: https://golang.org/doc/install/source#environment
+    # Default: [ '386', 'amd64', 'arm64' ]
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - builds:
+      - golang-api-server
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format: tar.gz
+    files:
+      - none*
+
+checksum:
+  name_template: "checksums.txt"
+
+report_sizes: true

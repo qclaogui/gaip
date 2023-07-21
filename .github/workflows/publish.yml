@@ -1,0 +1,52 @@
+name: Publish (workflow call)
+
+on:
+  workflow_call:
+    inputs:
+      isReleaseCandidate:
+        required: true
+        type: boolean
+      name:
+        required: true
+        type: string
+    secrets:
+      inputToken:
+        required: true
+
+permissions:
+  packages: write # needed for ghcr access
+        
+jobs:
+
+  publish-release:
+    name: ${{ inputs.name }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-buildx-action@v2
+      - uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Install GoReleaser
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          install-only: true
+  
+      - name: Publish release
+        if: ${{ !inputs.isReleaseCandidate }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.inputToken }}
+        run: ./tools/scripts/do-release.sh
+
+      - name: Publish release candidate
+        if: ${{ inputs.isReleaseCandidate }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.inputToken }}
+        run: ./tools/scripts/do-release-candidate.sh

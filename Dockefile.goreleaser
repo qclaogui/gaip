@@ -1,0 +1,5 @@
+FROM gcr.io/distroless/static
+
+COPY golang-api-server /usr/local/bin/main
+
+ENTRYPOINT ["main"]

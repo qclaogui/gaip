@@ -12,3 +12,7 @@
 *.out
 # Various IDEs
 .idea/
+
+vendor/
+bin/
+dist/

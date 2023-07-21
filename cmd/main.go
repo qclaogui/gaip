@@ -4,20 +4,18 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"runtime"
 
-	"github.com/qclaogui/golang-api-server/version"
+	"github.com/qclaogui/golang-api-server/pkg/version"
 
 	"log"
 )
 
-var port = "5012"
+var port = "8080"
 
 var sourceLink = "https://github.com/qclaogui/golang-api-server"
 
-func hello(w http.ResponseWriter, r *http.Request) {
-	var ver = fmt.Sprintf("Build on %s [commit: %s, build time: %s, release: %s]", runtime.Version(),
-		version.Commit, version.BuildTime, version.Release)
+func hello(w http.ResponseWriter, _ *http.Request) {
+	var ver = fmt.Sprintf("Build on %s [%s]", version.GoVersion, version.GetVersion())
 
 	var name, _ = os.Hostname()
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -26,8 +24,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Println(fmt.Sprintf("Starting the service...[commit: %s, build time: %s, release: %s]",
-		version.Commit, version.BuildTime, version.Release))
+	log.Printf("Starting the service...[%s]", version.GetVersion())
 
 	http.HandleFunc("/", hello)
 	// get port env var
