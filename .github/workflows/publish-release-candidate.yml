@@ -15,4 +15,6 @@ jobs:
       isReleaseCandidate: true
       name: prerelease
     secrets:
-      inputToken: ${{ secrets.QCBOT_TOKEN }}
+      ghPAT: ${{ secrets.QCBOT_TOKEN }}
+      dhUsername: ${{ secrets.DOCKERHUB_USERNAME }}
+      dhPassword: ${{ secrets.DOCKERHUB_TOKEN }}
