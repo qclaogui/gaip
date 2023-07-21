@@ -11,7 +11,7 @@ inputs:
   email:
     description: "Git config email"
     required: false
-    default: "qclaogui@gmail.com"
+    default: "41898282+github-actions[bot]@users.noreply.github.com"
 outputs: {}
 runs:
   using: "composite"

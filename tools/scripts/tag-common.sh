@@ -60,7 +60,7 @@ function commit() {
   local release_notes_file=$2
   git add pkg/version/release.go
   git add "${release_notes_file}"
-  git commit --message "${commit_msg}"
+  git commit -s --message "${commit_msg}"
 }
 
 function tag_and_push_release() {
@@ -90,7 +90,7 @@ function bump_version_if_not_at() {
   git checkout -b "${default_branch}-$(git rev-parse --short HEAD)"
   release_generate development
   git add pkg/version/release.go
-  git commit --message "Prepare for next development iteration"
+  git commit -s --message "Prepare for next development iteration"
   git push origin "$(git branch --show-current)"
   gh pr create --fill --label "skip-release-notes"
 }
