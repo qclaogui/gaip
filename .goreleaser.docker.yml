@@ -36,4 +36,4 @@ docker_manifests:
       - --insecure
     push_flags:
       - --insecure
-    skip_push: true
+    # skip_push: true
