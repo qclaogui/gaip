@@ -16,3 +16,5 @@ jobs:
       name: release
     secrets:
       ghPAT: ${{ secrets.QCBOT_TOKEN }}
+      dhUsername: ${{ secrets.DOCKERHUB_USERNAME }}
+      dhPassword: ${{ secrets.DOCKERHUB_TOKEN }}
