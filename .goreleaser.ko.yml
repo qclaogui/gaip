@@ -22,4 +22,4 @@ kos:
     - '{{.Version}}'
   bare: true
   preserve_import_paths: false
-  base_import_paths: true
+  base_import_paths: false
