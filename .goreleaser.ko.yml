@@ -2,8 +2,8 @@
 kos:
 - main: ./cmd
   # Base image to publish to use. Default: 'cgr.dev/chainguard/static'
-  base_image: alpine  
-  repository: qclaogui/golang-api-server
+  # base_image: alpine  
+  repository: ghcr.io/qclaogui/golang-api-server
   env:
     - CGO_ENABLED=0
   flags:
@@ -16,11 +16,11 @@ kos:
     - -X github.com/qclaogui/golang-api-server/pkg/version.BuildDate={{.Date}}
     - -X github.com/qclaogui/golang-api-server/pkg/version.PreReleaseID={{.Env.PRE_RELEASE_ID}}
   platforms:
-  - linux/amd64
-  - linux/arm64
+    - linux/amd64
+    - linux/arm64
   tags:
-  - latest
-  - '{{.Version}}'
+    - latest
+    - '{{.Version}}'
   bare: true
   preserve_import_paths: false
   base_import_paths: true

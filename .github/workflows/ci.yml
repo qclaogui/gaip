@@ -4,6 +4,8 @@ name: Test and lint
 
 on:
   push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
     paths:
       - '**.go'
       - '!pkg/version/release.go'

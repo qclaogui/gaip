@@ -15,5 +15,5 @@ if [ ! -f "${RELEASE_NOTES_FILE}" ]; then
     exit 1
 fi
 
-cat ./.goreleaser.yml ./.goreleaser.docker.yml > .goreleaser.combined.yml
+cat ./.goreleaser.yml ./.goreleaser.ko.yml > .goreleaser.combined.yml
 GORELEASER_CURRENT_TAG=v${tag} PRE_RELEASE_ID="" goreleaser release --clean --timeout 60m --skip-validate --config=./.goreleaser.combined.yml --release-notes="${RELEASE_NOTES_FILE}"
