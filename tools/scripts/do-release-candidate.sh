@@ -7,7 +7,7 @@ fi
 
 tag="${GITHUB_REF_NAME}"
 
-export RELEASE_DESCRIPTION="${tag}"
+export RELEASE_DESCRIPTION="v${tag}"
 RELEASE_NOTES_FILE="docs/release_notes/${tag/-rc.*}.md"
 
 if [ ! -f "${RELEASE_NOTES_FILE}" ]; then
