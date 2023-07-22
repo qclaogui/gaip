@@ -23,3 +23,5 @@ kos:
   bare: true
   preserve_import_paths: false
   base_import_paths: false
+
+  sbom: none
