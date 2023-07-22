@@ -12,7 +12,7 @@ dockers:
     dockerfile: "Dockefile.goreleaser"
     use: buildx
     goarch: amd64
-    skip_push: true
+    # skip_push: true
   - image_templates:
       - "qclaogui/golang-api-server:{{ .Version }}-arm64v8"
     build_flag_templates:
@@ -25,7 +25,7 @@ dockers:
     dockerfile: "Dockefile.goreleaser"
     use: buildx
     goarch: arm64
-    skip_push: true
+    # skip_push: true
 
 docker_manifests:
   - name_template: "qclaogui/golang-api-server:{{ .Version }}"
