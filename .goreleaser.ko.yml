@@ -1,6 +1,6 @@
 # https://goreleaser.com/customization/ko/
 kos:
-- main: ./cmd
+- working_dir: ./cmd
   # Base image to publish to use. Default: 'cgr.dev/chainguard/static'
   # base_image: alpine  
   repository: ghcr.io/qclaogui/golang-api-server
