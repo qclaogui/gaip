@@ -3,7 +3,7 @@
 </div>
 <p align="center">
 
-<a href="https://github.com/qclaogui/golang-api-server/actions/workflows/ci.yml/badge.svg">
+<a href="https://github.com/qclaogui/golang-api-server/actions/workflows/ci.yml">
   <img src="https://github.com/qclaogui/golang-api-server/actions/workflows/ci.yml/badge.svg">
 </a>
 
