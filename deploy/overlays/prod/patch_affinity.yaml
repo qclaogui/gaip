@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-api-server
+spec:
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - golang-api-server
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchLabels:
+#                app: golang-api-server
+##              matchExpressions:
+##              - key: app
+##                operator: In
+##                values:
+##                - golang-api-server
+#            topologyKey: kubernetes.io/hostname

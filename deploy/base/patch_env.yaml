@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-api-server
+spec:
+  template:
+    spec:
+      containers:
+      - name: golang-api-server
+        envFrom:
+        - configMapRef:
+            name: golang-api-server

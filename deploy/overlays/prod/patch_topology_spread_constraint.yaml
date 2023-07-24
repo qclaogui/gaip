@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-api-server
+spec:
+  template:
+    spec:
+      # https://kubernetes.io/blog/2020/05/introducing-podtopologyspread/
+      topologySpreadConstraints:
+      - maxSkew: 2
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway # DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: golang-api-server

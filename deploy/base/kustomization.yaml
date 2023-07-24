@@ -1,0 +1,22 @@
+# ----------------------------------------------------
+# apiVersion and kind of Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+- includeSelectors: true
+  pairs:
+    app: golang-api-server
+
+patches:
+- path: patch_env.yaml
+
+
+configMapGenerator:
+- literals:
+  - APP_PORT=8080
+  name: golang-api-server
+
+resources:
+- deployment.yaml
+- service.yaml

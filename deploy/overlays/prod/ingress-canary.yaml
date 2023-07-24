@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: golang-api-server-canary
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/enable-access-log: "false"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "Region"
+    nginx.ingress.kubernetes.io/canary-by-header-pattern: "EN|CN"
+    # nginx.ingress.kubernetes.io/canary-by-cookie: "user_from_dc"
+    # nginx.ingress.kubernetes.io/canary-weight: "10"
+    # nginx.ingress.kubernetes.io/affinity-canary-behavior: legacy
+
+spec:
+  rules:
+  - host: golang-api-server.k8s.qclaogui.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: golang-api-server-svc-v0-0-1
+            port:
+              name: http-metrics
+#              number: 80 # name和number不能同时指定

@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-api-server
+spec:
+  template:
+    metadata:
+      labels:
+        logging.qclaogui.com: "true"

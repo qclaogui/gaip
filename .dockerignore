@@ -1,0 +1,14 @@
+# Exclude locally vendored dependencies.
+vendor/
+dist/
+.vscode
+.git
+
+.editorconfig
+.gitignore
+.dockerignore
+
+Dockerfile
+Makefile
+LICENSE
+README.md

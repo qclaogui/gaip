@@ -14,7 +14,7 @@ var port = "8080"
 
 var sourceLink = "https://github.com/qclaogui/golang-api-server"
 
-func hello(w http.ResponseWriter, _ *http.Request) {
+func handleHello(w http.ResponseWriter, _ *http.Request) {
 	var ver = fmt.Sprintf("Build on %s [%s]", version.GoVersion, version.GetVersion())
 
 	var name, _ = os.Hostname()
@@ -23,10 +23,17 @@ func hello(w http.ResponseWriter, _ *http.Request) {
 		"<center>this request was processed by host: %s</center>", ver, sourceLink, name)
 }
 
+// handleHealthz is a liveness probe.
+func handleHealthz(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
 func main() {
 	log.Printf("Starting the service...[%s]", version.GetVersion())
 
-	http.HandleFunc("/", hello)
+	http.HandleFunc("/", handleHello)
+	http.HandleFunc("/healthz", handleHealthz)
+
 	// get port env var
 	portEnv := os.Getenv("APP_PORT")
 	if len(portEnv) > 0 {

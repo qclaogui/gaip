@@ -1,0 +1,40 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Adds namespace to all resources.
+namespace: default
+
+# nameSuffix: -v0-0-1
+
+labels:
+- includeSelectors: true
+  includeTemplates: true
+  pairs:
+    version: v0.0.1
+
+replicas:
+- count: 1
+  name: golang-api-server
+
+patches:
+- path: patch_healthcheck.yaml
+- path: patch_mem_cpu_resources.yaml
+
+
+configMapGenerator:
+- behavior: merge
+  literals:
+  - DEPLOY_ENV=dev
+  name: golang-api-server
+
+# https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-immutable
+generatorOptions:
+  immutable: true
+
+resources:
+- ../../base
+
+images:
+- name: golang-api-server
+  newName: qclaogui/golang-api-server
+  newTag: IMAGE_TAG

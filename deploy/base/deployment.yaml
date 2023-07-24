@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-api-server
+spec:
+  replicas: 1
+  template:
+    spec:
+      imagePullSecrets:
+      - name: ucloud-registry
+      containers:
+      - name: golang-api-server
+        imagePullPolicy: Always
+        image: golang-api-server
+        ports:
+        - name: http-metrics
+          containerPort: 8080
