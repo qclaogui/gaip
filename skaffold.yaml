@@ -1,0 +1,48 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: golang-api-server
+build:
+  platforms: ["linux/amd64"]
+  artifacts:
+    - image: golang-api-server
+      ko:
+        main: ./cmd
+manifests:
+  rawYaml: ["deploy/overlays/dev/k8s-all-in-one.yaml"]
+deploy:
+  kubectl:
+    remoteManifests: ["deploy/overlays/dev/k8s-all-in-one.yaml"]
+# portForward:
+#   - resourceType: Deployment
+#     resourceName: golang-api-server
+#     namespace: default
+#     port: 8080
+#     localPort: 8080
+
+profiles:
+  - name: dev
+    build:
+      artifacts:
+        - image: qclaogui/golang-api-server
+          ko:
+            main: ./cmd
+            ldflags:
+              - -s -w
+              - -extldflags "-static"
+    manifests:
+      rawYaml: ["deploy/overlays/dev/k8s-all-in-one.yaml"]
+    deploy:
+      kubectl:
+        remoteManifests: ["deploy/overlays/dev/k8s-all-in-one.yaml"]
+
+  - name: prod
+    build:
+      artifacts:
+        - image: uhub.service.ucloud.cn/qclaogui/golang-api-server
+          kaniko:
+            image: uhub.service.ucloud.cn/qclaogui/executor:debug
+      cluster: {}
+    manifests:
+      kustomize:
+        paths: ["deploy/overlays/prod"]
