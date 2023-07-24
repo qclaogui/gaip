@@ -4,8 +4,8 @@ release:
   skip_upload: true
 
 builds:
-  - main: ./cmd
-    binary: golang-api-server
+  - id: binary
+    main: ./cmd
     env:
       - CGO_ENABLED=0
     flags:
@@ -18,18 +18,13 @@ builds:
       - -X github.com/qclaogui/golang-api-server/pkg/version.BuildDate={{.Date}}
       - -X github.com/qclaogui/golang-api-server/pkg/version.PreReleaseID={{.Env.PRE_RELEASE_ID}}
     goos:
-      - linux
-    
-    # GOARCH to build for
-    # For more info refer to: https://golang.org/doc/install/source#environment
-    # Default: [ '386', 'amd64', 'arm64' ]
+      - linux    
     goarch:
       - amd64
-      - arm64
 
 archives:
   - builds:
-      - golang-api-server
+      - binary
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     format: tar.gz
     files:

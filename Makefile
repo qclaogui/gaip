@@ -41,7 +41,9 @@ clean: ## Remove artefacts or generated files from previous build
 .PHONY: lint
 lint: ## Run linter over the codebase
 	golangci-lint run --out-format=github-actions --timeout=15m
-	@for config_file in $(shell ls .goreleaser*); do goreleaser check -f $${config_file} || exit 1; done
+	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
+	goreleaser check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
+
 
 .PHONY: fmt
 fmt: ## Run go fmt against code.
