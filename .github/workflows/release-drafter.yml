@@ -1,10 +1,11 @@
 name: Release Drafter
 
+# this workflow will run when someone labeled a pull request that targets branch is main
 on:
-  push:
-    # branches to consider in the event; optional, defaults to all
+  pull_request:
+    types: ["labeled"]
     branches:
-      - main
+      - 'main'
 
 permissions:
   contents: read
