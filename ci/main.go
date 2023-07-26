@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"math"
-	"math/rand"
 	"os"
 
 	"dagger.io/dagger"
@@ -92,14 +90,4 @@ func main() {
 		os.Exit(-1)
 	}
 	fmt.Println("Image published at: ", imageDigest)
-
-	// --------------------------
-
-	// Build and Publish image from Dockerfile
-	ref, err := source.DockerBuild().Publish(ctx, fmt.Sprintf("ttl.sh/golang-api-server-%.0f", math.Floor(rand.Float64()*10000000))) //#nosec
-	if err != nil {
-		slog.Error("Executing the tests failed", err)
-		os.Exit(-1)
-	}
-	fmt.Println("Image published at: ", ref)
 }
