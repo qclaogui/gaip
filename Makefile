@@ -9,7 +9,7 @@
 GOOS             ?= $(shell go env GOOS)
 GOARCH           ?= $(shell go env GOARCH)
 GOARM            ?= $(shell go env GOARM)
-CGO_ENABLED      ?= 1
+CGO_ENABLED      ?= 0
 
 GO_ENV := GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) CGO_ENABLED=$(CGO_ENABLED)
 
@@ -55,7 +55,7 @@ vet: ## Run go vet against code.
 
 .PHONY: test
 test: fmt vet ## Run tests.
-	$(GO_ENV) go test $(GO_FLAGS) -timeout 10m -race -count 1 ./...
+	$(GO_ENV) go test $(GO_FLAGS) -timeout 10m -count 1 ./...
 
 
 ##@ Release
