@@ -17,10 +17,16 @@ builds:
       - -X github.com/qclaogui/golang-api-server/pkg/version.GitCommit={{.ShortCommit}}
       - -X github.com/qclaogui/golang-api-server/pkg/version.BuildDate={{.Date}}
       - -X github.com/qclaogui/golang-api-server/pkg/version.PreReleaseID={{.Env.PRE_RELEASE_ID}}
+
+    # GOOS list to build for.
+    # For more info refer to: https://golang.org/doc/install/source#environment
+    #
+    # Default: [ 'darwin', 'linux', 'windows' ]
     goos:
-      - linux    
+      - linux
     goarch:
       - amd64
+      - arm64
 
 archives:
   - builds:
