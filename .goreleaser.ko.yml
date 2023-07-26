@@ -17,6 +17,7 @@ kos:
     - -X github.com/qclaogui/golang-api-server/pkg/version.PreReleaseID={{.Env.PRE_RELEASE_ID}}
   platforms:
     - linux/amd64
+    - linux/arm64
   tags:
     - latest
     - '{{.Version}}'
