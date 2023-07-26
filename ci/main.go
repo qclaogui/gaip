@@ -50,26 +50,21 @@ func main() {
 	}
 	defer client.Close()
 
-	// create a cache volume for Go modules
-	goModCache := client.CacheVolume("go-mod-cache")
-	// create a cache volume for Go build outputs
-	goBuildCache := client.CacheVolume("go-build-cache")
-
 	// set registry password as secret for Dagger pipeline
 	password := client.SetSecret("password", os.Getenv("DOCKERHUB_PASSWORD"))
 	username := os.Getenv("DOCKERHUB_USERNAME")
 
-	// get reference to source code directory
+	// source code directory
 	source := client.Host().Directory(".")
 
 	platformVariants := make([]*dagger.Container, 0, len(platforms))
+
 	for _, platform := range platforms {
-		// pull the golang image for the *host platform*. This is
-		// accomplished by just not specifying a platform; the default
-		// is that of the host.
+
+		// use golang container as base
 		goContainer := client.Container().From(goImage).
-			WithMountedCache("/go/pkg/mod", goModCache).
-			WithMountedCache("/root/.cache/go-build", goBuildCache).
+			WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod")).
+			WithMountedCache("/root/.cache/go-build", client.CacheVolume("go-build")).
 			WithMountedDirectory("/app", source).
 			WithWorkdir("/app").
 			WithEnvVariable("GOCACHE", "/root/.cache/go-build"). // set GOCACHE explicitly to point to our mounted cache
@@ -89,7 +84,6 @@ func main() {
 			os.Exit(-1)
 		}
 
-		// use gcr.io/distroless/static container as base
 		// copy binary file from builder
 		app := client.Container(dagger.ContainerOpts{Platform: platform}).From("gcr.io/distroless/static").
 			WithFile("/bin/main", builder.File("bin/golang-api-server")).
