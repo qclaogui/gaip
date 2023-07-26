@@ -27,7 +27,7 @@ func main() {
 	// LOG_LEVEL is set, let's default to the desired level
 	if lvlEnv, ok := os.LookupEnv("LOG_LEVEL"); ok {
 		if err := lvl.UnmarshalText([]byte(lvlEnv)); err != nil {
-			slog.Error("unknown log level specified, choises are [DEBUG, INFO, WARN, ERROR]", errors.New(lvlEnv))
+			slog.Error("unknown log level specified, choises are [DEBUG, INFO, WARN, ERROR]", "error", errors.New(lvlEnv))
 			os.Exit(-1)
 		}
 	}
@@ -74,13 +74,13 @@ func main() {
 		// Running build
 		builder, err := goContainer.WithExec([]string{"make", "build"}).Sync(ctx)
 		if err != nil {
-			slog.Error("Executing the tests failed", err)
+			slog.Error("Executing the tests failed", "error", err)
 			os.Exit(-1)
 		}
 
 		// Running tests
 		if _, err := goContainer.WithExec([]string{"make", "test"}).Sync(ctx); err != nil {
-			slog.Error("Executing the tests failed", err)
+			slog.Error("Executing the tests failed", "error", err)
 			os.Exit(-1)
 		}
 
