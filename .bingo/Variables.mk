@@ -17,15 +17,21 @@ GO     ?= $(shell which go)
 #	@echo "Running golangci-lint"
 #	@$(GOLANGCI_LINT) <flags/args..>
 #
-GOLANGCI_LINT ?= $(GOBIN)/golangci-lint-v1.53.3
+GOLANGCI_LINT := $(GOBIN)/golangci-lint-v1.53.3
 $(GOLANGCI_LINT): $(BINGO_DIR)/golangci-lint.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
 	@echo "(re)installing $(GOBIN)/golangci-lint-v1.53.3"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=golangci-lint.mod -o=$(GOBIN)/golangci-lint-v1.53.3 "github.com/golangci/golangci-lint/cmd/golangci-lint"
 
-GORELEASER ?= $(GOBIN)/goreleaser-v1.19.2
+GORELEASER := $(GOBIN)/goreleaser-v1.19.2
 $(GORELEASER): $(BINGO_DIR)/goreleaser.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
 	@echo "(re)installing $(GOBIN)/goreleaser-v1.19.2"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=goreleaser.mod -o=$(GOBIN)/goreleaser-v1.19.2 "github.com/goreleaser/goreleaser"
+
+MISSPELL := $(GOBIN)/misspell-v0.4.1
+$(MISSPELL): $(BINGO_DIR)/misspell.mod
+	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
+	@echo "(re)installing $(GOBIN)/misspell-v0.4.1"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=misspell.mod -o=$(GOBIN)/misspell-v0.4.1 "github.com/golangci/misspell/cmd/misspell"
 

@@ -55,8 +55,10 @@ clean: ## Remove artefacts or generated files from previous build
 
 .PHONY: lint
 lint: ## Runs various static analysis against our code.
-lint: $(GOLANGCI_LINT) $(GORELEASER) vet deps 
+lint: $(GOLANGCI_LINT) $(MISSPELL) $(GORELEASER) vet deps 
 	$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
+	@echo ">> detecting misspells"
+	@find . -type f | grep -v vendor/ | grep -vE '\./\..*' | xargs $(MISSPELL) -error
 	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
 	$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
 
