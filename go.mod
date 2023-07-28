@@ -5,7 +5,7 @@ go 1.20
 require (
 	dagger.io/dagger v0.7.4
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/containerd/containerd v1.7.2
+	github.com/containerd/containerd v1.7.3
 	github.com/dave/jennifer v1.6.1
 	golang.org/x/exp v0.0.0-20230725093048-515e97ebf090
 )
@@ -23,6 +23,7 @@ require (
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
+	golang.org/x/text v0.11.0 // indirect
 	golang.org/x/tools v0.11.0 // indirect
 	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4 // indirect
 	google.golang.org/grpc v1.53.0 // indirect
