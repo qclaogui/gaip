@@ -16,3 +16,6 @@
 vendor/
 bin/
 dist/
+
+# auto generated Go files
+*_gen.go

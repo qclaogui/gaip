@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+source .bingo/variables.env
+
 if [ -z "${GITHUB_REF_NAME}" ] || [ "${GITHUB_REF_TYPE}" != "tag" ] ; then
     echo "Expected a tag push event, skipping release workflow"
     exit 1
@@ -16,4 +18,4 @@ if [ ! -f "${RELEASE_NOTES_FILE}" ]; then
 fi
 
 cat ./.goreleaser.yml ./.goreleaser.ko.yml > .goreleaser.combined.yml
-GORELEASER_CURRENT_TAG=v${tag} PRE_RELEASE_ID="" goreleaser release --clean --timeout 60m --skip-validate --config=./.goreleaser.combined.yml --release-notes="${RELEASE_NOTES_FILE}"
+GORELEASER_CURRENT_TAG=v${tag} PRE_RELEASE_ID="" ${GORELEASER} release --clean --timeout 60m --skip-validate --config=./.goreleaser.combined.yml --release-notes="${RELEASE_NOTES_FILE}"

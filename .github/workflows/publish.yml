@@ -47,10 +47,10 @@ jobs:
         if: ${{ !inputs.isReleaseCandidate }}
         env:
           GITHUB_TOKEN: ${{ secrets.ghPAT }}
-        run: ./tools/scripts/do-release.sh
+        run: GORELEASER=$(which goreleaser) ./tools/scripts/do-release.sh
 
       - name: Publish release candidate
         if: ${{ inputs.isReleaseCandidate }}
         env:
           GITHUB_TOKEN: ${{ secrets.ghPAT }}
-        run: ./tools/scripts/do-release-candidate.sh
+        run: GORELEASER=$(which goreleaser) ./tools/scripts/do-release-candidate.sh

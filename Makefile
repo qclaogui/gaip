@@ -1,3 +1,5 @@
+include .bingo/Variables.mk
+
 .DEFAULT_GOAL := help
 
 ##@ Build
@@ -24,13 +26,26 @@ GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
 
 GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
+##@ Dependencies
+
+.PHONY: deps
+deps: ## Ensures fresh go.mod and go.sum.
+	@go mod tidy
+	@go mod verify
+
+.PHONY: install-build-deps
+install-build-deps: ## Install dependencies tools
+	$(info ******************** downloading dependencies ********************)
+	@echo ">> building bingo and setup dependencies tools"
+	@go install github.com/bwplotka/bingo@v0.8.0
+
 .PHONY: build
 build: ## Build golang-api-server binary for current OS and place it at ./bin/api-server
-	$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd
+	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd
 
 .PHONY: build-all
 build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
-	PRE_RELEASE_ID="" goreleaser --config=.goreleaser.yml --snapshot --skip-publish --clean
+	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.yml --snapshot --skip-publish --clean
 
 .PHONY: clean
 clean: ## Remove artefacts or generated files from previous build
@@ -39,23 +54,21 @@ clean: ## Remove artefacts or generated files from previous build
 ##@ Testing & CI
 
 .PHONY: lint
-lint: ## Run linter over the codebase
-	golangci-lint run --out-format=github-actions --timeout=15m
+lint: ## Runs various static analysis against our code.
+lint: $(GOLANGCI_LINT) $(GORELEASER) vet deps 
+	$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
 	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
-	goreleaser check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
+	$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
 
-
-.PHONY: fmt
-fmt: ## Run go fmt against code.
-	go fmt ./...
 
 .PHONY: vet
-vet: ## Run go vet against code.
-	go vet ./...
+vet: ## examining all of the Go files.
+	@go vet -stdmethods=false ./...
+
 
 .PHONY: test
-test: fmt vet ## Run tests.
-	$(GO_ENV) go test $(GO_FLAGS) -timeout 10m -count 1 ./...
+test: ## Run tests.
+	@$(GO_ENV) go test $(GO_FLAGS) -timeout 10m -count 1 ./...
 
 
 ##@ Release
