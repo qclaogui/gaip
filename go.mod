@@ -3,7 +3,7 @@ module github.com/qclaogui/golang-api-server
 go 1.20
 
 require (
-	dagger.io/dagger v0.7.4
+	dagger.io/dagger v0.8.0
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/containerd/containerd v1.7.3
 	github.com/dave/jennifer v1.6.1
