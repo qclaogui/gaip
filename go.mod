@@ -6,7 +6,7 @@ require (
 	dagger.io/dagger v0.8.1
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/containerd/containerd v1.7.3
-	github.com/dave/jennifer v1.6.1
+	github.com/dave/jennifer v1.7.0
 	golang.org/x/exp v0.0.0-20230725093048-515e97ebf090
 )
 
