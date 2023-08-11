@@ -3,7 +3,7 @@ module github.com/qclaogui/golang-api-server
 go 1.20
 
 require (
-	dagger.io/dagger v0.8.1
+	dagger.io/dagger v0.8.2
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/containerd/containerd v1.7.3
 	github.com/dave/jennifer v1.7.0
@@ -16,6 +16,7 @@ require (
 	github.com/adrg/xdg v0.4.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
+	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0-rc4 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
