@@ -88,9 +88,9 @@ print-version: ## Prints the upcoming release number
 	@go run pkg/version/generate/release_generate.go print-version
 
 .PHONY: manifests
-manifests: ## Generates the k8s manifests
-	kustomize build deploy/overlays/dev > deploy/overlays/dev/k8s-all-in-one.yaml
-	kustomize build deploy/overlays/prod > deploy/overlays/prod/k8s-all-in-one.yaml
+manifests: $(KUSTOMIZE) ## Generates the k8s manifests
+	@$(KUSTOMIZE) build deploy/overlays/dev > deploy/overlays/dev/k8s-all-in-one.yaml
+	@$(KUSTOMIZE) build deploy/overlays/prod > deploy/overlays/prod/k8s-all-in-one.yaml
 
 ##@ General
 
