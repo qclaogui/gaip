@@ -3,7 +3,7 @@
 ##
 ## Build the image
 ##
-FROM golang:1.20.6-bullseye AS builder
+FROM golang:1.21.0-bullseye AS builder
 LABEL maintainer="qclaogui@gmail.com"
 
 # Set destination for COPY
