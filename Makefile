@@ -37,7 +37,7 @@ deps: ## Ensures fresh go.mod and go.sum.
 install-build-deps: ## Install dependencies tools
 	$(info ******************** downloading dependencies ********************)
 	@echo ">> building bingo and setup dependencies tools"
-	@go install github.com/bwplotka/bingo@v0.8.0
+	@go install github.com/bwplotka/bingo@0568407746a2915ba57f9fa1def47694728b831e
 
 .PHONY: build
 build: ## Build golang-api-server binary for current OS and place it at ./bin/api-server
