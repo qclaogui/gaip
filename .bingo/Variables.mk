@@ -47,3 +47,15 @@ $(MISSPELL): $(BINGO_DIR)/misspell.mod
 	@echo "(re)installing $(GOBIN)/misspell-v0.4.1"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=misspell.mod -o=$(GOBIN)/misspell-v0.4.1 "github.com/golangci/misspell/cmd/misspell"
 
+PROTOC_GEN_GO_GRPC := $(GOBIN)/protoc-gen-go-grpc-v1.3.0
+$(PROTOC_GEN_GO_GRPC): $(BINGO_DIR)/protoc-gen-go-grpc.mod
+	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
+	@echo "(re)installing $(GOBIN)/protoc-gen-go-grpc-v1.3.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go-grpc.mod -o=$(GOBIN)/protoc-gen-go-grpc-v1.3.0 "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
+
+PROTOC_GEN_GO := $(GOBIN)/protoc-gen-go-v1.31.0
+$(PROTOC_GEN_GO): $(BINGO_DIR)/protoc-gen-go.mod
+	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
+	@echo "(re)installing $(GOBIN)/protoc-gen-go-v1.31.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go.mod -o=$(GOBIN)/protoc-gen-go-v1.31.0 "google.golang.org/protobuf/cmd/protoc-gen-go"
+
