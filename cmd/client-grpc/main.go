@@ -27,23 +27,22 @@ func main() {
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	c := todopbv1.NewToDoServiceClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	var t *timestamppb.Timestamp
-	t.Seconds = time.Now().In(time.Local).Unix()
-	// Create
+	reminder := timestamppb.New(time.Now().UTC().Add(time.Minute))
 
+	// Create
 	req1 := todopbv1.CreateRequest{
 		Api: apiVersion,
 		ToDo: &todopbv1.ToDo{
 			Title:       "title",
 			Description: "description",
-			Reminder:    t,
+			Reminder:    reminder,
 		},
 	}
 

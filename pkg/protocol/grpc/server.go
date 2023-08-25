@@ -10,6 +10,7 @@ import (
 
 	todopbv1 "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 // RunServer runs gRPC service to publish ToDo service
@@ -29,6 +30,9 @@ func RunServer(ctx context.Context, todov1 todopbv1.ToDoServiceServer, port stri
 
 	//	register service
 	todopbv1.RegisterToDoServiceServer(srv, todov1)
+
+	// Register reflection service on gRPC server.
+	reflection.Register(srv)
 
 	// graceful shutdown
 	quit := make(chan os.Signal, 1)

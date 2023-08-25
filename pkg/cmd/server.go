@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"database/sql"
 	"flag"
 	"fmt"
 
@@ -10,7 +9,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc"
-	v1 "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
+	td "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
 )
 
 // Config is configuration for Server
@@ -45,7 +44,6 @@ func RunToDoServer() error {
 	flag.StringVar(&cfg.DatastoreDBUser, "db-user", "root", "Database user")
 	flag.StringVar(&cfg.DatastoreDBPassword, "db-password", "", "Database password")
 	flag.StringVar(&cfg.DatastoreDBSchema, "db-schema", "dev", "Database schema")
-
 	flag.IntVar(&cfg.LogLevel, "log-level", 0, "Global log level")
 	flag.StringVar(&cfg.LogTimeFormat, "log-time-format", "2006-01-02T15:04:05.999999999Z07:00",
 		"Print time format for logger e.g. 2006-01-02T15:04:05Z07:00")
@@ -62,20 +60,20 @@ func RunToDoServer() error {
 
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
-	param := "parseTime=true"
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s",
-		cfg.DatastoreDBUser,
-		cfg.DatastoreDBPassword,
-		cfg.DatastoreDBHost,
-		cfg.DatastoreDBSchema,
-		param)
+	//param := "parseTime=true"
+	//dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s",
+	//	cfg.DatastoreDBUser,
+	//	cfg.DatastoreDBPassword,
+	//	cfg.DatastoreDBHost,
+	//	cfg.DatastoreDBSchema,
+	//	param)
+	//toDov1, err := td.NewToDoService(td.WithMysqlToDoRepository(dsn))
 
-	db, err := sql.Open("mysql", dsn)
+	toDov1, err := td.NewToDoService(td.WithMemoryToDoRepository())
 	if err != nil {
-		return fmt.Errorf("failed to open database: %v", err)
+		return err
 	}
-	defer func() { _ = db.Close() }()
 
-	return grpc.RunServer(ctx, v1.NewToDoServiceServer(db), cfg.GRPCPort)
+	return grpc.RunServer(ctx, toDov1, cfg.GRPCPort)
 }

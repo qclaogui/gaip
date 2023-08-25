@@ -10,7 +10,7 @@ import "google/protobuf/timestamp.proto";
 // Tasks wo have to do
 message ToDo {
     // Unique integer identifier of the todo task
-    int64 id = 1;
+    string id = 1;
 
     string title = 2;
 
@@ -29,13 +29,13 @@ message CreateResponse {
     // API version
     string api = 1;
 
-    int64 id = 2;
+    string id = 2;
 }
 
 message ReadRequest {
     // API version
     string api = 1;
-    int64 id = 2;
+    string id = 2;
 }
 
 message ReadResponse {
@@ -65,7 +65,7 @@ message DeleteRequest {
     // API version
     string api = 1;
 
-    int64 id = 2;
+    string id = 2;
 }
 
 message DeleteResponse{

@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if err := cmd.RunToDoServer(); err != nil {
-		fmt.Fprintf(os.Stderr, "Oops! %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Oops! %v\n", err)
 		os.Exit(1)
 	}
 }
