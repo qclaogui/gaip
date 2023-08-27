@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 
@@ -19,28 +20,28 @@ const (
 	apiVersion = "v1"
 )
 
-// ConfigOption is an alias for a function that will take in a pointer to
+// TodoOption is an alias for a function that will take in a pointer to
 // an ToDoService and modify it
-type ConfigOption func(svc *ToDoService) error
+type TodoOption func(svc *ToDoService) error
 
-// WithToDoRepository applies a given todo repository to the ToDoService
-func WithToDoRepository(repo todo.Repository) ConfigOption {
+// WithRepository applies a given todo repository to the ToDoService
+func WithRepository(repo todo.Repository) TodoOption {
 	return func(svc *ToDoService) error {
 		svc.repo = repo
 		return nil
 	}
 }
 
-// WithMemoryToDoRepository applies a memory todo repository to the ConfigOption
-func WithMemoryToDoRepository() ConfigOption {
-	// Create the memory repo, if we needed parameters, such as connection
-	// strings they could be inputted here
+// WithMemoryRepository applies a memory todo repository to the ConfigOption
+func WithMemoryRepository() TodoOption {
 	repo := todo.NewMemoryRepository()
-	return WithToDoRepository(repo)
+	return WithRepository(repo)
 }
 
-// WithMysqlToDoRepository applies a memory todo repository to the ConfigOption
-func WithMysqlToDoRepository(dsn string) ConfigOption {
+// WithMysqlRepository applies a memory todo repository to the ConfigOption
+func WithMysqlRepository(dsn string) TodoOption {
+	// Create the memory repo, if we needed parameters, such as connection
+	// strings they could be inputted here
 	return func(svc *ToDoService) error {
 		db, err := sql.Open("mysql", dsn)
 		if err != nil {
@@ -53,10 +54,8 @@ func WithMysqlToDoRepository(dsn string) ConfigOption {
 		}
 
 		svc.repo = repo
-
 		return nil
 	}
-
 }
 
 type ToDoService struct {
@@ -64,7 +63,7 @@ type ToDoService struct {
 	db   *sql.DB
 }
 
-func NewToDoService(opts ...ConfigOption) (pb.ToDoServiceServer, error) {
+func NewToDoService(opts ...TodoOption) (pb.ToDoServiceServer, error) {
 	// Create the ToDoService
 	s := &ToDoService{}
 	// Apply all Configurations passed in

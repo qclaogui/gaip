@@ -9,7 +9,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc"
-	td "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
+	todov1 "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
 )
 
 // Config is configuration for Server
@@ -35,8 +35,8 @@ type Config struct {
 	LogTimeFormat string
 }
 
-// RunToDoServer runs gRPC server and HTTP gateway
-func RunToDoServer() error {
+// StartServer runs gRPC server and HTTP gateway
+func StartServer() error {
 	ctx := context.Background()
 	var cfg Config
 	flag.StringVar(&cfg.GRPCPort, "grpc-port", "9095", "gRPC port to bind")
@@ -70,7 +70,7 @@ func RunToDoServer() error {
 	//	param)
 	//toDov1, err := td.NewToDoService(td.WithMysqlToDoRepository(dsn))
 
-	toDov1, err := td.NewToDoService(td.WithMemoryToDoRepository())
+	toDov1, err := todov1.NewToDoService(todov1.WithMemoryRepository())
 	if err != nil {
 		return err
 	}

@@ -3,10 +3,11 @@ package v1
 import (
 	"context"
 	"errors"
-	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	pb "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
@@ -25,7 +26,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 	defer func() { _ = db.Close() }()
 	//ssv, _ := NewToDoService(WithMemoryToDoRepository())
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithToDoRepository(repo))
+	ssv, _ := NewToDoService(WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -168,7 +169,7 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithToDoRepository(repo))
+	ssv, _ := NewToDoService(WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -281,7 +282,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithToDoRepository(repo))
+	ssv, _ := NewToDoService(WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -449,7 +450,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithToDoRepository(repo))
+	ssv, _ := NewToDoService(WithRepository(repo))
 
 	type args struct {
 		ctx context.Context
@@ -568,7 +569,7 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithToDoRepository(repo))
+	ssv, _ := NewToDoService(WithRepository(repo))
 
 	tm1 := time.Now().UTC().Add(time.Minute)
 	reminder1 := timestamppb.New(tm1)
