@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	goImage   = "golang:1.21.0"                     // use golang:1.20.6 container as builder
+	goImage   = "golang:1.21.0"                     // use golang:1.21.0 container as builder
 	runImage  = "gcr.io/distroless/static"          // use gcr.io/distroless/static container as runtime
 	imageRepo = "docker.io"                         // the container registry for the app image
 	appImage  = "qclaogui/golang-api-server:latest" // the app image
@@ -37,7 +37,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	// set registry password as secret for Dagger pipeline
 	password := client.SetSecret("password", os.Getenv("DOCKERHUB_PASSWORD"))
@@ -60,7 +60,7 @@ func main() {
 		goContainer = goContainer.
 			WithEnvVariable("GOOS", platformFormat.MustParse(string(platform)).OS).             // setup platform GOOS
 			WithEnvVariable("GOARCH", platformFormat.MustParse(string(platform)).Architecture). // setup platform  GOARCH
-			WithExec([]string{"make", "install-build-deps"})                                    // install dependencies toolss
+			WithExec([]string{"make", "install-build-deps"})                                    // install dependencies tools
 
 		// Running lint
 		if _, err = goContainer.WithExec([]string{"make", "lint"}).Sync(ctx); err != nil {

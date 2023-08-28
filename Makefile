@@ -38,19 +38,13 @@ protoc-gen: $(PROTOC_GEN_GO) ## Regenerate gRPC code
 		--go_grpc_opt=require_unimplemented_servers=false \
 		api/proto/v1/todo_service.proto
 
-	# @protoc --proto_path=api/proto/v1 \
-	# 	--cpp_out=pkg/api/todopb/v1 \
-	# 	--java_out=pkg/api/todopb/v1 \
-	# 	--python_out=pkg/api/todopb/v1 \
-	# 	--go_out=pkg/api/todopb/v1 \
-	# 	--ruby_out=pkg/api/todopb/v1 \
-	# 	--objc_out=pkg/api/todopb/v1 \
-	# 	--csharp_out=pkg/api/todopb/v1 \
-	# 	--go_opt=paths=source_relative \
-	# 	--go_grpc_out=pkg/api/todopb/v1 \
-	# 	--go_grpc_opt=paths=source_relative \
-	# 	--go_grpc_opt=require_unimplemented_servers=false \
-	# 	api/proto/v1/todo_service.proto
+	@protoc -I api/proto \
+		--go_out=pkg/api/routeguidepb \
+		--go_opt=paths=source_relative \
+		--go_grpc_out=pkg/api/routeguidepb \
+		--go_grpc_opt=paths=source_relative \
+		--go_grpc_opt=require_unimplemented_servers=false \
+		api/proto/route_guide.proto
 
 ##@ Dependencies
 

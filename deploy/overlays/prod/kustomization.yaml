@@ -33,7 +33,7 @@ resources:
 - ingress-canary.yaml
 
 patches:
-- path: pathch-ingress-name.yaml
+- path: patch-ingress-name.yaml
   target:
     kind: Ingress
     name: golang-api-server

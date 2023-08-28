@@ -24,9 +24,9 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 	}
 	defer func() { _ = db.Close() }()
-	//ssv, _ := NewToDoService(WithMemoryToDoRepository())
+	//ssv, _ := NewServiceServer(WithMemoryToDoRepository())
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithRepository(repo))
+	ssv, _ := NewServiceServer(WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -169,7 +169,7 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithRepository(repo))
+	ssv, _ := NewServiceServer(WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -282,7 +282,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithRepository(repo))
+	ssv, _ := NewServiceServer(WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -450,7 +450,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithRepository(repo))
+	ssv, _ := NewServiceServer(WithRepository(repo))
 
 	type args struct {
 		ctx context.Context
@@ -569,7 +569,7 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewToDoService(WithRepository(repo))
+	ssv, _ := NewServiceServer(WithRepository(repo))
 
 	tm1 := time.Now().UTC().Add(time.Minute)
 	reminder1 := timestamppb.New(tm1)

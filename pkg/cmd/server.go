@@ -68,9 +68,9 @@ func StartServer() error {
 	//	cfg.DatastoreDBHost,
 	//	cfg.DatastoreDBSchema,
 	//	param)
-	//toDov1, err := td.NewToDoService(td.WithMysqlToDoRepository(dsn))
+	//toDov1, err := td.NewServiceServer(td.WithMysqlToDoRepository(dsn))
 
-	toDov1, err := todov1.NewToDoService(todov1.WithMemoryRepository())
+	toDov1, err := todov1.NewServiceServer(todov1.WithMemoryRepository())
 	if err != nil {
 		return err
 	}
