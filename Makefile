@@ -30,21 +30,14 @@ GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
 .PHONY: protoc-gen
 protoc-gen: $(PROTOC_GEN_GO) ## Regenerate gRPC code
-	@protoc -I api/proto/v1 \
-		--go_out=pkg/api/todopb/v1 \
-		--go_opt=paths=source_relative \
-		--go_grpc_out=pkg/api/todopb/v1 \
-		--go_grpc_opt=paths=source_relative \
-		--go_grpc_opt=require_unimplemented_servers=false \
-		api/proto/v1/todo_service.proto
-
 	@protoc -I api/proto \
-		--go_out=pkg/api/routeguidepb \
+		--go_out=pkg/api \
 		--go_opt=paths=source_relative \
-		--go_grpc_out=pkg/api/routeguidepb \
+		--go_grpc_out=pkg/api \
 		--go_grpc_opt=paths=source_relative \
 		--go_grpc_opt=require_unimplemented_servers=false \
-		api/proto/route_guide.proto
+		api/proto/todopb/v1/todo_service.proto  \
+		api/proto/routeguidepb/route_guide.proto
 
 ##@ Dependencies
 
