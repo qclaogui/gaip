@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/qclaogui/golang-api-server/pkg/service/routeguide"
 
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
@@ -14,19 +15,18 @@ import (
 
 // Config is configuration for Server
 type Config struct {
-	// gRPC server start parameters section
-	// gRPC is TCP port to listen by gRPC server
+	// gRPC port to listen by gRPC server
 	GRPCPort string
 
 	// DB Datastore parameters section
-	// DatastoreDBHost is host of database
-	DatastoreDBHost string
-	// DatastoreDBUser is username to connect to database
-	DatastoreDBUser string
-	// DatastoreDBPassword password to connect to database
-	DatastoreDBPassword string
-	// DatastoreDBSchema is schema of database
-	DatastoreDBSchema string
+	// DBHost is host of database
+	DBHost string
+	// DBUser is username to connect to database
+	DBUser string
+	// DBPassword password to connect to database
+	DBPassword string
+	// DBSchema is schema of database
+	DBSchema string
 
 	// Log parameters section
 	// LogLevel is global log level: Debug(-1), Info(0), Warn(1), Error(2), DPanic(3), Panic(4), Fatal(5)
@@ -40,10 +40,10 @@ func StartServer() error {
 	ctx := context.Background()
 	var cfg Config
 	flag.StringVar(&cfg.GRPCPort, "grpc-port", "9095", "gRPC port to bind")
-	flag.StringVar(&cfg.DatastoreDBHost, "db-host", "127.0.0.1", "Database host")
-	flag.StringVar(&cfg.DatastoreDBUser, "db-user", "root", "Database user")
-	flag.StringVar(&cfg.DatastoreDBPassword, "db-password", "", "Database password")
-	flag.StringVar(&cfg.DatastoreDBSchema, "db-schema", "dev", "Database schema")
+	flag.StringVar(&cfg.DBHost, "db-host", "127.0.0.1", "Database host")
+	flag.StringVar(&cfg.DBUser, "db-user", "root", "Database user")
+	flag.StringVar(&cfg.DBPassword, "db-password", "", "Database password")
+	flag.StringVar(&cfg.DBSchema, "db-schema", "dev", "Database schema")
 	flag.IntVar(&cfg.LogLevel, "log-level", 0, "Global log level")
 	flag.StringVar(&cfg.LogTimeFormat, "log-time-format", "2006-01-02T15:04:05.999999999Z07:00",
 		"Print time format for logger e.g. 2006-01-02T15:04:05Z07:00")
@@ -60,20 +60,24 @@ func StartServer() error {
 
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
-
 	//param := "parseTime=true"
-	//dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s",
-	//	cfg.DatastoreDBUser,
-	//	cfg.DatastoreDBPassword,
-	//	cfg.DatastoreDBHost,
-	//	cfg.DatastoreDBSchema,
-	//	param)
-	//toDov1, err := td.NewServiceServer(td.WithMysqlToDoRepository(dsn))
+	//dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s", cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBSchema, param)
+	//toDoSrv, err := todov1.NewServiceServer(todov1.WithMysqlRepository(dsn))
 
-	toDov1, err := todov1.NewServiceServer(todov1.WithMemoryRepository())
+	toDoSrv, err := todov1.NewServiceServer(todov1.WithMemoryRepository())
 	if err != nil {
 		return err
 	}
 
-	return grpc.RunServer(ctx, toDov1, cfg.GRPCPort)
+	routeGuideSrv, err := routeguide.NewServiceServer(routeguide.WithMemoryRepository())
+	if err != nil {
+		return err
+	}
+
+	return grpc.RunServer(
+		ctx,
+		toDoSrv,
+		routeGuideSrv,
+		cfg.GRPCPort,
+	)
 }

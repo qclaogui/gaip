@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
 	"sync"
 
@@ -13,6 +14,7 @@ import (
 
 // MemoryRepository fulfills the Repository interface
 type MemoryRepository struct {
+	pb.UnimplementedRouteGuideServer
 	mem []*pb.Feature // read-only after initialized
 	mu  sync.Mutex
 }
@@ -53,6 +55,34 @@ func (mr *MemoryRepository) GetFeature(_ context.Context, point *pb.Point) (*pb.
 	}
 	// No feature was found, return an unnamed feature
 	return &pb.Feature{Location: point}, nil
+}
+
+func (mr *MemoryRepository) ListFeatures(rect *pb.Rectangle, stream pb.RouteGuide_ListFeaturesServer) error {
+	for _, feature := range mr.mem {
+		if inRange(feature.Location, rect) {
+			if err := stream.Send(feature); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func inRange(point *pb.Point, rect *pb.Rectangle) bool {
+	left := math.Min(float64(rect.Lo.Longitude), float64(rect.Hi.Longitude))
+	right := math.Max(float64(rect.Lo.Longitude), float64(rect.Hi.Longitude))
+
+	top := math.Max(float64(rect.Lo.Latitude), float64(rect.Hi.Latitude))
+	bottom := math.Min(float64(rect.Lo.Latitude), float64(rect.Hi.Latitude))
+
+	if float64(point.Longitude) >= left &&
+		float64(point.Longitude) <= right &&
+		float64(point.Latitude) >= bottom &&
+		float64(point.Latitude) <= top {
+		return true
+	}
+
+	return false
 }
 
 // exampleData is a copy of testdata/route_guide_db.json. It's to avoid

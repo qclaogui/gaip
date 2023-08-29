@@ -54,3 +54,7 @@ func NewServiceServer(opts ...Option) (*ServiceServer, error) {
 func (srv *ServiceServer) GetFeature(ctx context.Context, point *pb.Point) (*pb.Feature, error) {
 	return srv.repo.GetFeature(ctx, point)
 }
+
+func (srv *ServiceServer) ListFeatures(rect *pb.Rectangle, stream pb.RouteGuide_ListFeaturesServer) error {
+	return srv.repo.ListFeatures(rect, stream)
+}

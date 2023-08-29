@@ -8,13 +8,20 @@ import (
 
 	"log/slog"
 
-	todopbv1 "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+	pbrouteguide "github.com/qclaogui/golang-api-server/pkg/api/routeguidepb"
+	pbtodov1 "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-// RunServer runs gRPC service to publish ToDo service
-func RunServer(ctx context.Context, toDov1 todopbv1.ToDoServiceServer, port string) error {
+// RunServer runs gRPC service to publish service
+func RunServer(
+	ctx context.Context,
+	toDoSrv pbtodov1.ToDoServiceServer,
+	routeGuideSrv pbrouteguide.RouteGuideServer,
+	port string,
+) error {
 	listen, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		return err
@@ -29,7 +36,8 @@ func RunServer(ctx context.Context, toDov1 todopbv1.ToDoServiceServer, port stri
 	srv := grpc.NewServer(opts...)
 
 	//	register service
-	todopbv1.RegisterToDoServiceServer(srv, toDov1)
+	pbtodov1.RegisterToDoServiceServer(srv, toDoSrv)
+	pbrouteguide.RegisterRouteGuideServer(srv, routeGuideSrv)
 
 	// Register reflection service on gRPC server.
 	reflection.Register(srv)
