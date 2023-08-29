@@ -239,5 +239,5 @@ var ToDoService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "todopb/v1/todo_service.proto",
+	Metadata: "todo/v1/todo_service.proto",
 }

@@ -1,0 +1,21 @@
+version: v1
+managed:
+  enabled: true
+  # go_package_prefix:
+  #   default: github.com/qclaogui/golang-api-server/api/gen
+plugins:
+  - plugin: go
+    out: gen/proto
+    opt: paths=source_relative
+    # path: bin/proto/protoc-gen-foo
+    # protoc_path: /path/to/specific/version/bin/protoc
+  - plugin: go-grpc
+    out: gen/proto
+    opt: paths=source_relative,require_unimplemented_servers=false
+
+  # - plugin: buf.build/protocolbuffers/go
+  #   out: gen
+  #   opt: paths=source_relative
+  # - plugin: buf.build/connectrpc/go
+  #   out: gen
+  #   opt: paths=source_relative

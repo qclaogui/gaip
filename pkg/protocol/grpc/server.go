@@ -8,8 +8,8 @@ import (
 
 	"log/slog"
 
-	pbrouteguide "github.com/qclaogui/golang-api-server/pkg/api/routeguidepb"
-	pbtodov1 "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+	pbrouteguidev1 "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
+	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -19,7 +19,7 @@ import (
 func RunServer(
 	ctx context.Context,
 	toDoSrv pbtodov1.ToDoServiceServer,
-	routeGuideSrv pbrouteguide.RouteGuideServer,
+	routeGuideSrv pbrouteguidev1.RouteGuideServiceServer,
 	port string,
 ) error {
 	listen, err := net.Listen("tcp", ":"+port)
@@ -37,7 +37,7 @@ func RunServer(
 
 	//	register service
 	pbtodov1.RegisterToDoServiceServer(srv, toDoSrv)
-	pbrouteguide.RegisterRouteGuideServer(srv, routeGuideSrv)
+	pbrouteguidev1.RegisterRouteGuideServiceServer(srv, routeGuideSrv)
 
 	// Register reflection service on gRPC server.
 	reflection.Register(srv)

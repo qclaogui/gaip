@@ -1,16 +1,16 @@
-package routeguide
+package v1
 
 import (
 	"context"
-	"sync"
 
-	pb "github.com/qclaogui/golang-api-server/pkg/api/routeguidepb"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
+	routeguide "github.com/qclaogui/golang-api-server/pkg/service/routeguide"
 )
 
 type Option func(*ServiceServer) error
 
 // WithRepository applies a given repository to the ServiceServer
-func WithRepository(repo Repository) Option {
+func WithRepository(repo routeguide.Repository) Option {
 	return func(srv *ServiceServer) error {
 		srv.repo = repo
 		return nil
@@ -20,7 +20,7 @@ func WithRepository(repo Repository) Option {
 // WithMemoryRepository applies a memory repository to the ServiceServer
 func WithMemoryRepository() Option {
 	return func(srv *ServiceServer) error {
-		repo, err := NewMemoryRepository("")
+		repo, err := routeguide.NewMemoryRepository("")
 		if err != nil {
 			return err
 		}
@@ -31,10 +31,8 @@ func WithMemoryRepository() Option {
 
 // ServiceServer ServiceServer
 type ServiceServer struct {
-	pb.UnimplementedRouteGuideServer
-	repo Repository
-
-	mu sync.Mutex // protects routeNotes
+	pb.UnimplementedRouteGuideServiceServer
+	repo routeguide.Repository
 }
 
 func NewServiceServer(opts ...Option) (*ServiceServer, error) {
@@ -51,10 +49,10 @@ func NewServiceServer(opts ...Option) (*ServiceServer, error) {
 }
 
 // GetFeature returns the feature at the given point.
-func (srv *ServiceServer) GetFeature(ctx context.Context, point *pb.Point) (*pb.Feature, error) {
-	return srv.repo.GetFeature(ctx, point)
+func (srv *ServiceServer) GetFeature(ctx context.Context, req *pb.GetFeatureRequest) (*pb.GetFeatureResponse, error) {
+	return srv.repo.GetFeature(ctx, req)
 }
 
-func (srv *ServiceServer) ListFeatures(rect *pb.Rectangle, stream pb.RouteGuide_ListFeaturesServer) error {
-	return srv.repo.ListFeatures(rect, stream)
+func (srv *ServiceServer) ListFeatures(req *pb.ListFeaturesRequest, stream pb.RouteGuideService_ListFeaturesServer) error {
+	return srv.repo.ListFeatures(req, stream)
 }

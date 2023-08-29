@@ -6,17 +6,16 @@ import (
 	"fmt"
 	"math"
 	"os"
-	"sync"
 
-	pb "github.com/qclaogui/golang-api-server/pkg/api/routeguidepb"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
 	"google.golang.org/protobuf/proto"
 )
 
 // MemoryRepository fulfills the Repository interface
 type MemoryRepository struct {
-	pb.UnimplementedRouteGuideServer
+	pb.UnimplementedRouteGuideServiceServer
 	mem []*pb.Feature // read-only after initialized
-	mu  sync.Mutex
+	// mu  sync.Mutex    // protects routeNotes
 }
 
 // NewMemoryRepository is a factory function to generate a new repository
@@ -47,20 +46,20 @@ func (mr *MemoryRepository) loadFeatures(filePath string) error {
 }
 
 // GetFeature returns the feature at the given point.
-func (mr *MemoryRepository) GetFeature(_ context.Context, point *pb.Point) (*pb.Feature, error) {
+func (mr *MemoryRepository) GetFeature(_ context.Context, req *pb.GetFeatureRequest) (*pb.GetFeatureResponse, error) {
 	for _, feature := range mr.mem {
-		if proto.Equal(feature.Location, point) {
-			return feature, nil
+		if proto.Equal(feature.Location, req.Point) {
+			return &pb.GetFeatureResponse{Feature: feature}, nil
 		}
 	}
 	// No feature was found, return an unnamed feature
-	return &pb.Feature{Location: point}, nil
+	return &pb.GetFeatureResponse{Feature: &pb.Feature{Location: req.Point}}, nil
 }
 
-func (mr *MemoryRepository) ListFeatures(rect *pb.Rectangle, stream pb.RouteGuide_ListFeaturesServer) error {
+func (mr *MemoryRepository) ListFeatures(req *pb.ListFeaturesRequest, stream pb.RouteGuideService_ListFeaturesServer) error {
 	for _, feature := range mr.mem {
-		if inRange(feature.Location, rect) {
-			if err := stream.Send(feature); err != nil {
+		if inRange(feature.Location, req.Rectangle) {
+			if err := stream.Send(&pb.ListFeaturesResponse{Feature: feature}); err != nil {
 				return err
 			}
 		}

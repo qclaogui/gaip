@@ -7,7 +7,7 @@ import (
 
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 
-	pb "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -57,7 +57,6 @@ func WithMysqlRepository(dsn string) Option {
 type ServiceServer struct {
 	pb.UnimplementedToDoServiceServer
 	repo todo.Repository
-	db   *sql.DB
 }
 
 func NewServiceServer(opts ...Option) (*ServiceServer, error) {

@@ -4,13 +4,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/qclaogui/golang-api-server/pkg/service/routeguide"
+
+	routeguidev1 "github.com/qclaogui/golang-api-server/pkg/service/routeguide/v1"
+	todov1 "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
 
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc"
-	todov1 "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
 )
 
 // Config is configuration for Server
@@ -35,8 +36,8 @@ type Config struct {
 	LogTimeFormat string
 }
 
-// StartServer runs gRPC server and HTTP gateway
-func StartServer() error {
+// Bootstrap runs gRPC server and HTTP gateway
+func Bootstrap() error {
 	ctx := context.Background()
 	var cfg Config
 	flag.StringVar(&cfg.GRPCPort, "grpc-port", "9095", "gRPC port to bind")
@@ -69,7 +70,7 @@ func StartServer() error {
 		return err
 	}
 
-	routeGuideSrv, err := routeguide.NewServiceServer(routeguide.WithMemoryRepository())
+	routeGuideSrv, err := routeguidev1.NewServiceServer(routeguidev1.WithMemoryRepository())
 	if err != nil {
 		return err
 	}

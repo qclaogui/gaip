@@ -10,7 +10,7 @@ import (
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
-	pb "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )

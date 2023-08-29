@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	pb "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 )
 
 var (

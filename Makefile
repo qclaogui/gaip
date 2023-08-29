@@ -26,25 +26,36 @@ GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
 
 GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
-##@ protoc-gen
+
+##@ Regenerate gRPC code
+
+.PHONY: gen
+gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) ## buf regenerate gRPC code
+	@rm -Rf api/openapiv2/gen/ api/gen
+	cd api/ && $(BUF) generate
 
 .PHONY: protoc-gen
-protoc-gen: $(PROTOC_GEN_GO) ## Regenerate gRPC code
-	@protoc -I api/proto \
-		--go_out=pkg/api \
+protoc-gen: $(PROTOC_GEN_GO) ## protoc regenerate gRPC code
+	@protoc -I api \
+		--go_out=api/gen/proto \
 		--go_opt=paths=source_relative \
-		--go_grpc_out=pkg/api \
+		--go_grpc_out=api/gen/proto \
 		--go_grpc_opt=paths=source_relative \
 		--go_grpc_opt=require_unimplemented_servers=false \
-		api/proto/todopb/v1/todo_service.proto  \
-		api/proto/routeguidepb/route_guide.proto
+		api/todo/v1/todo_service.proto  \
+		api/routeguide/v1/route_guide.proto
 
 ##@ Dependencies
 
-.PHONY: deps
-deps: ## Ensures fresh go.mod and go.sum.
+.PHONY: go/mod
+go/mod: ## Ensures fresh go.mod and go.sum.
+	@go mod download
 	@go mod tidy
 	@go mod verify
+
+.PHONY: check/go/mod
+check/go/mod: go/mod
+	@git --no-pager diff --exit-code -- go.sum go.mod vendor/ || { echo ">> There are unstaged changes in go vendoring run 'make go/mod'"; exit 1; }
 
 .PHONY: install-build-deps
 install-build-deps: ## Install dependencies tools
@@ -68,18 +79,34 @@ clean: ## Remove artefacts or generated files from previous build
 
 .PHONY: lint
 lint: ## Runs various static analysis against our code.
-lint: $(GOLANGCI_LINT) $(MISSPELL) $(GORELEASER) vet deps 
-	$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
+lint: $(MISSPELL) go/mod go/lint goreleaser/lint buf/lint
 	@echo ">> detecting misspells"
 	@find . -type f | grep -v vendor/ | grep -vE '\./\..*' | xargs $(MISSPELL) -error
+
+.PHONY: goreleaser/lint
+goreleaser/lint: $(GORELEASER) ## examining all of the Go files.
+	@echo ">> run goreleaser check"
 	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
 	$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
 
+.PHONY: go/lint
+go/lint: $(GOLANGCI_LINT) vet ## examining all of the Go files.
+	@echo ">> run golangci-lint"
+	$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
+
+.PHONY: buf/lint
+buf/lint: $(BUF) ## examining all of the proto files.
+	@echo ">> run buf lint"
+	@cd api/ && $(BUF) lint
+
+.PHONY: buf/fmt
+buf/fmt: ## examining all of the proto files.
+	@echo ">> run buf format"
+	@cd api/ && $(BUF) format -w --exit-code
 
 .PHONY: vet
 vet: ## examining all of the Go files.
 	@go vet -stdmethods=false ./...
-
 
 .PHONY: test
 test: ## Run tests.

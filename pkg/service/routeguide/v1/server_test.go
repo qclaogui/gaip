@@ -1,4 +1,4 @@
-package routeguide
+package v1
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
-	pb "github.com/qclaogui/golang-api-server/pkg/api/routeguidepb"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
 )
 
 func Test_ServiceServer_GetFeature(t *testing.T) {
@@ -18,32 +18,32 @@ func Test_ServiceServer_GetFeature(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.Point
+		req *pb.GetFeatureRequest
 	}
 	tests := []struct {
 		name string
-		ssv  pb.RouteGuideServer
+		ssv  pb.RouteGuideServiceServer
 		args args
-		want *pb.Feature
+		want *pb.GetFeatureResponse
 	}{
 		{
 			name: "Looking for a valid feature",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.Point{Latitude: 409146138, Longitude: -746188906},
+				req: &pb.GetFeatureRequest{Point: &pb.Point{Latitude: 409146138, Longitude: -746188906}},
 			},
-			want: &pb.Feature{Name: "Berkshire Valley Management Area Trail, Jefferson, NJ, USA",
-				Location: &pb.Point{Latitude: 409146138, Longitude: -746188906}},
+			want: &pb.GetFeatureResponse{Feature: &pb.Feature{Name: "Berkshire Valley Management Area Trail, Jefferson, NJ, USA",
+				Location: &pb.Point{Latitude: 409146138, Longitude: -746188906}}},
 		},
 		{
 			name: "Feature missing",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.Point{},
+				req: &pb.GetFeatureRequest{Point: &pb.Point{}},
 			},
-			want: &pb.Feature{Location: &pb.Point{}},
+			want: &pb.GetFeatureResponse{Feature: &pb.Feature{Location: &pb.Point{}}},
 		},
 	}
 

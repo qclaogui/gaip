@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	pb "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

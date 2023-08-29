@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	pb "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -42,13 +42,13 @@ func (m *MysqlRepository) Read(ctx context.Context, req *pb.ReadRequest) (*pb.Re
 	id := req.GetId()
 	rows, err := c.QueryContext(ctx, "SELECT `ID`, `Title`, `Description`, `Reminder` FROM ToDo WHERE `ID`=?", id)
 	if err != nil {
-		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to select from ToDo-> ")+err.Error())
+		return nil, status.Error(codes.Unknown, "failed to select from ToDo-> "+err.Error())
 	}
 	defer func() { _ = rows.Close() }()
 
 	if !rows.Next() {
 		if err = rows.Err(); err != nil {
-			return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to select from ToDo-> ")+err.Error())
+			return nil, status.Error(codes.Unknown, "failed to select from ToDo-> "+err.Error())
 		}
 	}
 

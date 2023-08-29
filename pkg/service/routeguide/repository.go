@@ -2,11 +2,12 @@ package routeguide
 
 import (
 	"context"
-	pb "github.com/qclaogui/golang-api-server/pkg/api/routeguidepb"
+
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
 )
 
 type Repository interface {
-	GetFeature(context.Context, *pb.Point) (*pb.Feature, error)
+	GetFeature(context.Context, *pb.GetFeatureRequest) (*pb.GetFeatureResponse, error)
 
-	ListFeatures(*pb.Rectangle, pb.RouteGuide_ListFeaturesServer) error
+	ListFeatures(*pb.ListFeaturesRequest, pb.RouteGuideService_ListFeaturesServer) error
 }

@@ -1,19 +1,18 @@
 syntax = "proto3";
 
-option go_package = "github.com/qclaogui/golang-api-server/pkg/api/routeguidepb";
+package routeguide.v1;
 
-package routeguide;
-
+option go_package = "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1";
 
 // Interface exported by the server.
-service RouteGuide {
+service RouteGuideService {
   // A simple RPC.
   //
   // Obtains the feature at a given position.
   //
   // A feature with an empty name is returned if there's no feature at the given
   // position.
-  rpc GetFeature(Point) returns (Feature) {}
+  rpc GetFeature(GetFeatureRequest) returns (GetFeatureResponse) {}
 
   // A server-to-client streaming RPC.
   //
@@ -21,36 +20,47 @@ service RouteGuide {
   // streamed rather than returned at once (e.g. in a response message with a
   // repeated field), as the rectangle may cover a large area and contain a
   // huge number of features.
-  rpc ListFeatures(Rectangle) returns (stream Feature) {}
+  rpc ListFeatures(ListFeaturesRequest) returns (stream ListFeaturesResponse) {}
 
   // A client-to-server streaming RPC.
   //
   // Accepts a stream of Points on a route being traversed, returning a
   // RouteSummary when traversal is completed.
-  rpc RecordRoute(stream Point) returns (RouteSummary) {}
-
+  rpc RecordRoute(stream RecordRouteRequest) returns (RecordRouteResponse) {}
 }
+
+message GetFeatureRequest {
+  Point point = 1;
+}
+
+message GetFeatureResponse {
+  Feature feature = 1;
+}
+
+message ListFeaturesRequest {
+  Rectangle rectangle = 1;
+}
+
+message ListFeaturesResponse {
+  Feature feature = 1;
+}
+
+message RecordRouteRequest {
+  Point point = 1;
+}
+
+message RecordRouteResponse {
+  RouteSummary summary = 1;
+}
+
 // Points are represented as latitude-longitude pairs in the E7 representation
 // (degrees multiplied by 10**7 and rounded to the nearest integer).
 // Latitudes should be in the range +/- 90 degrees and longitude should be in
 // the range +/- 180 degrees (inclusive).
 message Point {
-    int32 latitude = 1;
-    int32 longitude = 2;
+  int32 latitude = 1;
+  int32 longitude = 2;
 }
-  
-
-// A feature names something at a given point.
-//
-// If a feature could not be named, the name is empty.
-message Feature {
-    // The name of the feature.
-    string name = 1;
-  
-    // The point where the feature is detected.
-    Point location = 2;
-}
-
 
 // A latitude-longitude rectangle, represented as two diagonally opposite
 // points "lo" and "hi".
@@ -60,6 +70,17 @@ message Rectangle {
 
   // The other corner of the rectangle.
   Point hi = 2;
+}
+
+// A feature names something at a given point.
+//
+// If a feature could not be named, the name is empty.
+message Feature {
+  // The name of the feature.
+  string name = 1;
+
+  // The point where the feature is detected.
+  Point location = 2;
 }
 
 // A RouteSummary is received in response to a RecordRoute rpc.

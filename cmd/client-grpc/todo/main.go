@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	todopbv1 "github.com/qclaogui/golang-api-server/pkg/api/todopb/v1"
+	todopbv1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/types/known/timestamppb"
