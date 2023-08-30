@@ -3,9 +3,10 @@ package middleware
 import (
 	"context"
 
+	"log/slog"
+
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"google.golang.org/grpc"
-	"log/slog"
 
 	"os"
 )

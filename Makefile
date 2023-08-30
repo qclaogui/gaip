@@ -94,6 +94,12 @@ go/lint: $(GOLANGCI_LINT) ## examining all of the Go files.
 	@echo ">> run golangci-lint"
 	$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
 
+.PHONY: lint/fix
+lint/fix: $(GOLANGCI_LINT) ## examining all of the Go files.
+	@echo ">> run golangci-lint fix"
+	$(GOLANGCI_LINT) run --fix
+
+
 .PHONY: buf/lint
 buf/lint: $(BUF) buf/fmt ## examining all of the proto files.
 	@echo ">> run buf lint"

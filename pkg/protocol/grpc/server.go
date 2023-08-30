@@ -2,10 +2,11 @@ package grpc
 
 import (
 	"context"
-	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/middleware"
 	"net"
 	"os"
 	"os/signal"
+
+	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/middleware"
 
 	"log/slog"
 
