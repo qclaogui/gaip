@@ -50,6 +50,9 @@ func main() {
 	// Looking for a valid feature
 	printFeature(client, &pb.Point{Latitude: 409146138, Longitude: -746188906})
 
+	// test Recovery
+	//printFeatures(client, nil)
+
 	printFeatures(client, &pb.Rectangle{
 		Lo: &pb.Point{Latitude: 400000000, Longitude: -750000000},
 		Hi: &pb.Point{Latitude: 420000000, Longitude: -730000000},

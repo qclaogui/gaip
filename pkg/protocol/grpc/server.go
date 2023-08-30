@@ -34,6 +34,7 @@ func RunServer(
 
 	// add middleware
 	opts = middleware.AddLogging(opts)
+	opts = middleware.AddRecovery(opts)
 
 	srv := grpc.NewServer(opts...)
 	//	register service
