@@ -5,7 +5,7 @@ go 1.20
 require (
 	dagger.io/dagger v0.8.4
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/containerd/containerd v1.7.4
+	github.com/containerd/containerd v1.7.5
 	github.com/dave/jennifer v1.7.0
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/golang/protobuf v1.5.3
