@@ -7,10 +7,6 @@
   <img src="https://github.com/qclaogui/golang-api-server/actions/workflows/ci.yml/badge.svg">
 </a>
 
-<a href="https://codecov.io/gh/qclaogui/golang-api-server">
-  <img src="https://codecov.io/gh/qclaogui/golang-api-server/branch/master/graph/badge.svg" />
-</a>
-
 <a href="https://goreportcard.com/report/github.com/qclaogui/golang-api-server">
   <img src="https://goreportcard.com/badge/github.com/qclaogui/golang-api-server?v=1" />
 </a>
@@ -24,3 +20,6 @@
 </a>
 
 </p>
+
+
+Share knowledge and help others.

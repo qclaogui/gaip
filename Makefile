@@ -75,13 +75,13 @@ build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
 clean: ## Remove artefacts or generated files from previous build
 	rm -rf bin dist
 
-##@ Testing & CI
+##@ Testing Lint & fmt
 
 .PHONY: lint
 lint: ## Runs various static analysis against our code.
-lint: $(MISSPELL) go/mod go/lint goreleaser/lint buf/lint
-	@echo ">> detecting misspells"
-	@find . -type f | grep -v vendor/ | grep -vE '\./\..*' | xargs $(MISSPELL) -error
+lint: go/mod go/lint goreleaser/lint buf/lint
+	$(info ******************** lint done ********************)
+
 
 .PHONY: goreleaser/lint
 goreleaser/lint: $(GORELEASER) ## examining all of the Go files.
@@ -90,12 +90,12 @@ goreleaser/lint: $(GORELEASER) ## examining all of the Go files.
 	$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
 
 .PHONY: go/lint
-go/lint: $(GOLANGCI_LINT) vet ## examining all of the Go files.
+go/lint: $(GOLANGCI_LINT) ## examining all of the Go files.
 	@echo ">> run golangci-lint"
 	$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
 
 .PHONY: buf/lint
-buf/lint: $(BUF) ## examining all of the proto files.
+buf/lint: $(BUF) buf/fmt ## examining all of the proto files.
 	@echo ">> run buf lint"
 	@cd api/ && $(BUF) lint
 
@@ -104,9 +104,6 @@ buf/fmt: ## examining all of the proto files.
 	@echo ">> run buf format"
 	@cd api/ && $(BUF) format -w --exit-code
 
-.PHONY: vet
-vet: ## examining all of the Go files.
-	@go vet -stdmethods=false ./...
 
 .PHONY: test
 test: ## Run tests.

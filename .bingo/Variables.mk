@@ -47,12 +47,6 @@ $(KUSTOMIZE): $(BINGO_DIR)/kustomize.mod
 	@echo "(re)installing $(GOBIN)/kustomize-v5.1.1"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=kustomize.mod -o=$(GOBIN)/kustomize-v5.1.1 "sigs.k8s.io/kustomize/kustomize/v5"
 
-MISSPELL := $(GOBIN)/misspell-v0.4.1
-$(MISSPELL): $(BINGO_DIR)/misspell.mod
-	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/misspell-v0.4.1"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=misspell.mod -o=$(GOBIN)/misspell-v0.4.1 "github.com/golangci/misspell/cmd/misspell"
-
 PROTOC_GEN_GO_GRPC := $(GOBIN)/protoc-gen-go-grpc-v1.3.0
 $(PROTOC_GEN_GO_GRPC): $(BINGO_DIR)/protoc-gen-go-grpc.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.

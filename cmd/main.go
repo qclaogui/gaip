@@ -21,7 +21,7 @@ func handleHello(w http.ResponseWriter, r *http.Request) {
 	var name, _ = os.Hostname()
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, "<br/><center><h1>Happy Coding </h1><br/><code>%s</code><p><a href=%q target=_blank>source code</a></p></center><hr><br/>"+
+	_, _ = fmt.Fprintf(w, "<br/><center><h1>Happy Coding </h1><br/><code>%s</code><p><a href=%q target=_blank>source code</a></p></center><hr><br/>"+
 		"<center>this request was processed by host: %s</center>", ver, sourceLink, name)
 }
 

@@ -36,7 +36,7 @@ type Config struct {
 	LogTimeFormat string
 }
 
-// Bootstrap runs gRPC server and HTTP gateway
+// Bootstrap bootstrap gRPC server and HTTP gateway
 func Bootstrap() error {
 	ctx := context.Background()
 	var cfg Config
