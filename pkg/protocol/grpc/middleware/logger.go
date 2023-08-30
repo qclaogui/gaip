@@ -1,44 +1,41 @@
 package middleware
 
 import (
-	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
-	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"context"
+
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
+	"log/slog"
+
+	"os"
 )
 
-// codeToLevel redirects OK to DEBUG level logging instead of INFO
-// This is example how you can log several gRPC code results
-func codeToLevel(code codes.Code) zapcore.Level {
-	if code == codes.OK {
-		// It is DEBUG
-		return zap.DebugLevel
-	}
-	return grpc_zap.DefaultCodeToLevel(code)
+// InterceptorLogger adapts slog logger to interceptor logger.
+// This code is simple enough to be copied and not imported.
+func InterceptorLogger(l *slog.Logger) logging.Logger {
+	return logging.LoggerFunc(func(ctx context.Context, lvl logging.Level, msg string, fields ...any) {
+		l.Log(ctx, slog.Level(lvl), msg, fields...)
+	})
 }
 
 // AddLogging returns grpc.Server config option that turn on logging.
-func AddLogging(logger *zap.Logger, opts []grpc.ServerOption) []grpc.ServerOption {
-	// Shared options for the logger, with a custom gRPC code to log level function.
-	o := []grpc_zap.Option{
-		grpc_zap.WithLevels(codeToLevel),
-	}
+func AddLogging(opts []grpc.ServerOption) []grpc.ServerOption {
+	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelInfo}))
+	slog.SetDefault(logger)
 
-	// Make sure that log statements internal to gRPC library are logged using the zapLogger as well.
-	grpc_zap.ReplaceGrpcLoggerV2(logger)
+	lo := []logging.Option{
+		logging.WithLogOnEvents(logging.StartCall, logging.FinishCall),
+		// Add any other option (check functions starting with logging.With).
+	}
 
 	// Add unary interceptor
 	opts = append(opts, grpc.ChainUnaryInterceptor(
-		grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
-		grpc_zap.UnaryServerInterceptor(logger, o...),
+		logging.UnaryServerInterceptor(InterceptorLogger(logger), lo...),
 	))
 
-	// Add stream interceptor (added as an example here)
+	// Add stream interceptor
 	opts = append(opts, grpc.ChainStreamInterceptor(
-		grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
-		grpc_zap.StreamServerInterceptor(logger, o...),
+		logging.StreamServerInterceptor(InterceptorLogger(logger), lo...),
 	))
 
 	return opts

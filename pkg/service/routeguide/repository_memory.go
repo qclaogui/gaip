@@ -58,7 +58,7 @@ func (mr *MemoryRepository) GetFeature(_ context.Context, req *pb.GetFeatureRequ
 
 func (mr *MemoryRepository) ListFeatures(req *pb.ListFeaturesRequest, stream pb.RouteGuideService_ListFeaturesServer) error {
 	for _, feature := range mr.mem {
-		if inRange(feature.Location, req.Rectangle) {
+		if inRange(feature.Location, req.GetRectangle()) {
 			if err := stream.Send(&pb.ListFeaturesResponse{Feature: feature}); err != nil {
 				return err
 			}

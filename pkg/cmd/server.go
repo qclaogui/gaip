@@ -32,8 +32,6 @@ type Config struct {
 	// Log parameters section
 	// LogLevel is global log level: Debug(-1), Info(0), Warn(1), Error(2), DPanic(3), Panic(4), Fatal(5)
 	LogLevel int
-	// LogTimeFormat is print time format for logger e.g. 2006-01-02T15:04:05Z07:00
-	LogTimeFormat string
 }
 
 // Bootstrap bootstrap gRPC server and HTTP gateway
@@ -46,8 +44,6 @@ func Bootstrap() error {
 	flag.StringVar(&cfg.DBPassword, "db-password", "", "Database password")
 	flag.StringVar(&cfg.DBSchema, "db-schema", "dev", "Database schema")
 	flag.IntVar(&cfg.LogLevel, "log-level", 0, "Global log level")
-	flag.StringVar(&cfg.LogTimeFormat, "log-time-format", "2006-01-02T15:04:05.999999999Z07:00",
-		"Print time format for logger e.g. 2006-01-02T15:04:05Z07:00")
 	flag.Parse()
 
 	// initialize logger

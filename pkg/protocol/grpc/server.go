@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/middleware"
 	"net"
 	"os"
 	"os/signal"
@@ -29,12 +30,11 @@ func RunServer(
 
 	// gRPC server startup options
 	var opts []grpc.ServerOption
+
 	// add middleware
-	// opts = middleware.AddLogging(logger.Log, opts)
+	opts = middleware.AddLogging(opts)
 
-	// register service
 	srv := grpc.NewServer(opts...)
-
 	//	register service
 	pbtodov1.RegisterToDoServiceServer(srv, toDoSrv)
 	pbrouteguidev1.RegisterRouteGuideServiceServer(srv, routeGuideSrv)
