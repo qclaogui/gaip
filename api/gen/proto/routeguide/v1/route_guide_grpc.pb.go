@@ -4,6 +4,7 @@ package v1
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -37,6 +38,11 @@ type RouteGuideServiceClient interface {
 	// Accepts a stream of Points on a route being traversed, returning a
 	// RouteSummary when traversal is completed.
 	RecordRoute(ctx context.Context, opts ...grpc.CallOption) (RouteGuideService_RecordRouteClient, error)
+	// A Bidirectional streaming RPC.
+	//
+	// Accepts a stream of RouteChatRequest sent while a route is being traversed,
+	// while receiving other RouteChatResponse (e.g. from other users).
+	RouteChat(ctx context.Context, opts ...grpc.CallOption) (RouteGuideService_RouteChatClient, error)
 }
 
 type routeGuideServiceClient struct {
@@ -122,6 +128,37 @@ func (x *routeGuideServiceRecordRouteClient) CloseAndRecv() (*RecordRouteRespons
 	return m, nil
 }
 
+func (c *routeGuideServiceClient) RouteChat(ctx context.Context, opts ...grpc.CallOption) (RouteGuideService_RouteChatClient, error) {
+	stream, err := c.cc.NewStream(ctx, &RouteGuideService_ServiceDesc.Streams[2], "/routeguide.v1.RouteGuideService/RouteChat", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &routeGuideServiceRouteChatClient{stream}
+	return x, nil
+}
+
+type RouteGuideService_RouteChatClient interface {
+	Send(*RouteChatRequest) error
+	Recv() (*RouteChatResponse, error)
+	grpc.ClientStream
+}
+
+type routeGuideServiceRouteChatClient struct {
+	grpc.ClientStream
+}
+
+func (x *routeGuideServiceRouteChatClient) Send(m *RouteChatRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *routeGuideServiceRouteChatClient) Recv() (*RouteChatResponse, error) {
+	m := new(RouteChatResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // RouteGuideServiceServer is the server API for RouteGuideService service.
 // All implementations should embed UnimplementedRouteGuideServiceServer
 // for forward compatibility
@@ -145,6 +182,11 @@ type RouteGuideServiceServer interface {
 	// Accepts a stream of Points on a route being traversed, returning a
 	// RouteSummary when traversal is completed.
 	RecordRoute(RouteGuideService_RecordRouteServer) error
+	// A Bidirectional streaming RPC.
+	//
+	// Accepts a stream of RouteChatRequest sent while a route is being traversed,
+	// while receiving other RouteChatResponse (e.g. from other users).
+	RouteChat(RouteGuideService_RouteChatServer) error
 }
 
 // UnimplementedRouteGuideServiceServer should be embedded to have forward compatible implementations.
@@ -159,6 +201,9 @@ func (UnimplementedRouteGuideServiceServer) ListFeatures(*ListFeaturesRequest, R
 }
 func (UnimplementedRouteGuideServiceServer) RecordRoute(RouteGuideService_RecordRouteServer) error {
 	return status.Errorf(codes.Unimplemented, "method RecordRoute not implemented")
+}
+func (UnimplementedRouteGuideServiceServer) RouteChat(RouteGuideService_RouteChatServer) error {
+	return status.Errorf(codes.Unimplemented, "method RouteChat not implemented")
 }
 
 // UnsafeRouteGuideServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -237,6 +282,32 @@ func (x *routeGuideServiceRecordRouteServer) Recv() (*RecordRouteRequest, error)
 	return m, nil
 }
 
+func _RouteGuideService_RouteChat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(RouteGuideServiceServer).RouteChat(&routeGuideServiceRouteChatServer{stream})
+}
+
+type RouteGuideService_RouteChatServer interface {
+	Send(*RouteChatResponse) error
+	Recv() (*RouteChatRequest, error)
+	grpc.ServerStream
+}
+
+type routeGuideServiceRouteChatServer struct {
+	grpc.ServerStream
+}
+
+func (x *routeGuideServiceRouteChatServer) Send(m *RouteChatResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *routeGuideServiceRouteChatServer) Recv() (*RouteChatRequest, error) {
+	m := new(RouteChatRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // RouteGuideService_ServiceDesc is the grpc.ServiceDesc for RouteGuideService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -258,6 +329,12 @@ var RouteGuideService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "RecordRoute",
 			Handler:       _RouteGuideService_RecordRoute_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "RouteChat",
+			Handler:       _RouteGuideService_RouteChat_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

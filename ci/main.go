@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package main
 
 import (
@@ -6,7 +10,6 @@ import (
 	"os"
 
 	"dagger.io/dagger"
-
 	platformFormat "github.com/containerd/containerd/platforms"
 )
 

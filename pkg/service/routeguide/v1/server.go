@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package v1
 
 import (
@@ -55,4 +59,11 @@ func (srv *ServiceServer) GetFeature(ctx context.Context, req *pb.GetFeatureRequ
 
 func (srv *ServiceServer) ListFeatures(req *pb.ListFeaturesRequest, stream pb.RouteGuideService_ListFeaturesServer) error {
 	return srv.repo.ListFeatures(req, stream)
+}
+
+func (srv *ServiceServer) RecordRoute(req pb.RouteGuideService_RecordRouteServer) error {
+	return srv.repo.RecordRoute(req)
+}
+func (srv *ServiceServer) RouteChat(req pb.RouteGuideService_RouteChatServer) error {
+	return srv.repo.RouteChat(req)
 }

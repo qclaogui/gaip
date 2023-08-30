@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package v1
 
 import (
@@ -5,10 +9,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/qclaogui/golang-api-server/pkg/service/todo"
-
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
-
+	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

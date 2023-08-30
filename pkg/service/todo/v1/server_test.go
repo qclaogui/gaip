@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package v1
 
 import (
@@ -7,10 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/qclaogui/golang-api-server/pkg/service/todo"
-
 	"github.com/golang/protobuf/ptypes/timestamp"
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )

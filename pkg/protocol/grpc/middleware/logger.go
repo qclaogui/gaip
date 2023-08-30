@@ -1,14 +1,16 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package middleware
 
 import (
 	"context"
-
 	"log/slog"
+	"os"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"google.golang.org/grpc"
-
-	"os"
 )
 
 // InterceptorLogger adapts slog logger to interceptor logger.

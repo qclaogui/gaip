@@ -1,12 +1,15 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package v1
 
 import (
 	"context"
 	"testing"
 
-	"google.golang.org/protobuf/proto"
-
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
+	"google.golang.org/protobuf/proto"
 )
 
 func Test_ServiceServer_GetFeature(t *testing.T) {

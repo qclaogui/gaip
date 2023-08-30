@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package cmd
 
 import (
@@ -10,7 +14,6 @@ import (
 
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc"
 )
 

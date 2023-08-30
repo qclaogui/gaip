@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package main
 
 import (
@@ -6,6 +10,7 @@ import (
 	"flag"
 	"io"
 	"log"
+	"math/rand"
 	"time"
 
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
@@ -58,12 +63,11 @@ func main() {
 		Hi: &pb.Point{Latitude: 420000000, Longitude: -730000000},
 	})
 
-	//// RecordRoute
-	//runRecordRoute(client)
-	//
-	//// RouteChat
-	//runRouteChat(client)
+	// RecordRoute
+	runRecordRoute(client)
 
+	// RouteChat
+	runRouteChat(client)
 }
 
 // printFeature gets the feature for the given point.
@@ -99,4 +103,97 @@ func printFeatures(client pb.RouteGuideServiceClient, rect *pb.Rectangle) {
 		log.Printf("Feature: name: %q, point:(%v, %v)", feature.GetName(),
 			feature.GetLocation().GetLatitude(), feature.GetLocation().GetLongitude())
 	}
+}
+
+func randomPoint(r *rand.Rand) *pb.Point {
+	lat := (r.Int31n(180) - 90) * 1e7
+	long := (r.Int31n(360) - 180) * 1e7
+	return &pb.Point{Latitude: lat, Longitude: long}
+}
+
+// runRecordRoute sends a sequence of points to server and expects to get a RouteSummary from server.
+func runRecordRoute(client pb.RouteGuideServiceClient) {
+	// Create a random number of random points
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	pointCount := int(r.Int31n(100)) + 2 // Traverse at least two points
+	var points []*pb.Point
+	for i := 0; i < pointCount; i++ {
+		points = append(points, randomPoint(r))
+	}
+	log.Printf("Traversing %d points.", len(points))
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	stream, err := client.RecordRoute(ctx)
+	if err != nil {
+		log.Fatalf("client.RecordRoute failed: %v", err)
+	}
+
+	//  Send points
+	for _, point := range points {
+		if err := stream.Send(&pb.RecordRouteRequest{Point: point}); err != nil {
+			log.Fatalf("client.RecordRoute: stream.Send(%v) failed: %v", point, err)
+		}
+	}
+
+	//  recv reply
+	reply, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Fatalf("client.RecordRoute failed: %v", err)
+	}
+
+	log.Printf("Route summary: %v", reply.GetRouteSummary())
+}
+
+// runRouteChat receives a sequence of route notes, while sending notes for various locations.
+func runRouteChat(client pb.RouteGuideServiceClient) {
+	notes := []*pb.RouteNote{
+		{Location: &pb.Point{Latitude: 0, Longitude: 1}, Message: "First message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 2}, Message: "Second message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 3}, Message: "Third message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 1}, Message: "Fourth message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 2}, Message: "Fifth message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 3}, Message: "Sixth message"},
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	stream, err := client.RouteChat(ctx)
+	if err != nil {
+		log.Fatalf("client.RouteChat failed: %v", err)
+	}
+
+	waitc := make(chan struct{})
+	go func() {
+		for {
+			in, err := stream.Recv()
+			if errors.Is(err, io.EOF) {
+				// read done
+				close(waitc)
+				return
+			}
+			if err != nil {
+				log.Fatalf("client.RouteChat failed: %v", err)
+			}
+			routeNote := in.GetRouteNote()
+			log.Printf("Got message %s at point(%d, %d)",
+				routeNote.GetMessage(),
+				routeNote.GetLocation().Latitude,
+				routeNote.GetLocation().Longitude)
+		}
+	}()
+
+	for _, note := range notes {
+		if err := stream.Send(&pb.RouteChatRequest{RouteNote: note}); err != nil {
+			log.Fatalf("client.RouteChat: stream.Send(%v) failed: %v", note, err)
+		}
+	}
+
+	if err = stream.CloseSend(); err != nil {
+		log.Fatalf("client.RouteChat: stream.CloseSend() failed: %v", err)
+	}
+
+	<-waitc
 }

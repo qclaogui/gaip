@@ -1,11 +1,19 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package routeguide
 
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"math"
 	"os"
+	"sync"
+	"time"
 
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
 	"google.golang.org/protobuf/proto"
@@ -15,12 +23,16 @@ import (
 type MemoryRepository struct {
 	pb.UnimplementedRouteGuideServiceServer
 	mem []*pb.Feature // read-only after initialized
-	// mu  sync.Mutex    // protects routeNotes
+
+	mu         sync.Mutex // protects routeNotes
+	routeNotes map[string][]*pb.RouteNote
 }
 
 // NewMemoryRepository is a factory function to generate a new repository
 func NewMemoryRepository(filePath string) (*MemoryRepository, error) {
-	mr := &MemoryRepository{}
+	mr := &MemoryRepository{
+		routeNotes: make(map[string][]*pb.RouteNote, 0),
+	}
 	// load Features
 	if err := mr.loadFeatures(filePath); err != nil {
 		return nil, err
@@ -65,6 +77,104 @@ func (mr *MemoryRepository) ListFeatures(req *pb.ListFeaturesRequest, stream pb.
 		}
 	}
 	return nil
+}
+
+func (mr *MemoryRepository) RecordRoute(stream pb.RouteGuideService_RecordRouteServer) error {
+	var pointCount, featureCount, distance int32
+	var lastPoint *pb.Point
+	startTime := time.Now()
+	for {
+		req, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			return stream.SendAndClose(&pb.RecordRouteResponse{
+				RouteSummary: &pb.RouteSummary{
+					PointCount:   pointCount,
+					FeatureCount: featureCount,
+					Distance:     distance,
+					ElapsedTime:  int32(time.Since(startTime).Seconds()),
+				},
+			})
+		}
+
+		if err != nil {
+			return err
+		}
+
+		point := req.GetPoint()
+		pointCount++
+		for _, feature := range mr.mem {
+			if proto.Equal(feature.Location, point) {
+				featureCount++
+			}
+		}
+
+		if lastPoint != nil {
+			distance += calcDistance(lastPoint, point)
+		}
+		lastPoint = point
+	}
+}
+
+func toRadians(num float64) float64 {
+	return num * math.Pi / float64(180)
+}
+
+// calcDistance calculates the distance between two points using the "haversine" formula.
+// The formula is based on http://mathforum.org/library/drmath/view/51879.html.
+func calcDistance(p1 *pb.Point, p2 *pb.Point) int32 {
+	const CordFactor float64 = 1e7
+	const R = float64(6371000) // earth radius in metres
+
+	lat1 := toRadians(float64(p1.Latitude) / CordFactor)
+	lat2 := toRadians(float64(p2.Latitude) / CordFactor)
+
+	lng1 := toRadians(float64(p1.Longitude) / CordFactor)
+	lng2 := toRadians(float64(p2.Longitude) / CordFactor)
+
+	dlat := lat2 - lat1
+	dlng := lng2 - lng1
+
+	a := math.Sin(dlat/2)*math.Sin(dlat/2) +
+		math.Cos(lat1)*math.Cos(lat2)*
+			math.Sin(dlng/2)*math.Sin(dlng/2)
+	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+
+	distance := R * c
+	return int32(distance)
+}
+
+func serialize(point *pb.Point) string {
+	return fmt.Sprintf("%d %d", point.Latitude, point.Longitude)
+}
+
+func (mr *MemoryRepository) RouteChat(stream pb.RouteGuideService_RouteChatServer) error {
+	for {
+		req, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+
+		note := req.GetRouteNote()
+		key := serialize(note.Location)
+
+		mr.mu.Lock()
+		mr.routeNotes[key] = append(mr.routeNotes[key], note)
+		// Note: this copy prevents blocking other clients while serving this one.
+		// We don't need to do a deep copy, because elements in the slice are
+		// insert-only and never modified.
+		notes := make([]*pb.RouteNote, len(mr.routeNotes[key]))
+		copy(notes, mr.routeNotes[key])
+		mr.mu.Unlock()
+
+		for _, rn := range notes {
+			if err := stream.Send(&pb.RouteChatResponse{RouteNote: rn}); err != nil {
+				return err
+			}
+		}
+	}
 }
 
 func inRange(point *pb.Point, rect *pb.Rectangle) bool {

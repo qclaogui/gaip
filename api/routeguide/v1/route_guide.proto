@@ -27,6 +27,12 @@ service RouteGuideService {
   // Accepts a stream of Points on a route being traversed, returning a
   // RouteSummary when traversal is completed.
   rpc RecordRoute(stream RecordRouteRequest) returns (RecordRouteResponse) {}
+
+  // A Bidirectional streaming RPC.
+  //
+  // Accepts a stream of RouteChatRequest sent while a route is being traversed,
+  // while receiving other RouteChatResponse (e.g. from other users).
+  rpc RouteChat(stream RouteChatRequest) returns (stream RouteChatResponse) {}
 }
 
 message GetFeatureRequest {
@@ -50,7 +56,17 @@ message RecordRouteRequest {
 }
 
 message RecordRouteResponse {
-  RouteSummary summary = 1;
+  RouteSummary route_summary = 1;
+}
+
+// A message sent while at a given point.
+message RouteChatRequest {
+  RouteNote route_note = 1;
+}
+
+// A message response at a given point.
+message RouteChatResponse {
+  RouteNote route_note = 1;
 }
 
 // Points are represented as latitude-longitude pairs in the E7 representation
@@ -81,6 +97,15 @@ message Feature {
 
   // The point where the feature is detected.
   Point location = 2;
+}
+
+// A RouteNote is a message sent while at a given point.
+message RouteNote {
+  // The location from which the message is sent.
+  Point location = 1;
+
+  // The message to be sent.
+  string message = 2;
 }
 
 // A RouteSummary is received in response to a RecordRoute rpc.
