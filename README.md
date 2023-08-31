@@ -22,3 +22,52 @@
 </p>
 
 Share knowledge and help others.
+
+```shell
+❯ tree -I vendor -I docs -I tools -I deploy -L 3
+.
+├── COPYRIGHT
+├── Dockerfile
+├── LICENSE
+├── Makefile
+├── README.md
+├── SECURITY.md
+├── api
+│   ├── buf.gen.yaml
+│   ├── buf.yaml
+│   ├── gen
+│   │   └── proto
+│   ├── routeguide
+│   │   ├── v1
+│   │   └── v1beta1
+│   └── todo
+│       ├── v1
+│       └── v1alpha
+├── ci
+│   └── main.go
+├── cmd
+│   ├── client-grpc
+│   │   ├── data
+│   │   ├── routeguide
+│   │   └── todo
+│   ├── main.go
+│   └── server
+│       └── main.go
+├── go.mod
+├── go.sum
+├── pkg
+│   ├── cmd
+│   │   └── server.go
+│   ├── protocol
+│   │   ├── grpc
+│   │   └── http
+│   ├── service
+│   │   ├── routeguide
+│   │   └── todo
+│   └── version
+│       ├── generate
+│       ├── release.go
+│       └── version.go
+├── skaffold.env
+└── skaffold.yaml
+```
