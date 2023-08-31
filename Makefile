@@ -18,7 +18,6 @@ GO_FILES_TO_FMT  ?= $(shell find . -path ./vendor -prune -o -name '*.go' -print)
 # systems gsed won't be installed, so will use sed as expected.
 SED ?= $(shell which gsed 2>/dev/null || which sed)
 
-
 GOPROXY          ?= https://proxy.golang.org
 export GOPROXY
 
@@ -34,7 +33,6 @@ GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
                 -X $(VPREFIX).BuildDate=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
-
 
 ##@ Regenerate gRPC code
 
@@ -56,14 +54,14 @@ protoc.gen: $(PROTOC_GEN_GO) ## protoc regenerate gRPC code
 
 ##@ Dependencies
 
-.PHONY: go.mod
-go.mod: ## Ensures fresh go.mod and go.sum.
+.PHONY: go/mod
+go/mod: ## Ensures fresh go.mod and go.sum.
 	@go mod download
 	@go mod tidy
 	@go mod verify
 
-.PHONY: check.go.mod
-check.go.mod: go.mod
+.PHONY: check/mod
+check/mod: go/mod
 	@git --no-pager diff --exit-code -- go.sum go.mod vendor/ || { echo ">> There are unstaged changes in go vendoring run 'make go/mod'"; exit 1; }
 
 .PHONY: install-build-deps
@@ -76,8 +74,8 @@ install-build-deps: ## Install dependencies tools
 build: ## Build golang-api-server binary for current OS and place it at ./bin/api-server
 	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd
 
-.PHONY: build.all
-build.all: ## Build binaries for Linux, Windows and Mac and place them in dist/
+.PHONY: build/all
+build/all: ## Build binaries for Linux, Windows and Mac and place them in dist/
 	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.yml --snapshot --skip-publish --clean
 
 .PHONY: clean
@@ -88,11 +86,11 @@ clean: ## Remove artefacts or generated files from previous build
 
 .PHONY: fmt
 fmt: ## Runs fmt code.
-fmt: go.fmt buf.fmt
+fmt: go/fmt buf/fmt
 	$(info ******************** done ********************)
 
-.PHONY: go.fmt
-go.fmt: $(GOIMPORTS)
+.PHONY: go/fmt
+go/fmt: $(GOIMPORTS)
 	@echo ">> formatting go code"
 	@gofmt -s -w $(GO_FILES_TO_FMT)
 	@for file in $(GO_FILES_TO_FMT) ; do \
@@ -100,35 +98,35 @@ go.fmt: $(GOIMPORTS)
 	done
 	@$(GOIMPORTS) -w $(GO_FILES_TO_FMT)
 
-.PHONY: buf.fmt
-buf.fmt: ## examining all of the proto files.
+.PHONY: buf/fmt
+buf/fmt: ## examining all of the proto files.
 	@echo ">> run buf format"
 	@cd api/ && $(BUF) format -w --exit-code
 
 .PHONY: lint
 lint: ## Runs various static analysis against our code.
-lint: go.lint goreleaser.lint buf.lint $(COPYRIGHT)
+lint: go/lint goreleaser/lint buf/lint $(COPYRIGHT)
 	@$(COPYRIGHT) $(shell go list -f "{{.Dir}}" ./... | xargs -I {} find {} -name "*.go")
 	$(info ******************** done ********************)
 
-.PHONY: goreleaser.lint
-goreleaser.lint: $(GORELEASER) ## examining all of the Go files.
+.PHONY: goreleaser/lint
+goreleaser/lint: $(GORELEASER) ## examining all of the Go files.
 	@echo ">> run goreleaser check"
 	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
 	$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
 
-.PHONY: go.lint
-go.lint: $(GOLANGCI_LINT) ## examining all of the Go files.
+.PHONY: go/lint
+go/lint: $(GOLANGCI_LINT) ## examining all of the Go files.
 	@echo ">> run golangci-lint"
 	$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
 
-.PHONY: buf.lint
-buf.lint: $(BUF) buf.fmt ## examining all of the proto files.
+.PHONY: buf/lint
+buf/lint: $(BUF) buf/fmt ## examining all of the proto files.
 	@echo ">> run buf lint"
 	@cd api/ && $(BUF) lint
 
-.PHONY: lint.fix
-lint.fix: $(GOLANGCI_LINT) ## examining all of the Go files.
+.PHONY: fix/lint
+fix/lint: $(GOLANGCI_LINT) ## examining all of the Go files.
 	@echo ">> run golangci-lint fix"
 	$(GOLANGCI_LINT) run --fix
 
