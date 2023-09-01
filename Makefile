@@ -36,21 +36,49 @@ GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
 ##@ Regenerate gRPC code
 
-.PHONY: buf.gen
-buf.gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) ## buf regenerate gRPC code
+.PHONY: buf/gen
+buf/gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) ## buf regenerate gRPC code
 	@rm -Rf api/openapiv2/gen/ api/gen
 	cd api/ && $(BUF) generate
 
-.PHONY: protoc.gen
-protoc.gen: $(PROTOC_GEN_GO) ## protoc regenerate gRPC code
+.PHONY: protoc/gen
+protoc/gen: $(PROTOC_GEN_GO) ## protoc regenerate gRPC code
 	@protoc -I api \
-		--go_out=api/gen/proto \
-		--go_opt=paths=source_relative \
-		--go_grpc_out=api/gen/proto \
-		--go_grpc_opt=paths=source_relative \
-		--go_grpc_opt=require_unimplemented_servers=false \
+		--go_out api/gen/proto \
+		--go_opt paths=source_relative \
+		--go_grpc_out api/gen/proto \
+		--go_grpc_opt paths=source_relative \
+		--go_grpc_opt require_unimplemented_servers=false \
 		api/todo/v1/todo_service.proto  \
 		api/routeguide/v1/route_guide.proto
+
+# grpc-gateway
+# https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/grpc_api_configuration/
+	@protoc -I api \
+		--grpc-gateway_out api/gen/proto \
+		--grpc-gateway_opt logtostderr=true \
+		--grpc-gateway_opt paths=source_relative \
+		--grpc-gateway_opt generate_unbound_methods=true \
+		api/todo/v1/todo_service.proto
+
+# # grpc-gateway
+# # https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/grpc_api_configuration/
+# 	@protoc -I api \
+# 		--grpc-gateway_out api/gen/proto \
+# 		--grpc-gateway_opt logtostderr=true \
+# 		--grpc-gateway_opt paths=source_relative \
+# 		--grpc-gateway_opt generate_unbound_methods=true \
+# 		--grpc-gateway_opt standalone=true \
+# 		--grpc-gateway_opt grpc_api_configuration=path/to/your_service.yaml \
+# 		api/todo/v1/todo_service.proto
+
+# # OpenAPI
+# 	@protoc -I api \
+# 		--openapiv2_out api/gen/proto \
+# 		--openapiv2_opt logtostderr=true \
+# 		--openapiv2_opt grpc_api_configuration=path/to/your_service.yaml \
+# 		--openapiv2_opt openapi_configuration=path/to/your_service_swagger.yaml \
+# 		api/todo/v1/todo_service.proto
 
 ##@ Dependencies
 

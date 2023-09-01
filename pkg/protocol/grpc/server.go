@@ -43,6 +43,7 @@ func RunServer(
 	pbrouteguidev1.RegisterRouteGuideServiceServer(srv, routeGuideSrv)
 
 	// Register reflection service on gRPC server.
+	// Enable reflection to allow clients to query the server's services
 	reflection.Register(srv)
 
 	// graceful shutdown
