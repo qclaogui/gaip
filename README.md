@@ -24,7 +24,7 @@
 Share knowledge and help others.
 
 ```shell
-❯ tree -I vendor -I docs -I tools -I deploy -L 3
+❯ tree -I 'vendor|docs|tools|deploy|cmd' -L 3
 .
 ├── COPYRIGHT
 ├── Dockerfile
@@ -45,22 +45,9 @@ Share knowledge and help others.
 │       └── v1alpha
 ├── ci
 │   └── main.go
-├── cmd
-│   ├── client-grpc
-│   │   ├── data
-│   │   ├── routeguide
-│   │   └── todo
-│   ├── client-rest
-│   │   ├── routeguide
-│   │   └── todo
-│   ├── main.go
-│   └── server
-│       └── main.go
 ├── go.mod
 ├── go.sum
 ├── pkg
-│   ├── cmd
-│   │   └── server.go
 │   ├── protocol
 │   │   ├── grpc
 │   │   └── rest
