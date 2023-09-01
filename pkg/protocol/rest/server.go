@@ -14,6 +14,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	"github.com/qclaogui/golang-api-server/pkg/protocol/rest/middleware"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -38,9 +39,13 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 		return err
 	}
 
+	// Wrapper middleware
+	handler := middleware.RequestID(gwmux)
+	handler = middleware.Throttle(1000)(handler)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
-		Handler: gwmux,
+		Handler: handler,
 	}
 
 	// graceful shutdown
