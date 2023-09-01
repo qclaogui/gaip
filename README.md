@@ -50,6 +50,9 @@ Share knowledge and help others.
 │   │   ├── data
 │   │   ├── routeguide
 │   │   └── todo
+│   ├── client-rest
+│   │   ├── routeguide
+│   │   └── todo
 │   ├── main.go
 │   └── server
 │       └── main.go
@@ -60,7 +63,7 @@ Share knowledge and help others.
 │   │   └── server.go
 │   ├── protocol
 │   │   ├── grpc
-│   │   └── http
+│   │   └── rest
 │   ├── service
 │   │   ├── routeguide
 │   │   └── todo
