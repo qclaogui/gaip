@@ -1,8 +1,31 @@
 version: v1
+build:
+  excludes: []
 breaking:
   use:
     - FILE
+  except: []
+  ignore: []
+  ignore_only: {}
   ignore_unstable_packages: true
+
 lint:
   use:
     - DEFAULT
+  except: []
+  ignore:
+    # - routeguide/v1beta1
+    - kvstore
+  ignore_only:
+    RPC_REQUEST_RESPONSE_UNIQUE:
+      - bookstore/v1alpha1/bookstore.proto
+    RPC_RESPONSE_STANDARD_NAME:
+      - bookstore/v1alpha1/bookstore.proto
+  allow_comment_ignores: false
+  enum_zero_value_suffix: _UNSPECIFIED
+  rpc_allow_google_protobuf_empty_requests: true
+  rpc_allow_google_protobuf_empty_responses: true
+
+deps:
+- buf.build/googleapis/googleapis
+- buf.build/grpc-ecosystem/grpc-gateway

@@ -24,11 +24,11 @@ var (
 type Repository interface {
 	Create(context.Context, *pb.CreateRequest) (*pb.CreateResponse, error)
 
-	Read(context.Context, *pb.ReadRequest) (*pb.ReadResponse, error)
+	Get(context.Context, *pb.GetRequest) (*pb.GetResponse, error)
 
 	Update(context.Context, *pb.UpdateRequest) (*pb.UpdateResponse, error)
 
 	Delete(context.Context, *pb.DeleteRequest) (*pb.DeleteResponse, error)
 
-	ReadAll(context.Context, *pb.ReadAllRequest) (*pb.ReadAllResponse, error)
+	List(context.Context, *pb.ListRequest) (*pb.ListResponse, error)
 }

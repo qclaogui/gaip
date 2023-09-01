@@ -6,6 +6,7 @@ package todo
 
 import (
 	"context"
+	"log/slog"
 	"sync"
 
 	"github.com/google/uuid"
@@ -31,7 +32,7 @@ func NewMemoryRepository() *MemoryRepository {
 
 func (m *MemoryRepository) Create(_ context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
 	// request todo
-	todo := req.GetToDo()
+	todo := req.GetItem()
 	if todo.GetTitle() == "" && todo.GetDescription() == "" {
 		return nil, status.Error(codes.Unknown, ErrFailedToCreate.Error())
 	}
@@ -40,28 +41,32 @@ func (m *MemoryRepository) Create(_ context.Context, req *pb.CreateRequest) (*pb
 	defer m.mu.Unlock()
 
 	id := uuid.NewSHA1(uuid.NameSpaceOID, []byte(todo.GetTitle()+todo.GetDescription()))
+	todo.Id = id.String()
+
 	m.mem[id] = todo
-	return &pb.CreateResponse{Api: apiVersion, Id: id.String()}, nil
+	return &pb.CreateResponse{Api: apiVersion, Id: todo.Id}, nil
 }
 
-func (m *MemoryRepository) Read(_ context.Context, req *pb.ReadRequest) (*pb.ReadResponse, error) {
+func (m *MemoryRepository) Get(_ context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	id, _ := uuid.Parse(req.GetId())
+
+	slog.Warn("Repo info", "req_id", req.GetId(), "id", id, "mem", m.mem)
 	todo, ok := m.mem[id]
 	if !ok {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
 
-	return &pb.ReadResponse{Api: apiVersion, ToDo: todo}, nil
+	return &pb.GetResponse{Api: apiVersion, Item: todo}, nil
 }
 
 func (m *MemoryRepository) Update(_ context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	todo := req.GetToDo()
+	todo := req.GetItem()
 	id, _ := uuid.Parse(todo.GetId())
 
 	if _, ok := m.mem[id]; !ok {
@@ -85,7 +90,7 @@ func (m *MemoryRepository) Delete(_ context.Context, req *pb.DeleteRequest) (*pb
 	return &pb.DeleteResponse{Api: apiVersion, Deleted: 1}, nil
 }
 
-func (m *MemoryRepository) ReadAll(_ context.Context, _ *pb.ReadAllRequest) (*pb.ReadAllResponse, error) {
+func (m *MemoryRepository) List(_ context.Context, _ *pb.ListRequest) (*pb.ListResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -97,5 +102,5 @@ func (m *MemoryRepository) ReadAll(_ context.Context, _ *pb.ReadAllRequest) (*pb
 	if len(todos) < 1 {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
-	return &pb.ReadAllResponse{Api: apiVersion, ToDos: todos}, nil
+	return &pb.ListResponse{Api: apiVersion, Items: todos}, nil
 }

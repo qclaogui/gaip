@@ -29,8 +29,9 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 	// gRPC client options
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
 	// Use the OpenTelemetry gRPC client interceptor for tracing
-	// opts = append(opts, grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()))
+	//opts = append(opts, grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()))
 
 	// Register the gRPC server's handler with the HTTP gwmux
 	err := pbtodov1.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, "localhost:"+grpcPort, opts)
@@ -39,10 +40,11 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 		return err
 	}
 
-	// Wrapper middleware
+	// Wrapper http middleware
 	handler := middleware.RequestID(gwmux)
 	handler = middleware.Throttle(1000)(handler)
 
+	// Set up the REST server on port cfg.HTTPPort and handle requests by proxying them to the gRPC server
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: handler,
@@ -63,5 +65,6 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 	}()
 
 	slog.Warn("starting HTTP/REST gateway...", "http_port", port)
+	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	return srv.ListenAndServe()
 }

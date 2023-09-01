@@ -10,8 +10,10 @@ import (
 	"log"
 	"time"
 
-	todopbv1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	"github.com/qclaogui/golang-api-server/cmd/client-grpc/data"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -21,87 +23,126 @@ const (
 	apiVersion = "v1"
 )
 
+var (
+	tls                = flag.Bool("tls", false, "Connection uses TLS if true, else plain TCP")
+	caFile             = flag.String("ca_file", "", "The file containing the CA root cert file")
+	serverAddr         = flag.String("addr", "localhost:9095", "The server address in the format of host:port")
+	serverHostOverride = flag.String("server_host_override", "x.test.example.com", "The server name used to verify the hostname returned by the TLS handshake")
+)
+
 func main() {
-	// get configuration
-	address := flag.String("server", "localhost:9095", "gRPC server in format host:port")
 	flag.Parse()
+	var opts []grpc.DialOption
+	if *tls {
+		if *caFile == "" {
+			*caFile = data.Path("x509/ca_cert.pem")
+		}
+		creds, err := credentials.NewClientTLSFromFile(*caFile, *serverHostOverride)
+		if err != nil {
+			log.Fatalf("Failed to create TLS credentials: %v", err)
+		}
+		opts = append(opts, grpc.WithTransportCredentials(creds))
+	} else {
+		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	}
 
 	// Set up a connection to the server.
-	conn, err := grpc.Dial(*address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(*serverAddr, opts...)
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer func() { _ = conn.Close() }()
 
-	c := todopbv1.NewToDoServiceClient(conn)
+	client := pb.NewToDoServiceClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
-	reminder := timestamppb.New(time.Now().UTC().Add(time.Minute))
+	// Call createTodo
+	id := createTodo(ctx, client)
 
-	// Create
-	req1 := todopbv1.CreateRequest{
+	// Call getTodo
+	todo := getTodo(ctx, client, id)
+
+	// Call updateTodo
+	updateTodo(ctx, client, todo)
+
+	// Call listTodo
+	listTodo(ctx, client)
+
+	// Call deleteTodo
+	deleteTodo(ctx, client, id)
+
+}
+
+func createTodo(ctx context.Context, client pb.ToDoServiceClient) string {
+
+	resp, err := client.Create(ctx, &pb.CreateRequest{
 		Api: apiVersion,
-		ToDo: &todopbv1.ToDo{
+		Item: &pb.ToDo{
 			Title:       "title",
 			Description: "description",
-			Reminder:    reminder,
+			CreatedAt:   timestamppb.New(time.Now().UTC().Add(time.Minute)),
 		},
-	}
-
-	res1, err := c.Create(ctx, &req1)
+	})
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
 
-	log.Printf("Create result: <%+v>\n\n", res1)
+	log.Printf("Create resp: <%v>\n\n", resp)
+	return resp.Id
+}
 
-	//	Read
-	id := res1.Id
-	req2 := todopbv1.ReadRequest{Api: apiVersion, Id: id}
+func getTodo(ctx context.Context, client pb.ToDoServiceClient, id string) *pb.ToDo {
 
-	res2, err := c.Read(ctx, &req2)
-	if err != nil {
-		log.Fatalf("Read failed: %v", err)
-	}
-	log.Printf("Read result: <%+v>\n\n", res2)
-
-	// Update
-	req3 := todopbv1.UpdateRequest{
+	resp, err := client.Get(ctx, &pb.GetRequest{
 		Api: apiVersion,
-		ToDo: &todopbv1.ToDo{
-			Id:          res2.ToDo.Id,
-			Title:       res2.ToDo.Title,
-			Description: res2.ToDo.Description + " + updated",
-			Reminder:    res2.ToDo.Reminder,
-		},
+		Id:  id,
+	})
+	if err != nil {
+		log.Fatalf("Get failed: %v", err)
 	}
-	res3, err := c.Update(ctx, &req3)
+	log.Printf("Get resp: <%v>\n\n", resp)
+	return resp.Item
+
+}
+
+func updateTodo(ctx context.Context, client pb.ToDoServiceClient, todo *pb.ToDo) {
+
+	resp, err := client.Update(ctx, &pb.UpdateRequest{
+		Api: apiVersion,
+		Item: &pb.ToDo{
+			Id:          todo.Id,
+			Title:       todo.Title,
+			Description: todo.Description + " updated",
+			CreatedAt:   todo.CreatedAt,
+		},
+	})
 	if err != nil {
 		log.Fatalf("Update failed: %v", err)
 	}
-	log.Printf("Update result: <%+v>\n\n", res3)
+	log.Printf("Update resp: <%v>\n\n", resp)
+}
 
-	// ReadAll
-	req4 := todopbv1.ReadAllRequest{
+func listTodo(ctx context.Context, client pb.ToDoServiceClient) {
+
+	resp, err := client.List(ctx, &pb.ListRequest{
 		Api: apiVersion,
-	}
-	res4, err := c.ReadAll(ctx, &req4)
+	})
 	if err != nil {
-		log.Fatalf("ReadAll failed: %v", err)
+		log.Fatalf("List failed: %v", err)
 	}
-	log.Printf("ReadAll result: <%+v>\n\n", res4)
+	log.Printf("List resp: <%v>\n\n", resp)
+}
 
-	// Delete
-	req5 := todopbv1.DeleteRequest{
+func deleteTodo(ctx context.Context, client pb.ToDoServiceClient, id string) {
+
+	resp, err := client.Delete(ctx, &pb.DeleteRequest{
 		Api: apiVersion,
 		Id:  id,
-	}
-	res5, err := c.Delete(ctx, &req5)
+	})
 	if err != nil {
 		log.Fatalf("Delete failed: %v", err)
 	}
-	log.Printf("Delete result: <%+v>\n\n", res5)
-
+	log.Printf("Delete resp: <%v>\n\n", resp)
 }

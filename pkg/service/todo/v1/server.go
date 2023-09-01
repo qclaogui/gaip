@@ -90,7 +90,7 @@ func (s *ServiceServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	if err := req.GetToDo().GetReminder().CheckValid(); err != nil {
+	if err := req.GetItem().GetCreatedAt().CheckValid(); err != nil {
 		return nil, status.Error(codes.InvalidArgument, "reminder field has invalid format-> "+err.Error())
 	}
 
@@ -106,13 +106,13 @@ func (s *ServiceServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.
 	return s.repo.Update(ctx, req)
 }
 
-func (s *ServiceServer) Read(ctx context.Context, req *pb.ReadRequest) (*pb.ReadResponse, error) {
+func (s *ServiceServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.Read(ctx, req)
+	return s.repo.Get(ctx, req)
 }
 
 func (s *ServiceServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
@@ -124,11 +124,11 @@ func (s *ServiceServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.
 	return s.repo.Delete(ctx, req)
 }
 
-func (s *ServiceServer) ReadAll(ctx context.Context, req *pb.ReadAllRequest) (*pb.ReadAllResponse, error) {
+func (s *ServiceServer) List(ctx context.Context, req *pb.ListRequest) (*pb.ListResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.ReadAll(ctx, req)
+	return s.repo.List(ctx, req)
 }

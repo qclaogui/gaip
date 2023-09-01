@@ -11,7 +11,10 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/google/uuid v1.3.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.17.1
+	go.opentelemetry.io/otel v1.17.0
+	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.17.0
+	go.opentelemetry.io/otel/sdk v1.17.0
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
 	google.golang.org/grpc v1.57.0
 	google.golang.org/protobuf v1.31.0
@@ -22,17 +25,21 @@ require (
 	github.com/99designs/gqlgen v0.17.36 // indirect
 	github.com/Khan/genqlient v0.6.0 // indirect
 	github.com/adrg/xdg v0.4.0 // indirect
+	github.com/go-logr/logr v1.2.4 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0-rc4 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/vektah/gqlparser/v2 v2.5.8 // indirect
+	go.opentelemetry.io/otel/metric v1.17.0 // indirect
+	go.opentelemetry.io/otel/trace v1.17.0 // indirect
 	golang.org/x/net v0.14.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
-	golang.org/x/sys v0.11.0 // indirect
-	golang.org/x/text v0.12.0 // indirect
-	google.golang.org/genproto v0.0.0-20230803162519-f966b187b2e5 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20230726155614-23370e0ffb3e // indirect
+	golang.org/x/sys v0.12.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
+	google.golang.org/genproto v0.0.0-20230822172742-b8732ec3820d // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20230822172742-b8732ec3820d // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230822172742-b8732ec3820d // indirect
 )

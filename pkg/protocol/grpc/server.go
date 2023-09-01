@@ -60,6 +60,6 @@ func RunServer(
 	}()
 
 	// start gRPC server
-	slog.Info("starting gRPC server...", "grpc_port", port)
+	slog.Warn("starting gRPC server...", "grpc_port", port)
 	return srv.Serve(listen)
 }

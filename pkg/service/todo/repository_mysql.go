@@ -35,7 +35,7 @@ func (m *MysqlRepository) connect(ctx context.Context) (*sql.Conn, error) {
 	return c, nil
 }
 
-func (m *MysqlRepository) Read(ctx context.Context, req *pb.ReadRequest) (*pb.ReadResponse, error) {
+func (m *MysqlRepository) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -62,12 +62,12 @@ func (m *MysqlRepository) Read(ctx context.Context, req *pb.ReadRequest) (*pb.Re
 		return nil, fmt.Errorf("failed to retrieve field values from ToDo row-> " + err.Error())
 	}
 
-	todo.Reminder = timestamppb.New(reminder)
+	todo.CreatedAt = timestamppb.New(reminder)
 	if rows.Next() {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("found multiple ToDo rows with ID='%s'", id))
 	}
 
-	return &pb.ReadResponse{Api: apiVersion, ToDo: todo}, nil
+	return &pb.GetResponse{Api: apiVersion, Item: todo}, nil
 }
 
 func (m *MysqlRepository) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
@@ -78,9 +78,9 @@ func (m *MysqlRepository) Create(ctx context.Context, req *pb.CreateRequest) (*p
 	}
 	defer func() { _ = c.Close() }()
 
-	todo := req.GetToDo()
+	todo := req.GetItem()
 	_, err = c.ExecContext(ctx, "INSERT INTO ToDo(`ID`, `Title`, `Description`, `Reminder`) VALUES(?, ?, ?, ?)",
-		todo.GetId(), todo.GetTitle(), todo.GetDescription(), todo.GetReminder().AsTime())
+		todo.GetId(), todo.GetTitle(), todo.GetDescription(), todo.GetCreatedAt().AsTime())
 	if err != nil {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to insert into ToDo-> "+err.Error()))
 	}
@@ -95,10 +95,10 @@ func (m *MysqlRepository) Update(ctx context.Context, req *pb.UpdateRequest) (*p
 	}
 	defer func() { _ = c.Close() }()
 
-	todo := req.GetToDo()
+	todo := req.GetItem()
 
 	res, err := c.ExecContext(ctx, "UPDATE ToDo SET `Title`=?, `Description`=?, `Reminder`=? WHERE `ID`=?",
-		todo.Title, todo.Description, todo.Reminder.AsTime(), todo.Id)
+		todo.Title, todo.Description, todo.GetCreatedAt().AsTime(), todo.Id)
 	if err != nil {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to update ToDo-> "+err.Error()))
 	}
@@ -138,7 +138,7 @@ func (m *MysqlRepository) Delete(ctx context.Context, req *pb.DeleteRequest) (*p
 	return &pb.DeleteResponse{Api: apiVersion, Deleted: rows}, nil
 }
 
-func (m *MysqlRepository) ReadAll(ctx context.Context, _ *pb.ReadAllRequest) (*pb.ReadAllResponse, error) {
+func (m *MysqlRepository) List(ctx context.Context, _ *pb.ListRequest) (*pb.ListResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -159,7 +159,7 @@ func (m *MysqlRepository) ReadAll(ctx context.Context, _ *pb.ReadAllRequest) (*p
 		if err = rows.Scan(&todo.Id, &todo.Title, &todo.Description, &reminder); err != nil {
 			return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve field values from ToDo row-> "+err.Error()))
 		}
-		todo.Reminder = timestamppb.New(reminder)
+		todo.CreatedAt = timestamppb.New(reminder)
 		todos = append(todos, todo)
 	}
 
@@ -167,5 +167,5 @@ func (m *MysqlRepository) ReadAll(ctx context.Context, _ *pb.ReadAllRequest) (*p
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve data from ToDo-> "+err.Error()))
 	}
 
-	return &pb.ReadAllResponse{Api: apiVersion, ToDos: todos}, nil
+	return &pb.ListResponse{Api: apiVersion, Items: todos}, nil
 }

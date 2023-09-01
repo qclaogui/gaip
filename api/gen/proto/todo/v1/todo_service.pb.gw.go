@@ -69,8 +69,8 @@ func local_request_ToDoService_Create_0(ctx context.Context, marshaler runtime.M
 
 }
 
-func request_ToDoService_Read_0(ctx context.Context, marshaler runtime.Marshaler, client ToDoServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ReadRequest
+func request_ToDoService_Get_0(ctx context.Context, marshaler runtime.Marshaler, client ToDoServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -81,13 +81,13 @@ func request_ToDoService_Read_0(ctx context.Context, marshaler runtime.Marshaler
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.Read(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.Get(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_ToDoService_Read_0(ctx context.Context, marshaler runtime.Marshaler, server ToDoServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ReadRequest
+func local_request_ToDoService_Get_0(ctx context.Context, marshaler runtime.Marshaler, server ToDoServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -98,7 +98,7 @@ func local_request_ToDoService_Read_0(ctx context.Context, marshaler runtime.Mar
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.Read(ctx, &protoReq)
+	msg, err := server.Get(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -137,6 +137,40 @@ func local_request_ToDoService_Update_0(ctx context.Context, marshaler runtime.M
 
 }
 
+func request_ToDoService_List_0(ctx context.Context, marshaler runtime.Marshaler, client ToDoServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListRequest
+	var metadata runtime.ServerMetadata
+
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.List(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_ToDoService_List_0(ctx context.Context, marshaler runtime.Marshaler, server ToDoServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListRequest
+	var metadata runtime.ServerMetadata
+
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.List(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 func request_ToDoService_Delete_0(ctx context.Context, marshaler runtime.Marshaler, client ToDoServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteRequest
 	var metadata runtime.ServerMetadata
@@ -171,40 +205,6 @@ func local_request_ToDoService_Delete_0(ctx context.Context, marshaler runtime.M
 
 }
 
-func request_ToDoService_ReadAll_0(ctx context.Context, marshaler runtime.Marshaler, client ToDoServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ReadAllRequest
-	var metadata runtime.ServerMetadata
-
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	msg, err := client.ReadAll(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-
-}
-
-func local_request_ToDoService_ReadAll_0(ctx context.Context, marshaler runtime.Marshaler, server ToDoServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ReadAllRequest
-	var metadata runtime.ServerMetadata
-
-	newReader, berr := utilities.IOReaderFactory(req.Body)
-	if berr != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
-	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	msg, err := server.ReadAll(ctx, &protoReq)
-	return msg, metadata, err
-
-}
-
 // RegisterToDoServiceHandlerServer registers the http handlers for service ToDoService to "mux".
 // UnaryRPC     :call ToDoServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -217,43 +217,47 @@ func RegisterToDoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/Create")
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/Create", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/Create"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ToDoService_Create_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ToDoService_Create_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		ctx = runtime.NewServerMetadataContext(ctx, md)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ToDoService_Create_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ToDoService_Create_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ToDoService_Read_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ToDoService_Get_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/Read")
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/Get", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/Get"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ToDoService_Read_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ToDoService_Get_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		ctx = runtime.NewServerMetadataContext(ctx, md)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ToDoService_Read_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ToDoService_Get_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -263,20 +267,47 @@ func RegisterToDoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/Update")
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/Update", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/Update"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ToDoService_Update_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ToDoService_Update_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		ctx = runtime.NewServerMetadataContext(ctx, md)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ToDoService_Update_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ToDoService_Update_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_ToDoService_List_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/List", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/List"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_ToDoService_List_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_ToDoService_List_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -286,43 +317,22 @@ func RegisterToDoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/Delete")
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/Delete", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/Delete"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ToDoService_Delete_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ToDoService_Delete_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		ctx = runtime.NewServerMetadataContext(ctx, md)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ToDoService_Delete_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
-	})
-
-	mux.Handle("POST", pattern_ToDoService_ReadAll_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		var stream runtime.ServerTransportStream
-		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/todo.v1.ToDoService/ReadAll")
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := local_request_ToDoService_ReadAll_0(rctx, inboundMarshaler, server, req, pathParams)
-		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		ctx = runtime.NewServerMetadataContext(ctx, md)
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-
-		forward_ToDoService_ReadAll_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ToDoService_Delete_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -332,7 +342,7 @@ func RegisterToDoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 // RegisterToDoServiceHandlerFromEndpoint is same as RegisterToDoServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterToDoServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.Dial(endpoint, opts...)
+	conn, err := grpc.DialContext(ctx, endpoint, opts...)
 	if err != nil {
 		return err
 	}
@@ -371,39 +381,43 @@ func RegisterToDoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/Create")
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/Create", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/Create"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ToDoService_Create_0(rctx, inboundMarshaler, client, req, pathParams)
-		ctx = runtime.NewServerMetadataContext(ctx, md)
+		resp, md, err := request_ToDoService_Create_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ToDoService_Create_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ToDoService_Create_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ToDoService_Read_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ToDoService_Get_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/Read")
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/Get", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/Get"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ToDoService_Read_0(rctx, inboundMarshaler, client, req, pathParams)
-		ctx = runtime.NewServerMetadataContext(ctx, md)
+		resp, md, err := request_ToDoService_Get_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ToDoService_Read_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ToDoService_Get_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -411,19 +425,43 @@ func RegisterToDoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/Update")
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/Update", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/Update"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ToDoService_Update_0(rctx, inboundMarshaler, client, req, pathParams)
-		ctx = runtime.NewServerMetadataContext(ctx, md)
+		resp, md, err := request_ToDoService_Update_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ToDoService_Update_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ToDoService_Update_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_ToDoService_List_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/List", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/List"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_ToDoService_List_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_ToDoService_List_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -431,39 +469,21 @@ func RegisterToDoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/Delete")
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/Delete", runtime.WithHTTPPathPattern("/todo.v1.ToDoService/Delete"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ToDoService_Delete_0(rctx, inboundMarshaler, client, req, pathParams)
-		ctx = runtime.NewServerMetadataContext(ctx, md)
+		resp, md, err := request_ToDoService_Delete_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ToDoService_Delete_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
-	})
-
-	mux.Handle("POST", pattern_ToDoService_ReadAll_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/todo.v1.ToDoService/ReadAll")
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := request_ToDoService_ReadAll_0(rctx, inboundMarshaler, client, req, pathParams)
-		ctx = runtime.NewServerMetadataContext(ctx, md)
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-
-		forward_ToDoService_ReadAll_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ToDoService_Delete_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -473,23 +493,23 @@ func RegisterToDoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 var (
 	pattern_ToDoService_Create_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"todo.v1.ToDoService", "Create"}, ""))
 
-	pattern_ToDoService_Read_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"todo.v1.ToDoService", "Read"}, ""))
+	pattern_ToDoService_Get_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"todo.v1.ToDoService", "Get"}, ""))
 
 	pattern_ToDoService_Update_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"todo.v1.ToDoService", "Update"}, ""))
 
-	pattern_ToDoService_Delete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"todo.v1.ToDoService", "Delete"}, ""))
+	pattern_ToDoService_List_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"todo.v1.ToDoService", "List"}, ""))
 
-	pattern_ToDoService_ReadAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"todo.v1.ToDoService", "ReadAll"}, ""))
+	pattern_ToDoService_Delete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"todo.v1.ToDoService", "Delete"}, ""))
 )
 
 var (
 	forward_ToDoService_Create_0 = runtime.ForwardResponseMessage
 
-	forward_ToDoService_Read_0 = runtime.ForwardResponseMessage
+	forward_ToDoService_Get_0 = runtime.ForwardResponseMessage
 
 	forward_ToDoService_Update_0 = runtime.ForwardResponseMessage
 
-	forward_ToDoService_Delete_0 = runtime.ForwardResponseMessage
+	forward_ToDoService_List_0 = runtime.ForwardResponseMessage
 
-	forward_ToDoService_ReadAll_0 = runtime.ForwardResponseMessage
+	forward_ToDoService_Delete_0 = runtime.ForwardResponseMessage
 )

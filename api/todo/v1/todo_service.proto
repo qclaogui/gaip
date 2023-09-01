@@ -15,13 +15,18 @@ message ToDo {
 
   string description = 3;
 
-  google.protobuf.Timestamp reminder = 4;
+  bool completed = 4;
+
+  google.protobuf.Timestamp created_at = 5;
+
+  google.protobuf.Timestamp updated_at = 6;
 }
 
 message CreateRequest {
   // API version
   string api = 1;
-  ToDo to_do = 2;
+
+  ToDo item = 2;
 }
 
 message CreateResponse {
@@ -31,30 +36,31 @@ message CreateResponse {
   string id = 2;
 }
 
-message ReadRequest {
+message GetRequest {
   // API version
   string api = 1;
+
   string id = 2;
 }
 
-message ReadResponse {
+message GetResponse {
   // API version
   string api = 1;
-  ToDo to_do = 2;
+
+  ToDo item = 2;
 }
 
 message UpdateRequest {
   // API version
   string api = 1;
-  ToDo to_do = 2;
+
+  ToDo item = 2;
 }
 
 message UpdateResponse {
   // API version
   string api = 1;
 
-  // Contains number of entities have been updated
-  //  Equals 1 in case of successful update
   int64 updated = 2;
 }
 
@@ -72,27 +78,31 @@ message DeleteResponse {
   int64 deleted = 2;
 }
 
-message ReadAllRequest {
+message ListRequest {
   // API version
   string api = 1;
+
+  int32 limit = 2;
+
+  bool completed = 3;
 }
 
-message ReadAllResponse {
+message ListResponse {
   // API version
   string api = 1;
 
   // List of all
-  repeated ToDo to_dos = 2;
+  repeated ToDo items = 2;
 }
 
 service ToDoService {
   rpc Create(CreateRequest) returns (CreateResponse);
 
-  rpc Read(ReadRequest) returns (ReadResponse);
+  rpc Get(GetRequest) returns (GetResponse);
 
   rpc Update(UpdateRequest) returns (UpdateResponse);
 
-  rpc Delete(DeleteRequest) returns (DeleteResponse);
+  rpc List(ListRequest) returns (ListResponse);
 
-  rpc ReadAll(ReadAllRequest) returns (ReadAllResponse);
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
 }

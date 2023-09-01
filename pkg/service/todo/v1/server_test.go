@@ -53,11 +53,11 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 				ctx: ctx,
 				req: &pb.CreateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Id:          ID,
 						Title:       "title",
 						Description: "description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -77,10 +77,10 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 				ctx: ctx,
 				req: &pb.CreateRequest{
 					Api: "v1000",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Title:       "title",
 						Description: "description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -94,10 +94,10 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 				ctx: ctx,
 				req: &pb.CreateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Title:       "title",
 						Description: "description",
-						Reminder: &timestamp.Timestamp{
+						CreatedAt: &timestamp.Timestamp{
 							Seconds: 1,
 							Nanos:   -1,
 						},
@@ -114,10 +114,10 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 				ctx: ctx,
 				req: &pb.CreateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Title:       "title",
 						Description: "description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -134,10 +134,10 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 				ctx: ctx,
 				req: &pb.CreateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Title:       "title",
 						Description: "description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -163,7 +163,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 	}
 }
 
-func Test_toDoServiceServer_Read(t *testing.T) {
+func Test_toDoServiceServer_Get(t *testing.T) {
 	ctx := context.Background()
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -179,14 +179,14 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.ReadRequest
+		req *pb.GetRequest
 	}
 	tests := []struct {
 		name    string
 		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.ReadResponse
+		want    *pb.GetResponse
 		wantErr bool
 	}{
 		{
@@ -194,7 +194,7 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ReadRequest{
+				req: &pb.GetRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -204,13 +204,13 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 					AddRow(ID, "title", "description", tm)
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WithArgs(ID).WillReturnRows(rows)
 			},
-			want: &pb.ReadResponse{
+			want: &pb.GetResponse{
 				Api: "v1",
-				ToDo: &pb.ToDo{
+				Item: &pb.ToDo{
 					Id:          ID,
 					Title:       "title",
 					Description: "description",
-					Reminder:    reminder,
+					CreatedAt:   reminder,
 				},
 			},
 		},
@@ -219,7 +219,7 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ReadRequest{
+				req: &pb.GetRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -232,7 +232,7 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ReadRequest{
+				req: &pb.GetRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -248,7 +248,7 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ReadRequest{
+				req: &pb.GetRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -263,14 +263,14 @@ func Test_toDoServiceServer_Read(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mock()
-			got, err := tt.ssv.Read(tt.args.ctx, tt.args.req)
+			got, err := tt.ssv.Get(tt.args.ctx, tt.args.req)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDoService.Read() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ToDoService.Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
 			if err == nil && !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDoService.Read() = %v, want %v", got, tt.want)
+				t.Errorf("ToDoService.Get() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -309,11 +309,11 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				ctx: ctx,
 				req: &pb.UpdateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Id:          ID,
 						Title:       "new title",
 						Description: "new description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -333,11 +333,11 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				ctx: ctx,
 				req: &pb.UpdateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -351,11 +351,11 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				ctx: ctx,
 				req: &pb.UpdateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
-						Reminder: &timestamp.Timestamp{
+						CreatedAt: &timestamp.Timestamp{
 							Seconds: 1,
 							Nanos:   -1,
 						},
@@ -372,11 +372,11 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				ctx: ctx,
 				req: &pb.UpdateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -393,11 +393,11 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				ctx: ctx,
 				req: &pb.UpdateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -414,11 +414,11 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				ctx: ctx,
 				req: &pb.UpdateRequest{
 					Api: "v1",
-					ToDo: &pb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
-						Reminder:    reminder,
+						CreatedAt:   reminder,
 					},
 				},
 			},
@@ -563,7 +563,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	}
 }
 
-func Test_toDoServiceServer_ReadAll(t *testing.T) {
+func Test_toDoServiceServer_List(t *testing.T) {
 	ctx := context.Background()
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -584,14 +584,14 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.ReadAllRequest
+		req *pb.ListRequest
 	}
 	tests := []struct {
 		name    string
 		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.ReadAllResponse
+		want    *pb.ListResponse
 		wantErr bool
 	}{
 		{
@@ -599,7 +599,7 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ReadAllRequest{
+				req: &pb.ListRequest{
 					Api: "v1",
 				},
 			},
@@ -609,20 +609,20 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 					AddRow(ID2, "title 2", "description 2", tm2)
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WillReturnRows(rows)
 			},
-			want: &pb.ReadAllResponse{
+			want: &pb.ListResponse{
 				Api: "v1",
-				ToDos: []*pb.ToDo{
+				Items: []*pb.ToDo{
 					{
 						Id:          ID,
 						Title:       "title 1",
 						Description: "description 1",
-						Reminder:    reminder1,
+						CreatedAt:   reminder1,
 					},
 					{
 						Id:          ID2,
 						Title:       "title 2",
 						Description: "description 2",
-						Reminder:    reminder2,
+						CreatedAt:   reminder2,
 					},
 				},
 			},
@@ -632,7 +632,7 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ReadAllRequest{
+				req: &pb.ListRequest{
 					Api: "v1",
 				},
 			},
@@ -640,9 +640,9 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 				rows := sqlmock.NewRows([]string{"ID", "Title", "Description", "Reminder"})
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WillReturnRows(rows)
 			},
-			want: &pb.ReadAllResponse{
+			want: &pb.ListResponse{
 				Api:   "v1",
-				ToDos: []*pb.ToDo(nil),
+				Items: []*pb.ToDo(nil),
 			},
 		},
 		{
@@ -650,7 +650,7 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ReadAllRequest{
+				req: &pb.ListRequest{
 					Api: "v1",
 				},
 			},
@@ -661,13 +661,13 @@ func Test_toDoServiceServer_ReadAll(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mock()
-			got, err := tt.ssv.ReadAll(tt.args.ctx, tt.args.req)
+			got, err := tt.ssv.List(tt.args.ctx, tt.args.req)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDoService.ReadAll() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ToDoService.List() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDoService.ReadAll() = %v, want %v", got, tt.want)
+				t.Errorf("ToDoService.List() = %v, want %v", got, tt.want)
 			}
 		})
 	}

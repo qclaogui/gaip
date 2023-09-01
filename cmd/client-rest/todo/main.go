@@ -15,126 +15,141 @@ import (
 	"time"
 )
 
+var contentType = "application/json"
+
+var (
+	serverAddr = flag.String("addr", "http://localhost:8080", "HTTP gateway url, e.g. http://localhost:8080")
+)
+
+type Todo struct {
+	ID          string    `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
 func main() {
-	// get configuration
-	address := flag.String("server", "http://localhost:8080", "HTTP gateway url, e.g. http://localhost:8080")
 	flag.Parse()
 
-	t := time.Now().In(time.UTC)
-	pfx := t.Format(time.RFC3339Nano)
-
-	var body string
-	var bodyBytes []byte
-
-	var req *http.Request
-	var resp *http.Response
-	var err error
-
 	// Call Create
-	resp, err = http.Post(*address+"/v1/todo", "application/json", strings.NewReader(fmt.Sprintf(`
-		{
-			"api":"v1",
-			"toDo": {
-				"title":"title (%s)",
-				"description":"description (%s)",
-				"reminder":"%s"
-			}
-		}
-	`, pfx, pfx, pfx)))
+	id := createTodo()
+
+	// Call Get
+	todo := getTodo(id)
+
+	// Call Update
+	updateTodo(todo)
+
+	// Call List
+	listTodo()
+
+	// Call Delete
+	deleteTodo(id)
+}
+
+func CallHTTP(method string, endpoint string, body io.Reader) []byte {
+	client := &http.Client{Timeout: 10 * time.Second}
+
+	req, err := http.NewRequest(method, endpoint, body)
 	if err != nil {
+		log.Fatalf("error constructing HTTP request: %v", err)
+	}
+
+	req.Header.Set("Content-Type", contentType)
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("HTTP request error: %v", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	if resp.StatusCode != http.StatusOK {
 		log.Fatalf("failed to call Create method: %v", err)
 	}
 
-	bodyBytes, err = io.ReadAll(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		body = fmt.Sprintf("failed read Create response body: %v", err)
-	} else {
-		body = string(bodyBytes)
-	}
-	log.Printf("Create response: Code=%d, Body=%s\n\n", resp.StatusCode, body)
+	log.Printf("HTTP Response: Code=%d, Body=%s\n\n", resp.StatusCode, body)
 
-	// parse ID of created ToDo
-	var created struct {
+	respData, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalf("error reading HTTP body: %v", err)
+	}
+	return respData
+}
+
+func createTodo() string {
+	reqMethod := http.MethodPost
+	reqURL := *serverAddr + "/v1/todo"
+	reqBody := strings.NewReader(fmt.Sprintf(`{
+		"api":"v1",
+		"item": {
+			"title":"title",
+			"description":"description",
+			"created_at":"%s"
+		}
+	}`, time.Now().In(time.UTC).Format(time.RFC3339Nano)))
+
+	respBytes := CallHTTP(reqMethod, reqURL, reqBody)
+
+	var createResp struct {
 		API string `json:"api"`
 		ID  string `json:"id"`
 	}
-	err = json.Unmarshal(bodyBytes, &created)
-	if err != nil {
+	if err := json.Unmarshal(respBytes, &createResp); err != nil {
 		log.Fatalf("failed to unmarshal JSON response of Create method: %v", err)
 	}
 
-	// Call Read
-	resp, err = http.Get(fmt.Sprintf("%s%s/%s", *address, "/v1/todo", created.ID))
-	if err != nil {
-		log.Fatalf("failed to call Read method: %v", err)
-	}
-	bodyBytes, err = io.ReadAll(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		body = fmt.Sprintf("failed read Read response body: %v", err)
-	} else {
-		body = string(bodyBytes)
-	}
-	log.Printf("Read response: Code=%d, Body=%s\n\n", resp.StatusCode, body)
+	return createResp.ID
+}
 
-	// Call Update
-	req, err = http.NewRequest(http.MethodPut, fmt.Sprintf("%s%s/%s", *address, "/v1/todo", created.ID), strings.NewReader(fmt.Sprintf(`
-		{
-			"api":"v1",
-			"toDo": {
-				"title":"title (%s) + updated",
-				"description":"description (%s) + updated",
-				"reminder":"%s"
-			}
+func deleteTodo(id string) {
+	reqMethod := http.MethodDelete
+	reqURL := *serverAddr + "/v1/todo/" + id
+
+	respBytes := CallHTTP(reqMethod, reqURL, nil)
+	log.Printf("Delete respBody=%s\n\n", respBytes)
+}
+
+func listTodo() {
+	reqMethod := http.MethodGet
+	reqURL := *serverAddr + "/v1/todo/all"
+
+	respBytes := CallHTTP(reqMethod, reqURL, nil)
+	log.Printf("List respBody=%s\n\n", respBytes)
+}
+
+func getTodo(id string) *Todo {
+	reqMethod := http.MethodGet
+	reqURL := *serverAddr + "/v1/todo/" + id
+
+	respBytes := CallHTTP(reqMethod, reqURL, nil)
+
+	var GetResp struct {
+		API  string `json:"api"`
+		Item *Todo  `json:"item"`
+	}
+	if err := json.Unmarshal(respBytes, &GetResp); err != nil {
+		log.Fatalf("failed to unmarshal JSON response of Create method: %v", err)
+	}
+
+	return GetResp.Item
+}
+
+func updateTodo(todo *Todo) {
+	reqMethod := http.MethodPut
+	reqURL := *serverAddr + "/v1/todo/" + todo.ID
+
+	reqBody := strings.NewReader(fmt.Sprintf(`
+	{
+		"api":"v1",
+		"item": {
+			"id":"%s",
+			"title":"%s",
+			"description":"%s updated",
+			"updated_at":"%s"
 		}
-	`, pfx, pfx, pfx)))
-	if err != nil {
-		log.Fatalf("failed to call Update method: %v", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-	resp, err = http.DefaultClient.Do(req)
-	if err != nil {
-		log.Fatalf("failed to call Update method: %v", err)
-	}
-	bodyBytes, err = io.ReadAll(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		body = fmt.Sprintf("failed read Update response body: %v", err)
-	} else {
-		body = string(bodyBytes)
-	}
-	log.Printf("Update response: Code=%d, Body=%s\n\n", resp.StatusCode, body)
+	}`, todo.ID, todo.Title, todo.Description, time.Now().In(time.UTC).Format(time.RFC3339Nano)))
 
-	// Call ReadAll
-	resp, err = http.Get(*address + "/v1/todo/all")
-	if err != nil {
-		log.Fatalf("failed to call ReadAll method: %v", err)
-	}
-	bodyBytes, err = io.ReadAll(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		body = fmt.Sprintf("failed read ReadAll response body: %v", err)
-	} else {
-		body = string(bodyBytes)
-	}
-	log.Printf("ReadAll response: Code=%d, Body=%s\n\n", resp.StatusCode, body)
+	respBytes := CallHTTP(reqMethod, reqURL, reqBody)
 
-	// Call Delete
-	req, err = http.NewRequest(http.MethodDelete, fmt.Sprintf("%s%s/%s", *address, "/v1/todo", created.ID), nil)
-	if err != nil {
-		log.Fatalf("failed to call Update method: %v", err)
-	}
-	resp, err = http.DefaultClient.Do(req)
-	if err != nil {
-		log.Fatalf("failed to call Delete method: %v", err)
-	}
-	bodyBytes, err = io.ReadAll(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		body = fmt.Sprintf("failed read Delete response body: %v", err)
-	} else {
-		body = string(bodyBytes)
-	}
-	log.Printf("Delete response: Code=%d, Body=%s\n\n", resp.StatusCode, body)
+	log.Printf("Update respBody=%s\n\n", respBytes)
 }

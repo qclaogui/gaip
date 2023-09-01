@@ -37,23 +37,27 @@ GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 ##@ Regenerate gRPC code
 
 .PHONY: buf/gen
-buf/gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) ## buf regenerate gRPC code
-	@rm -Rf api/openapiv2/gen/ api/gen
-	cd api/ && $(BUF) generate
+buf/gen: ## buf regenerate gRPC code
+buf/gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
+	@rm -Rf api/gen third_party/gen
+	@cd api/ && $(BUF) generate
 
 .PHONY: protoc/gen
-protoc/gen: $(PROTOC_GEN_GO) ## protoc regenerate gRPC code
+protoc/gen: ## protoc regenerate gRPC code
+protoc/gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
+	@rm -Rf api/gen third_party/gen
+	@mkdir -p api/gen/proto third_party/gen/openapiv2
 	@protoc -I api \
 		--go_out api/gen/proto \
 		--go_opt paths=source_relative \
-		--go_grpc_out api/gen/proto \
-		--go_grpc_opt paths=source_relative \
-		--go_grpc_opt require_unimplemented_servers=false \
+		--go-grpc_out api/gen/proto \
+		--go-grpc_opt paths=source_relative \
+		--go-grpc_opt require_unimplemented_servers=false \
 		api/todo/v1/todo_service.proto  \
-		api/routeguide/v1/route_guide.proto
+		api/routeguide/v1/route_guide.proto \
+		api/bookstore/v1alpha1/bookstore.proto
 
-# grpc-gateway
-# https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/grpc_api_configuration/
+    # grpc-gateway
 	@protoc -I api \
 		--grpc-gateway_out api/gen/proto \
 		--grpc-gateway_opt logtostderr=true \
@@ -61,24 +65,12 @@ protoc/gen: $(PROTOC_GEN_GO) ## protoc regenerate gRPC code
 		--grpc-gateway_opt generate_unbound_methods=true \
 		api/todo/v1/todo_service.proto
 
-# # grpc-gateway
-# # https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/grpc_api_configuration/
-# 	@protoc -I api \
-# 		--grpc-gateway_out api/gen/proto \
-# 		--grpc-gateway_opt logtostderr=true \
-# 		--grpc-gateway_opt paths=source_relative \
-# 		--grpc-gateway_opt generate_unbound_methods=true \
-# 		--grpc-gateway_opt standalone=true \
-# 		--grpc-gateway_opt grpc_api_configuration=path/to/your_service.yaml \
-# 		api/todo/v1/todo_service.proto
-
-# # OpenAPI
-# 	@protoc -I api \
-# 		--openapiv2_out api/gen/proto \
-# 		--openapiv2_opt logtostderr=true \
-# 		--openapiv2_opt grpc_api_configuration=path/to/your_service.yaml \
-# 		--openapiv2_opt openapi_configuration=path/to/your_service_swagger.yaml \
-# 		api/todo/v1/todo_service.proto
+    # OpenAPI
+	@protoc -I api \
+ 		--openapiv2_out third_party/gen/openapiv2 \
+ 		--openapiv2_opt logtostderr=true \
+ 		--openapiv2_opt generate_unbound_methods=true \
+ 		api/todo/v1/todo_service.proto
 
 ##@ Dependencies
 
@@ -115,7 +107,6 @@ clean: ## Remove artefacts or generated files from previous build
 .PHONY: fmt
 fmt: ## Runs fmt code.
 fmt: go/fmt buf/fmt
-	$(info ******************** done ********************)
 
 .PHONY: go/fmt
 go/fmt: $(GOIMPORTS)
@@ -126,6 +117,11 @@ go/fmt: $(GOIMPORTS)
 	done
 	@$(GOIMPORTS) -w $(GO_FILES_TO_FMT)
 
+.PHONY: buf/mod
+buf/mod: ## run buf mod update after adding a dependency to your buf.yaml
+	@echo ">> run buf mod update"
+	@cd api/ && $(BUF) mod update
+
 .PHONY: buf/fmt
 buf/fmt: ## examining all of the proto files.
 	@echo ">> run buf format"
@@ -133,20 +129,19 @@ buf/fmt: ## examining all of the proto files.
 
 .PHONY: lint
 lint: ## Runs various static analysis against our code.
-lint: go/lint goreleaser/lint buf/lint $(COPYRIGHT)
+lint: go/lint goreleaser/lint buf/lint $(COPYRIGHT) fmt
 	@$(COPYRIGHT) $(shell go list -f "{{.Dir}}" ./... | xargs -I {} find {} -name "*.go")
-	$(info ******************** done ********************)
 
 .PHONY: goreleaser/lint
 goreleaser/lint: $(GORELEASER) ## examining all of the Go files.
 	@echo ">> run goreleaser check"
 	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
-	$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
+	@$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
 
 .PHONY: go/lint
 go/lint: $(GOLANGCI_LINT) ## examining all of the Go files.
 	@echo ">> run golangci-lint"
-	$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
+	@$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
 
 .PHONY: buf/lint
 buf/lint: $(BUF) buf/fmt ## examining all of the proto files.
