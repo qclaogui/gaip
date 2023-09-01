@@ -15,12 +15,18 @@ import (
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc"
+	"github.com/qclaogui/golang-api-server/pkg/protocol/rest"
 )
 
 // Config is configuration for Server
 type Config struct {
-	// gRPC port to listen by gRPC server
+	// gRPC server start parameters section
+	// GRPCPort is TCP port to listen by gRPC server
 	GRPCPort string
+
+	// HTTP/REST gateway start parameters section
+	// HTTPPort is TCP port to listen by HTTP/REST gateway
+	HTTPPort string
 
 	// DB Datastore parameters section
 	// DBHost is host of database
@@ -42,6 +48,7 @@ func Bootstrap() error {
 	ctx := context.Background()
 	var cfg Config
 	flag.StringVar(&cfg.GRPCPort, "grpc-port", "9095", "gRPC port to bind")
+	flag.StringVar(&cfg.HTTPPort, "http-port", "8080", "http port to bind")
 	flag.StringVar(&cfg.DBHost, "db-host", "127.0.0.1", "Database host")
 	flag.StringVar(&cfg.DBUser, "db-user", "root", "Database user")
 	flag.StringVar(&cfg.DBPassword, "db-password", "", "Database password")
@@ -58,6 +65,10 @@ func Bootstrap() error {
 		return fmt.Errorf("invalid TCP port for gRPC server: '%s'", cfg.GRPCPort)
 	}
 
+	if len(cfg.HTTPPort) == 0 {
+		return fmt.Errorf("invalid TCP port for HTTP gateway: '%s'", cfg.HTTPPort)
+	}
+
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
 	//param := "parseTime=true"
@@ -68,12 +79,15 @@ func Bootstrap() error {
 	if err != nil {
 		return err
 	}
-
 	routeGuideSrv, err := routeguidev1.NewServiceServer(routeguidev1.WithMemoryRepository())
 	if err != nil {
 		return err
 	}
 
+	// run HTTP gateway
+	go func() { _ = rest.RunServer(ctx, cfg.GRPCPort, cfg.HTTPPort) }()
+
+	// run gRPC server
 	return grpc.RunServer(
 		ctx,
 		toDoSrv,
