@@ -19,3 +19,5 @@ dist/
 
 # auto generated Go files
 *_gen.go
+
+.cache/

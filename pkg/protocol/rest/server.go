@@ -6,15 +6,19 @@ package rest
 
 import (
 	"context"
+	"io/fs"
 	"log/slog"
+	"mime"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/rest/middleware"
+	"github.com/qclaogui/golang-api-server/third_party"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -40,14 +44,23 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 		return err
 	}
 
+	openAPI := getOpenAPIHandler()
+
 	// Wrapper http middleware
 	handler := middleware.RequestID(gwmux)
 	handler = middleware.Throttle(1000)(handler)
 
 	// Set up the REST server on port cfg.HTTPPort and handle requests by proxying them to the gRPC server
 	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: handler,
+		Addr: ":" + port,
+		// Handler: handler,
+		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if strings.HasPrefix(r.URL.Path, "/api") {
+				handler.ServeHTTP(w, r)
+				return
+			}
+			openAPI.ServeHTTP(w, r)
+		}),
 	}
 
 	// graceful shutdown
@@ -67,4 +80,16 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 	slog.Warn("starting HTTP/REST gateway...", "http_port", port)
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	return srv.ListenAndServe()
+}
+
+// getOpenAPIHandler serves an OpenAPI UI.
+// Adapted from https://github.com/philips/grpc-gateway-example/blob/a269bcb5931ca92be0ceae6130ac27ae89582ecc/cmd/serve.go#L63
+func getOpenAPIHandler() http.Handler {
+	_ = mime.AddExtensionType(".svg", "image/svg+xml")
+	// Use subdirectory in embedded files
+	subFS, err := fs.Sub(third_party.OpenAPI, "gen/openapiv2")
+	if err != nil {
+		panic("couldn't create sub filesystem: " + err.Error())
+	}
+	return http.FileServer(http.FS(subFS))
 }

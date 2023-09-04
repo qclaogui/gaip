@@ -2,6 +2,8 @@ include .bingo/Variables.mk
 
 .DEFAULT_GOAL := help
 
+SWAGGER_UI_VERSION:=v5.5.0
+
 ##@ Build
 
 #
@@ -41,6 +43,10 @@ buf/gen: ## buf regenerate gRPC code
 buf/gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 	@rm -Rf api/gen third_party/gen
 	@cd api/ && $(BUF) generate
+
+.PHONY: swagger-ui
+swagger-ui: ## Generate Swagger UI
+	SWAGGER_UI_VERSION=$(SWAGGER_UI_VERSION) tools/scripts/generate-swagger-ui.sh
 
 .PHONY: protoc/gen
 protoc/gen: ## protoc regenerate gRPC code
