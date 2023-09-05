@@ -13,7 +13,7 @@ import (
 
 	pbrouteguidev1 "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
 	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
-	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/middleware"
+	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -31,13 +31,8 @@ func RunServer(
 	}
 
 	// gRPC server startup options
-	var opts []grpc.ServerOption
+	srv := grpc.NewServer(interceptors.RegisterGRPCServerOption()...)
 
-	// add middleware
-	opts = middleware.AddLogging(opts)
-	opts = middleware.AddRecovery(opts)
-
-	srv := grpc.NewServer(opts...)
 	//	register service
 	pbtodov1.RegisterToDoServiceServer(srv, toDoSrv)
 	pbrouteguidev1.RegisterRouteGuideServiceServer(srv, routeGuideSrv)

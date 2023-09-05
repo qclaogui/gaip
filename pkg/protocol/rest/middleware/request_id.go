@@ -29,7 +29,7 @@ const RequestIDKey ctxKeyRequestID = 0
 var RequestIDHeader = "X-Request-Id"
 
 var prefix string
-var reqid uint64
+var reqID uint64
 
 // A quick note on the statistics here: we're trying to calculate the chance that
 // two randomly generated base62 prefixes will collide. We use the formula from
@@ -73,7 +73,7 @@ func RequestID(next http.Handler) http.Handler {
 		ctx := r.Context()
 		requestID := r.Header.Get(RequestIDHeader)
 		if requestID == "" {
-			myid := atomic.AddUint64(&reqid, 1)
+			myid := atomic.AddUint64(&reqID, 1)
 			requestID = fmt.Sprintf("%s-%06d", prefix, myid)
 		}
 		ctx = context.WithValue(ctx, RequestIDKey, requestID)
@@ -96,5 +96,5 @@ func GetReqID(ctx context.Context) string {
 
 // NextRequestID generates the next request ID in the sequence.
 func NextRequestID() uint64 {
-	return atomic.AddUint64(&reqid, 1)
+	return atomic.AddUint64(&reqID, 1)
 }

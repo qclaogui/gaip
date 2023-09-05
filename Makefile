@@ -36,6 +36,47 @@ GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
 
 GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
+
+.PHONY: build
+build: ## Build binary for current OS and place it at ./bin/golang-api-server
+	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd
+
+.PHONY: build-all
+build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
+	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.yml --snapshot --skip-publish --clean
+
+.PHONY: clean
+clean: ## Remove artefacts or generated files from previous build
+	rm -rf bin dist
+
+
+
+##@ Dependencies
+
+.PHONY: go-mod
+go-mod: ## go mod download && go mod tidy
+	@go mod download
+	@go mod tidy
+	@go mod verify
+
+.PHONY: check-go-mod
+check-go-mod: go-mod ## Ensures fresh go.mod and go.sum.
+	@git --no-pager diff --exit-code -- go.sum go.mod vendor/ || { echo ">> There are unstaged changes in go vendoring run 'make go-mod'"; exit 1; }
+
+.PHONY: buf-mod
+buf-mod: ## Run buf mod update after adding a dependency to your buf.yaml
+	@echo ">> run buf mod update"
+	@cd api/ && $(BUF) mod update
+
+
+.PHONY: install-build-deps
+install-build-deps: ## Install dependencies tools
+	$(info ******************** downloading dependencies ********************)
+	@echo ">> building bingo and setup dependencies tools"
+	@go install github.com/bwplotka/bingo@0568407746a2915ba57f9fa1def47694728b831e
+
+
+
 ##@ Regenerate gRPC code
 
 .PHONY: buf-gen
@@ -78,41 +119,25 @@ protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(
  		--openapiv2_opt generate_unbound_methods=true \
  		api/todo/v1/todo_service.proto
 
-##@ Dependencies
 
-.PHONY: go-mod
-go-mod: ## go mod download && go mod tidy
-	@go mod download
-	@go mod tidy
-	@go mod verify
-
-.PHONY: check-go-mod
-check-go-mod: go-mod ## Ensures fresh go.mod and go.sum.
-	@git --no-pager diff --exit-code -- go.sum go.mod vendor/ || { echo ">> There are unstaged changes in go vendoring run 'make go-mod'"; exit 1; }
-
-.PHONY: install-build-deps
-install-build-deps: ## Install dependencies tools
-	$(info ******************** downloading dependencies ********************)
-	@echo ">> building bingo and setup dependencies tools"
-	@go install github.com/bwplotka/bingo@0568407746a2915ba57f9fa1def47694728b831e
-
-.PHONY: build
-build: ## Build golang-api-server binary for current OS and place it at ./bin/golang-api-server
-	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd
-
-.PHONY: build-all
-build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
-	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.yml --snapshot --skip-publish --clean
-
-.PHONY: clean
-clean: ## Remove artefacts or generated files from previous build
-	rm -rf bin dist
 
 ##@ Testing Lint & fmt
+
+.PHONY: test
+test: ## Run tests.
+	@$(GO_ENV) go test $(GO_FLAGS) -timeout 10m -count 1 ./...
+
+
+.PHONY: lint
+lint: ## Runs various static analysis against our code.
+lint: go-lint goreleaser-lint buf-lint $(COPYRIGHT) fmt
+	@$(COPYRIGHT) $(shell go list -f "{{.Dir}}" ./... | xargs -I {} find {} -name "*.go")
+
 
 .PHONY: fmt
 fmt: ## Runs fmt code. (go-fmt buf-fmt)
 fmt: go-fmt buf-fmt
+
 
 .PHONY: go-fmt
 go-fmt: $(GOIMPORTS) ## Runs gofmt code
@@ -123,20 +148,10 @@ go-fmt: $(GOIMPORTS) ## Runs gofmt code
 	done
 	@$(GOIMPORTS) -w $(GO_FILES_TO_FMT)
 
-.PHONY: buf-mod
-buf-mod: ## Run buf mod update after adding a dependency to your buf.yaml
-	@echo ">> run buf mod update"
-	@cd api/ && $(BUF) mod update
-
 .PHONY: buf-fmt
 buf-fmt: ## examining all of the proto files.
 	@echo ">> run buf format"
 	@cd api/ && $(BUF) format -w --exit-code
-
-.PHONY: lint
-lint: ## Runs various static analysis against our code.
-lint: go-lint goreleaser-lint buf-lint $(COPYRIGHT) fmt
-	@$(COPYRIGHT) $(shell go list -f "{{.Dir}}" ./... | xargs -I {} find {} -name "*.go")
 
 .PHONY: goreleaser-lint
 goreleaser-lint: $(GORELEASER) ## Lint .goreleaser*.yml files.
@@ -159,9 +174,7 @@ fix-lint: $(GOLANGCI_LINT) ## fix lint issue of the Go files
 	@echo ">> run golangci-lint fix"
 	$(GOLANGCI_LINT) run --fix
 
-.PHONY: test
-test: ## Run tests.
-	@$(GO_ENV) go test $(GO_FLAGS) -timeout 10m -count 1 ./...
+
 
 ##@ Release
 
@@ -181,6 +194,8 @@ print-version: ## Prints the upcoming release number
 manifests: $(KUSTOMIZE) ## Generates the k8s manifests
 	@$(KUSTOMIZE) build deploy/overlays/dev > deploy/overlays/dev/k8s-all-in-one.yaml
 	@$(KUSTOMIZE) build deploy/overlays/prod > deploy/overlays/prod/k8s-all-in-one.yaml
+
+
 
 ##@ General
 

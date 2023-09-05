@@ -30,31 +30,31 @@ Usage:
   make <target>
 
 Build
+  build                                     Build binary for current OS and place it at ./bin/golang-api-server
+  build-all                                 Build binaries for Linux, Windows and Mac and place them in dist/
+  clean                                     Remove artefacts or generated files from previous build
+
+Dependencies
+  go-mod                                    go mod download && go mod tidy
+  check-go-mod                              Ensures fresh go.mod and go.sum.
+  buf-mod                                   Run buf mod update after adding a dependency to your buf.yaml
+  install-build-deps                        Install dependencies tools
 
 Regenerate gRPC code
   buf-gen                                   Regenerate proto by buf https://buf.build/
   swagger-ui                                Generate Swagger UI
   protoc-gen                                Regenerate proto by protoc
 
-Dependencies
-  go-mod                                    go mod download && go mod tidy
-  check-go-mod                              Ensures fresh go.mod and go.sum.
-  install-build-deps                        Install dependencies tools
-  build                                     Build golang-api-server binary for current OS and place it at ./bin/golang-api-server
-  build-all                                 Build binaries for Linux, Windows and Mac and place them in dist/
-  clean                                     Remove artefacts or generated files from previous build
-
 Testing Lint & fmt
+  test                                      Run tests.
+  lint                                      Runs various static analysis against our code.
   fmt                                       Runs fmt code. (go-fmt buf-fmt)
   go-fmt                                    Runs gofmt code
-  buf-mod                                   Run buf mod update after adding a dependency to your buf.yaml
   buf-fmt                                   examining all of the proto files.
-  lint                                      Runs various static analysis against our code.
   goreleaser-lint                           Lint .goreleaser*.yml files.
   go-lint                                   examining all of the Go files.
   buf-lint                                  Lint all of the proto files.
   fix-lint                                  fix lint issue of the Go files
-  test                                      Run tests.
 
 Release
   prepare-release-candidate                 Create release candidate

@@ -17,6 +17,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/rest/middleware"
 	"github.com/qclaogui/golang-api-server/third_party"
 	"google.golang.org/grpc"
@@ -28,28 +29,27 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials())) //TODO(qc) move to interceptors
+	opts = interceptors.RegisterGRPCDailOption(opts...)
+
+	// The address to the gRPC server, in the gRPC standard naming format.
+	// See https://github.com/grpc/grpc/blob/master/doc/naming.md for more information.
+	endpoint := "dns:///0.0.0.0:" + grpcPort
+
 	gwmux := runtime.NewServeMux()
 
-	// gRPC client options
-	var opts []grpc.DialOption
-	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-
-	// Use the OpenTelemetry gRPC client interceptor for tracing
-	//opts = append(opts, grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()))
-
 	// Register the gRPC server's handler with the HTTP gwmux
-	err := pbtodov1.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, "localhost:"+grpcPort, opts)
+	err := pbtodov1.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, endpoint, opts)
 	if err != nil {
 		slog.Error("failed to start HTTP gateway", "error", err)
 		return err
 	}
 
+	// Register middleware chain
+	handler := middleware.WrapperHandler(gwmux)
+
 	openAPI := getOpenAPIHandler()
-
-	// Wrapper http middleware
-	handler := middleware.RequestID(gwmux)
-	handler = middleware.Throttle(1000)(handler)
-
 	// Set up the REST server on port cfg.HTTPPort and handle requests by proxying them to the gRPC server
 	srv := &http.Server{
 		Addr: ":" + port,
