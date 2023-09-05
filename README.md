@@ -24,40 +24,45 @@
 Share knowledge and help others.
 
 ```shell
-❯ tree -I 'vendor|docs|tools|deploy|cmd' -L 3
-.
-├── COPYRIGHT
-├── Dockerfile
-├── LICENSE
-├── Makefile
-├── README.md
-├── SECURITY.md
-├── api
-│   ├── buf.gen.yaml
-│   ├── buf.yaml
-│   ├── gen
-│   │   └── proto
-│   ├── routeguide
-│   │   ├── v1
-│   │   └── v1beta1
-│   └── todo
-│       ├── v1
-│       └── v1alpha
-├── ci
-│   └── main.go
-├── go.mod
-├── go.sum
-├── pkg
-│   ├── protocol
-│   │   ├── grpc
-│   │   └── rest
-│   ├── service
-│   │   ├── routeguide
-│   │   └── todo
-│   └── version
-│       ├── generate
-│       ├── release.go
-│       └── version.go
-├── skaffold.env
-└── skaffold.yaml
+❯ make help
+
+Usage:
+  make <target>
+
+Build
+
+Regenerate gRPC code
+  buf-gen                                   Regenerate proto by buf https://buf.build/
+  swagger-ui                                Generate Swagger UI
+  protoc-gen                                Regenerate proto by protoc
+
+Dependencies
+  go-mod                                    go mod download && go mod tidy
+  check-go-mod                              Ensures fresh go.mod and go.sum.
+  install-build-deps                        Install dependencies tools
+  build                                     Build golang-api-server binary for current OS and place it at ./bin/golang-api-server
+  build-all                                 Build binaries for Linux, Windows and Mac and place them in dist/
+  clean                                     Remove artefacts or generated files from previous build
+
+Testing Lint & fmt
+  fmt                                       Runs fmt code. (go-fmt buf-fmt)
+  go-fmt                                    Runs gofmt code
+  buf-mod                                   Run buf mod update after adding a dependency to your buf.yaml
+  buf-fmt                                   examining all of the proto files.
+  lint                                      Runs various static analysis against our code.
+  goreleaser-lint                           Lint .goreleaser*.yml files.
+  go-lint                                   examining all of the Go files.
+  buf-lint                                  Lint all of the proto files.
+  fix-lint                                  fix lint issue of the Go files
+  test                                      Run tests.
+
+Release
+  prepare-release-candidate                 Create release candidate
+  prepare-release                           Create release
+  print-version                             Prints the upcoming release number
+  manifests                                 Generates the k8s manifests
+
+General
+  help                                      Display this help. Thanks to https://www.thapaliya.com/en/writings/well-documented-makefiles/
+
 ```
