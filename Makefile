@@ -84,41 +84,55 @@ buf-gen: ## Regenerate proto by buf https://buf.build/
 buf-gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 	@rm -Rf api/gen third_party/gen
 	@cd api/ && $(BUF) generate
+	@make swagger-ui
+	@make lint
 
 .PHONY: swagger-ui
 swagger-ui: ## Generate Swagger UI
-	SWAGGER_UI_VERSION=$(SWAGGER_UI_VERSION) tools/scripts/generate-swagger-ui.sh
+	@SWAGGER_UI_VERSION=$(SWAGGER_UI_VERSION) tools/scripts/generate-swagger-ui.sh
 
 .PHONY: protoc-gen
 protoc-gen: ## Regenerate proto by protoc
 protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 	@rm -Rf api/gen third_party/gen
 	@mkdir -p api/gen/proto third_party/gen/openapiv2
-	@protoc -I api \
-		--go_out api/gen/proto \
-		--go_opt paths=source_relative \
-		--go-grpc_out api/gen/proto \
-		--go-grpc_opt paths=source_relative \
-		--go-grpc_opt require_unimplemented_servers=false \
+	@protoc --proto_path=api \
+		--plugin=protoc-gen-go=$(PROTOC_GEN_GO) \
+		--go_out=api/gen/proto \
+		--go_opt=paths=source_relative \
 		api/todo/v1/todo_service.proto  \
 		api/routeguide/v1/route_guide.proto \
 		api/bookstore/v1alpha1/bookstore.proto
 
-    # grpc-gateway
-	@protoc -I api \
-		--grpc-gateway_out api/gen/proto \
-		--grpc-gateway_opt logtostderr=true \
-		--grpc-gateway_opt paths=source_relative \
-		--grpc-gateway_opt generate_unbound_methods=true \
+    # plugin protoc-gen-go-grpc
+	@protoc --proto_path=api \
+		--plugin=protoc-gen-go-grpc=$(PROTOC_GEN_GO_GRPC) \
+		--go-grpc_out=api/gen/proto \
+		--go-grpc_opt=paths=source_relative \
+		--go-grpc_opt=require_unimplemented_servers=false \
+		api/todo/v1/todo_service.proto  \
+		api/routeguide/v1/route_guide.proto \
+		api/bookstore/v1alpha1/bookstore.proto
+
+    # plugin protoc-gen-grpc-gateway
+	@protoc --proto_path=api \
+		--plugin=protoc-gen-grpc-gateway=$(PROTOC_GEN_GRPC_GATEWAY) \
+		--grpc-gateway_out=api/gen/proto \
+		--grpc-gateway_opt=logtostderr=true \
+		--grpc-gateway_opt=paths=source_relative \
+		--grpc-gateway_opt=generate_unbound_methods=true \
 		api/todo/v1/todo_service.proto
 
-    # OpenAPI
-	@protoc -I api \
- 		--openapiv2_out third_party/gen/openapiv2 \
- 		--openapiv2_opt logtostderr=true \
- 		--openapiv2_opt generate_unbound_methods=true \
+    # plugin protoc-gen-openapiv2
+	@protoc --proto_path=api \
+		--plugin=protoc-gen-openapiv2=$(PROTOC_GEN_OPENAPIV2) \
+ 		--openapiv2_out=third_party/gen/openapiv2 \
+ 		--openapiv2_opt=logtostderr=true \
+ 		--openapiv2_opt=generate_unbound_methods=true \
  		api/todo/v1/todo_service.proto
 
+	@make swagger-ui
+	@make lint
 
 
 ##@ Testing Lint & fmt
