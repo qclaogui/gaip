@@ -6,6 +6,7 @@ package rest
 
 import (
 	"context"
+	"fmt"
 	"io/fs"
 	"log/slog"
 	"mime"
@@ -15,6 +16,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grafana/dskit/server"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
@@ -24,8 +26,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// RunServer runs HTTP/REST gateway
-func RunServer(ctx context.Context, grpcPort, port string) error {
+// RunRESTServer runs HTTP/REST gateway
+func RunRESTServer(ctx context.Context, cfg server.Config) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -35,7 +37,7 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 
 	// The address to the gRPC server, in the gRPC standard naming format.
 	// See https://github.com/grpc/grpc/blob/master/doc/naming.md for more information.
-	endpoint := "dns:///0.0.0.0:" + grpcPort
+	endpoint := fmt.Sprintf("dns:///0.0.0.0:%d", cfg.GRPCListenPort)
 
 	gwmux := runtime.NewServeMux()
 
@@ -52,7 +54,7 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 	openAPI := getOpenAPIHandler()
 	// Set up the REST server on port cfg.HTTPPort and handle requests by proxying them to the gRPC server
 	srv := &http.Server{
-		Addr: ":" + port,
+		Addr: fmt.Sprintf("%s:%d", cfg.HTTPListenAddress, cfg.HTTPListenPort),
 		// Handler: handler,
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if strings.HasPrefix(r.URL.Path, "/api") {
@@ -77,7 +79,7 @@ func RunServer(ctx context.Context, grpcPort, port string) error {
 		_ = srv.Shutdown(ctx)
 	}()
 
-	slog.Warn("starting HTTP/REST gateway...", "http_port", port)
+	slog.Warn("starting HTTP/REST gateway...", "http_port", cfg.HTTPListenPort)
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	return srv.ListenAndServe()
 }

@@ -7,11 +7,11 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 
 	"github.com/qclaogui/golang-api-server/pkg/version"
-	"golang.org/x/exp/slog"
 )
 
 var port = "8080"

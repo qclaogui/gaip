@@ -8,7 +8,7 @@ jobs:
     name: Trigger (Publish Release Candidate) build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.QCBOT_TOKEN }}
           # Set fetch-depth: 0 to fetch all history for all branches and tags.

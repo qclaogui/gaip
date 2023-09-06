@@ -18,6 +18,7 @@ func RegisterGRPCServerOption(serverOpts ...grpc.ServerOption) []grpc.ServerOpti
 func RegisterGRPCDailOption(dailOpts ...grpc.DialOption) []grpc.DialOption {
 	dailOpts = WithDailOptionLogging(dailOpts)
 	dailOpts = WithDailOptionTracing(dailOpts)
+	dailOpts = WithDailOptionCredentials(dailOpts)
 
 	return dailOpts
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
+	util_log "github.com/qclaogui/golang-api-server/tools/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
@@ -27,9 +28,9 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 	}
 	defer func() { _ = db.Close() }()
-	//ssv, _ := NewServiceServer(WithMemoryToDoRepository())
+	//ssv, _ := NewServiceServer(util_log.Logger,WithMemoryToDoRepository())
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewServiceServer(WithRepository(repo))
+	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -172,7 +173,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewServiceServer(WithRepository(repo))
+	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -285,7 +286,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewServiceServer(WithRepository(repo))
+	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -453,7 +454,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewServiceServer(WithRepository(repo))
+	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	type args struct {
 		ctx context.Context
@@ -572,7 +573,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	repo, _ := todo.NewMysqlRepository(db)
-	ssv, _ := NewServiceServer(WithRepository(repo))
+	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	tm1 := time.Now().UTC().Add(time.Minute)
 	reminder1 := timestamppb.New(tm1)

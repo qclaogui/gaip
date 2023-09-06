@@ -6,11 +6,13 @@ package grpc
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net"
 	"os"
 	"os/signal"
 
+	"github.com/grafana/dskit/server"
 	pbrouteguidev1 "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
 	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
@@ -18,14 +20,14 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-// RunServer runs gRPC service to publish service
-func RunServer(
+// RunGRPCServer runs gRPC service to publish service
+func RunGRPCServer(
 	ctx context.Context,
 	toDoSrv pbtodov1.ToDoServiceServer,
 	routeGuideSrv pbrouteguidev1.RouteGuideServiceServer,
-	port string,
+	cfg server.Config,
 ) error {
-	listen, err := net.Listen("tcp", ":"+port)
+	listen, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.GRPCListenAddress, cfg.GRPCListenPort))
 	if err != nil {
 		return err
 	}
@@ -55,6 +57,6 @@ func RunServer(
 	}()
 
 	// start gRPC server
-	slog.Warn("starting gRPC server...", "grpc_port", port)
+	slog.Warn("starting gRPC server...", "grpc_port", cfg.GRPCListenPort)
 	return srv.Serve(listen)
 }

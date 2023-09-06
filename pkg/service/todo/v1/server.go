@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/go-kit/log"
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"google.golang.org/grpc/codes"
@@ -58,12 +59,13 @@ func WithMysqlRepository(dsn string) Option {
 
 type ServiceServer struct {
 	pb.UnimplementedToDoServiceServer
-	repo todo.Repository
+	repo   todo.Repository
+	logger log.Logger
 }
 
-func NewServiceServer(opts ...Option) (*ServiceServer, error) {
+func NewServiceServer(logger log.Logger, opts ...Option) (*ServiceServer, error) {
 	// Create the ServiceServer
-	s := &ServiceServer{}
+	s := &ServiceServer{logger: logger}
 	// Apply all Configurations passed in
 	for _, opt := range opts {
 		// Pass the service into the config option function

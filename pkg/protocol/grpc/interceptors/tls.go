@@ -6,13 +6,16 @@ package interceptors
 
 import (
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
-// ServerOptionTLS TLSCredentials
-func ServerOptionTLS(serverOpts []grpc.ServerOption) []grpc.ServerOption {
+// ServerOptionCredentials ServerOption Credentials
+func ServerOptionCredentials(serverOpts []grpc.ServerOption) []grpc.ServerOption {
 	return serverOpts
 }
 
-func WithDailOptionTLS(dialOpts []grpc.DialOption) []grpc.DialOption {
+// WithDailOptionCredentials DialOption Credentials
+func WithDailOptionCredentials(dialOpts []grpc.DialOption) []grpc.DialOption {
+	dialOpts = append(dialOpts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	return dialOpts
 }

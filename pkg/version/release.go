@@ -19,4 +19,4 @@ var GitCommit = ""
 var BuildDate = ""
 
 // GoVersion returns the Go version string.
-var GoVersion = "go1.20.6"
+var GoVersion = "go1.21.1"

@@ -12,7 +12,7 @@ import (
 
 //go:generate go run ./release_generate.go
 
-// VersionInfo contains build information.
+// Info VersionInfo contains build information.
 type Info struct {
 	Version      string
 	PreReleaseID string
