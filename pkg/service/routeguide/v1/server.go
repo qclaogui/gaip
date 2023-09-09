@@ -9,6 +9,7 @@ import (
 
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
 	routeguide "github.com/qclaogui/golang-api-server/pkg/service/routeguide"
+	"google.golang.org/grpc"
 )
 
 type Option func(*ServiceServer) error
@@ -50,6 +51,10 @@ func NewServiceServer(opts ...Option) (*ServiceServer, error) {
 		}
 	}
 	return srv, nil
+}
+
+func (srv *ServiceServer) RegisterGRPC(s *grpc.Server) {
+	s.RegisterService(&pb.RouteGuideService_ServiceDesc, srv)
 }
 
 // GetFeature returns the feature at the given point.

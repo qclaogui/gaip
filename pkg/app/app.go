@@ -103,12 +103,11 @@ func (app *Application) Bootstrap() error {
 		return err
 	}
 
-	// Start the REST server in app goroutine
+	// Start the REST server in goroutine
 	go func() {
 		err = rest.RunRESTServer(ctx, app.Cfg.Server)
 		util_log.CheckFatal("running REST server", err)
 	}()
 
-	// run gRPC server
-	return grpc.RunGRPCServer(ctx, toDoSrv, routeGuideSrv, app.Cfg.Server)
+	return grpc.RunGRPCServer(ctx, app.Cfg.Server, toDoSrv, routeGuideSrv)
 }

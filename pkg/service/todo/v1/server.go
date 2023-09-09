@@ -12,6 +12,7 @@ import (
 	"github.com/go-kit/log"
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -76,7 +77,11 @@ func NewServiceServer(logger log.Logger, opts ...Option) (*ServiceServer, error)
 	return s, nil
 }
 
-func (s *ServiceServer) checkAPI(api string) error {
+func (srv *ServiceServer) RegisterGRPC(s *grpc.Server) {
+	s.RegisterService(&pb.ToDoService_ServiceDesc, srv)
+}
+
+func (srv *ServiceServer) checkAPI(api string) error {
 	// API version is "" means use current version of the service
 	if len(api) > 0 {
 		if apiVersion != api {
@@ -86,9 +91,9 @@ func (s *ServiceServer) checkAPI(api string) error {
 	return nil
 }
 
-func (s *ServiceServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
+func (srv *ServiceServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
 	// check if the API version requested by client is supported by server
-	if err := s.checkAPI(req.GetApi()); err != nil {
+	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
@@ -96,41 +101,41 @@ func (s *ServiceServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.
 		return nil, status.Error(codes.InvalidArgument, "reminder field has invalid format-> "+err.Error())
 	}
 
-	return s.repo.Create(ctx, req)
+	return srv.repo.Create(ctx, req)
 }
 
-func (s *ServiceServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
+func (srv *ServiceServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
 	// check if the API version requested by client is supported by server
-	if err := s.checkAPI(req.GetApi()); err != nil {
+	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.Update(ctx, req)
+	return srv.repo.Update(ctx, req)
 }
 
-func (s *ServiceServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (srv *ServiceServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	// check if the API version requested by client is supported by server
-	if err := s.checkAPI(req.GetApi()); err != nil {
+	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.Get(ctx, req)
+	return srv.repo.Get(ctx, req)
 }
 
-func (s *ServiceServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+func (srv *ServiceServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
 	// check if the API version requested by client is supported by server
-	if err := s.checkAPI(req.GetApi()); err != nil {
+	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.Delete(ctx, req)
+	return srv.repo.Delete(ctx, req)
 }
 
-func (s *ServiceServer) List(ctx context.Context, req *pb.ListRequest) (*pb.ListResponse, error) {
+func (srv *ServiceServer) List(ctx context.Context, req *pb.ListRequest) (*pb.ListResponse, error) {
 	// check if the API version requested by client is supported by server
-	if err := s.checkAPI(req.GetApi()); err != nil {
+	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.List(ctx, req)
+	return srv.repo.List(ctx, req)
 }

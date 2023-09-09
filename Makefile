@@ -163,7 +163,7 @@ lint: go-lint goreleaser-lint buf-lint $(COPYRIGHT) fmt
 
 
 .PHONY: fmt
-fmt: ## Runs fmt code. (fix-lint go-fmt buf-fmt)
+fmt: ## Runs fmt code (automatically fix lint errors)
 fmt: fix-lint go-fmt buf-fmt
 
 

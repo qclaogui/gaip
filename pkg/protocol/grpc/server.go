@@ -13,35 +13,29 @@ import (
 	"os/signal"
 
 	"github.com/grafana/dskit/server"
-	pbrouteguidev1 "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
-	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
+	"github.com/qclaogui/golang-api-server/pkg/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 // RunGRPCServer runs gRPC service to publish service
-func RunGRPCServer(
-	ctx context.Context,
-	toDoSrv pbtodov1.ToDoServiceServer,
-	routeGuideSrv pbrouteguidev1.RouteGuideServiceServer,
-	cfg server.Config,
-) error {
+func RunGRPCServer(ctx context.Context, cfg server.Config, backends ...service.Backend) error {
 	listen, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.GRPCListenAddress, cfg.GRPCListenPort))
 	if err != nil {
 		return err
 	}
 
 	// gRPC server startup options
-	srv := grpc.NewServer(interceptors.RegisterGRPCServerOption()...)
-
-	//	register service
-	pbtodov1.RegisterToDoServiceServer(srv, toDoSrv)
-	pbrouteguidev1.RegisterRouteGuideServiceServer(srv, routeGuideSrv)
+	grpcServer := grpc.NewServer(interceptors.RegisterGRPCServerOption()...)
+	//	register backend service
+	for _, backend := range backends {
+		backend.RegisterGRPC(grpcServer)
+	}
 
 	// Register reflection service on gRPC server.
 	// Enable reflection to allow clients to query the server's services
-	reflection.Register(srv)
+	reflection.Register(grpcServer)
 
 	// graceful shutdown
 	quit := make(chan os.Signal, 1)
@@ -51,12 +45,12 @@ func RunGRPCServer(
 			// sig is a ^C, handle it
 			slog.Warn("Graceful shutting down gRPC server...")
 
-			srv.GracefulStop()
+			grpcServer.GracefulStop()
 			<-ctx.Done()
 		}
 	}()
 
 	// start gRPC server
 	slog.Warn("starting gRPC server...", "grpc_port", cfg.GRPCListenPort)
-	return srv.Serve(listen)
+	return grpcServer.Serve(listen)
 }
