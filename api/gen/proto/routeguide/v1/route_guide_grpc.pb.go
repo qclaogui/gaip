@@ -4,7 +4,7 @@
 // - protoc             v4.24.3
 // source: routeguide/v1/route_guide.proto
 
-package v1
+package routeguidev1
 
 import (
 	context "context"

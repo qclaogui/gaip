@@ -20,7 +20,7 @@
 // - protoc             v4.24.3
 // source: bookstore/v1alpha1/bookstore.proto
 
-package v1alpha1
+package bookstorev1alpha1
 
 import (
 	context "context"

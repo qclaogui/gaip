@@ -33,6 +33,7 @@ type Application struct {
 	Vault *vault.Vault
 }
 
+// initVault init Vault
 func (app *Application) initVault() error {
 	if !app.Cfg.Vault.Enabled {
 		return nil
@@ -74,6 +75,7 @@ func New(cfg Config, reg prometheus.Registerer) (*Application, error) {
 func (app *Application) Bootstrap() error {
 	ctx := context.Background()
 
+	// Application init
 	if err := app.initVault(); err != nil {
 		return err
 	}

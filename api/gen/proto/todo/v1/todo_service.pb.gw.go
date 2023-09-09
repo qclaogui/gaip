@@ -6,11 +6,11 @@
 // source: todo/v1/todo_service.proto
 
 /*
-Package v1 is a reverse proxy.
+Package todov1 is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package v1
+package todov1
 
 import (
 	"context"

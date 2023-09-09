@@ -1,8 +1,13 @@
 version: v1
 managed:
   enabled: true
-#  go_package_prefix:
-#    default: github.com/qclaogui/golang-api-server/api/gen
+  go_package_prefix:
+    default: github.com/qclaogui/golang-api-server/api/gen/proto
+    except:
+      - buf.build/googleapis/googleapis
+      - buf.build/grpc-ecosystem/grpc-gateway
+    # override:
+    #   buf.build/acme/weather: github.com/acme/weather/gen/proto/go
 
 plugins:
   # # Usage with remote plugins

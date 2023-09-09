@@ -20,7 +20,7 @@ package bookstore.v1alpha1;
 
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/api/gen/proto/bookstore/v1alpha1";
+option go_package = "github.com/qclaogui/golang-api-server/api/gen/proto/bookstore/v1alpha1;bookstorev1alpha1";
 
 // A simple Bookstore API.
 //

@@ -80,7 +80,8 @@ protoc-install:
 ifeq ("$(wildcard $(PROTOC))","")
 	@cd third_party && curl -LO $(PROTOC_URL)$(PROTOC_ZIP)
 	@cd third_party && unzip -n $(PROTOC_ZIP)
-	@cd third_party && mv -f bin/protoc ${GOBIN}/protoc-${PROTOC_VERSION} && mv -f include/google .
+	@cd third_party && rm -Rf google/protobuf
+	@cd third_party && mv -f bin/protoc ${GOBIN}/protoc-${PROTOC_VERSION} && mv -f include/google/protobuf google
 	@cd third_party && rm -Rf bin include readme.txt $(PROTOC_ZIP)
 endif
 
@@ -107,16 +108,14 @@ swagger-ui: ## Generate Swagger UI
 
 .PHONY: protoc-gen
 protoc-gen: ## Regenerate proto by protoc
-protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
+protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 	@rm -Rf api/gen third_party/gen
 	@mkdir -p api/gen/proto third_party/gen/openapiv2
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
 		--plugin=protoc-gen-go=$(PROTOC_GEN_GO) \
 		--go_out=api/gen/proto \
 		--go_opt=paths=source_relative \
-		api/todo/v1/todo_service.proto  \
-		api/routeguide/v1/route_guide.proto \
-		api/bookstore/v1alpha1/bookstore.proto
+		api/*/*/*.proto
 
     # plugin protoc-gen-go-grpc
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
@@ -124,9 +123,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go-grpc_out=api/gen/proto \
 		--go-grpc_opt=paths=source_relative \
 		--go-grpc_opt=require_unimplemented_servers=false \
-		api/todo/v1/todo_service.proto  \
-		api/routeguide/v1/route_guide.proto \
-		api/bookstore/v1alpha1/bookstore.proto
+		api/*/*/*.proto
 
     # plugin protoc-gen-grpc-gateway
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
@@ -135,7 +132,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--grpc-gateway_opt=logtostderr=true \
 		--grpc-gateway_opt=paths=source_relative \
 		--grpc-gateway_opt=generate_unbound_methods=true \
-		api/todo/v1/todo_service.proto
+		api/*/*/*.proto
 
     # plugin protoc-gen-openapiv2
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
@@ -143,7 +140,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
  		--openapiv2_out=third_party/gen/openapiv2 \
  		--openapiv2_opt=logtostderr=true \
  		--openapiv2_opt=generate_unbound_methods=true \
- 		api/todo/v1/todo_service.proto
+ 		api/*/*/*.proto
 
 	@make swagger-ui
 	@make lint
@@ -180,6 +177,7 @@ go-fmt: $(GOIMPORTS) ## Runs gofmt code
 buf-fmt: ## examining all of the proto files.
 	@echo ">> run buf format"
 	@cd api/ && $(BUF) format -w --exit-code
+	@cd third_party/google && $(BUF) format -w --exit-code
 
 .PHONY: goreleaser-lint
 goreleaser-lint: $(GORELEASER) ## Lint .goreleaser*.yml files.

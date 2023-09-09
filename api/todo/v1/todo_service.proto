@@ -4,7 +4,7 @@ package todo.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1";
+option go_package = "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1;todov1";
 
 // Tasks wo have to do
 message ToDo {

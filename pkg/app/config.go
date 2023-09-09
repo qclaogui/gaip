@@ -42,13 +42,17 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 	c.Server.DisableRequestSuccessLog = true
 
 	fs.BoolVar(&c.PrintConfig, "print.config", false, "Print the config and exit.")
-	c.registerServerFlagsWithChangedDefaultValues(fs)
 
+	// Register Server Config
+	c.registerServerFlagsWithChangedDefaultValues(fs)
+	// Register Vault Config
 	c.Vault.RegisterFlags(fs)
 }
 
 // Validate the app config and return an error if the validation doesn't pass
 func (c *Config) Validate(_ log.Logger) error {
+
+	// Validate Vault Config
 	if err := c.Vault.Validate(); err != nil {
 		return errors.Wrap(err, "invalid vault config")
 	}
