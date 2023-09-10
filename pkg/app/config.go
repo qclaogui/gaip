@@ -11,6 +11,7 @@ import (
 	"github.com/go-kit/log"
 	"github.com/grafana/dskit/server"
 	"github.com/pkg/errors"
+	bookstorev1alpha1 "github.com/qclaogui/golang-api-server/pkg/service/bookstore/v1alpha1"
 	"github.com/qclaogui/golang-api-server/pkg/vault"
 )
 
@@ -19,17 +20,20 @@ type Config struct {
 	PrintConfig bool `yaml:"-"`
 
 	Server server.Config `yaml:"server"`
-	Vault  vault.Config  `yaml:"vault"`
+
+	Bookstore bookstorev1alpha1.Config `yaml:"bookstore"`
+
+	Vault vault.Config `yaml:"vault"`
 
 	//// DB Datastore parameters section
-	//// DBHost is host of database
-	//DBHost string
-	//// DBUser is username to connect to database
-	//DBUser string
-	//// DBPassword password to connect to database
-	//DBPassword string
-	//// DBSchema is schema of database
-	//DBSchema string
+	//// Host is host of database
+	//Host string
+	//// User is username to connect to database
+	//User string
+	//// Password password to connect to database
+	//Password string
+	//// Schema is schema of database
+	//Schema string
 }
 
 // RegisterFlags registers flag.
@@ -45,12 +49,21 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 
 	// Register Server Config
 	c.registerServerFlagsWithChangedDefaultValues(fs)
+
+	// Register Bookstore Config
+	c.Bookstore.RegisterFlags(fs)
+
 	// Register Vault Config
 	c.Vault.RegisterFlags(fs)
 }
 
 // Validate the app config and return an error if the validation doesn't pass
 func (c *Config) Validate(_ log.Logger) error {
+
+	// Validate Bookstore Config
+	if err := c.Bookstore.Validate(); err != nil {
+		return errors.Wrap(err, "invalid Bookstore config")
+	}
 
 	// Validate Vault Config
 	if err := c.Vault.Validate(); err != nil {

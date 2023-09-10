@@ -53,7 +53,7 @@ func (m *MemoryRepository) Get(_ context.Context, req *pb.GetRequest) (*pb.GetRe
 
 	id, _ := uuid.Parse(req.GetId())
 
-	slog.Warn("Repo info", "req_id", req.GetId(), "id", id, "mem", m.mem)
+	slog.Warn("RepoCfg info", "req_id", req.GetId(), "id", id, "mem", m.mem)
 	todo, ok := m.mem[id]
 	if !ok {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())

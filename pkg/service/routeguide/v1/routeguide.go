@@ -7,6 +7,7 @@ package v1
 import (
 	"context"
 
+	"github.com/go-kit/log"
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
 	routeguide "github.com/qclaogui/golang-api-server/pkg/service/routeguide"
 	"google.golang.org/grpc"
@@ -37,12 +38,14 @@ func WithMemoryRepository() Option {
 // ServiceServer ServiceServer
 type ServiceServer struct {
 	pb.UnimplementedRouteGuideServiceServer
-	repo routeguide.Repository
+
+	repo   routeguide.Repository
+	logger log.Logger
 }
 
-func NewServiceServer(opts ...Option) (*ServiceServer, error) {
+func NewServiceServer(logger log.Logger, opts ...Option) (*ServiceServer, error) {
 	// Create the Server
-	srv := &ServiceServer{}
+	srv := &ServiceServer{logger: logger}
 	// Apply all Configurations passed in
 	for _, opt := range opts {
 		// Pass the service into the configuration function

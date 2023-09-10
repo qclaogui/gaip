@@ -47,7 +47,7 @@ GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
 .PHONY: build
 build: ## Build binary for current OS and place it at ./bin/golang-api-server
-	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd
+	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd/server
 
 .PHONY: build-all
 build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
@@ -97,8 +97,11 @@ install-build-deps: protoc-install ## Install dependencies tools
 .PHONY: buf-gen
 buf-gen: ## Regenerate proto by buf https://buf.build/
 buf-gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
-	@rm -Rf api/gen third_party/gen
-	@cd api/ && $(BUF) generate
+	@rm -Rf api/gen third_party/gen cmd/client-gapic/*
+	@cd api/ && $(BUF) generate \
+		--path routeguide/v1/*.proto \
+		--path todo/v1/*.proto \
+		--path bookstore/v1alpha1/*.proto
 	@make swagger-ui
 	@make lint
 
@@ -108,39 +111,61 @@ swagger-ui: ## Generate Swagger UI
 
 .PHONY: protoc-gen
 protoc-gen: ## Regenerate proto by protoc
-protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
-	@rm -Rf api/gen third_party/gen
+protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
+	@rm -Rf api/gen third_party/gen cmd/client-gapic/*
 	@mkdir -p api/gen/proto third_party/gen/openapiv2
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
 		--plugin=protoc-gen-go=$(PROTOC_GEN_GO) \
 		--go_out=api/gen/proto \
-		--go_opt=paths=source_relative \
-		api/*/*/*.proto
+		--go_opt='paths=source_relative' \
+		api/routeguide/v1/*.proto \
+		api/todo/v1/*.proto \
+		api/bookstore/v1alpha1/*.proto
 
     # plugin protoc-gen-go-grpc
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
 		--plugin=protoc-gen-go-grpc=$(PROTOC_GEN_GO_GRPC) \
 		--go-grpc_out=api/gen/proto \
-		--go-grpc_opt=paths=source_relative \
-		--go-grpc_opt=require_unimplemented_servers=false \
-		api/*/*/*.proto
+		--go-grpc_opt='paths=source_relative' \
+		--go-grpc_opt='require_unimplemented_servers=false' \
+		api/routeguide/v1/*.proto \
+		api/todo/v1/*.proto \
+		api/bookstore/v1alpha1/*.proto
+
+
+    # plugin protoc-gen-go_gapic
+    # https://github.com/googleapis/gapic-generator-go?tab=readme-ov-file#invocation
+	@$(PROTOC) --proto_path=api --proto_path=third_party \
+		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
+		--go_gapic_out=cmd \
+		--go_gapic_opt='go-gapic-package=github.com/qclaogui/golang-api-server/cmd/client-gapic;clientgapic' \
+		--go_gapic_opt='metadata=false' \
+		--go_gapic_opt='module=github.com/qclaogui/golang-api-server/cmd' \
+		--go_gapic_opt='release-level=alpha' \
+		--go_gapic_opt='transport=grpc+rest' \
+		--go_gapic_opt='rest-numeric-enums=true' \
+		api/bookstore/v1alpha1/*.proto
 
     # plugin protoc-gen-grpc-gateway
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
 		--plugin=protoc-gen-grpc-gateway=$(PROTOC_GEN_GRPC_GATEWAY) \
 		--grpc-gateway_out=api/gen/proto \
-		--grpc-gateway_opt=logtostderr=true \
-		--grpc-gateway_opt=paths=source_relative \
-		--grpc-gateway_opt=generate_unbound_methods=true \
-		api/*/*/*.proto
+		--grpc-gateway_opt='logtostderr=true' \
+		--grpc-gateway_opt='paths=source_relative' \
+		--grpc-gateway_opt='generate_unbound_methods=true' \
+		api/routeguide/v1/*.proto \
+		api/todo/v1/*.proto \
+		api/bookstore/v1alpha1/*.proto
 
     # plugin protoc-gen-openapiv2
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
 		--plugin=protoc-gen-openapiv2=$(PROTOC_GEN_OPENAPIV2) \
  		--openapiv2_out=third_party/gen/openapiv2 \
- 		--openapiv2_opt=logtostderr=true \
- 		--openapiv2_opt=generate_unbound_methods=true \
- 		api/*/*/*.proto
+ 		--openapiv2_opt='logtostderr=true' \
+ 		--openapiv2_opt='generate_unbound_methods=true' \
+ 		api/routeguide/v1/*.proto \
+ 		api/todo/v1/*.proto \
+ 		api/bookstore/v1alpha1/*.proto
 
 	@make swagger-ui
 	@make lint

@@ -24,7 +24,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1Book"
+              "$ref": "#/definitions/v1alpha1Book"
             }
           },
           "default": {
@@ -41,7 +41,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1CreateBookRequest"
+              "$ref": "#/definitions/v1alpha1CreateBookRequest"
             }
           }
         ],
@@ -58,7 +58,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1Shelf"
+              "$ref": "#/definitions/v1alpha1Shelf"
             }
           },
           "default": {
@@ -75,7 +75,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1CreateShelfRequest"
+              "$ref": "#/definitions/v1alpha1CreateShelfRequest"
             }
           }
         ],
@@ -110,7 +110,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1DeleteBookRequest"
+              "$ref": "#/definitions/v1alpha1DeleteBookRequest"
             }
           }
         ],
@@ -145,7 +145,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1DeleteShelfRequest"
+              "$ref": "#/definitions/v1alpha1DeleteShelfRequest"
             }
           }
         ],
@@ -162,7 +162,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1Book"
+              "$ref": "#/definitions/v1alpha1Book"
             }
           },
           "default": {
@@ -179,7 +179,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1GetBookRequest"
+              "$ref": "#/definitions/v1alpha1GetBookRequest"
             }
           }
         ],
@@ -196,7 +196,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1Shelf"
+              "$ref": "#/definitions/v1alpha1Shelf"
             }
           },
           "default": {
@@ -213,7 +213,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1GetShelfRequest"
+              "$ref": "#/definitions/v1alpha1GetShelfRequest"
             }
           }
         ],
@@ -230,7 +230,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1ListBooksResponse"
+              "$ref": "#/definitions/v1alpha1ListBooksResponse"
             }
           },
           "default": {
@@ -247,7 +247,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1ListBooksRequest"
+              "$ref": "#/definitions/v1alpha1ListBooksRequest"
             }
           }
         ],
@@ -264,7 +264,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/bookstorev1alpha1ListShelvesResponse"
+              "$ref": "#/definitions/v1alpha1ListShelvesResponse"
             }
           },
           "default": {
@@ -292,158 +292,6 @@
     }
   },
   "definitions": {
-    "bookstorev1alpha1Book": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64",
-          "description": "A unique book id."
-        },
-        "author": {
-          "type": "string",
-          "description": "An author of the book."
-        },
-        "title": {
-          "type": "string",
-          "description": "A book title."
-        }
-      },
-      "description": "A book resource."
-    },
-    "bookstorev1alpha1CreateBookRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "type": "string",
-          "format": "int64",
-          "description": "The ID of the shelf on which to create a book."
-        },
-        "book": {
-          "$ref": "#/definitions/bookstorev1alpha1Book",
-          "description": "A book resource to create on the shelf."
-        }
-      },
-      "description": "Request message for CreateBook method."
-    },
-    "bookstorev1alpha1CreateShelfRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "$ref": "#/definitions/bookstorev1alpha1Shelf",
-          "description": "The shelf resource to create."
-        }
-      },
-      "description": "Request message for CreateShelf method."
-    },
-    "bookstorev1alpha1DeleteBookRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "type": "string",
-          "format": "int64",
-          "description": "The ID of the shelf from which to delete a book."
-        },
-        "book": {
-          "type": "string",
-          "format": "int64",
-          "description": "The ID of the book to delete."
-        }
-      },
-      "description": "Request message for DeleteBook method."
-    },
-    "bookstorev1alpha1DeleteShelfRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "type": "string",
-          "format": "int64",
-          "description": "The ID of the shelf to delete."
-        }
-      },
-      "description": "Request message for DeleteShelf method."
-    },
-    "bookstorev1alpha1GetBookRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "type": "string",
-          "format": "int64",
-          "description": "The ID of the shelf from which to retrieve a book."
-        },
-        "book": {
-          "type": "string",
-          "format": "int64",
-          "description": "The ID of the book to retrieve."
-        }
-      },
-      "description": "Request message for GetBook method."
-    },
-    "bookstorev1alpha1GetShelfRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "type": "string",
-          "format": "int64",
-          "description": "The ID of the shelf resource to retrieve."
-        }
-      },
-      "description": "Request message for GetShelf method."
-    },
-    "bookstorev1alpha1ListBooksRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "type": "string",
-          "format": "int64",
-          "description": "ID of the shelf which books to list."
-        }
-      },
-      "description": "Request message for ListBooks method."
-    },
-    "bookstorev1alpha1ListBooksResponse": {
-      "type": "object",
-      "properties": {
-        "books": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/bookstorev1alpha1Book"
-          },
-          "description": "The books on the shelf."
-        }
-      },
-      "description": "Response message to ListBooks method."
-    },
-    "bookstorev1alpha1ListShelvesResponse": {
-      "type": "object",
-      "properties": {
-        "shelves": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/bookstorev1alpha1Shelf"
-          },
-          "description": "Shelves in the bookstore."
-        }
-      },
-      "description": "Response to ListShelves call."
-    },
-    "bookstorev1alpha1Shelf": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64",
-          "description": "A unique shelf id."
-        },
-        "theme": {
-          "type": "string",
-          "description": "A theme of the shelf (fiction, poetry, etc)."
-        }
-      },
-      "description": "A shelf resource."
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -471,6 +319,158 @@
           }
         }
       }
+    },
+    "v1alpha1Book": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "A unique book id."
+        },
+        "author": {
+          "type": "string",
+          "description": "An author of the book."
+        },
+        "title": {
+          "type": "string",
+          "description": "A book title."
+        }
+      },
+      "description": "A book resource."
+    },
+    "v1alpha1CreateBookRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of the shelf on which to create a book."
+        },
+        "book": {
+          "$ref": "#/definitions/v1alpha1Book",
+          "description": "A book resource to create on the shelf."
+        }
+      },
+      "description": "Request message for CreateBook method."
+    },
+    "v1alpha1CreateShelfRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "$ref": "#/definitions/v1alpha1Shelf",
+          "description": "The shelf resource to create."
+        }
+      },
+      "description": "Request message for CreateShelf method."
+    },
+    "v1alpha1DeleteBookRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of the shelf from which to delete a book."
+        },
+        "book": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of the book to delete."
+        }
+      },
+      "description": "Request message for DeleteBook method."
+    },
+    "v1alpha1DeleteShelfRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of the shelf to delete."
+        }
+      },
+      "description": "Request message for DeleteShelf method."
+    },
+    "v1alpha1GetBookRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of the shelf from which to retrieve a book."
+        },
+        "book": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of the book to retrieve."
+        }
+      },
+      "description": "Request message for GetBook method."
+    },
+    "v1alpha1GetShelfRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of the shelf resource to retrieve."
+        }
+      },
+      "description": "Request message for GetShelf method."
+    },
+    "v1alpha1ListBooksRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "type": "string",
+          "format": "int64",
+          "description": "ID of the shelf which books to list."
+        }
+      },
+      "description": "Request message for ListBooks method."
+    },
+    "v1alpha1ListBooksResponse": {
+      "type": "object",
+      "properties": {
+        "books": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1alpha1Book"
+          },
+          "description": "The books on the shelf."
+        }
+      },
+      "description": "Response message to ListBooks method."
+    },
+    "v1alpha1ListShelvesResponse": {
+      "type": "object",
+      "properties": {
+        "shelves": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1alpha1Shelf"
+          },
+          "description": "Shelves in the bookstore."
+        }
+      },
+      "description": "Response to ListShelves call."
+    },
+    "v1alpha1Shelf": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "A unique shelf id."
+        },
+        "theme": {
+          "type": "string",
+          "description": "A theme of the shelf (fiction, poetry, etc)."
+        }
+      },
+      "description": "A shelf resource."
     }
   }
 }

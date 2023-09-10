@@ -6,7 +6,7 @@ package service
 
 import "google.golang.org/grpc"
 
-// Backend abstracts a registerable GRPC service.
+// Backend abstracts a registrable GRPC service.
 type Backend interface {
 	RegisterGRPC(*grpc.Server)
 }

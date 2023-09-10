@@ -1,0 +1,381 @@
+{
+  "clientLibrary": {
+    "name": "github.com/qclaogui/golang-api-server/cmd/client-gapic",
+    "version": "$VERSION",
+    "language": "GO",
+    "apis": [
+      {
+        "id": "bookstore.v1alpha1",
+        "version": "v1alpha1"
+      }
+    ]
+  },
+  "snippets": [
+    {
+      "regionTag": "_v1alpha1_generated_BookstoreService_CreateBook_sync",
+      "title": " CreateBook Sample",
+      "description": "CreateBook creates a new book.",
+      "file": "BookstoreClient/CreateBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateBook",
+        "fullName": "bookstore.v1alpha1.BookstoreClient.CreateBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "bookstorev1alpha1pb.CreateBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*bookstorev1alpha1pb.Book",
+        "client": {
+          "shortName": "BookstoreClient",
+          "fullName": "bookstore.v1alpha1.BookstoreClient"
+        },
+        "method": {
+          "shortName": "CreateBook",
+          "fullName": "bookstore.v1alpha1.BookstoreService.CreateBook",
+          "service": {
+            "shortName": "BookstoreService",
+            "fullName": "bookstore.v1alpha1.BookstoreService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1alpha1_generated_BookstoreService_CreateShelf_sync",
+      "title": " CreateShelf Sample",
+      "description": "CreateShelf creates a new shelf in the bookstore.",
+      "file": "BookstoreClient/CreateShelf/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateShelf",
+        "fullName": "bookstore.v1alpha1.BookstoreClient.CreateShelf",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "bookstorev1alpha1pb.CreateShelfRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*bookstorev1alpha1pb.Shelf",
+        "client": {
+          "shortName": "BookstoreClient",
+          "fullName": "bookstore.v1alpha1.BookstoreClient"
+        },
+        "method": {
+          "shortName": "CreateShelf",
+          "fullName": "bookstore.v1alpha1.BookstoreService.CreateShelf",
+          "service": {
+            "shortName": "BookstoreService",
+            "fullName": "bookstore.v1alpha1.BookstoreService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1alpha1_generated_BookstoreService_DeleteBook_sync",
+      "title": " DeleteBook Sample",
+      "description": "DeleteBook deletes a book from a shelf.",
+      "file": "BookstoreClient/DeleteBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "DeleteBook",
+        "fullName": "bookstore.v1alpha1.BookstoreClient.DeleteBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "bookstorev1alpha1pb.DeleteBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "client": {
+          "shortName": "BookstoreClient",
+          "fullName": "bookstore.v1alpha1.BookstoreClient"
+        },
+        "method": {
+          "shortName": "DeleteBook",
+          "fullName": "bookstore.v1alpha1.BookstoreService.DeleteBook",
+          "service": {
+            "shortName": "BookstoreService",
+            "fullName": "bookstore.v1alpha1.BookstoreService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 51,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1alpha1_generated_BookstoreService_DeleteShelf_sync",
+      "title": " DeleteShelf Sample",
+      "description": "DeleteShelf deletes a shelf, including all books that are stored on the shelf.",
+      "file": "BookstoreClient/DeleteShelf/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "DeleteShelf",
+        "fullName": "bookstore.v1alpha1.BookstoreClient.DeleteShelf",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "bookstorev1alpha1pb.DeleteShelfRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "client": {
+          "shortName": "BookstoreClient",
+          "fullName": "bookstore.v1alpha1.BookstoreClient"
+        },
+        "method": {
+          "shortName": "DeleteShelf",
+          "fullName": "bookstore.v1alpha1.BookstoreService.DeleteShelf",
+          "service": {
+            "shortName": "BookstoreService",
+            "fullName": "bookstore.v1alpha1.BookstoreService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 51,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1alpha1_generated_BookstoreService_GetBook_sync",
+      "title": " GetBook Sample",
+      "description": "GetBook returns a specific book.",
+      "file": "BookstoreClient/GetBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "GetBook",
+        "fullName": "bookstore.v1alpha1.BookstoreClient.GetBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "bookstorev1alpha1pb.GetBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*bookstorev1alpha1pb.Book",
+        "client": {
+          "shortName": "BookstoreClient",
+          "fullName": "bookstore.v1alpha1.BookstoreClient"
+        },
+        "method": {
+          "shortName": "GetBook",
+          "fullName": "bookstore.v1alpha1.BookstoreService.GetBook",
+          "service": {
+            "shortName": "BookstoreService",
+            "fullName": "bookstore.v1alpha1.BookstoreService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1alpha1_generated_BookstoreService_GetShelf_sync",
+      "title": " GetShelf Sample",
+      "description": "GetShelf returns a specific bookstore shelf.",
+      "file": "BookstoreClient/GetShelf/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "GetShelf",
+        "fullName": "bookstore.v1alpha1.BookstoreClient.GetShelf",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "bookstorev1alpha1pb.GetShelfRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*bookstorev1alpha1pb.Shelf",
+        "client": {
+          "shortName": "BookstoreClient",
+          "fullName": "bookstore.v1alpha1.BookstoreClient"
+        },
+        "method": {
+          "shortName": "GetShelf",
+          "fullName": "bookstore.v1alpha1.BookstoreService.GetShelf",
+          "service": {
+            "shortName": "BookstoreService",
+            "fullName": "bookstore.v1alpha1.BookstoreService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1alpha1_generated_BookstoreService_ListBooks_sync",
+      "title": " ListBooks Sample",
+      "description": "ListBooks returns a list of books on a shelf.",
+      "file": "BookstoreClient/ListBooks/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "ListBooks",
+        "fullName": "bookstore.v1alpha1.BookstoreClient.ListBooks",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "bookstorev1alpha1pb.ListBooksRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*bookstorev1alpha1pb.ListBooksResponse",
+        "client": {
+          "shortName": "BookstoreClient",
+          "fullName": "bookstore.v1alpha1.BookstoreClient"
+        },
+        "method": {
+          "shortName": "ListBooks",
+          "fullName": "bookstore.v1alpha1.BookstoreService.ListBooks",
+          "service": {
+            "shortName": "BookstoreService",
+            "fullName": "bookstore.v1alpha1.BookstoreService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1alpha1_generated_BookstoreService_ListShelves_sync",
+      "title": " ListShelves Sample",
+      "description": "ListShelves returns a list of all shelves in the bookstore.",
+      "file": "BookstoreClient/ListShelves/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "ListShelves",
+        "fullName": "bookstore.v1alpha1.BookstoreClient.ListShelves",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "emptypb.Empty",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*bookstorev1alpha1pb.ListShelvesResponse",
+        "client": {
+          "shortName": "BookstoreClient",
+          "fullName": "bookstore.v1alpha1.BookstoreClient"
+        },
+        "method": {
+          "shortName": "ListShelves",
+          "fullName": "bookstore.v1alpha1.BookstoreService.ListShelves",
+          "service": {
+            "shortName": "BookstoreService",
+            "fullName": "bookstore.v1alpha1.BookstoreService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    }
+  ]
+}

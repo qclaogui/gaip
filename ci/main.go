@@ -90,7 +90,7 @@ func main() {
 		platformVariants = append(platformVariants, app)
 	}
 
-	// CD: publish image to Repo
+	// CD: publish image to RepoCfg
 	imageDigest, err := client.Container().WithRegistryAuth(imageRepo, username, password).
 		Publish(ctx, appImage, dagger.ContainerPublishOpts{PlatformVariants: platformVariants})
 	if err != nil {

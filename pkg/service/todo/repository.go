@@ -5,7 +5,6 @@
 package todo
 
 import (
-	"context"
 	"errors"
 
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
@@ -22,13 +21,5 @@ var (
 // Repository is a interface that defines the rules around what a customer repository
 // Has to be able to perform
 type Repository interface {
-	Create(context.Context, *pb.CreateRequest) (*pb.CreateResponse, error)
-
-	Get(context.Context, *pb.GetRequest) (*pb.GetResponse, error)
-
-	Update(context.Context, *pb.UpdateRequest) (*pb.UpdateResponse, error)
-
-	Delete(context.Context, *pb.DeleteRequest) (*pb.DeleteResponse, error)
-
-	List(context.Context, *pb.ListRequest) (*pb.ListResponse, error)
+	pb.ToDoServiceServer
 }

@@ -127,7 +127,7 @@ func main() {
 	})
 	_ = level.Info(util_log.Logger).Log("msg", "Starting application", "version", version.GetVersion())
 
-	application, err := app.New(cfg, reg)
+	application, err := app.NewApplication(cfg, reg)
 	util_log.CheckFatal("initializing application", err)
 
 	err = application.Bootstrap()

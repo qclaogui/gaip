@@ -35,7 +35,7 @@ func Usage(printAll bool, configs ...interface{}) error {
 	}
 
 	fs := flag.CommandLine
-	fmt.Fprintf(fs.Output(), "Usage of %s:\n", os.Args[0])
+	_, _ = fmt.Fprintf(fs.Output(), "Usage of %s:\n", os.Args[0])
 	fs.VisitAll(func(fl *flag.Flag) {
 		v := reflect.ValueOf(fl.Value)
 		fieldCat := fieldcategory.Basic
@@ -79,7 +79,7 @@ func Usage(printAll bool, configs ...interface{}) error {
 
 		var b strings.Builder
 		// Two spaces before -; see next two comments.
-		fmt.Fprintf(&b, "  -%s", fl.Name)
+		_, _ = fmt.Fprintf(&b, "  -%s", fl.Name)
 		name := getFlagName(fl)
 		if len(name) > 0 {
 			b.WriteString(" ")
@@ -94,6 +94,7 @@ func Usage(printAll bool, configs ...interface{}) error {
 		case fieldcategory.Deprecated:
 			b.WriteString("[deprecated] ")
 		}
+
 		b.WriteString(strings.ReplaceAll(fl.Usage, "\n", "\n    \t"))
 
 		if defValue := getFlagDefault(fl, field); !isZeroValue(fl, defValue) {
@@ -103,16 +104,16 @@ func Usage(printAll bool, configs ...interface{}) error {
 			}
 			if v.Kind() == reflect.String {
 				// put quotes on the value
-				fmt.Fprintf(&b, " (default %q)", defValue)
+				_, _ = fmt.Fprintf(&b, " (default %q)", defValue)
 			} else {
-				fmt.Fprintf(&b, " (default %v)", defValue)
+				_, _ = fmt.Fprintf(&b, " (default %v)", defValue)
 			}
 		}
-		fmt.Fprint(fs.Output(), b.String(), "\n")
+		_, _ = fmt.Fprint(fs.Output(), b.String(), "\n")
 	})
 
 	if !printAll {
-		fmt.Fprintf(fs.Output(), "\nTo see all flags, use -help-all\n")
+		_, _ = fmt.Fprintf(fs.Output(), "\nTo see all flags, use -help-all\n")
 	}
 
 	return nil

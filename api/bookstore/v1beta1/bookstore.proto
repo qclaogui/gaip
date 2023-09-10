@@ -19,14 +19,17 @@ syntax = "proto3";
 package bookstore.v1beta1;
 
 import "google/api/annotations.proto";
+import "google/api/client.proto";
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/api/gen/proto/bookstore/v1beta1;bookstorev1beta1";
+option go_package = "github.com/qclaogui/golang-api-server/api/gen/proto/bookstore/v1beta1;bookstorev1beta1pb";
 
 // A simple Bookstore API.
 //
 // The API manages shelves and books resources. Shelves contain books.
 service BookstoreService {
+  // https://github.com/googleapis/gapic-generator-go?tab=readme-ov-file#configuration
+  option (google.api.default_host) = "api.qclaogui.com";
   // Returns a list of all shelves in the bookstore.
   rpc ListShelves(google.protobuf.Empty) returns (ListShelvesResponse) {
     // Define HTTP mapping.

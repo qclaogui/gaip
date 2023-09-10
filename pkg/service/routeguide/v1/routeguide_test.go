@@ -9,12 +9,13 @@ import (
 	"testing"
 
 	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
+	util_log "github.com/qclaogui/golang-api-server/tools/log"
 	"google.golang.org/protobuf/proto"
 )
 
 func Test_ServiceServer_GetFeature(t *testing.T) {
 	ctx := context.Background()
-	ssv, err := NewServiceServer(WithMemoryRepository())
+	ssv, err := NewServiceServer(util_log.Logger, WithMemoryRepository())
 	if err != nil {
 		t.Fatalf("an error '%s' was not expected when NewServiceServer", err)
 	}

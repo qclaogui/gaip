@@ -6,11 +6,11 @@
 // source: bookstore/v1alpha1/bookstore.proto
 
 /*
-Package bookstorev1alpha1 is a reverse proxy.
+Package bookstorev1alpha1pb is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package bookstorev1alpha1
+package bookstorev1alpha1pb
 
 import (
 	"context"

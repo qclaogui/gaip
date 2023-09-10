@@ -13,6 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/rest"
+	bookstorev1alpha1 "github.com/qclaogui/golang-api-server/pkg/service/bookstore/v1alpha1"
 	routeguidev1 "github.com/qclaogui/golang-api-server/pkg/service/routeguide/v1"
 	todov1 "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/vault"
@@ -28,7 +29,8 @@ type Application struct {
 	Cfg        Config
 	Registerer prometheus.Registerer
 
-	Server *server.Server
+	Server    *server.Server
+	Bookstore bookstorev1alpha1.ServiceServer
 
 	Vault *vault.Vault
 }
@@ -54,8 +56,17 @@ func (app *Application) initVault() error {
 	return nil
 }
 
-// New makes a new Application.
-func New(cfg Config, reg prometheus.Registerer) (*Application, error) {
+func (app *Application) initBookstore() (*bookstorev1alpha1.ServiceServer, error) {
+	bookstoreSrv, err := bookstorev1alpha1.NewServiceServer(app.Cfg.Bookstore)
+	if err != nil {
+		return nil, err
+	}
+
+	return bookstoreSrv, nil
+}
+
+// NewApplication makes a new Application.
+func NewApplication(cfg Config, reg prometheus.Registerer) (*Application, error) {
 	if cfg.PrintConfig {
 		if err := yaml.NewEncoder(os.Stdout).Encode(&cfg); err != nil {
 			fmt.Println("Error encoding config:", err)
@@ -75,32 +86,24 @@ func New(cfg Config, reg prometheus.Registerer) (*Application, error) {
 func (app *Application) Bootstrap() error {
 	ctx := context.Background()
 
+	// Initialize tracing and handle the tracer provider shutdown
+	stopTracing := interceptors.InitTracing()
+	defer stopTracing()
+
 	// Application init
 	if err := app.initVault(); err != nil {
 		return err
 	}
 
-	// flag.StringVar(&cfg.DBHost, "db-host", "127.0.0.1", "Database host")
-	// flag.StringVar(&cfg.DBUser, "db-user", "root", "Database user")
-	// flag.StringVar(&cfg.DBPassword, "db-password", "", "Database password")
-	// flag.StringVar(&cfg.DBSchema, "db-schema", "dev", "Database schema")
-	// flag.IntVar(&cfg.LogLevel, "log-level", 0, "Global log level")
-
-	// Initialize tracing and handle the tracer provider shutdown
-	stopTracing := interceptors.InitTracing()
-	defer stopTracing()
-
-	// add MySQL driver specific parameter to parse date/time
-	// Drop it for another database
-	//param := "parseTime=true"
-	//dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s", cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBSchema, param)
-	//toDoSrv, err := todov1.NewServiceServer(todov1.WithMysqlRepository(dsn))
-
 	toDoSrv, err := todov1.NewServiceServer(util_log.Logger, todov1.WithMemoryRepository())
 	if err != nil {
 		return err
 	}
-	routeGuideSrv, err := routeguidev1.NewServiceServer(routeguidev1.WithMemoryRepository())
+	routeGuideSrv, err := routeguidev1.NewServiceServer(util_log.Logger, routeguidev1.WithMemoryRepository())
+	if err != nil {
+		return err
+	}
+	bookstoreSrv, err := app.initBookstore()
 	if err != nil {
 		return err
 	}
@@ -111,5 +114,5 @@ func (app *Application) Bootstrap() error {
 		util_log.CheckFatal("running REST server", err)
 	}()
 
-	return grpc.RunGRPCServer(ctx, app.Cfg.Server, toDoSrv, routeGuideSrv)
+	return grpc.RunGRPCServer(ctx, app.Cfg.Server, toDoSrv, routeGuideSrv, bookstoreSrv)
 }
