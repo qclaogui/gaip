@@ -25,8 +25,7 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.17.0
 	go.opentelemetry.io/otel/sdk v1.17.0
 	google.golang.org/api v0.140.0
-	google.golang.org/genproto/googleapis/api v0.0.0-20230911183012-2d3300fd4832
-	google.golang.org/grpc v1.57.0
+	google.golang.org/grpc v1.58.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -114,6 +113,7 @@ require (
 	golang.org/x/tools v0.13.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto v0.0.0-20230911183012-2d3300fd4832 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20230911183012-2d3300fd4832 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230911183012-2d3300fd4832 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
