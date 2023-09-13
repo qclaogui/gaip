@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
-	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	pb "github.com/qclaogui/golang-api-server/api/todo/v1/todopb"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	util_log "github.com/qclaogui/golang-api-server/tools/log"
 	"google.golang.org/protobuf/types/known/timestamppb"

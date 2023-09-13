@@ -12,17 +12,18 @@ breaking:
 lint:
   use:
     - DEFAULT
-  except: []
-  ignore:
-    # - routeguide/v1beta1
-    - kvstore
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+#  ignore:
+#    - bookstore
+#    - routeguide/v1beta1
   ignore_only:
     RPC_REQUEST_RESPONSE_UNIQUE:
-      - bookstore/v1alpha1/bookstore.proto
-      - bookstore/v1beta1/bookstore.proto
+      - bookstore/v1alpha1/bookstorepb/bookstore.proto
+      - bookstore/v1beta1/bookstorepb/bookstore.proto
     RPC_RESPONSE_STANDARD_NAME:
-      - bookstore/v1alpha1/bookstore.proto
-      - bookstore/v1beta1/bookstore.proto
+      - bookstore/v1alpha1/bookstorepb/bookstore.proto
+      - bookstore/v1beta1/bookstorepb/bookstore.proto
   allow_comment_ignores: false
   enum_zero_value_suffix: _UNSPECIFIED
   rpc_allow_google_protobuf_empty_requests: true

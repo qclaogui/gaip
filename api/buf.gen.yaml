@@ -1,26 +1,26 @@
 version: v1
 managed:
   enabled: true
-  go_package_prefix:
-    default: github.com/qclaogui/golang-api-server/api/gen/proto
-    except:
-      - buf.build/googleapis/googleapis
-      - buf.build/grpc-ecosystem/grpc-gateway
-    # override:
-    #   buf.build/acme/weather: github.com/acme/weather/gen/proto/go
+#  go_package_prefix:
+#    default: github.com/qclaogui/golang-api-server/api
+#    except:
+#      - buf.build/googleapis/googleapis
+#      - buf.build/grpc-ecosystem/grpc-gateway
+#    # override:
+#    #   buf.build/acme/weather: github.com/acme/weather/gen/proto/go
 
 # Usage with local plugins (just run: make install-build-deps to install dependencies)
 # replace path with your {GOBIN}/protoc-gen-go-v1.31.0. Example: /Users/Shared/code/golang/bin/protoc-gen-go-v1.31.0
 plugins:
   - plugin: go
-    out: gen/proto
+    out: .
     opt:
     - paths=source_relative
     path: /Users/Shared/code/golang/bin/protoc-gen-go-v1.31.0
     protoc_path: /Users/Shared/code/golang/bin/protoc-24.3
 
   - plugin: go-grpc
-    out: gen/proto
+    out: .
     opt:
     - paths=source_relative
     - require_unimplemented_servers=false
@@ -28,7 +28,7 @@ plugins:
     protoc_path: /Users/Shared/code/golang/bin/protoc-24.3
 
   - plugin: grpc-gateway
-    out: gen/proto
+    out: .
     opt:
     - paths=source_relative
     - generate_unbound_methods=true
@@ -44,11 +44,12 @@ plugins:
     protoc_path: /Users/Shared/code/golang/bin/protoc-24.3
 
   - plugin: go_gapic
-    out: ../cmd
+    out: .
     opt:
-    - go-gapic-package=github.com/qclaogui/golang-api-server/cmd/client-gapic;clientgapic
+    - go-gapic-package=github.com/qclaogui/golang-api-server/api/bookstore/v1alpha1/snippets;bookstore_snippets
     - metadata=false
-    - module=github.com/qclaogui/golang-api-server/cmd
+    - module=github.com/qclaogui/golang-api-server/api
+    - grpc-service-config=bookstore/v1alpha1/bookstorepb/bookstore_grpc_service_config.json
     - release-level=alpha
     - transport=grpc+rest
     - rest-numeric-enums=true
@@ -59,18 +60,18 @@ plugins:
 ## Usage with remote plugins
 #plugins:
 #  - plugin: buf.build/protocolbuffers/go:v1.31.0
-#    out: gen/proto
+#    out: .
 #    opt:
 #    - paths=source_relative
 #
 #  - plugin: buf.build/grpc/go:v1.3.0
-#    out: gen/proto
+#    out: .
 #    opt:
 #    - paths=source_relative
 #    - require_unimplemented_servers=false
 #
 #  - plugin: buf.build/grpc-ecosystem/gateway:v2.17.1
-#    out: gen/proto
+#    out: .
 #    opt:
 #    - paths=source_relative
 #    - logtostderr=true
@@ -83,5 +84,5 @@ plugins:
 #    - generate_unbound_methods=true
 #
 #  - plugin: buf.build/connectrpc/go
-#    out: gen/proto
+#    out: .
 #    opt: paths=source_relative

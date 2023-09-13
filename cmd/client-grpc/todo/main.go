@@ -10,7 +10,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	pb "github.com/qclaogui/golang-api-server/api/todo/v1/todopb"
 	"github.com/qclaogui/golang-api-server/cmd/client-grpc/data"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

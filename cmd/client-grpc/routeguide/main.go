@@ -13,7 +13,7 @@ import (
 	"math/rand"
 	"time"
 
-	pb "github.com/qclaogui/golang-api-server/api/gen/proto/routeguide/v1"
+	pb "github.com/qclaogui/golang-api-server/api/routeguide/v1/routeguidepb"
 	"github.com/qclaogui/golang-api-server/cmd/client-grpc/data"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

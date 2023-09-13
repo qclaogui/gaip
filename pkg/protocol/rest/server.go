@@ -18,7 +18,7 @@ import (
 
 	"github.com/grafana/dskit/server"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	pbtodov1 "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	pbtodov1 "github.com/qclaogui/golang-api-server/api/todo/v1/todopb"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/rest/middleware"
 	"github.com/qclaogui/golang-api-server/third_party"

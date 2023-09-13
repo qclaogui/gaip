@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/go-kit/log"
-	pb "github.com/qclaogui/golang-api-server/api/gen/proto/todo/v1"
+	pb "github.com/qclaogui/golang-api-server/api/todo/v1/todopb"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

@@ -7,7 +7,7 @@ package v1alpha1
 import (
 	"context"
 
-	pb "github.com/qclaogui/golang-api-server/api/gen/proto/bookstore/v1alpha1"
+	pb "github.com/qclaogui/golang-api-server/api/bookstore/v1alpha1/bookstorepb"
 	"github.com/qclaogui/golang-api-server/pkg/service/bookstore/repository"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
