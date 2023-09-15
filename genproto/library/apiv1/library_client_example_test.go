@@ -21,6 +21,7 @@ import (
 
 	library "github.com/qclaogui/golang-api-server/genproto/library/apiv1"
 	librarypb "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	"google.golang.org/api/iterator"
 )
 
 func ExampleNewClient() {
@@ -82,6 +83,110 @@ func ExampleClient_CreateShelf() {
 	_ = resp
 }
 
+func ExampleClient_GetShelf() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.GetShelfRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#GetShelfRequest.
+	}
+	resp, err := c.GetShelf(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleClient_ListShelves() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.ListShelvesRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#ListShelvesRequest.
+	}
+	it := c.ListShelves(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
+		}
+		// TODO: Use resp.
+		_ = resp
+	}
+}
+
+func ExampleClient_DeleteShelf() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.DeleteShelfRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#DeleteShelfRequest.
+	}
+	err = c.DeleteShelf(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+}
+
+func ExampleClient_MergeShelves() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.MergeShelvesRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#MergeShelvesRequest.
+	}
+	resp, err := c.MergeShelves(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
 func ExampleClient_CreateBook() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
@@ -100,6 +205,135 @@ func ExampleClient_CreateBook() {
 		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#CreateBookRequest.
 	}
 	resp, err := c.CreateBook(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleClient_GetBook() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.GetBookRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#GetBookRequest.
+	}
+	resp, err := c.GetBook(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleClient_ListBooks() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.ListBooksRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#ListBooksRequest.
+	}
+	it := c.ListBooks(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
+		}
+		// TODO: Use resp.
+		_ = resp
+	}
+}
+
+func ExampleClient_DeleteBook() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.DeleteBookRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#DeleteBookRequest.
+	}
+	err = c.DeleteBook(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+}
+
+func ExampleClient_UpdateBook() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.UpdateBookRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#UpdateBookRequest.
+	}
+	resp, err := c.UpdateBook(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleClient_MoveBook() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := library.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &librarypb.MoveBookRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#MoveBookRequest.
+	}
+	resp, err := c.MoveBook(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}

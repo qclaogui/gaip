@@ -38,7 +38,7 @@
 //  // - It may require correct/in-range values for request initialization.
 //  // - It may require specifying regional endpoints when creating the service client as shown in:
 //  //   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-//  c, err := bookstore.NewClient(ctx)
+//  c, err := todo.NewClient(ctx)
 //  if err != nil {
 //  	// TODO: Handle error.
 //  }
@@ -58,17 +58,17 @@
 //  // - It may require correct/in-range values for request initialization.
 //  // - It may require specifying regional endpoints when creating the service client as shown in:
 //  //   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-//  c, err := bookstore.NewClient(ctx)
+//  c, err := todo.NewClient(ctx)
 //  if err != nil {
 //  	// TODO: Handle error.
 //  }
 //  defer c.Close()
 //
-//  req := &emptypb.Empty{
+//  req := &todopb.CreateRequest{
 //  	// TODO: Fill request struct fields.
-//  	// See https://pkg.go.dev/google.golang.org/protobuf/types/known/emptypb#Empty.
+//  	// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#CreateRequest.
 //  }
-//  resp, err := c.ListShelves(ctx, req)
+//  resp, err := c.Create(ctx, req)
 //  if err != nil {
 //  	// TODO: Handle error.
 //  }
@@ -88,7 +88,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package bookstore // import "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1"
+package todo // import "github.com/qclaogui/golang-api-server/genproto/todo/apiv1"
 
 import (
 	"context"

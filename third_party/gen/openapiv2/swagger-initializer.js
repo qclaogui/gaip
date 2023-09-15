@@ -3,7 +3,7 @@ window.onload = function() {
 
   // the following lines will be replaced by docker/configurator, when it runs in a docker-container
   window.ui = SwaggerUIBundle({
-    urls: [{"url":"routeguide/v1/route_guide.swagger.json","name":"routeguide/v1/route_guide.swagger.json"},{"url":"bookstore/v1alpha1/bookstore.swagger.json","name":"bookstore/v1alpha1/bookstore.swagger.json"},{"url":"library/v1/library.swagger.json","name":"library/v1/library.swagger.json"},{"url":"todo/v1/todo_service.swagger.json","name":"todo/v1/todo_service.swagger.json"}],
+    urls: [{"url":"routeguide/v1/route_guide.swagger.json","name":"routeguide/v1/route_guide.swagger.json"},{"url":"bookstore/v1alpha1/bookstore.swagger.json","name":"bookstore/v1alpha1/bookstore.swagger.json"},{"url":"library/v1/service.swagger.json","name":"library/v1/service.swagger.json"},{"url":"library/v1/resources.swagger.json","name":"library/v1/resources.swagger.json"},{"url":"todo/v1/todo_service.swagger.json","name":"todo/v1/todo_service.swagger.json"}],
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [

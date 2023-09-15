@@ -64,7 +64,7 @@ func CallHTTP(method string, endpoint string, body io.Reader) []byte {
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		log.Fatalf("failed to call Create method: %v", err)
+		log.Fatalf("failed to call Create method: %v", resp)
 	}
 
 	log.Printf("HTTP Response: Code=%d, Body=%s\n\n", resp.StatusCode, body)

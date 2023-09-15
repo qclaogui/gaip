@@ -1,0 +1,22 @@
+{
+  "methodConfig": [{
+    "name": [{ "service": "todo.v1.ToDoService" }],
+    "waitForReady": true,
+    "timeout": "60s",
+    "retryPolicy": {
+      "maxAttempts": 3,
+      "initialBackoff": "0.01s",
+      "maxBackoff": "60s",
+      "backoffMultiplier": 1.3,
+      "retryableStatusCodes": ["UNAVAILABLE"]
+    }
+  },
+    {
+      "name": [
+        { "service": "todo.v1.ToDoService", "method": "Create" }
+      ],
+      "waitForReady": true,
+      "timeout": "60s"
+    }
+  ]
+}

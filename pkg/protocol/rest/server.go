@@ -57,7 +57,7 @@ func RunRESTServer(ctx context.Context, cfg server.Config) error {
 		Addr: fmt.Sprintf("%s:%d", cfg.HTTPListenAddress, cfg.HTTPListenPort),
 		// Handler: handler,
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if strings.HasPrefix(r.URL.Path, "/api") {
+			if strings.HasPrefix(r.URL.Path, "/v1") {
 				handler.ServeHTTP(w, r)
 				return
 			}

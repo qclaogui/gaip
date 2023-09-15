@@ -47,7 +47,7 @@ GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
 .PHONY: build
 build: ## Build binary for current OS and place it at ./bin/golang-api-server
-	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd
+	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd/server
 
 .PHONY: build-all
 build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
@@ -145,6 +145,19 @@ protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROT
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
  		api/bookstore/v1alpha1/*.proto
+
+	@$(PROTOC) --proto_path=api --proto_path=third_party \
+		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
+		--go_gapic_out=genproto \
+		--go_gapic_opt='go-gapic-package=github.com/qclaogui/golang-api-server/genproto/todo/apiv1;todo' \
+		--go_gapic_opt='metadata=false' \
+		--go_gapic_opt='module=github.com/qclaogui/golang-api-server/genproto' \
+		--go_gapic_opt='grpc-service-config=api/todo/v1/todo_grpc_service_config.json' \
+		--go_gapic_opt='release-level=alpha' \
+		--go_gapic_opt='transport=grpc+rest' \
+		--go_gapic_opt='rest-numeric-enums=true' \
+ 		api/todo/v1/*.proto
+
 
 	@$(PROTOC) --proto_path=api --proto_path=third_party \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
