@@ -24,7 +24,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1Book"
+              "$ref": "#/definitions/bookstorev1alpha1Book"
             }
           },
           "default": {
@@ -41,7 +41,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1alpha1CreateBookRequest"
+              "$ref": "#/definitions/bookstorev1alpha1CreateBookRequest"
             }
           }
         ],
@@ -58,7 +58,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1Shelf"
+              "$ref": "#/definitions/bookstorev1alpha1Shelf"
             }
           },
           "default": {
@@ -75,7 +75,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1alpha1CreateShelfRequest"
+              "$ref": "#/definitions/bookstorev1alpha1CreateShelfRequest"
             }
           }
         ],
@@ -162,7 +162,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1Book"
+              "$ref": "#/definitions/bookstorev1alpha1Book"
             }
           },
           "default": {
@@ -196,7 +196,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1Shelf"
+              "$ref": "#/definitions/bookstorev1alpha1Shelf"
             }
           },
           "default": {
@@ -292,6 +292,65 @@
     }
   },
   "definitions": {
+    "bookstorev1alpha1Book": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "A unique book id."
+        },
+        "author": {
+          "type": "string",
+          "description": "An author of the book."
+        },
+        "title": {
+          "type": "string",
+          "description": "A book title."
+        }
+      },
+      "description": "A book resource."
+    },
+    "bookstorev1alpha1CreateBookRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of the shelf on which to create a book."
+        },
+        "book": {
+          "$ref": "#/definitions/bookstorev1alpha1Book",
+          "description": "A book resource to create on the shelf."
+        }
+      },
+      "description": "Request message for CreateBook method."
+    },
+    "bookstorev1alpha1CreateShelfRequest": {
+      "type": "object",
+      "properties": {
+        "shelf": {
+          "$ref": "#/definitions/bookstorev1alpha1Shelf",
+          "description": "The shelf resource to create."
+        }
+      },
+      "description": "Request message for CreateShelf method."
+    },
+    "bookstorev1alpha1Shelf": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "description": "A unique shelf id."
+        },
+        "theme": {
+          "type": "string",
+          "description": "A theme of the shelf (fiction, poetry, etc)."
+        }
+      },
+      "description": "A shelf resource."
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -319,50 +378,6 @@
           }
         }
       }
-    },
-    "v1alpha1Book": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64",
-          "description": "A unique book id."
-        },
-        "author": {
-          "type": "string",
-          "description": "An author of the book."
-        },
-        "title": {
-          "type": "string",
-          "description": "A book title."
-        }
-      },
-      "description": "A book resource."
-    },
-    "v1alpha1CreateBookRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "type": "string",
-          "format": "int64",
-          "description": "The ID of the shelf on which to create a book."
-        },
-        "book": {
-          "$ref": "#/definitions/v1alpha1Book",
-          "description": "A book resource to create on the shelf."
-        }
-      },
-      "description": "Request message for CreateBook method."
-    },
-    "v1alpha1CreateShelfRequest": {
-      "type": "object",
-      "properties": {
-        "shelf": {
-          "$ref": "#/definitions/v1alpha1Shelf",
-          "description": "The shelf resource to create."
-        }
-      },
-      "description": "Request message for CreateShelf method."
     },
     "v1alpha1DeleteBookRequest": {
       "type": "object",
@@ -436,7 +451,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1Book"
+            "$ref": "#/definitions/bookstorev1alpha1Book"
           },
           "description": "The books on the shelf."
         }
@@ -450,27 +465,12 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1Shelf"
+            "$ref": "#/definitions/bookstorev1alpha1Shelf"
           },
           "description": "Shelves in the bookstore."
         }
       },
       "description": "Response to ListShelves call."
-    },
-    "v1alpha1Shelf": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64",
-          "description": "A unique shelf id."
-        },
-        "theme": {
-          "type": "string",
-          "description": "A theme of the shelf (fiction, poetry, etc)."
-        }
-      },
-      "description": "A shelf resource."
     }
   }
 }

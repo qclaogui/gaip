@@ -18,7 +18,7 @@ import (
 
 	"github.com/grafana/dskit/server"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	pbtodov1 "github.com/qclaogui/golang-api-server/api/todo/v1/todopb"
+	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/rest/middleware"
 	"github.com/qclaogui/golang-api-server/third_party"
@@ -42,7 +42,7 @@ func RunRESTServer(ctx context.Context, cfg server.Config) error {
 	gwmux := runtime.NewServeMux()
 
 	// Register the gRPC server's handler with the HTTP gwmux
-	err := pbtodov1.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, endpoint, opts)
+	err := todopb.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, endpoint, opts)
 	if err != nil {
 		slog.Error("failed to start HTTP gateway", "error", err)
 		return err
