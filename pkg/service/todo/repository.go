@@ -7,7 +7,7 @@ package todo
 import (
 	"errors"
 
-	pb "github.com/qclaogui/golang-api-server/api/todo/v1/todopb"
+	pb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
 )
 
 var (

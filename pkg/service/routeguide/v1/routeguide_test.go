@@ -8,7 +8,7 @@ import (
 	"context"
 	"testing"
 
-	pb "github.com/qclaogui/golang-api-server/api/routeguide/v1/routeguidepb"
+	pb "github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
 	util_log "github.com/qclaogui/golang-api-server/tools/log"
 	"google.golang.org/protobuf/proto"
 )

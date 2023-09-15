@@ -1,0 +1,168 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "library/v1/library.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "LibraryService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/shelves": {
+      "post": {
+        "summary": "Creates a shelf, and returns the new Shelf.",
+        "operationId": "LibraryService_CreateShelf",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/libraryv1Shelf"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "shelf",
+            "description": "The shelf to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/libraryv1Shelf",
+              "required": [
+                "shelf"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "LibraryService"
+        ]
+      }
+    },
+    "/v1/{parent}/books": {
+      "post": {
+        "summary": "Creates a book, and returns the new Book.",
+        "operationId": "LibraryService_CreateBook",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/libraryv1Book"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "The name of the shelf in which the book is created.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "shelves/[^/]+"
+          },
+          {
+            "name": "book",
+            "description": "The book to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/libraryv1Book",
+              "required": [
+                "book"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "LibraryService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "libraryv1Book": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The resource name of the book.\nBook names have the form `shelves/{shelf_id}/books/{book_id}`.\nThe name is ignored when creating a book."
+        },
+        "author": {
+          "type": "string",
+          "description": "The name of the book author."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the book."
+        },
+        "read": {
+          "type": "boolean",
+          "description": "Value indicating whether the book has been read."
+        }
+      },
+      "description": "A single book in the library."
+    },
+    "libraryv1Shelf": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The resource name of the shelf.\nShelf names have the form `shelves/{shelf_id}`.\nThe name is ignored when creating a shelf."
+        },
+        "theme": {
+          "type": "string",
+          "title": "The theme of the shelf"
+        }
+      },
+      "description": "A Shelf contains a collection of books with a theme."
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

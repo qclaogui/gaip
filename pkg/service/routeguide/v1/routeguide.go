@@ -8,7 +8,7 @@ import (
 	"context"
 
 	"github.com/go-kit/log"
-	pb "github.com/qclaogui/golang-api-server/api/routeguide/v1/routeguidepb"
+	pb "github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
 	routeguide "github.com/qclaogui/golang-api-server/pkg/service/routeguide"
 	"google.golang.org/grpc"
 )

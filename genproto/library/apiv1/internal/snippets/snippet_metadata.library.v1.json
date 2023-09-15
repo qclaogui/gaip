@@ -1,0 +1,107 @@
+{
+  "clientLibrary": {
+    "name": "github.com/qclaogui/golang-api-server/genproto/library/apiv1",
+    "version": "$VERSION",
+    "language": "GO",
+    "apis": [
+      {
+        "id": "library.v1",
+        "version": "v1"
+      }
+    ]
+  },
+  "snippets": [
+    {
+      "regionTag": "library_v1_generated_LibraryService_CreateBook_sync",
+      "title": "library CreateBook Sample",
+      "description": "CreateBook creates a book, and returns the new Book.",
+      "file": "Client/CreateBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateBook",
+        "fullName": "library.v1.Client.CreateBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.CreateBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Book",
+        "client": {
+          "shortName": "Client",
+          "fullName": "library.v1.Client"
+        },
+        "method": {
+          "shortName": "CreateBook",
+          "fullName": "library.v1.LibraryService.CreateBook",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_CreateShelf_sync",
+      "title": "library CreateShelf Sample",
+      "description": "CreateShelf creates a shelf, and returns the new Shelf.",
+      "file": "Client/CreateShelf/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateShelf",
+        "fullName": "library.v1.Client.CreateShelf",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.CreateShelfRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Shelf",
+        "client": {
+          "shortName": "Client",
+          "fullName": "library.v1.Client"
+        },
+        "method": {
+          "shortName": "CreateShelf",
+          "fullName": "library.v1.LibraryService.CreateShelf",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    }
+  ]
+}
