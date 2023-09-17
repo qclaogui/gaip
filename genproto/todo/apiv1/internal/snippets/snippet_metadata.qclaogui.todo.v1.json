@@ -1,0 +1,240 @@
+{
+  "clientLibrary": {
+    "name": "github.com/qclaogui/golang-api-server/genproto/todo/apiv1",
+    "version": "$VERSION",
+    "language": "GO",
+    "apis": [
+      {
+        "id": "qclaogui.todo.v1",
+        "version": "v1"
+      }
+    ]
+  },
+  "snippets": [
+    {
+      "regionTag": "_v1_generated_ToDoService_Create_sync",
+      "title": " Create Sample",
+      "file": "Client/Create/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "Create",
+        "fullName": "qclaogui.todo.v1.Client.Create",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "todopb.CreateRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*todopb.CreateResponse",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.todo.v1.Client"
+        },
+        "method": {
+          "shortName": "Create",
+          "fullName": "qclaogui.todo.v1.ToDoService.Create",
+          "service": {
+            "shortName": "ToDoService",
+            "fullName": "qclaogui.todo.v1.ToDoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1_generated_ToDoService_Delete_sync",
+      "title": " Delete Sample",
+      "file": "Client/Delete/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "Delete",
+        "fullName": "qclaogui.todo.v1.Client.Delete",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "todopb.DeleteRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*todopb.DeleteResponse",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.todo.v1.Client"
+        },
+        "method": {
+          "shortName": "Delete",
+          "fullName": "qclaogui.todo.v1.ToDoService.Delete",
+          "service": {
+            "shortName": "ToDoService",
+            "fullName": "qclaogui.todo.v1.ToDoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1_generated_ToDoService_Get_sync",
+      "title": " Get Sample",
+      "file": "Client/Get/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "Get",
+        "fullName": "qclaogui.todo.v1.Client.Get",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "todopb.GetRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*todopb.GetResponse",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.todo.v1.Client"
+        },
+        "method": {
+          "shortName": "Get",
+          "fullName": "qclaogui.todo.v1.ToDoService.Get",
+          "service": {
+            "shortName": "ToDoService",
+            "fullName": "qclaogui.todo.v1.ToDoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1_generated_ToDoService_List_sync",
+      "title": " List Sample",
+      "file": "Client/List/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "List",
+        "fullName": "qclaogui.todo.v1.Client.List",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "todopb.ListRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*todopb.ListResponse",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.todo.v1.Client"
+        },
+        "method": {
+          "shortName": "List",
+          "fullName": "qclaogui.todo.v1.ToDoService.List",
+          "service": {
+            "shortName": "ToDoService",
+            "fullName": "qclaogui.todo.v1.ToDoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "_v1_generated_ToDoService_Update_sync",
+      "title": " Update Sample",
+      "file": "Client/Update/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "Update",
+        "fullName": "qclaogui.todo.v1.Client.Update",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "todopb.UpdateRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*todopb.UpdateResponse",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.todo.v1.Client"
+        },
+        "method": {
+          "shortName": "Update",
+          "fullName": "qclaogui.todo.v1.ToDoService.Update",
+          "service": {
+            "shortName": "ToDoService",
+            "fullName": "qclaogui.todo.v1.ToDoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    }
+  ]
+}

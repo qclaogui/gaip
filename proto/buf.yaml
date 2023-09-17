@@ -1,0 +1,32 @@
+version: v1
+build:
+  excludes: []
+breaking:
+  use:
+    - FILE
+  except: []
+  ignore: []
+  ignore_only: {}
+  ignore_unstable_packages: true
+
+lint:
+  use:
+    - DEFAULT
+  except:
+    - RPC_REQUEST_RESPONSE_UNIQUE
+    - RPC_RESPONSE_STANDARD_NAME
+  ignore:
+    - qclaogui/library/v1beta1
+    - google
+#  ignore_only:
+#    RPC_REQUEST_RESPONSE_UNIQUE:
+#      - bookstore/v1alpha1/bookstore.proto
+#      - bookstore/v1beta1/bookstore.proto
+  allow_comment_ignores: false
+  enum_zero_value_suffix: _UNSPECIFIED
+  rpc_allow_google_protobuf_empty_requests: true
+  rpc_allow_google_protobuf_empty_responses: true
+
+#deps:
+#  - buf.build/grpc-ecosystem/grpc-gateway
+#  - buf.build/googleapis/googleapis

@@ -73,16 +73,16 @@ check-go-mod: go-mod ## Ensures fresh go.mod and go.sum.
 .PHONY: buf-mod
 buf-mod: ## Run buf mod update after adding a dependency to your buf.yaml
 	@echo ">> run buf mod update"
-	@cd api/ && $(BUF) mod update
+	@cd proto/ && $(BUF) mod update
 
 .PHONY: protoc-install
 protoc-install:
 ifeq ("$(wildcard $(PROTOC))","")
-	@cd third_party && curl -LO $(PROTOC_URL)$(PROTOC_ZIP)
-	@cd third_party && unzip -n $(PROTOC_ZIP)
-	@cd third_party && rm -Rf google/protobuf
-	@cd third_party && mv -f bin/protoc ${GOBIN}/protoc-${PROTOC_VERSION} && mv -f include/google/protobuf google
-	@cd third_party && rm -Rf bin include readme.txt $(PROTOC_ZIP)
+	@cd proto && curl -LO $(PROTOC_URL)$(PROTOC_ZIP)
+	@cd proto && unzip -n $(PROTOC_ZIP)
+	@cd proto && rm -Rf google/protobuf
+	@cd proto && mv -f bin/protoc ${GOBIN}/protoc-${PROTOC_VERSION} && mv -f include/google/protobuf google
+	@cd proto && rm -Rf bin include readme.txt $(PROTOC_ZIP)
 endif
 
 .PHONY: install-build-deps
@@ -98,8 +98,8 @@ install-build-deps: protoc-install ## Install dependencies tools
 buf-gen: ## Regenerate proto by buf https://buf.build/
 buf-gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 	@#rm -Rf genproto third_party/gen
-	@cd api/ && $(BUF) generate \
-		--path library/v1/*.proto
+	@cd proto/ && $(BUF) generate \
+		--path qclaogui/library/v1/*.proto
 	@make swagger-ui
 	@make lint
 
@@ -112,87 +112,87 @@ protoc-gen: ## Regenerate proto by protoc
 protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 	@rm -Rf genproto third_party/gen
 	@mkdir -p genproto third_party/gen/openapiv2
-	@$(PROTOC) --proto_path=api --proto_path=third_party \
+	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go=$(PROTOC_GEN_GO) \
 		--go_out=genproto \
 		--go_opt='module=github.com/qclaogui/golang-api-server/genproto' \
- 		api/library/v1/*.proto \
- 		api/routeguide/v1/*.proto \
- 		api/todo/v1/*.proto \
- 		api/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/routeguide/v1/*.proto \
+ 		proto/qclaogui/todo/v1/*.proto \
+ 		proto/qclaogui/library/v1/*.proto \
+ 		proto/qclaogui/bookstore/v1alpha1/*.proto
 
     # plugin protoc-gen-go-grpc
-	@$(PROTOC) --proto_path=api --proto_path=third_party \
+	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go-grpc=$(PROTOC_GEN_GO_GRPC) \
 		--go-grpc_out=genproto \
 		--go-grpc_opt='module=github.com/qclaogui/golang-api-server/genproto' \
 		--go-grpc_opt='require_unimplemented_servers=false' \
- 		api/library/v1/*.proto \
- 		api/routeguide/v1/*.proto \
- 		api/todo/v1/*.proto \
- 		api/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/routeguide/v1/*.proto \
+ 		proto/qclaogui/todo/v1/*.proto \
+ 		proto/qclaogui/library/v1/*.proto \
+ 		proto/qclaogui/bookstore/v1alpha1/*.proto
 
     # plugin protoc-gen-go_gapic
     # https://github.com/googleapis/gapic-generator-go?tab=readme-ov-file#invocation
-	@$(PROTOC) --proto_path=api --proto_path=third_party \
+	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
 		--go_gapic_out=genproto \
 		--go_gapic_opt='go-gapic-package=github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1;bookstore' \
 		--go_gapic_opt='metadata=false' \
 		--go_gapic_opt='module=github.com/qclaogui/golang-api-server/genproto' \
-		--go_gapic_opt='grpc-service-config=api/bookstore/v1alpha1/bookstore_grpc_service_config.json' \
+		--go_gapic_opt='grpc-service-config=proto/qclaogui/bookstore/v1alpha1/bookstore_grpc_service_config.json' \
 		--go_gapic_opt='release-level=alpha' \
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
- 		api/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/bookstore/v1alpha1/*.proto
 
-	@$(PROTOC) --proto_path=api --proto_path=third_party \
+	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
 		--go_gapic_out=genproto \
 		--go_gapic_opt='go-gapic-package=github.com/qclaogui/golang-api-server/genproto/todo/apiv1;todo' \
 		--go_gapic_opt='metadata=false' \
 		--go_gapic_opt='module=github.com/qclaogui/golang-api-server/genproto' \
-		--go_gapic_opt='grpc-service-config=api/todo/v1/todo_grpc_service_config.json' \
+		--go_gapic_opt='grpc-service-config=proto/qclaogui/todo/v1/todo_grpc_service_config.json' \
 		--go_gapic_opt='release-level=alpha' \
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
- 		api/todo/v1/*.proto
+ 		proto/qclaogui/todo/v1/*.proto
 
 
-	@$(PROTOC) --proto_path=api --proto_path=third_party \
+	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
 		--go_gapic_out=genproto \
 		--go_gapic_opt='go-gapic-package=github.com/qclaogui/golang-api-server/genproto/library/apiv1;library' \
 		--go_gapic_opt='metadata=false' \
 		--go_gapic_opt='module=github.com/qclaogui/golang-api-server/genproto' \
-		--go_gapic_opt='grpc-service-config=api/library/v1/library_grpc_service_config.json' \
+		--go_gapic_opt='grpc-service-config=proto/qclaogui/library/v1/library_grpc_service_config.json' \
 		--go_gapic_opt='release-level=alpha' \
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
- 		api/library/v1/*.proto
+ 		proto/qclaogui/library/v1/*.proto
 
     # plugin protoc-gen-grpc-gateway
-	@$(PROTOC) --proto_path=api --proto_path=third_party \
+	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-grpc-gateway=$(PROTOC_GEN_GRPC_GATEWAY) \
 		--grpc-gateway_out=genproto \
 		--grpc-gateway_opt='logtostderr=true' \
 		--grpc-gateway_opt='module=github.com/qclaogui/golang-api-server/genproto' \
 		--grpc-gateway_opt='generate_unbound_methods=true' \
- 		api/library/v1/*.proto \
- 		api/routeguide/v1/*.proto \
- 		api/todo/v1/*.proto \
- 		api/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/routeguide/v1/*.proto \
+ 		proto/qclaogui/todo/v1/*.proto \
+ 		proto/qclaogui/library/v1/*.proto \
+ 		proto/qclaogui/bookstore/v1alpha1/*.proto
 
     # plugin protoc-gen-openapiv2
-	@$(PROTOC) --proto_path=api --proto_path=third_party \
+	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-openapiv2=$(PROTOC_GEN_OPENAPIV2) \
  		--openapiv2_out=third_party/gen/openapiv2 \
  		--openapiv2_opt='logtostderr=true' \
  		--openapiv2_opt='generate_unbound_methods=true' \
- 		api/library/v1/*.proto \
- 		api/routeguide/v1/*.proto \
- 		api/todo/v1/*.proto \
- 		api/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/routeguide/v1/*.proto \
+ 		proto/qclaogui/todo/v1/*.proto \
+ 		proto/qclaogui/library/v1/*.proto \
+ 		proto/qclaogui/bookstore/v1alpha1/*.proto
 
 	@make swagger-ui
 	@make lint
@@ -228,8 +228,7 @@ go-fmt: $(GOIMPORTS) ## Runs gofmt code
 .PHONY: buf-fmt
 buf-fmt: ## examining all of the proto files.
 	@echo ">> run buf format"
-	@cd api/ && $(BUF) format -w --exit-code
-	@cd third_party/google && $(BUF) format -w --exit-code
+	@cd proto/ && $(BUF) format -w --exit-code
 
 .PHONY: goreleaser-lint
 goreleaser-lint: $(GORELEASER) ## Lint .goreleaser*.yml files.
@@ -245,7 +244,7 @@ go-lint: $(GOLANGCI_LINT) ## examining all of the Go files.
 .PHONY: buf-lint
 buf-lint: $(BUF) buf-fmt ## Lint all of the proto files.
 	@echo ">> run buf lint"
-	@cd api/ && $(BUF) lint
+	@cd proto/ && $(BUF) lint
 
 .PHONY: fix-lint
 fix-lint: $(GOLANGCI_LINT) ## fix lint issue of the Go files

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.24.3
-// source: todo/v1/todo_service.proto
+// source: qclaogui/todo/v1/todo_service.proto
 
 package todopb
 
@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ToDoService_Create_FullMethodName = "/todo.v1.ToDoService/Create"
-	ToDoService_Get_FullMethodName    = "/todo.v1.ToDoService/Get"
-	ToDoService_Update_FullMethodName = "/todo.v1.ToDoService/Update"
-	ToDoService_List_FullMethodName   = "/todo.v1.ToDoService/List"
-	ToDoService_Delete_FullMethodName = "/todo.v1.ToDoService/Delete"
+	ToDoService_Create_FullMethodName = "/qclaogui.todo.v1.ToDoService/Create"
+	ToDoService_Get_FullMethodName    = "/qclaogui.todo.v1.ToDoService/Get"
+	ToDoService_Update_FullMethodName = "/qclaogui.todo.v1.ToDoService/Update"
+	ToDoService_List_FullMethodName   = "/qclaogui.todo.v1.ToDoService/List"
+	ToDoService_Delete_FullMethodName = "/qclaogui.todo.v1.ToDoService/Delete"
 )
 
 // ToDoServiceClient is the client API for ToDoService service.
@@ -226,7 +226,7 @@ func _ToDoService_Delete_Handler(srv interface{}, ctx context.Context, dec func(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ToDoService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "todo.v1.ToDoService",
+	ServiceName: "qclaogui.todo.v1.ToDoService",
 	HandlerType: (*ToDoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -251,5 +251,5 @@ var ToDoService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "todo/v1/todo_service.proto",
+	Metadata: "qclaogui/todo/v1/todo_service.proto",
 }

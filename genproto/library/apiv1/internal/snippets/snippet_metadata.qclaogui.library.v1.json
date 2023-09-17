@@ -1,0 +1,519 @@
+{
+  "clientLibrary": {
+    "name": "github.com/qclaogui/golang-api-server/genproto/library/apiv1",
+    "version": "$VERSION",
+    "language": "GO",
+    "apis": [
+      {
+        "id": "qclaogui.library.v1",
+        "version": "v1"
+      }
+    ]
+  },
+  "snippets": [
+    {
+      "regionTag": "library_v1_generated_LibraryService_CreateBook_sync",
+      "title": "library CreateBook Sample",
+      "description": "CreateBook creates a book, and returns the new Book.",
+      "file": "Client/CreateBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateBook",
+        "fullName": "qclaogui.library.v1.Client.CreateBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.CreateBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Book",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "CreateBook",
+          "fullName": "qclaogui.library.v1.LibraryService.CreateBook",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_CreateShelf_sync",
+      "title": "library CreateShelf Sample",
+      "description": "CreateShelf creates a shelf, and returns the new Shelf.",
+      "file": "Client/CreateShelf/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateShelf",
+        "fullName": "qclaogui.library.v1.Client.CreateShelf",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.CreateShelfRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Shelf",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "CreateShelf",
+          "fullName": "qclaogui.library.v1.LibraryService.CreateShelf",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_DeleteBook_sync",
+      "title": "library DeleteBook Sample",
+      "description": "DeleteBook deletes a book. Returns NOT_FOUND if the book does not exist.",
+      "file": "Client/DeleteBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "DeleteBook",
+        "fullName": "qclaogui.library.v1.Client.DeleteBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.DeleteBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "DeleteBook",
+          "fullName": "qclaogui.library.v1.LibraryService.DeleteBook",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 51,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_DeleteShelf_sync",
+      "title": "library DeleteShelf Sample",
+      "description": "DeleteShelf deletes a shelf. Returns NOT_FOUND if the shelf does not exist.",
+      "file": "Client/DeleteShelf/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "DeleteShelf",
+        "fullName": "qclaogui.library.v1.Client.DeleteShelf",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.DeleteShelfRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "DeleteShelf",
+          "fullName": "qclaogui.library.v1.LibraryService.DeleteShelf",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 51,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_GetBook_sync",
+      "title": "library GetBook Sample",
+      "description": "GetBook gets a book. Returns NOT_FOUND if the book does not exist.",
+      "file": "Client/GetBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "GetBook",
+        "fullName": "qclaogui.library.v1.Client.GetBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.GetBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Book",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "GetBook",
+          "fullName": "qclaogui.library.v1.LibraryService.GetBook",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_GetShelf_sync",
+      "title": "library GetShelf Sample",
+      "description": "GetShelf gets a shelf. Returns NOT_FOUND if the shelf does not exist.",
+      "file": "Client/GetShelf/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "GetShelf",
+        "fullName": "qclaogui.library.v1.Client.GetShelf",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.GetShelfRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Shelf",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "GetShelf",
+          "fullName": "qclaogui.library.v1.LibraryService.GetShelf",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_ListBooks_sync",
+      "title": "library ListBooks Sample",
+      "description": "ListBooks lists books in a shelf. The order is unspecified but deterministic. Newly\ncreated books will not necessarily be added to the end of this list.\nReturns NOT_FOUND if the shelf does not exist.",
+      "file": "Client/ListBooks/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "ListBooks",
+        "fullName": "qclaogui.library.v1.Client.ListBooks",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.ListBooksRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "BookIterator",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "ListBooks",
+          "fullName": "qclaogui.library.v1.LibraryService.ListBooks",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 60,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_ListShelves_sync",
+      "title": "library ListShelves Sample",
+      "description": "ListShelves lists shelves. The order is unspecified but deterministic. Newly created\nshelves will not necessarily be added to the end of this list.",
+      "file": "Client/ListShelves/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "ListShelves",
+        "fullName": "qclaogui.library.v1.Client.ListShelves",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.ListShelvesRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "ShelfIterator",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "ListShelves",
+          "fullName": "qclaogui.library.v1.LibraryService.ListShelves",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 60,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_MergeShelves_sync",
+      "title": "library MergeShelves Sample",
+      "description": "MergeShelves merges two shelves by adding all books from the shelf named\n`other_shelf_name` to shelf `name`, and deletes\n`other_shelf_name`. Returns the updated shelf.\nThe book ids of the moved books may not be the same as the original books.\n\nReturns NOT_FOUND if either shelf does not exist.\nThis call is a no-op if the specified shelves are the same.",
+      "file": "Client/MergeShelves/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "MergeShelves",
+        "fullName": "qclaogui.library.v1.Client.MergeShelves",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.MergeShelvesRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Shelf",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "MergeShelves",
+          "fullName": "qclaogui.library.v1.LibraryService.MergeShelves",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_MoveBook_sync",
+      "title": "library MoveBook Sample",
+      "description": "MoveBook moves a book to another shelf, and returns the new book. The book\nid of the new book may not be the same as the original book.",
+      "file": "Client/MoveBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "MoveBook",
+        "fullName": "qclaogui.library.v1.Client.MoveBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.MoveBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Book",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "MoveBook",
+          "fullName": "qclaogui.library.v1.LibraryService.MoveBook",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "library_v1_generated_LibraryService_UpdateBook_sync",
+      "title": "library UpdateBook Sample",
+      "description": "UpdateBook updates a book. Returns INVALID_ARGUMENT if the name of the book\nis non-empty and does not equal the existing name.",
+      "file": "Client/UpdateBook/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "UpdateBook",
+        "fullName": "qclaogui.library.v1.Client.UpdateBook",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "librarypb.UpdateBookRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*librarypb.Book",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.library.v1.Client"
+        },
+        "method": {
+          "shortName": "UpdateBook",
+          "fullName": "qclaogui.library.v1.LibraryService.UpdateBook",
+          "service": {
+            "shortName": "LibraryService",
+            "fullName": "qclaogui.library.v1.LibraryService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    }
+  ]
+}

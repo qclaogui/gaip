@@ -18,7 +18,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.24.3
-// source: bookstore/v1alpha1/bookstore.proto
+// source: qclaogui/bookstore/v1alpha1/bookstore.proto
 
 package bookstorepb
 
@@ -36,14 +36,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	BookstoreService_ListShelves_FullMethodName = "/bookstore.v1alpha1.BookstoreService/ListShelves"
-	BookstoreService_CreateShelf_FullMethodName = "/bookstore.v1alpha1.BookstoreService/CreateShelf"
-	BookstoreService_GetShelf_FullMethodName    = "/bookstore.v1alpha1.BookstoreService/GetShelf"
-	BookstoreService_DeleteShelf_FullMethodName = "/bookstore.v1alpha1.BookstoreService/DeleteShelf"
-	BookstoreService_ListBooks_FullMethodName   = "/bookstore.v1alpha1.BookstoreService/ListBooks"
-	BookstoreService_CreateBook_FullMethodName  = "/bookstore.v1alpha1.BookstoreService/CreateBook"
-	BookstoreService_GetBook_FullMethodName     = "/bookstore.v1alpha1.BookstoreService/GetBook"
-	BookstoreService_DeleteBook_FullMethodName  = "/bookstore.v1alpha1.BookstoreService/DeleteBook"
+	BookstoreService_ListShelves_FullMethodName = "/qclaogui.bookstore.v1alpha1.BookstoreService/ListShelves"
+	BookstoreService_CreateShelf_FullMethodName = "/qclaogui.bookstore.v1alpha1.BookstoreService/CreateShelf"
+	BookstoreService_GetShelf_FullMethodName    = "/qclaogui.bookstore.v1alpha1.BookstoreService/GetShelf"
+	BookstoreService_DeleteShelf_FullMethodName = "/qclaogui.bookstore.v1alpha1.BookstoreService/DeleteShelf"
+	BookstoreService_ListBooks_FullMethodName   = "/qclaogui.bookstore.v1alpha1.BookstoreService/ListBooks"
+	BookstoreService_CreateBook_FullMethodName  = "/qclaogui.bookstore.v1alpha1.BookstoreService/CreateBook"
+	BookstoreService_GetBook_FullMethodName     = "/qclaogui.bookstore.v1alpha1.BookstoreService/GetBook"
+	BookstoreService_DeleteBook_FullMethodName  = "/qclaogui.bookstore.v1alpha1.BookstoreService/DeleteBook"
 )
 
 // BookstoreServiceClient is the client API for BookstoreService service.
@@ -358,7 +358,7 @@ func _BookstoreService_DeleteBook_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var BookstoreService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "bookstore.v1alpha1.BookstoreService",
+	ServiceName: "qclaogui.bookstore.v1alpha1.BookstoreService",
 	HandlerType: (*BookstoreServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -395,5 +395,5 @@ var BookstoreService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "bookstore/v1alpha1/bookstore.proto",
+	Metadata: "qclaogui/bookstore/v1alpha1/bookstore.proto",
 }

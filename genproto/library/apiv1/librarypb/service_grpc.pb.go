@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.24.3
-// source: library/v1/service.proto
+// source: qclaogui/library/v1/service.proto
 
 package librarypb
 
@@ -20,17 +20,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	LibraryService_CreateShelf_FullMethodName  = "/library.v1.LibraryService/CreateShelf"
-	LibraryService_GetShelf_FullMethodName     = "/library.v1.LibraryService/GetShelf"
-	LibraryService_ListShelves_FullMethodName  = "/library.v1.LibraryService/ListShelves"
-	LibraryService_DeleteShelf_FullMethodName  = "/library.v1.LibraryService/DeleteShelf"
-	LibraryService_MergeShelves_FullMethodName = "/library.v1.LibraryService/MergeShelves"
-	LibraryService_CreateBook_FullMethodName   = "/library.v1.LibraryService/CreateBook"
-	LibraryService_GetBook_FullMethodName      = "/library.v1.LibraryService/GetBook"
-	LibraryService_ListBooks_FullMethodName    = "/library.v1.LibraryService/ListBooks"
-	LibraryService_DeleteBook_FullMethodName   = "/library.v1.LibraryService/DeleteBook"
-	LibraryService_UpdateBook_FullMethodName   = "/library.v1.LibraryService/UpdateBook"
-	LibraryService_MoveBook_FullMethodName     = "/library.v1.LibraryService/MoveBook"
+	LibraryService_CreateShelf_FullMethodName  = "/qclaogui.library.v1.LibraryService/CreateShelf"
+	LibraryService_GetShelf_FullMethodName     = "/qclaogui.library.v1.LibraryService/GetShelf"
+	LibraryService_ListShelves_FullMethodName  = "/qclaogui.library.v1.LibraryService/ListShelves"
+	LibraryService_DeleteShelf_FullMethodName  = "/qclaogui.library.v1.LibraryService/DeleteShelf"
+	LibraryService_MergeShelves_FullMethodName = "/qclaogui.library.v1.LibraryService/MergeShelves"
+	LibraryService_CreateBook_FullMethodName   = "/qclaogui.library.v1.LibraryService/CreateBook"
+	LibraryService_GetBook_FullMethodName      = "/qclaogui.library.v1.LibraryService/GetBook"
+	LibraryService_ListBooks_FullMethodName    = "/qclaogui.library.v1.LibraryService/ListBooks"
+	LibraryService_DeleteBook_FullMethodName   = "/qclaogui.library.v1.LibraryService/DeleteBook"
+	LibraryService_UpdateBook_FullMethodName   = "/qclaogui.library.v1.LibraryService/UpdateBook"
+	LibraryService_MoveBook_FullMethodName     = "/qclaogui.library.v1.LibraryService/MoveBook"
 )
 
 // LibraryServiceClient is the client API for LibraryService service.
@@ -469,7 +469,7 @@ func _LibraryService_MoveBook_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var LibraryService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "library.v1.LibraryService",
+	ServiceName: "qclaogui.library.v1.LibraryService",
 	HandlerType: (*LibraryServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -518,5 +518,5 @@ var LibraryService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "library/v1/service.proto",
+	Metadata: "qclaogui/library/v1/service.proto",
 }

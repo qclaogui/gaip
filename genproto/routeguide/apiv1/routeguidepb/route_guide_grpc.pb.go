@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.24.3
-// source: routeguide/v1/route_guide.proto
+// source: qclaogui/routeguide/v1/route_guide.proto
 
 package routeguidepb
 
@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RouteGuideService_GetFeature_FullMethodName   = "/routeguide.v1.RouteGuideService/GetFeature"
-	RouteGuideService_ListFeatures_FullMethodName = "/routeguide.v1.RouteGuideService/ListFeatures"
-	RouteGuideService_RecordRoute_FullMethodName  = "/routeguide.v1.RouteGuideService/RecordRoute"
-	RouteGuideService_RouteChat_FullMethodName    = "/routeguide.v1.RouteGuideService/RouteChat"
+	RouteGuideService_GetFeature_FullMethodName   = "/qclaogui.routeguide.v1.RouteGuideService/GetFeature"
+	RouteGuideService_ListFeatures_FullMethodName = "/qclaogui.routeguide.v1.RouteGuideService/ListFeatures"
+	RouteGuideService_RecordRoute_FullMethodName  = "/qclaogui.routeguide.v1.RouteGuideService/RecordRoute"
+	RouteGuideService_RouteChat_FullMethodName    = "/qclaogui.routeguide.v1.RouteGuideService/RouteChat"
 )
 
 // RouteGuideServiceClient is the client API for RouteGuideService service.
@@ -322,7 +322,7 @@ func (x *routeGuideServiceRouteChatServer) Recv() (*RouteChatRequest, error) {
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var RouteGuideService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "routeguide.v1.RouteGuideService",
+	ServiceName: "qclaogui.routeguide.v1.RouteGuideService",
 	HandlerType: (*RouteGuideServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -348,5 +348,5 @@ var RouteGuideService_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "routeguide/v1/route_guide.proto",
+	Metadata: "qclaogui/routeguide/v1/route_guide.proto",
 }
