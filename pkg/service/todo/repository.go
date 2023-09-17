@@ -7,7 +7,7 @@ package todo
 import (
 	"errors"
 
-	pb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
 )
 
 var (
@@ -21,5 +21,5 @@ var (
 // Repository is a interface that defines the rules around what a customer repository
 // Has to be able to perform
 type Repository interface {
-	pb.ToDoServiceServer
+	todopb.ToDoServiceServer
 }

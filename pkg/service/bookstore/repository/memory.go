@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"sync"
 
-	pb "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -20,7 +20,6 @@ type MemoryConfig struct {
 
 func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
 	cfg.RegisterFlagsWithPrefix("", fs)
-
 }
 
 func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
@@ -36,12 +35,12 @@ func (cfg *MemoryConfig) Validate() error {
 //
 // MemoryRepo is used to implement BookstoreServiceServer.
 type MemoryRepo struct {
-	pb.UnimplementedBookstoreServiceServer
+	bookstorepb.UnimplementedBookstoreServiceServer
 
 	// shelves are stored in a map keyed by shelf id
 	// books are stored in a two level map, keyed first by shelf id and then by book id
-	Shelves     map[int64]*pb.Shelf
-	Books       map[int64]map[int64]*pb.Book
+	Shelves     map[int64]*bookstorepb.Shelf
+	Books       map[int64]map[int64]*bookstorepb.Book
 	LastShelfID int64      // the id of the last shelf that was added
 	LastBookID  int64      // the id of the last book that was added
 	Mutex       sync.Mutex // global mutex to synchronize service access
@@ -50,14 +49,14 @@ type MemoryRepo struct {
 // NewMemoryRepo is a factory function to generate a new repository
 func NewMemoryRepo() (*MemoryRepo, error) {
 	mr := &MemoryRepo{
-		Shelves: map[int64]*pb.Shelf{},
-		Books:   map[int64]map[int64]*pb.Book{},
+		Shelves: map[int64]*bookstorepb.Shelf{},
+		Books:   map[int64]map[int64]*bookstorepb.Book{},
 	}
 	return mr, nil
 }
 
 // internal helpers
-func (mr *MemoryRepo) getShelf(sid int64) (shelf *pb.Shelf, err error) {
+func (mr *MemoryRepo) getShelf(sid int64) (shelf *bookstorepb.Shelf, err error) {
 	shelf, ok := mr.Shelves[sid]
 	if !ok {
 		return nil, fmt.Errorf("couldn't find shelf %d", sid)
@@ -65,7 +64,7 @@ func (mr *MemoryRepo) getShelf(sid int64) (shelf *pb.Shelf, err error) {
 	return shelf, nil
 }
 
-func (mr *MemoryRepo) getBook(sid int64, bid int64) (book *pb.Book, err error) {
+func (mr *MemoryRepo) getBook(sid int64, bid int64) (book *bookstorepb.Book, err error) {
 	_, err = mr.getShelf(sid)
 	if err != nil {
 		return nil, err
@@ -78,24 +77,24 @@ func (mr *MemoryRepo) getBook(sid int64, bid int64) (book *pb.Book, err error) {
 	return book, nil
 }
 
-func (mr *MemoryRepo) ListShelves(context.Context, *emptypb.Empty) (*pb.ListShelvesResponse, error) {
+func (mr *MemoryRepo) ListShelves(context.Context, *emptypb.Empty) (*bookstorepb.ListShelvesResponse, error) {
 	mr.Mutex.Lock()
 	defer mr.Mutex.Unlock()
 
 	// copy shelf ids from Shelves map keys
-	shelves := make([]*pb.Shelf, 0, len(mr.Shelves))
+	shelves := make([]*bookstorepb.Shelf, 0, len(mr.Shelves))
 	for _, shelf := range mr.Shelves {
 		shelves = append(shelves, shelf)
 	}
 
-	response := &pb.ListShelvesResponse{
+	response := &bookstorepb.ListShelvesResponse{
 		Shelves: shelves,
 	}
 
 	return response, nil
 }
 
-func (mr *MemoryRepo) CreateShelf(_ context.Context, req *pb.CreateShelfRequest) (*pb.Shelf, error) {
+func (mr *MemoryRepo) CreateShelf(_ context.Context, req *bookstorepb.CreateShelfRequest) (*bookstorepb.Shelf, error) {
 	mr.Mutex.Lock()
 	defer mr.Mutex.Unlock()
 
@@ -109,7 +108,7 @@ func (mr *MemoryRepo) CreateShelf(_ context.Context, req *pb.CreateShelfRequest)
 
 	return shelf, nil
 }
-func (mr *MemoryRepo) GetShelf(_ context.Context, req *pb.GetShelfRequest) (*pb.Shelf, error) {
+func (mr *MemoryRepo) GetShelf(_ context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
 	sid := req.Shelf
 
 	mr.Mutex.Lock()
@@ -123,7 +122,7 @@ func (mr *MemoryRepo) GetShelf(_ context.Context, req *pb.GetShelfRequest) (*pb.
 
 	return shelf, nil
 }
-func (mr *MemoryRepo) DeleteShelf(_ context.Context, req *pb.DeleteShelfRequest) (*emptypb.Empty, error) {
+func (mr *MemoryRepo) DeleteShelf(_ context.Context, req *bookstorepb.DeleteShelfRequest) (*emptypb.Empty, error) {
 	sid := req.Shelf
 
 	mr.Mutex.Lock()
@@ -135,7 +134,7 @@ func (mr *MemoryRepo) DeleteShelf(_ context.Context, req *pb.DeleteShelfRequest)
 
 	return nil, nil
 }
-func (mr *MemoryRepo) ListBooks(_ context.Context, req *pb.ListBooksRequest) (*pb.ListBooksResponse, error) {
+func (mr *MemoryRepo) ListBooks(_ context.Context, req *bookstorepb.ListBooksRequest) (*bookstorepb.ListBooksResponse, error) {
 	sid := req.Shelf
 
 	mr.Mutex.Lock()
@@ -149,18 +148,18 @@ func (mr *MemoryRepo) ListBooks(_ context.Context, req *pb.ListBooksRequest) (*p
 
 	shelfBooks := mr.Books[sid]
 
-	books := make([]*pb.Book, 0, len(shelfBooks))
+	books := make([]*bookstorepb.Book, 0, len(shelfBooks))
 	for _, book := range shelfBooks {
 		books = append(books, book)
 	}
 
-	response := &pb.ListBooksResponse{
+	response := &bookstorepb.ListBooksResponse{
 		Books: books,
 	}
 
 	return response, nil
 }
-func (mr *MemoryRepo) CreateBook(_ context.Context, req *pb.CreateBookRequest) (*pb.Book, error) {
+func (mr *MemoryRepo) CreateBook(_ context.Context, req *bookstorepb.CreateBookRequest) (*bookstorepb.Book, error) {
 	sid := req.Shelf
 
 	mr.Mutex.Lock()
@@ -177,14 +176,14 @@ func (mr *MemoryRepo) CreateBook(_ context.Context, req *pb.CreateBookRequest) (
 
 	book := req.Book
 	if mr.Books[sid] == nil {
-		mr.Books[sid] = make(map[int64]*pb.Book)
+		mr.Books[sid] = make(map[int64]*bookstorepb.Book)
 	}
 
 	mr.Books[sid][bid] = book
 
 	return book, nil
 }
-func (mr *MemoryRepo) GetBook(_ context.Context, req *pb.GetBookRequest) (*pb.Book, error) {
+func (mr *MemoryRepo) GetBook(_ context.Context, req *bookstorepb.GetBookRequest) (*bookstorepb.Book, error) {
 	sid, bid := req.Shelf, req.Book
 
 	mr.Mutex.Lock()
@@ -198,7 +197,7 @@ func (mr *MemoryRepo) GetBook(_ context.Context, req *pb.GetBookRequest) (*pb.Bo
 
 	return book, nil
 }
-func (mr *MemoryRepo) DeleteBook(_ context.Context, req *pb.DeleteBookRequest) (*emptypb.Empty, error) {
+func (mr *MemoryRepo) DeleteBook(_ context.Context, req *bookstorepb.DeleteBookRequest) (*emptypb.Empty, error) {
 	sid, bid := req.Shelf, req.Book
 
 	mr.Mutex.Lock()

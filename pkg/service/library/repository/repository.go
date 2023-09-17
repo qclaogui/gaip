@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
 )
 
 const (
@@ -22,7 +22,7 @@ const (
 var supportedDatabaseBackends = []string{BackendMemory, BackendMysql}
 
 type Repository interface {
-	bookstorepb.BookstoreServiceServer
+	librarypb.LibraryServiceServer
 }
 
 // Config RepoCfg Connections config
@@ -30,17 +30,17 @@ type Repository interface {
 type Config struct {
 	Backend string `yaml:"backend"`
 
-	Mysql  MysqlConfig  `yaml:"mysql"`
 	Memory MemoryConfig `yaml:"memory"`
+	//Mysql MysqlConfig `yaml:"mysql"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
-	prefix := "bookstore.database."
+	prefix := "library.database."
 
 	fs.StringVar(&cfg.Backend, prefix+"backend", BackendMemory, fmt.Sprintf("Backend storage to use. Supported backends are: %s.", strings.Join(supportedDatabaseBackends, ", ")))
 
 	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
-	cfg.Mysql.RegisterFlagsWithPrefix(prefix, fs)
+	//cfg.Mysql.RegisterFlagsWithPrefix(prefix, fs)
 }
 
 // Validate RepoCfg config.
@@ -52,8 +52,8 @@ func (cfg *Config) Validate() error {
 	switch cfg.Backend {
 	case BackendMemory:
 		return cfg.Memory.Validate()
-	case BackendMysql:
-		return cfg.Mysql.Validate()
+		//case BackendMysql:
+		//	return cfg.Mysql.Validate()
 	}
 	return nil
 }

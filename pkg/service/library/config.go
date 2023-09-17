@@ -2,21 +2,17 @@
 //
 // Licensed under the Apache License 2.0.
 
-package v1alpha1
+package library
 
 import (
 	"flag"
 
-	"github.com/grafana/dskit/cache"
-	"github.com/qclaogui/golang-api-server/pkg/service/bookstore/repository"
+	"github.com/qclaogui/golang-api-server/pkg/service/library/repository"
 )
 
 type Config struct {
 	//RepoCfg holds the configuration used for the repository.
 	RepoCfg repository.Config `yaml:"database"`
-
-	// CacheCfg holds the configuration used for the cache.
-	CacheCfg cache.BackendConfig `yaml:"cache"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
@@ -25,7 +21,7 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 }
 
 func (cfg *Config) Validate() error {
-	//Register RepoCfg Config
+	//Validate RepoCfg Config
 	if err := cfg.RepoCfg.Validate(); err != nil {
 		return err
 	}

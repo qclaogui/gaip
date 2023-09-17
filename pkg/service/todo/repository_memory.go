@@ -10,27 +10,27 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	pb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 var apiVersion = "v1"
 
-// MemoryRepository fulfills the Repository interface
-type MemoryRepository struct {
-	mem map[uuid.UUID]*pb.ToDo
+// MemoryRepo fulfills the Repository interface
+type MemoryRepo struct {
+	mem map[uuid.UUID]*todopb.ToDo
 	mu  sync.Mutex
 }
 
-// NewMemoryRepository is a factory function to generate a new repository
-func NewMemoryRepository() *MemoryRepository {
-	return &MemoryRepository{
-		mem: make(map[uuid.UUID]*pb.ToDo),
+// NewMemoryRepo is a factory function to generate a new repository
+func NewMemoryRepo() *MemoryRepo {
+	return &MemoryRepo{
+		mem: make(map[uuid.UUID]*todopb.ToDo),
 	}
 }
 
-func (m *MemoryRepository) Create(_ context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
+func (m *MemoryRepo) Create(_ context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
 	// request todo
 	todo := req.GetItem()
 	if todo.GetTitle() == "" && todo.GetDescription() == "" {
@@ -44,10 +44,10 @@ func (m *MemoryRepository) Create(_ context.Context, req *pb.CreateRequest) (*pb
 	todo.Id = id.String()
 
 	m.mem[id] = todo
-	return &pb.CreateResponse{Api: apiVersion, Id: todo.Id}, nil
+	return &todopb.CreateResponse{Api: apiVersion, Id: todo.Id}, nil
 }
 
-func (m *MemoryRepository) Get(_ context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (m *MemoryRepo) Get(_ context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -59,10 +59,10 @@ func (m *MemoryRepository) Get(_ context.Context, req *pb.GetRequest) (*pb.GetRe
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
 
-	return &pb.GetResponse{Api: apiVersion, Item: todo}, nil
+	return &todopb.GetResponse{Api: apiVersion, Item: todo}, nil
 }
 
-func (m *MemoryRepository) Update(_ context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
+func (m *MemoryRepo) Update(_ context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -74,10 +74,10 @@ func (m *MemoryRepository) Update(_ context.Context, req *pb.UpdateRequest) (*pb
 	}
 
 	m.mem[id] = todo
-	return &pb.UpdateResponse{Api: apiVersion, Updated: 1}, nil
+	return &todopb.UpdateResponse{Api: apiVersion, Updated: 1}, nil
 }
 
-func (m *MemoryRepository) Delete(_ context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+func (m *MemoryRepo) Delete(_ context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -87,14 +87,14 @@ func (m *MemoryRepository) Delete(_ context.Context, req *pb.DeleteRequest) (*pb
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
 	delete(m.mem, id)
-	return &pb.DeleteResponse{Api: apiVersion, Deleted: 1}, nil
+	return &todopb.DeleteResponse{Api: apiVersion, Deleted: 1}, nil
 }
 
-func (m *MemoryRepository) List(_ context.Context, _ *pb.ListRequest) (*pb.ListResponse, error) {
+func (m *MemoryRepo) List(_ context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	var todos []*pb.ToDo
+	var todos []*todopb.ToDo
 	for _, todo := range m.mem {
 		todos = append(todos, todo)
 	}
@@ -102,5 +102,5 @@ func (m *MemoryRepository) List(_ context.Context, _ *pb.ListRequest) (*pb.ListR
 	if len(todos) < 1 {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
-	return &pb.ListResponse{Api: apiVersion, Items: todos}, nil
+	return &todopb.ListResponse{Api: apiVersion, Items: todos}, nil
 }

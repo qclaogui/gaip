@@ -13,11 +13,12 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/golang-api-server/pkg/protocol/rest"
-	bookstorev1alpha1 "github.com/qclaogui/golang-api-server/pkg/service/bookstore/v1alpha1"
+	"github.com/qclaogui/golang-api-server/pkg/service/bookstore"
+	"github.com/qclaogui/golang-api-server/pkg/service/library"
 	routeguidev1 "github.com/qclaogui/golang-api-server/pkg/service/routeguide/v1"
 	todov1 "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
 	"github.com/qclaogui/golang-api-server/pkg/vault"
-	util_log "github.com/qclaogui/golang-api-server/tools/log"
+	lg "github.com/qclaogui/golang-api-server/tools/log"
 	"gopkg.in/yaml.v3"
 
 	// mysql driver
@@ -29,10 +30,11 @@ type Application struct {
 	Cfg        Config
 	Registerer prometheus.Registerer
 
-	Server    *server.Server
-	Bookstore bookstorev1alpha1.ServiceServer
+	Server *server.Server
 
-	Vault *vault.Vault
+	bookstore *bookstore.ServiceServer
+	library   *library.ServiceServer
+	Vault     *vault.Vault
 }
 
 // initVault init Vault
@@ -56,13 +58,27 @@ func (app *Application) initVault() error {
 	return nil
 }
 
-func (app *Application) initBookstore() (*bookstorev1alpha1.ServiceServer, error) {
-	bookstoreSrv, err := bookstorev1alpha1.NewServiceServer(app.Cfg.Bookstore)
+// initBookstore init bookstore ServiceServer
+func (app *Application) initBookstore() (*bookstore.ServiceServer, error) {
+	srv, err := bookstore.NewServiceServer(app.Cfg.Bookstore)
 	if err != nil {
 		return nil, err
 	}
 
-	return bookstoreSrv, nil
+	app.bookstore = srv
+
+	return srv, nil
+}
+
+func (app *Application) initLibrary() (*library.ServiceServer, error) {
+	srv, err := library.NewServiceServer(app.Cfg.Library)
+	if err != nil {
+		return nil, err
+	}
+
+	app.library = srv
+
+	return srv, nil
 }
 
 // NewApplication makes a new Application.
@@ -95,15 +111,21 @@ func (app *Application) Bootstrap() error {
 		return err
 	}
 
-	toDoSrv, err := todov1.NewServiceServer(util_log.Logger, todov1.WithMemoryRepository())
+	toDoSrv, err := todov1.NewServiceServer(lg.Logger, todov1.WithMemoryRepository())
 	if err != nil {
 		return err
 	}
-	routeGuideSrv, err := routeguidev1.NewServiceServer(util_log.Logger, routeguidev1.WithMemoryRepository())
+	routeGuideSrv, err := routeguidev1.NewServiceServer(lg.Logger, routeguidev1.WithMemoryRepository())
 	if err != nil {
 		return err
 	}
+
 	bookstoreSrv, err := app.initBookstore()
+	if err != nil {
+		return err
+	}
+
+	librarySrv, err := app.initLibrary()
 	if err != nil {
 		return err
 	}
@@ -111,8 +133,8 @@ func (app *Application) Bootstrap() error {
 	// Start the REST server in goroutine
 	go func() {
 		err = rest.RunRESTServer(ctx, app.Cfg.Server)
-		util_log.CheckFatal("running REST server", err)
+		lg.CheckFatal("running REST server", err)
 	}()
 
-	return grpc.RunGRPCServer(ctx, app.Cfg.Server, toDoSrv, routeGuideSrv, bookstoreSrv)
+	return grpc.RunGRPCServer(ctx, app.Cfg.Server, toDoSrv, routeGuideSrv, bookstoreSrv, librarySrv)
 }

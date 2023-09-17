@@ -11,7 +11,8 @@ import (
 	"github.com/go-kit/log"
 	"github.com/grafana/dskit/server"
 	"github.com/pkg/errors"
-	bookstorev1alpha1 "github.com/qclaogui/golang-api-server/pkg/service/bookstore/v1alpha1"
+	"github.com/qclaogui/golang-api-server/pkg/service/bookstore"
+	"github.com/qclaogui/golang-api-server/pkg/service/library"
 	"github.com/qclaogui/golang-api-server/pkg/vault"
 )
 
@@ -21,7 +22,9 @@ type Config struct {
 
 	Server server.Config `yaml:"server"`
 
-	Bookstore bookstorev1alpha1.Config `yaml:"bookstore"`
+	Bookstore bookstore.Config `yaml:"bookstore"`
+
+	Library library.Config `yaml:"library"`
 
 	Vault vault.Config `yaml:"vault"`
 
@@ -50,7 +53,7 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 	// Register Server Config
 	c.registerServerFlagsWithChangedDefaultValues(fs)
 
-	// Register Bookstore Config
+	// Register bookstore Config
 	c.Bookstore.RegisterFlags(fs)
 
 	// Register Vault Config
@@ -60,9 +63,9 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 // Validate the app config and return an error if the validation doesn't pass
 func (c *Config) Validate(_ log.Logger) error {
 
-	// Validate Bookstore Config
+	// Validate bookstore Config
 	if err := c.Bookstore.Validate(); err != nil {
-		return errors.Wrap(err, "invalid Bookstore config")
+		return errors.Wrap(err, "invalid bookstore config")
 	}
 
 	// Validate Vault Config

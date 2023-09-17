@@ -10,24 +10,24 @@ import (
 	"fmt"
 	"time"
 
-	pb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// MysqlRepository fulfills the Repository interface
-type MysqlRepository struct {
+// MysqlRepo fulfills the Repository interface
+type MysqlRepo struct {
 	db *sql.DB
 }
 
-// NewMysqlRepository is a factory function to generate a new repository
-func NewMysqlRepository(db *sql.DB) (*MysqlRepository, error) {
-	repo := &MysqlRepository{db: db}
+// NewMysqlRepo is a factory function to generate a new repository
+func NewMysqlRepo(db *sql.DB) (*MysqlRepo, error) {
+	repo := &MysqlRepo{db: db}
 	return repo, nil
 }
 
-func (m *MysqlRepository) connect(ctx context.Context) (*sql.Conn, error) {
+func (m *MysqlRepo) connect(ctx context.Context) (*sql.Conn, error) {
 	c, err := m.db.Conn(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database-> " + err.Error())
@@ -35,7 +35,7 @@ func (m *MysqlRepository) connect(ctx context.Context) (*sql.Conn, error) {
 	return c, nil
 }
 
-func (m *MysqlRepository) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (m *MysqlRepo) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -56,7 +56,7 @@ func (m *MysqlRepository) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetR
 		}
 	}
 
-	todo := &pb.ToDo{}
+	todo := &todopb.ToDo{}
 	var reminder time.Time
 	if err = rows.Scan(&todo.Id, &todo.Title, &todo.Description, &reminder); err != nil {
 		return nil, fmt.Errorf("failed to retrieve field values from ToDo row-> " + err.Error())
@@ -67,10 +67,10 @@ func (m *MysqlRepository) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetR
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("found multiple ToDo rows with ID='%s'", id))
 	}
 
-	return &pb.GetResponse{Api: apiVersion, Item: todo}, nil
+	return &todopb.GetResponse{Api: apiVersion, Item: todo}, nil
 }
 
-func (m *MysqlRepository) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
+func (m *MysqlRepo) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -84,10 +84,10 @@ func (m *MysqlRepository) Create(ctx context.Context, req *pb.CreateRequest) (*p
 	if err != nil {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to insert into ToDo-> "+err.Error()))
 	}
-	return &pb.CreateResponse{Api: apiVersion, Id: todo.GetId()}, nil
+	return &todopb.CreateResponse{Api: apiVersion, Id: todo.GetId()}, nil
 }
 
-func (m *MysqlRepository) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
+func (m *MysqlRepo) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -111,10 +111,10 @@ func (m *MysqlRepository) Update(ctx context.Context, req *pb.UpdateRequest) (*p
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("ToDo with ID='%s' is not found", todo.Id))
 	}
 
-	return &pb.UpdateResponse{Api: apiVersion, Updated: rows}, nil
+	return &todopb.UpdateResponse{Api: apiVersion, Updated: rows}, nil
 }
 
-func (m *MysqlRepository) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+func (m *MysqlRepo) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -135,10 +135,10 @@ func (m *MysqlRepository) Delete(ctx context.Context, req *pb.DeleteRequest) (*p
 	if rows == 0 {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("ToDo with ID='%s' is not found", id))
 	}
-	return &pb.DeleteResponse{Api: apiVersion, Deleted: rows}, nil
+	return &todopb.DeleteResponse{Api: apiVersion, Deleted: rows}, nil
 }
 
-func (m *MysqlRepository) List(ctx context.Context, _ *pb.ListRequest) (*pb.ListResponse, error) {
+func (m *MysqlRepo) List(ctx context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -152,9 +152,9 @@ func (m *MysqlRepository) List(ctx context.Context, _ *pb.ListRequest) (*pb.List
 	}
 	defer func() { _ = rows.Close() }()
 
-	var todos []*pb.ToDo
+	var todos []*todopb.ToDo
 	for rows.Next() {
-		var todo = &pb.ToDo{}
+		var todo = &todopb.ToDo{}
 		var reminder time.Time
 		if err = rows.Scan(&todo.Id, &todo.Title, &todo.Description, &reminder); err != nil {
 			return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve field values from ToDo row-> "+err.Error()))
@@ -167,5 +167,5 @@ func (m *MysqlRepository) List(ctx context.Context, _ *pb.ListRequest) (*pb.List
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve data from ToDo-> "+err.Error()))
 	}
 
-	return &pb.ListResponse{Api: apiVersion, Items: todos}, nil
+	return &todopb.ListResponse{Api: apiVersion, Items: todos}, nil
 }

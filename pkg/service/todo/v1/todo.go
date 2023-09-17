@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/go-kit/log"
-	pb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -35,7 +35,7 @@ func WithRepository(repo todo.Repository) Option {
 
 // WithMemoryRepository applies a memory repository to the Option
 func WithMemoryRepository() Option {
-	repo := todo.NewMemoryRepository()
+	repo := todo.NewMemoryRepo()
 	return WithRepository(repo)
 }
 
@@ -49,7 +49,7 @@ func WithMysqlRepository(dsn string) Option {
 			return fmt.Errorf("failed to open database: %v", err)
 		}
 
-		repo, err := todo.NewMysqlRepository(db)
+		repo, err := todo.NewMysqlRepo(db)
 		if err != nil {
 			return err
 		}
@@ -59,7 +59,7 @@ func WithMysqlRepository(dsn string) Option {
 }
 
 type ServiceServer struct {
-	pb.UnimplementedToDoServiceServer
+	todopb.UnimplementedToDoServiceServer
 	repo   todo.Repository
 	logger log.Logger
 }
@@ -78,7 +78,7 @@ func NewServiceServer(logger log.Logger, opts ...Option) (*ServiceServer, error)
 }
 
 func (srv *ServiceServer) RegisterGRPC(s *grpc.Server) {
-	s.RegisterService(&pb.ToDoService_ServiceDesc, srv)
+	s.RegisterService(&todopb.ToDoService_ServiceDesc, srv)
 }
 
 func (srv *ServiceServer) checkAPI(api string) error {
@@ -91,7 +91,7 @@ func (srv *ServiceServer) checkAPI(api string) error {
 	return nil
 }
 
-func (srv *ServiceServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
+func (srv *ServiceServer) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -104,7 +104,7 @@ func (srv *ServiceServer) Create(ctx context.Context, req *pb.CreateRequest) (*p
 	return srv.repo.Create(ctx, req)
 }
 
-func (srv *ServiceServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
+func (srv *ServiceServer) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -113,7 +113,7 @@ func (srv *ServiceServer) Update(ctx context.Context, req *pb.UpdateRequest) (*p
 	return srv.repo.Update(ctx, req)
 }
 
-func (srv *ServiceServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (srv *ServiceServer) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -122,7 +122,7 @@ func (srv *ServiceServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetR
 	return srv.repo.Get(ctx, req)
 }
 
-func (srv *ServiceServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+func (srv *ServiceServer) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -131,7 +131,7 @@ func (srv *ServiceServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*p
 	return srv.repo.Delete(ctx, req)
 }
 
-func (srv *ServiceServer) List(ctx context.Context, req *pb.ListRequest) (*pb.ListResponse, error) {
+func (srv *ServiceServer) List(ctx context.Context, req *todopb.ListRequest) (*todopb.ListResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())

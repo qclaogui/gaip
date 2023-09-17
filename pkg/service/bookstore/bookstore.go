@@ -2,19 +2,18 @@
 //
 // Licensed under the Apache License 2.0.
 
-package v1alpha1
+package bookstore
 
 import (
 	"context"
 
-	pb "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"github.com/qclaogui/golang-api-server/pkg/service/bookstore/repository"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // The ServiceServer type implements a bookstore server.
-// All objects are managed in an in-memory non-persistent store.
 //
 // ServiceServer is used to implement BookstoreServiceServer.
 type ServiceServer struct {
@@ -45,33 +44,33 @@ func (srv *ServiceServer) setupRepo() error {
 }
 
 func (srv *ServiceServer) RegisterGRPC(s *grpc.Server) {
-	s.RegisterService(&pb.BookstoreService_ServiceDesc, srv)
+	s.RegisterService(&bookstorepb.BookstoreService_ServiceDesc, srv)
 }
 
-func (srv *ServiceServer) ListShelves(ctx context.Context, req *emptypb.Empty) (*pb.ListShelvesResponse, error) {
+func (srv *ServiceServer) ListShelves(ctx context.Context, req *emptypb.Empty) (*bookstorepb.ListShelvesResponse, error) {
 	return srv.repo.ListShelves(ctx, req)
 }
 
-func (srv *ServiceServer) CreateShelf(ctx context.Context, req *pb.CreateShelfRequest) (*pb.Shelf, error) {
+func (srv *ServiceServer) CreateShelf(ctx context.Context, req *bookstorepb.CreateShelfRequest) (*bookstorepb.Shelf, error) {
 	return srv.repo.CreateShelf(ctx, req)
 }
-func (srv *ServiceServer) GetShelf(ctx context.Context, req *pb.GetShelfRequest) (*pb.Shelf, error) {
+func (srv *ServiceServer) GetShelf(ctx context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
 	return srv.repo.GetShelf(ctx, req)
 }
-func (srv *ServiceServer) DeleteShelf(ctx context.Context, req *pb.DeleteShelfRequest) (*emptypb.Empty, error) {
+func (srv *ServiceServer) DeleteShelf(ctx context.Context, req *bookstorepb.DeleteShelfRequest) (*emptypb.Empty, error) {
 	return srv.repo.DeleteShelf(ctx, req)
 
 }
-func (srv *ServiceServer) ListBooks(ctx context.Context, req *pb.ListBooksRequest) (*pb.ListBooksResponse, error) {
+func (srv *ServiceServer) ListBooks(ctx context.Context, req *bookstorepb.ListBooksRequest) (*bookstorepb.ListBooksResponse, error) {
 	return srv.repo.ListBooks(ctx, req)
 
 }
-func (srv *ServiceServer) CreateBook(ctx context.Context, req *pb.CreateBookRequest) (*pb.Book, error) {
+func (srv *ServiceServer) CreateBook(ctx context.Context, req *bookstorepb.CreateBookRequest) (*bookstorepb.Book, error) {
 	return srv.repo.CreateBook(ctx, req)
 }
-func (srv *ServiceServer) GetBook(ctx context.Context, req *pb.GetBookRequest) (*pb.Book, error) {
+func (srv *ServiceServer) GetBook(ctx context.Context, req *bookstorepb.GetBookRequest) (*bookstorepb.Book, error) {
 	return srv.repo.GetBook(ctx, req)
 }
-func (srv *ServiceServer) DeleteBook(ctx context.Context, req *pb.DeleteBookRequest) (*emptypb.Empty, error) {
+func (srv *ServiceServer) DeleteBook(ctx context.Context, req *bookstorepb.DeleteBookRequest) (*emptypb.Empty, error) {
 	return srv.repo.DeleteBook(ctx, req)
 }

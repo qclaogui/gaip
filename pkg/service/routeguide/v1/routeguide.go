@@ -8,8 +8,8 @@ import (
 	"context"
 
 	"github.com/go-kit/log"
-	pb "github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
-	routeguide "github.com/qclaogui/golang-api-server/pkg/service/routeguide"
+	"github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/golang-api-server/pkg/service/routeguide"
 	"google.golang.org/grpc"
 )
 
@@ -37,7 +37,7 @@ func WithMemoryRepository() Option {
 
 // ServiceServer ServiceServer
 type ServiceServer struct {
-	pb.UnimplementedRouteGuideServiceServer
+	routeguidepb.UnimplementedRouteGuideServiceServer
 
 	repo   routeguide.Repository
 	logger log.Logger
@@ -57,21 +57,21 @@ func NewServiceServer(logger log.Logger, opts ...Option) (*ServiceServer, error)
 }
 
 func (srv *ServiceServer) RegisterGRPC(s *grpc.Server) {
-	s.RegisterService(&pb.RouteGuideService_ServiceDesc, srv)
+	s.RegisterService(&routeguidepb.RouteGuideService_ServiceDesc, srv)
 }
 
 // GetFeature returns the feature at the given point.
-func (srv *ServiceServer) GetFeature(ctx context.Context, req *pb.GetFeatureRequest) (*pb.GetFeatureResponse, error) {
+func (srv *ServiceServer) GetFeature(ctx context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
 	return srv.repo.GetFeature(ctx, req)
 }
 
-func (srv *ServiceServer) ListFeatures(req *pb.ListFeaturesRequest, stream pb.RouteGuideService_ListFeaturesServer) error {
+func (srv *ServiceServer) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
 	return srv.repo.ListFeatures(req, stream)
 }
 
-func (srv *ServiceServer) RecordRoute(req pb.RouteGuideService_RecordRouteServer) error {
+func (srv *ServiceServer) RecordRoute(req routeguidepb.RouteGuideService_RecordRouteServer) error {
 	return srv.repo.RecordRoute(req)
 }
-func (srv *ServiceServer) RouteChat(req pb.RouteGuideService_RouteChatServer) error {
+func (srv *ServiceServer) RouteChat(req routeguidepb.RouteGuideService_RouteChatServer) error {
 	return srv.repo.RouteChat(req)
 }

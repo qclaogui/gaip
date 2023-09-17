@@ -11,14 +11,14 @@ import (
 	"fmt"
 
 	"github.com/grafana/dskit/flagext"
-	pb "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 // MysqlRepo is used to implement BookstoreServiceServer.
 type MysqlRepo struct {
-	pb.UnimplementedBookstoreServiceServer
+	bookstorepb.UnimplementedBookstoreServiceServer
 	db *sql.DB
 }
 type MysqlConfig struct {
@@ -70,7 +70,7 @@ func (r *MysqlRepo) connect(ctx context.Context) (*sql.Conn, error) {
 	return c, nil
 }
 
-func (r *MysqlRepo) GetShelf(ctx context.Context, req *pb.GetShelfRequest) (*pb.Shelf, error) {
+func (r *MysqlRepo) GetShelf(ctx context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
 	// get SQL connection from pool
 	c, err := r.connect(ctx)
 	if err != nil {
@@ -92,7 +92,7 @@ func (r *MysqlRepo) GetShelf(ctx context.Context, req *pb.GetShelfRequest) (*pb.
 		}
 	}
 
-	shelf := &pb.Shelf{}
+	shelf := &bookstorepb.Shelf{}
 	if err = rows.Scan(&shelf.Id, &shelf.Theme); err != nil {
 		return nil, fmt.Errorf("failed to retrieve field values from Shelf row-> " + err.Error())
 	}

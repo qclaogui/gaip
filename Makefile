@@ -55,7 +55,7 @@ build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
 
 .PHONY: clean
 clean: ## Remove artefacts or generated files from previous build
-	rm -rf bin dist
+	@rm -rf bin dist
 
 
 ##@ Dependencies

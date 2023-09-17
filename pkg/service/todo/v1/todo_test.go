@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
-	pb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	util_log "github.com/qclaogui/golang-api-server/tools/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -29,7 +29,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 	//ssv, _ := NewServiceServer(util_log.Logger,WithMemoryToDoRepository())
-	repo, _ := todo.NewMysqlRepository(db)
+	repo, _ := todo.NewMysqlRepo(db)
 	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
@@ -37,24 +37,24 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.CreateRequest
+		req *todopb.CreateRequest
 	}
-	tests := []struct {
-		name    string
-		ssv     pb.ToDoServiceServer
+	cases := []struct {
+		desc    string
+		ssv     todopb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.CreateResponse
+		want    *todopb.CreateResponse
 		wantErr bool
 	}{
 		{
-			name: "OK",
+			desc: "OK",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &todopb.CreateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Id:          ID,
 						Title:       "title",
 						Description: "description",
@@ -66,19 +66,19 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 				mock.ExpectExec("INSERT INTO ToDo").WithArgs(ID, "title", "description", tm).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &pb.CreateResponse{
+			want: &todopb.CreateResponse{
 				Api: "v1",
 				Id:  ID,
 			},
 		},
 		{
-			name: "Unsupported API",
+			desc: "Unsupported API",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &todopb.CreateRequest{
 					Api: "v1000",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Title:       "title",
 						Description: "description",
 						CreatedAt:   reminder,
@@ -89,13 +89,13 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Invalid Reminder field format",
+			desc: "Invalid Reminder field format",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &todopb.CreateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Title:       "title",
 						Description: "description",
 						CreatedAt: &timestamp.Timestamp{
@@ -109,13 +109,13 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "INSERT failed",
+			desc: "INSERT failed",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &todopb.CreateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Title:       "title",
 						Description: "description",
 						CreatedAt:   reminder,
@@ -129,13 +129,13 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "LastInsertId failed",
+			desc: "LastInsertId failed",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &todopb.CreateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Title:       "title",
 						Description: "description",
 						CreatedAt:   reminder,
@@ -149,16 +149,16 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.mock()
-			got, err := tt.ssv.Create(tt.args.ctx, tt.args.req)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDoService.Create() error = %v, wantErr %v", err, tt.wantErr)
+	for _, c := range cases {
+		t.Run(c.desc, func(t *testing.T) {
+			c.mock()
+			got, err := c.ssv.Create(c.args.ctx, c.args.req)
+			if (err != nil) != c.wantErr {
+				t.Errorf("ToDoService.Create() error = %v, wantErr %v", err, c.wantErr)
 				return
 			}
-			if err == nil && !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDoService.Create() = %v, want %v", got, tt.want)
+			if err == nil && !reflect.DeepEqual(got, c.want) {
+				t.Errorf("ToDoService.Create() = %v, want %v", got, c.want)
 			}
 		})
 	}
@@ -172,7 +172,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	repo, _ := todo.NewMysqlRepository(db)
+	repo, _ := todo.NewMysqlRepo(db)
 	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
@@ -180,22 +180,23 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.GetRequest
+		req *todopb.GetRequest
 	}
-	tests := []struct {
-		name    string
-		ssv     pb.ToDoServiceServer
+
+	cases := []struct {
+		desc    string
+		ssv     todopb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.GetResponse
+		want    *todopb.GetResponse
 		wantErr bool
 	}{
 		{
-			name: "OK",
+			desc: "OK",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetRequest{
+				req: &todopb.GetRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -205,9 +206,9 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 					AddRow(ID, "title", "description", tm)
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WithArgs(ID).WillReturnRows(rows)
 			},
-			want: &pb.GetResponse{
+			want: &todopb.GetResponse{
 				Api: "v1",
-				Item: &pb.ToDo{
+				Item: &todopb.ToDo{
 					Id:          ID,
 					Title:       "title",
 					Description: "description",
@@ -216,11 +217,11 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			},
 		},
 		{
-			name: "Unsupported API",
+			desc: "Unsupported API",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetRequest{
+				req: &todopb.GetRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -229,11 +230,11 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "SELECT failed",
+			desc: "SELECT failed",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetRequest{
+				req: &todopb.GetRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -245,11 +246,11 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Not found",
+			desc: "Not found",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetRequest{
+				req: &todopb.GetRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -261,17 +262,17 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.mock()
-			got, err := tt.ssv.Get(tt.args.ctx, tt.args.req)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDoService.Get() error = %v, wantErr %v", err, tt.wantErr)
+	for _, c := range cases {
+		t.Run(c.desc, func(t *testing.T) {
+			c.mock()
+			got, err := c.ssv.Get(c.args.ctx, c.args.req)
+			if (err != nil) != c.wantErr {
+				t.Errorf("ToDoService.Get() error = %v, wantErr %v", err, c.wantErr)
 				return
 			}
 
-			if err == nil && !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDoService.Get() = %v, want %v", got, tt.want)
+			if err == nil && !reflect.DeepEqual(got, c.want) {
+				t.Errorf("ToDoService.Get() = %v, want %v", got, c.want)
 			}
 		})
 	}
@@ -285,7 +286,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	repo, _ := todo.NewMysqlRepository(db)
+	repo, _ := todo.NewMysqlRepo(db)
 	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	tm := time.Now().UTC().Add(time.Minute)
@@ -293,24 +294,24 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.UpdateRequest
+		req *todopb.UpdateRequest
 	}
-	tests := []struct {
-		name    string
-		ssv     pb.ToDoServiceServer
+	cases := []struct {
+		desc    string
+		ssv     todopb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.UpdateResponse
+		want    *todopb.UpdateResponse
 		wantErr bool
 	}{
 		{
-			name: "OK",
+			desc: "OK",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &todopb.UpdateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Id:          ID,
 						Title:       "new title",
 						Description: "new description",
@@ -322,19 +323,19 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				mock.ExpectExec("UPDATE ToDo").WithArgs("new title", "new description", tm, ID).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &pb.UpdateResponse{
+			want: &todopb.UpdateResponse{
 				Api:     "v1",
 				Updated: 1,
 			},
 		},
 		{
-			name: "Unsupported API",
+			desc: "Unsupported API",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &todopb.UpdateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -346,13 +347,13 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Invalid Reminder field format",
+			desc: "Invalid Reminder field format",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &todopb.UpdateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -367,13 +368,13 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "UPDATE failed",
+			desc: "UPDATE failed",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &todopb.UpdateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -388,13 +389,13 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "RowsAffected failed",
+			desc: "RowsAffected failed",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &todopb.UpdateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -409,13 +410,13 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Not Found",
+			desc: "Not Found",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &todopb.UpdateRequest{
 					Api: "v1",
-					Item: &pb.ToDo{
+					Item: &todopb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -430,16 +431,16 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.mock()
-			got, err := tt.ssv.Update(tt.args.ctx, tt.args.req)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDoService.Update() error = %v, wantErr %v", err, tt.wantErr)
+	for _, c := range cases {
+		t.Run(c.desc, func(t *testing.T) {
+			c.mock()
+			got, err := c.ssv.Update(c.args.ctx, c.args.req)
+			if (err != nil) != c.wantErr {
+				t.Errorf("ToDoService.Update() error = %v, wantErr %v", err, c.wantErr)
 				return
 			}
-			if err == nil && !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDoService.Update() = %v, want %v", got, tt.want)
+			if err == nil && !reflect.DeepEqual(got, c.want) {
+				t.Errorf("ToDoService.Update() = %v, want %v", got, c.want)
 			}
 		})
 	}
@@ -453,27 +454,27 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	repo, _ := todo.NewMysqlRepository(db)
+	repo, _ := todo.NewMysqlRepo(db)
 	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	type args struct {
 		ctx context.Context
-		req *pb.DeleteRequest
+		req *todopb.DeleteRequest
 	}
-	tests := []struct {
-		name    string
-		ssv     pb.ToDoServiceServer
+	cases := []struct {
+		desc    string
+		ssv     todopb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.DeleteResponse
+		want    *todopb.DeleteResponse
 		wantErr bool
 	}{
 		{
-			name: "OK",
+			desc: "OK",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &todopb.DeleteRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -482,17 +483,17 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 				mock.ExpectExec("DELETE FROM ToDo").WithArgs(ID).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &pb.DeleteResponse{
+			want: &todopb.DeleteResponse{
 				Api:     "v1",
 				Deleted: 1,
 			},
 		},
 		{
-			name: "Unsupported API",
+			desc: "Unsupported API",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &todopb.DeleteRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -501,11 +502,11 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "DELETE failed",
+			desc: "DELETE failed",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &todopb.DeleteRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -517,11 +518,11 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "RowsAffected failed",
+			desc: "RowsAffected failed",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &todopb.DeleteRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -533,11 +534,11 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Not Found",
+			desc: "Not Found",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &todopb.DeleteRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -549,16 +550,16 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.mock()
-			got, err := tt.ssv.Delete(tt.args.ctx, tt.args.req)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDoService.Delete() error = %v, wantErr %v", err, tt.wantErr)
+	for _, c := range cases {
+		t.Run(c.desc, func(t *testing.T) {
+			c.mock()
+			got, err := c.ssv.Delete(c.args.ctx, c.args.req)
+			if (err != nil) != c.wantErr {
+				t.Errorf("ToDoService.Delete() error = %v, wantErr %v", err, c.wantErr)
 				return
 			}
-			if err == nil && !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDoService.Delete() = %v, want %v", got, tt.want)
+			if err == nil && !reflect.DeepEqual(got, c.want) {
+				t.Errorf("ToDoService.Delete() = %v, want %v", got, c.want)
 			}
 		})
 	}
@@ -572,7 +573,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	repo, _ := todo.NewMysqlRepository(db)
+	repo, _ := todo.NewMysqlRepo(db)
 	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
 
 	tm1 := time.Now().UTC().Add(time.Minute)
@@ -585,22 +586,22 @@ func Test_toDoServiceServer_List(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.ListRequest
+		req *todopb.ListRequest
 	}
-	tests := []struct {
-		name    string
-		ssv     pb.ToDoServiceServer
+	cases := []struct {
+		desc    string
+		ssv     todopb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.ListResponse
+		want    *todopb.ListResponse
 		wantErr bool
 	}{
 		{
-			name: "OK",
+			desc: "OK",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ListRequest{
+				req: &todopb.ListRequest{
 					Api: "v1",
 				},
 			},
@@ -610,9 +611,9 @@ func Test_toDoServiceServer_List(t *testing.T) {
 					AddRow(ID2, "title 2", "description 2", tm2)
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WillReturnRows(rows)
 			},
-			want: &pb.ListResponse{
+			want: &todopb.ListResponse{
 				Api: "v1",
-				Items: []*pb.ToDo{
+				Items: []*todopb.ToDo{
 					{
 						Id:          ID,
 						Title:       "title 1",
@@ -629,11 +630,11 @@ func Test_toDoServiceServer_List(t *testing.T) {
 			},
 		},
 		{
-			name: "Empty",
+			desc: "Empty",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ListRequest{
+				req: &todopb.ListRequest{
 					Api: "v1",
 				},
 			},
@@ -641,17 +642,17 @@ func Test_toDoServiceServer_List(t *testing.T) {
 				rows := sqlmock.NewRows([]string{"ID", "Title", "Description", "Reminder"})
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WillReturnRows(rows)
 			},
-			want: &pb.ListResponse{
+			want: &todopb.ListResponse{
 				Api:   "v1",
-				Items: []*pb.ToDo(nil),
+				Items: []*todopb.ToDo(nil),
 			},
 		},
 		{
-			name: "Unsupported API",
+			desc: "Unsupported API",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ListRequest{
+				req: &todopb.ListRequest{
 					Api: "v1",
 				},
 			},
@@ -659,16 +660,16 @@ func Test_toDoServiceServer_List(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.mock()
-			got, err := tt.ssv.List(tt.args.ctx, tt.args.req)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDoService.List() error = %v, wantErr %v", err, tt.wantErr)
+	for _, c := range cases {
+		t.Run(c.desc, func(t *testing.T) {
+			c.mock()
+			got, err := c.ssv.List(c.args.ctx, c.args.req)
+			if (err != nil) != c.wantErr {
+				t.Errorf("ToDoService.List() error = %v, wantErr %v", err, c.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDoService.List() = %v, want %v", got, tt.want)
+			if !reflect.DeepEqual(got, c.want) {
+				t.Errorf("ToDoService.List() = %v, want %v", got, c.want)
 			}
 		})
 	}

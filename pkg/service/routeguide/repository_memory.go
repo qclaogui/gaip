@@ -15,23 +15,23 @@ import (
 	"sync"
 	"time"
 
-	pb "github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
 	"google.golang.org/protobuf/proto"
 )
 
 // MemoryRepository fulfills the Repository interface
 type MemoryRepository struct {
-	pb.UnimplementedRouteGuideServiceServer
-	mem []*pb.Feature // read-only after initialized
+	routeguidepb.UnimplementedRouteGuideServiceServer
+	mem []*routeguidepb.Feature // read-only after initialized
 
 	mu         sync.Mutex // protects routeNotes
-	routeNotes map[string][]*pb.RouteNote
+	routeNotes map[string][]*routeguidepb.RouteNote
 }
 
 // NewMemoryRepository is a factory function to generate a new repository
 func NewMemoryRepository(filePath string) (*MemoryRepository, error) {
 	mr := &MemoryRepository{
-		routeNotes: make(map[string][]*pb.RouteNote, 0),
+		routeNotes: make(map[string][]*routeguidepb.RouteNote, 0),
 	}
 	// load Features
 	if err := mr.loadFeatures(filePath); err != nil {
@@ -58,20 +58,20 @@ func (mr *MemoryRepository) loadFeatures(filePath string) error {
 }
 
 // GetFeature returns the feature at the given point.
-func (mr *MemoryRepository) GetFeature(_ context.Context, req *pb.GetFeatureRequest) (*pb.GetFeatureResponse, error) {
+func (mr *MemoryRepository) GetFeature(_ context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
 	for _, feature := range mr.mem {
 		if proto.Equal(feature.Location, req.Point) {
-			return &pb.GetFeatureResponse{Feature: feature}, nil
+			return &routeguidepb.GetFeatureResponse{Feature: feature}, nil
 		}
 	}
 	// No feature was found, return an unnamed feature
-	return &pb.GetFeatureResponse{Feature: &pb.Feature{Location: req.Point}}, nil
+	return &routeguidepb.GetFeatureResponse{Feature: &routeguidepb.Feature{Location: req.Point}}, nil
 }
 
-func (mr *MemoryRepository) ListFeatures(req *pb.ListFeaturesRequest, stream pb.RouteGuideService_ListFeaturesServer) error {
+func (mr *MemoryRepository) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
 	for _, feature := range mr.mem {
 		if inRange(feature.Location, req.GetRectangle()) {
-			if err := stream.Send(&pb.ListFeaturesResponse{Feature: feature}); err != nil {
+			if err := stream.Send(&routeguidepb.ListFeaturesResponse{Feature: feature}); err != nil {
 				return err
 			}
 		}
@@ -79,15 +79,15 @@ func (mr *MemoryRepository) ListFeatures(req *pb.ListFeaturesRequest, stream pb.
 	return nil
 }
 
-func (mr *MemoryRepository) RecordRoute(stream pb.RouteGuideService_RecordRouteServer) error {
+func (mr *MemoryRepository) RecordRoute(stream routeguidepb.RouteGuideService_RecordRouteServer) error {
 	var pointCount, featureCount, distance int32
-	var lastPoint *pb.Point
+	var lastPoint *routeguidepb.Point
 	startTime := time.Now()
 	for {
 		req, err := stream.Recv()
 		if errors.Is(err, io.EOF) {
-			return stream.SendAndClose(&pb.RecordRouteResponse{
-				RouteSummary: &pb.RouteSummary{
+			return stream.SendAndClose(&routeguidepb.RecordRouteResponse{
+				RouteSummary: &routeguidepb.RouteSummary{
 					PointCount:   pointCount,
 					FeatureCount: featureCount,
 					Distance:     distance,
@@ -121,7 +121,7 @@ func toRadians(num float64) float64 {
 
 // calcDistance calculates the distance between two points using the "haversine" formula.
 // The formula is based on http://mathforum.org/library/drmath/view/51879.html.
-func calcDistance(p1 *pb.Point, p2 *pb.Point) int32 {
+func calcDistance(p1 *routeguidepb.Point, p2 *routeguidepb.Point) int32 {
 	const CordFactor float64 = 1e7
 	const R = float64(6371000) // earth radius in metres
 
@@ -143,11 +143,11 @@ func calcDistance(p1 *pb.Point, p2 *pb.Point) int32 {
 	return int32(distance)
 }
 
-func serialize(point *pb.Point) string {
+func serialize(point *routeguidepb.Point) string {
 	return fmt.Sprintf("%d %d", point.Latitude, point.Longitude)
 }
 
-func (mr *MemoryRepository) RouteChat(stream pb.RouteGuideService_RouteChatServer) error {
+func (mr *MemoryRepository) RouteChat(stream routeguidepb.RouteGuideService_RouteChatServer) error {
 	for {
 		req, err := stream.Recv()
 		if errors.Is(err, io.EOF) {
@@ -165,19 +165,19 @@ func (mr *MemoryRepository) RouteChat(stream pb.RouteGuideService_RouteChatServe
 		// Note: this copy prevents blocking other clients while serving this one.
 		// We don't need to do a deep copy, because elements in the slice are
 		// insert-only and never modified.
-		notes := make([]*pb.RouteNote, len(mr.routeNotes[key]))
+		notes := make([]*routeguidepb.RouteNote, len(mr.routeNotes[key]))
 		copy(notes, mr.routeNotes[key])
 		mr.mu.Unlock()
 
 		for _, rn := range notes {
-			if err := stream.Send(&pb.RouteChatResponse{RouteNote: rn}); err != nil {
+			if err := stream.Send(&routeguidepb.RouteChatResponse{RouteNote: rn}); err != nil {
 				return err
 			}
 		}
 	}
 }
 
-func inRange(point *pb.Point, rect *pb.Rectangle) bool {
+func inRange(point *routeguidepb.Point, rect *routeguidepb.Rectangle) bool {
 	left := math.Min(float64(rect.Lo.Longitude), float64(rect.Hi.Longitude))
 	right := math.Max(float64(rect.Lo.Longitude), float64(rect.Hi.Longitude))
 

@@ -5,7 +5,8 @@ package qclaogui.library.v1;
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/protobuf/empty.proto";
-import "qclaogui/library/v1/resources.proto";
+import "qclaogui/library/v1/book.proto";
+import "qclaogui/library/v1/shelf.proto";
 
 option go_package = "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb";
 
@@ -13,10 +14,10 @@ option go_package = "github.com/qclaogui/golang-api-server/genproto/library/apiv
 // resources and Book resources in the library. It defines the following
 // resource model:
 //
-// - The API has a collection of [Shelf][library.v1.Shelf]
+// - The API has a collection of [Shelf][qclaogui.library.v1.Shelf]
 //   resources, named `shelves/*`
 //
-// - Each Shelf has a collection of [Book][library.v1.Book]
+// - Each Shelf has a collection of [Book][qclaogui.library.v1.Book]
 //   resources, named `shelves/*/books/*`
 service LibraryService {
   option (google.api.default_host) = "library.qclaogui.com";

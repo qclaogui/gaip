@@ -30,28 +30,6 @@ message Book {
   bool read = 4;
 }
 
-// A Shelf contains a collection of books with a theme.
-message Shelf {
-  option (google.api.resource) = {
-    type: "library.qclaogui.com/Shelf",
-    pattern: "shelves/{shelf_id}"
-  };
-
-  // The resource name of the shelf.
-  // Shelf names have the form `shelves/{shelf_id}`.
-  // The name is ignored when creating a shelf.
-  string name = 1;
-
-  // The theme of the shelf
-  string theme = 2;
-}
-
-// Request message for LibraryService.CreateShelf.
-message CreateShelfRequest {
-  // The shelf to create.
-  Shelf shelf = 1 [(google.api.field_behavior) = REQUIRED];
-}
-
 // Request message for LibraryService.CreateBook.
 message CreateBookRequest {
   // The name of the shelf in which the book is created.
@@ -62,65 +40,6 @@ message CreateBookRequest {
 
   // The book to create.
   Book book = 2 [(google.api.field_behavior) = REQUIRED];
-}
-
-// Request message for LibraryService.GetShelf.
-message GetShelfRequest {
-  // The name of the shelf to retrieve.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "library.qclaogui.com/Shelf"
-  ];
-}
-
-// Request message for LibraryService.ListShelves.
-message ListShelvesRequest {
-  // Requested page size. Server may return fewer shelves than requested.
-  // If unspecified, server will pick an appropriate default.
-  int32 page_size = 1;
-
-  // A token identifying a page of results the server should return.
-  // Typically, this is the value of
-  // [ListShelvesResponse.next_page_token][library.v1.ListShelvesResponse.next_page_token]
-  // returned from the previous call to `ListShelves` method.
-  string page_token = 2;
-}
-
-// Response message for LibraryService.ListShelves.
-message ListShelvesResponse {
-  // The list of shelves.
-  repeated Shelf shelves = 1;
-
-  // A token to retrieve next page of results.
-  // Pass this value in the
-  // [ListShelvesRequest.page_token][library.v1.ListShelvesRequest.page_token]
-  // field in the subsequent call to `ListShelves` method to retrieve the next
-  // page of results.
-  string next_page_token = 2;
-}
-
-// Request message for LibraryService.DeleteShelf.
-message DeleteShelfRequest {
-  // The name of the shelf to delete.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "library.qclaogui.com/Shelf"
-  ];
-}
-
-// Describes the shelf being removed (other_shelf_name) and updated
-// (name) in this merge.
-message MergeShelvesRequest {
-  // The name of the shelf we're adding books to.
-  string name = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "library.qclaogui.com/Shelf"
-  ];
-
-  string other_shelf = 2 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).type = "library.qclaogui.com/Shelf"
-  ];
 }
 
 // Request message for LibraryService.GetBook.
@@ -146,7 +65,7 @@ message ListBooksRequest {
 
   // A token identifying a page of results the server should return.
   // Typically, this is the value of
-  // [ListBooksResponse.next_page_token][library.v1.ListBooksResponse.next_page_token].
+  // [ListBooksResponse.next_page_token][qclaogui.library.v1.ListBooksResponse.next_page_token].
   // returned from the previous call to `ListBooks` method.
   string page_token = 3;
 }
@@ -158,7 +77,7 @@ message ListBooksResponse {
 
   // A token to retrieve next page of results.
   // Pass this value in the
-  // [ListBooksRequest.page_token][library.v1.ListBooksRequest.page_token]
+  // [ListBooksRequest.page_token][qclaogui.library.v1.ListBooksRequest.page_token]
   // field in the subsequent call to `ListBooks` method to retrieve the next
   // page of results.
   string next_page_token = 2;

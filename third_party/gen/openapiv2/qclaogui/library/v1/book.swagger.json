@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "qclaogui/library/v1/resources.proto",
+    "title": "qclaogui/library/v1/book.proto",
     "version": "version not set"
   },
   "consumes": [

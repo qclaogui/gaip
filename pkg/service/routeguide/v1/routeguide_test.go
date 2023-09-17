@@ -8,7 +8,7 @@ import (
 	"context"
 	"testing"
 
-	pb "github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
 	util_log "github.com/qclaogui/golang-api-server/tools/log"
 	"google.golang.org/protobuf/proto"
 )
@@ -22,32 +22,32 @@ func Test_ServiceServer_GetFeature(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.GetFeatureRequest
+		req *routeguidepb.GetFeatureRequest
 	}
 	tests := []struct {
 		name string
-		ssv  pb.RouteGuideServiceServer
+		ssv  routeguidepb.RouteGuideServiceServer
 		args args
-		want *pb.GetFeatureResponse
+		want *routeguidepb.GetFeatureResponse
 	}{
 		{
 			name: "Looking for a valid feature",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetFeatureRequest{Point: &pb.Point{Latitude: 409146138, Longitude: -746188906}},
+				req: &routeguidepb.GetFeatureRequest{Point: &routeguidepb.Point{Latitude: 409146138, Longitude: -746188906}},
 			},
-			want: &pb.GetFeatureResponse{Feature: &pb.Feature{Name: "Berkshire Valley Management Area Trail, Jefferson, NJ, USA",
-				Location: &pb.Point{Latitude: 409146138, Longitude: -746188906}}},
+			want: &routeguidepb.GetFeatureResponse{Feature: &routeguidepb.Feature{Name: "Berkshire Valley Management Area Trail, Jefferson, NJ, USA",
+				Location: &routeguidepb.Point{Latitude: 409146138, Longitude: -746188906}}},
 		},
 		{
 			name: "Feature missing",
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetFeatureRequest{Point: &pb.Point{}},
+				req: &routeguidepb.GetFeatureRequest{Point: &routeguidepb.Point{}},
 			},
-			want: &pb.GetFeatureResponse{Feature: &pb.Feature{Location: &pb.Point{}}},
+			want: &routeguidepb.GetFeatureResponse{Feature: &routeguidepb.Feature{Location: &routeguidepb.Point{}}},
 		},
 	}
 

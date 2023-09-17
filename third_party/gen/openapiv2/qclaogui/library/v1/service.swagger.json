@@ -45,7 +45,7 @@
           },
           {
             "name": "pageToken",
-            "description": "A token identifying a page of results the server should return.\nTypically, this is the value of\n[ListShelvesResponse.next_page_token][library.v1.ListShelvesResponse.next_page_token]\nreturned from the previous call to `ListShelves` method.",
+            "description": "A token identifying a page of results the server should return.\nTypically, this is the value of\n[ListShelvesResponse.next_page_token][qclaogui.library.v1.ListShelvesResponse.next_page_token]\nreturned from the previous call to `ListShelves` method.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -430,7 +430,7 @@
           },
           {
             "name": "pageToken",
-            "description": "A token identifying a page of results the server should return.\nTypically, this is the value of\n[ListBooksResponse.next_page_token][library.v1.ListBooksResponse.next_page_token].\nreturned from the previous call to `ListBooks` method.",
+            "description": "A token identifying a page of results the server should return.\nTypically, this is the value of\n[ListBooksResponse.next_page_token][qclaogui.library.v1.ListBooksResponse.next_page_token].\nreturned from the previous call to `ListBooks` method.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -521,7 +521,7 @@
         },
         "nextPageToken": {
           "type": "string",
-          "description": "A token to retrieve next page of results.\nPass this value in the\n[ListBooksRequest.page_token][library.v1.ListBooksRequest.page_token]\nfield in the subsequent call to `ListBooks` method to retrieve the next\npage of results."
+          "description": "A token to retrieve next page of results.\nPass this value in the\n[ListBooksRequest.page_token][qclaogui.library.v1.ListBooksRequest.page_token]\nfield in the subsequent call to `ListBooks` method to retrieve the next\npage of results."
         }
       },
       "description": "Response message for LibraryService.ListBooks."
@@ -539,7 +539,7 @@
         },
         "nextPageToken": {
           "type": "string",
-          "description": "A token to retrieve next page of results.\nPass this value in the\n[ListShelvesRequest.page_token][library.v1.ListShelvesRequest.page_token]\nfield in the subsequent call to `ListShelves` method to retrieve the next\npage of results."
+          "description": "A token to retrieve next page of results.\nPass this value in the\n[ListShelvesRequest.page_token][qclaogui.library.v1.ListShelvesRequest.page_token]\nfield in the subsequent call to `ListShelves` method to retrieve the next\npage of results."
         }
       },
       "description": "Response message for LibraryService.ListShelves."
