@@ -2,7 +2,7 @@
 //
 // Licensed under the Apache License 2.0.
 
-package v1
+package todo
 
 import (
 	"context"
@@ -11,7 +11,6 @@ import (
 
 	"github.com/go-kit/log"
 	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
-	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -26,7 +25,7 @@ const (
 type Option func(*ServiceServer) error
 
 // WithRepository applies a given repository to the ServiceServer
-func WithRepository(repo todo.Repository) Option {
+func WithRepository(repo Repository) Option {
 	return func(srv *ServiceServer) error {
 		srv.repo = repo
 		return nil
@@ -35,7 +34,7 @@ func WithRepository(repo todo.Repository) Option {
 
 // WithMemoryRepository applies a memory repository to the Option
 func WithMemoryRepository() Option {
-	repo := todo.NewMemoryRepo()
+	repo := NewMemoryRepo()
 	return WithRepository(repo)
 }
 
@@ -49,7 +48,7 @@ func WithMysqlRepository(dsn string) Option {
 			return fmt.Errorf("failed to open database: %v", err)
 		}
 
-		repo, err := todo.NewMysqlRepo(db)
+		repo, err := NewMysqlRepo(db)
 		if err != nil {
 			return err
 		}
@@ -60,7 +59,7 @@ func WithMysqlRepository(dsn string) Option {
 
 type ServiceServer struct {
 	todopb.UnimplementedToDoServiceServer
-	repo   todo.Repository
+	repo   Repository
 	logger log.Logger
 }
 

@@ -15,8 +15,8 @@ import (
 	"github.com/qclaogui/golang-api-server/pkg/protocol/rest"
 	"github.com/qclaogui/golang-api-server/pkg/service/bookstore"
 	"github.com/qclaogui/golang-api-server/pkg/service/library"
-	routeguidev1 "github.com/qclaogui/golang-api-server/pkg/service/routeguide/v1"
-	todov1 "github.com/qclaogui/golang-api-server/pkg/service/todo/v1"
+	"github.com/qclaogui/golang-api-server/pkg/service/routeguide"
+	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"github.com/qclaogui/golang-api-server/pkg/vault"
 	lg "github.com/qclaogui/golang-api-server/tools/log"
 	"gopkg.in/yaml.v3"
@@ -111,11 +111,11 @@ func (app *Application) Bootstrap() error {
 		return err
 	}
 
-	toDoSrv, err := todov1.NewServiceServer(lg.Logger, todov1.WithMemoryRepository())
+	toDoSrv, err := todo.NewServiceServer(lg.Logger, todo.WithMemoryRepository())
 	if err != nil {
 		return err
 	}
-	routeGuideSrv, err := routeguidev1.NewServiceServer(lg.Logger, routeguidev1.WithMemoryRepository())
+	routeGuideSrv, err := routeguide.NewServiceServer(lg.Logger, routeguide.WithMemoryRepository())
 	if err != nil {
 		return err
 	}

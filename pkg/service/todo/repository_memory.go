@@ -15,8 +15,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-var apiVersion = "v1"
-
 // MemoryRepo fulfills the Repository interface
 type MemoryRepo struct {
 	mem map[uuid.UUID]*todopb.ToDo

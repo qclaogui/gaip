@@ -2,21 +2,20 @@
 //
 // Licensed under the Apache License 2.0.
 
-package v1
+package routeguide
 
 import (
 	"context"
 
 	"github.com/go-kit/log"
 	"github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
-	"github.com/qclaogui/golang-api-server/pkg/service/routeguide"
 	"google.golang.org/grpc"
 )
 
 type Option func(*ServiceServer) error
 
 // WithRepository applies a given repository to the ServiceServer
-func WithRepository(repo routeguide.Repository) Option {
+func WithRepository(repo Repository) Option {
 	return func(srv *ServiceServer) error {
 		srv.repo = repo
 		return nil
@@ -26,7 +25,7 @@ func WithRepository(repo routeguide.Repository) Option {
 // WithMemoryRepository applies a memory repository to the ServiceServer
 func WithMemoryRepository() Option {
 	return func(srv *ServiceServer) error {
-		repo, err := routeguide.NewMemoryRepository("")
+		repo, err := NewMemoryRepository("")
 		if err != nil {
 			return err
 		}
@@ -39,7 +38,7 @@ func WithMemoryRepository() Option {
 type ServiceServer struct {
 	routeguidepb.UnimplementedRouteGuideServiceServer
 
-	repo   routeguide.Repository
+	repo   Repository
 	logger log.Logger
 }
 

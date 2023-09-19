@@ -2,20 +2,20 @@
 //
 // Licensed under the Apache License 2.0.
 
-package v1
+package routeguide
 
 import (
 	"context"
 	"testing"
 
 	"github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
-	util_log "github.com/qclaogui/golang-api-server/tools/log"
+	lg "github.com/qclaogui/golang-api-server/tools/log"
 	"google.golang.org/protobuf/proto"
 )
 
 func Test_ServiceServer_GetFeature(t *testing.T) {
 	ctx := context.Background()
-	ssv, err := NewServiceServer(util_log.Logger, WithMemoryRepository())
+	ssv, err := NewServiceServer(lg.Logger, WithMemoryRepository())
 	if err != nil {
 		t.Fatalf("an error '%s' was not expected when NewServiceServer", err)
 	}
