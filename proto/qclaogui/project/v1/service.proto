@@ -17,21 +17,30 @@ service ProjectService {
 
   // Creates a new project.
   rpc CreateProject(CreateProjectRequest) returns (Project) {
-    option (google.api.http) = {};
+    option (google.api.http) = {
+      post: "/v1/projects"
+      body: "project"
+    };
+
+    option (google.api.method_signature) = "project";
   }
 
   // Gets the specified project.
   rpc GetProject(GetProjectRequest) returns (Project) {
-    option (google.api.http) = {};
+    option (google.api.http) = {get: "/v1/{name=projects/*}"};
+
+    option (google.api.method_signature) = "name";
   }
 
   // Lists projects.
   rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse) {
-    option (google.api.http) = {};
+    option (google.api.http) = {get: "/v1/projects"};
   }
 
   // Deletes the specified project.
   rpc DeleteProject(DeleteProjectRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {};
+    option (google.api.http) = {delete: "/v1/{name=projects/*}"};
+
+    option (google.api.method_signature) = "name";
   }
 }
