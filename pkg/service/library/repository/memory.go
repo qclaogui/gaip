@@ -5,11 +5,35 @@
 package repository
 
 import (
+	"context"
 	"flag"
 	"sync"
 
 	"github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
+
+const (
+	defaultPageSize = 20
+	maxPageSize     = 10000
+	maxBatchSize    = 1000
+)
+
+// validatePageSize returns the default page size if the specified page size is 0, otherwise it
+// validates the specified page size.
+func validatePageSize(ps int32) (int32, error) {
+	switch {
+	case ps == 0:
+		return defaultPageSize, nil
+	case ps > maxPageSize:
+		return 0, status.Errorf(codes.InvalidArgument, "page size %d cannot be large than max page size %d", ps, maxPageSize)
+	case ps < 0:
+		return 0, status.Errorf(codes.InvalidArgument, "page size %d cannot be negative", ps)
+	}
+
+	return ps, nil
+}
 
 type MemoryConfig struct {
 	Enabled bool `yaml:"enabled"`
@@ -51,4 +75,16 @@ func NewMemoryRepo() (*MemoryRepo, error) {
 	}
 	return mr, nil
 
+}
+
+func (mr *MemoryRepo) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
+	_ = ctx
+
+	ps, err := validatePageSize(req.PageSize)
+	if err != nil {
+		return nil, err
+	}
+	_ = ps
+
+	return nil, status.Errorf(codes.Unimplemented, "method ListShelves not implemented")
 }

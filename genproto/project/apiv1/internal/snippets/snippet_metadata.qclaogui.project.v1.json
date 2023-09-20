@@ -1,0 +1,198 @@
+{
+  "clientLibrary": {
+    "name": "github.com/qclaogui/golang-api-server/genproto/project/apiv1",
+    "version": "$VERSION",
+    "language": "GO",
+    "apis": [
+      {
+        "id": "qclaogui.project.v1",
+        "version": "v1"
+      }
+    ]
+  },
+  "snippets": [
+    {
+      "regionTag": "project_v1_generated_ProjectService_CreateProject_sync",
+      "title": "project CreateProject Sample",
+      "description": "CreateProject creates a new project.",
+      "file": "Client/CreateProject/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateProject",
+        "fullName": "qclaogui.project.v1.Client.CreateProject",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.CreateProjectRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.Project",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.project.v1.Client"
+        },
+        "method": {
+          "shortName": "CreateProject",
+          "fullName": "qclaogui.project.v1.ProjectService.CreateProject",
+          "service": {
+            "shortName": "ProjectService",
+            "fullName": "qclaogui.project.v1.ProjectService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "project_v1_generated_ProjectService_DeleteProject_sync",
+      "title": "project DeleteProject Sample",
+      "description": "DeleteProject deletes the specified project.",
+      "file": "Client/DeleteProject/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "DeleteProject",
+        "fullName": "qclaogui.project.v1.Client.DeleteProject",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.DeleteProjectRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.project.v1.Client"
+        },
+        "method": {
+          "shortName": "DeleteProject",
+          "fullName": "qclaogui.project.v1.ProjectService.DeleteProject",
+          "service": {
+            "shortName": "ProjectService",
+            "fullName": "qclaogui.project.v1.ProjectService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 51,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "project_v1_generated_ProjectService_GetProject_sync",
+      "title": "project GetProject Sample",
+      "description": "GetProject gets the specified project.",
+      "file": "Client/GetProject/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "GetProject",
+        "fullName": "qclaogui.project.v1.Client.GetProject",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.GetProjectRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.Project",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.project.v1.Client"
+        },
+        "method": {
+          "shortName": "GetProject",
+          "fullName": "qclaogui.project.v1.ProjectService.GetProject",
+          "service": {
+            "shortName": "ProjectService",
+            "fullName": "qclaogui.project.v1.ProjectService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "project_v1_generated_ProjectService_ListProjects_sync",
+      "title": "project ListProjects Sample",
+      "description": "ListProjects lists projects.",
+      "file": "Client/ListProjects/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "ListProjects",
+        "fullName": "qclaogui.project.v1.Client.ListProjects",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.ListProjectsRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "ProjectIterator",
+        "client": {
+          "shortName": "Client",
+          "fullName": "qclaogui.project.v1.Client"
+        },
+        "method": {
+          "shortName": "ListProjects",
+          "fullName": "qclaogui.project.v1.ProjectService.ListProjects",
+          "service": {
+            "shortName": "ProjectService",
+            "fullName": "qclaogui.project.v1.ProjectService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 60,
+          "type": "FULL"
+        }
+      ]
+    }
+  ]
+}

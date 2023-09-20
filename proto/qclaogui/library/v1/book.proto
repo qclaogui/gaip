@@ -32,7 +32,7 @@ message Book {
 
 // Request message for LibraryService.CreateBook.
 message CreateBookRequest {
-  // The name of the shelf in which the book is created.
+  // The name of the shelf in the form of `shelves/[shelf_id]`
   string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference).type = "library.qclaogui.com/Shelf"
@@ -44,7 +44,7 @@ message CreateBookRequest {
 
 // Request message for LibraryService.GetBook.
 message GetBookRequest {
-  // The name of the book to retrieve.
+  // The name of the book in the form of `shelves/[shelf_id]/books/[book_id]`.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference).type = "library.qclaogui.com/Book"
@@ -59,15 +59,18 @@ message ListBooksRequest {
     (google.api.resource_reference).type = "library.qclaogui.com/Shelf"
   ];
 
-  // Requested page size. Server may return fewer books than requested.
-  // If unspecified, server will pick an appropriate default.
-  int32 page_size = 2;
+  // The filter expression.
+  string filter = 2;
+
+  // Number of books to return in the list. Must be positive. Max allowed page
+  // size is 1000. If not specified, page size defaults to 20.
+  int32 page_size = 3;
 
   // A token identifying a page of results the server should return.
   // Typically, this is the value of
   // [ListBooksResponse.next_page_token][qclaogui.library.v1.ListBooksResponse.next_page_token].
   // returned from the previous call to `ListBooks` method.
-  string page_token = 3;
+  string page_token = 4;
 }
 
 // Response message for LibraryService.ListBooks.
@@ -85,7 +88,7 @@ message ListBooksResponse {
 
 // Request message for LibraryService.DeleteBook.
 message DeleteBookRequest {
-  // The name of the book to delete.
+  // The name of the book in the form of `shelves/[shelf_id]/books/[book_id]`.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference).type = "library.qclaogui.com/Book"

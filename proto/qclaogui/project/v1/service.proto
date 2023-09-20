@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package qclaogui.project.v1;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/protobuf/empty.proto";
+import "qclaogui/project/v1/project.proto";
+
+option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+
+// [Projects] API.
+//
+// Manages `Projects`. Projects contain sets of other entities
+service ProjectService {
+  option (google.api.default_host) = "project.qclaogui.com";
+
+  // Creates a new project.
+  rpc CreateProject(CreateProjectRequest) returns (Project) {
+    option (google.api.http) = {};
+  }
+
+  // Gets the specified project.
+  rpc GetProject(GetProjectRequest) returns (Project) {
+    option (google.api.http) = {};
+  }
+
+  // Lists projects.
+  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse) {
+    option (google.api.http) = {};
+  }
+
+  // Deletes the specified project.
+  rpc DeleteProject(DeleteProjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {};
+  }
+}

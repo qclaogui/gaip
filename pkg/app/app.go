@@ -32,8 +32,8 @@ type Application struct {
 
 	Server *server.Server
 
-	bookstore *bookstore.ServiceServer
-	library   *library.ServiceServer
+	bookstore *bookstore.Server
+	library   *library.Server
 	Vault     *vault.Vault
 }
 
@@ -58,8 +58,8 @@ func (app *Application) initVault() error {
 	return nil
 }
 
-// initBookstore init bookstore ServiceServer
-func (app *Application) initBookstore() (*bookstore.ServiceServer, error) {
+// initBookstore init bookstore Server
+func (app *Application) initBookstore() (*bookstore.Server, error) {
 	srv, err := bookstore.NewServiceServer(app.Cfg.Bookstore)
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (app *Application) initBookstore() (*bookstore.ServiceServer, error) {
 	return srv, nil
 }
 
-func (app *Application) initLibrary() (*library.ServiceServer, error) {
+func (app *Application) initLibrary() (*library.Server, error) {
 	srv, err := library.NewServiceServer(app.Cfg.Library)
 	if err != nil {
 		return nil, err

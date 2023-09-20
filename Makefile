@@ -118,6 +118,7 @@ protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROT
 		--go_opt='module=github.com/qclaogui/golang-api-server/genproto' \
  		proto/qclaogui/routeguide/v1/*.proto \
  		proto/qclaogui/todo/v1/*.proto \
+ 		proto/qclaogui/project/v1/*.proto \
  		proto/qclaogui/library/v1/*.proto \
  		proto/qclaogui/bookstore/v1alpha1/*.proto
 
@@ -129,6 +130,7 @@ protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROT
 		--go-grpc_opt='require_unimplemented_servers=false' \
  		proto/qclaogui/routeguide/v1/*.proto \
  		proto/qclaogui/todo/v1/*.proto \
+ 		proto/qclaogui/project/v1/*.proto \
  		proto/qclaogui/library/v1/*.proto \
  		proto/qclaogui/bookstore/v1alpha1/*.proto
 
@@ -158,6 +160,17 @@ protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROT
 		--go_gapic_opt='rest-numeric-enums=true' \
  		proto/qclaogui/todo/v1/*.proto
 
+	@$(PROTOC) --proto_path=proto \
+		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
+		--go_gapic_out=genproto \
+		--go_gapic_opt='go-gapic-package=github.com/qclaogui/golang-api-server/genproto/project/apiv1;project' \
+		--go_gapic_opt='metadata=false' \
+		--go_gapic_opt='module=github.com/qclaogui/golang-api-server/genproto' \
+		--go_gapic_opt='grpc-service-config=proto/qclaogui/project/v1/project_grpc_service_config.json' \
+		--go_gapic_opt='release-level=alpha' \
+		--go_gapic_opt='transport=grpc+rest' \
+		--go_gapic_opt='rest-numeric-enums=true' \
+ 		proto/qclaogui/project/v1/*.proto
 
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
@@ -178,10 +191,7 @@ protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROT
 		--grpc-gateway_opt='logtostderr=true' \
 		--grpc-gateway_opt='module=github.com/qclaogui/golang-api-server/genproto' \
 		--grpc-gateway_opt='generate_unbound_methods=true' \
- 		proto/qclaogui/routeguide/v1/*.proto \
- 		proto/qclaogui/todo/v1/*.proto \
- 		proto/qclaogui/library/v1/*.proto \
- 		proto/qclaogui/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/todo/v1/*.proto
 
     # plugin protoc-gen-openapiv2
 	@$(PROTOC) --proto_path=proto \
@@ -189,10 +199,7 @@ protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROT
  		--openapiv2_out=third_party/gen/openapiv2 \
  		--openapiv2_opt='logtostderr=true' \
  		--openapiv2_opt='generate_unbound_methods=true' \
- 		proto/qclaogui/routeguide/v1/*.proto \
- 		proto/qclaogui/todo/v1/*.proto \
- 		proto/qclaogui/library/v1/*.proto \
- 		proto/qclaogui/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/todo/v1/*.proto
 
 	@make swagger-ui
 	@make lint
