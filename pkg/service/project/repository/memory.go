@@ -30,7 +30,7 @@ type MemoryConfig struct {
 }
 
 func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", false, "Enables memory Repository")
+	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", true, "Enables memory Repository")
 }
 
 func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
@@ -38,6 +38,10 @@ func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
 }
 
 func (cfg *MemoryConfig) Validate() error {
+	if !cfg.Enabled {
+		return nil
+	}
+
 	return nil
 }
 
