@@ -25,7 +25,7 @@ type Server struct {
 	repo repository.Repository
 }
 
-func NewServiceServer(cfg Config) (*Server, error) {
+func NewServer(cfg Config) (*Server, error) {
 	// Create the Server
 	s := &Server{Cfg: cfg}
 

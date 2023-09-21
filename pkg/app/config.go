@@ -13,6 +13,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/qclaogui/golang-api-server/pkg/service/bookstore"
 	"github.com/qclaogui/golang-api-server/pkg/service/library"
+	"github.com/qclaogui/golang-api-server/pkg/service/project"
 	"github.com/qclaogui/golang-api-server/pkg/vault"
 )
 
@@ -23,20 +24,10 @@ type Config struct {
 	Server server.Config `yaml:"server"`
 
 	Bookstore bookstore.Config `yaml:"bookstore"`
-
-	Library library.Config `yaml:"library"`
+	Library   library.Config   `yaml:"library"`
+	Project   project.Config   `yaml:"project"`
 
 	Vault vault.Config `yaml:"vault"`
-
-	//// DB Datastore parameters section
-	//// Host is host of database
-	//Host string
-	//// User is username to connect to database
-	//User string
-	//// Password password to connect to database
-	//Password string
-	//// Schema is schema of database
-	//Schema string
 }
 
 // RegisterFlags registers flag.
@@ -55,6 +46,8 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 
 	// Register bookstore Config
 	c.Bookstore.RegisterFlags(fs)
+	c.Library.RegisterFlags(fs)
+	c.Project.RegisterFlags(fs)
 
 	// Register Vault Config
 	c.Vault.RegisterFlags(fs)
@@ -63,15 +56,26 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 // Validate the app config and return an error if the validation doesn't pass
 func (c *Config) Validate(_ log.Logger) error {
 
-	// Validate bookstore Config
+	// Validate Bookstore Config
 	if err := c.Bookstore.Validate(); err != nil {
-		return errors.Wrap(err, "invalid bookstore config")
+		return errors.Wrap(err, "invalid Bookstore config")
+	}
+
+	// Validate Library Config
+	if err := c.Library.Validate(); err != nil {
+		return errors.Wrap(err, "invalid Library config")
+	}
+
+	// Validate Project Config
+	if err := c.Project.Validate(); err != nil {
+		return errors.Wrap(err, "invalid Project config")
 	}
 
 	// Validate Vault Config
 	if err := c.Vault.Validate(); err != nil {
-		return errors.Wrap(err, "invalid vault config")
+		return errors.Wrap(err, "invalid Vault config")
 	}
+
 	return nil
 }
 

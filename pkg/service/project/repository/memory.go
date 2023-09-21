@@ -9,7 +9,7 @@ import (
 	"flag"
 	"sync"
 
-	"github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -39,44 +39,20 @@ func (cfg *MemoryConfig) Validate() error {
 // MemoryRepo fulfills the Repository interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// MemoryRepo is used to implement LibraryServiceServer.
+// MemoryRepo is used to implement ProjectServiceServer.
 type MemoryRepo struct {
-	librarypb.UnimplementedLibraryServiceServer
+	projectpb.UnimplementedProjectServiceServer
 	mu sync.Mutex // global mutex to synchronize service access
 
-	// shelves are stored in a map keyed by shelf id
-	// books are stored in a two level map, keyed first by shelf id and then by book id
-	Shelves     map[int64]*librarypb.Shelf
-	Books       map[int64]map[int64]*librarypb.Book
-	LastShelfID int64 // the id of the last shelf that was added
-	LastBookID  int64 // the id of the last book that was added
+	projects map[string]*projectpb.Project
 }
 
 // NewMemoryRepo is a factory function to generate a new repository
 func NewMemoryRepo() (*MemoryRepo, error) {
 	mr := &MemoryRepo{
-		Shelves: map[int64]*librarypb.Shelf{},
-		Books:   map[int64]map[int64]*librarypb.Book{},
+		projects: map[string]*projectpb.Project{},
 	}
 	return mr, nil
-
-}
-
-func (mr *MemoryRepo) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
-
-	mr.mu.Lock()
-	defer mr.mu.Unlock()
-
-	_ = ctx
-
-	ps, err := validatePageSize(req.PageSize)
-	if err != nil {
-		return nil, err
-	}
-	_ = ps
-	_ = maxBatchSize
-
-	return nil, status.Errorf(codes.Unimplemented, "method ListShelves not implemented")
 }
 
 // validatePageSize returns the default page size if the specified page size is 0, otherwise it
@@ -92,4 +68,16 @@ func validatePageSize(ps int32) (int32, error) {
 	}
 
 	return ps, nil
+}
+
+func (mr *MemoryRepo) CreateProject(ctx context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
+	mr.mu.Lock()
+	defer mr.mu.Unlock()
+	_ = ctx
+	_ = req
+
+	_ = maxBatchSize
+	_, _ = validatePageSize(1)
+	//TODO implement me
+	panic("implement me")
 }

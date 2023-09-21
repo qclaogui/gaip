@@ -15,6 +15,7 @@ import (
 	"github.com/qclaogui/golang-api-server/pkg/protocol/rest"
 	"github.com/qclaogui/golang-api-server/pkg/service/bookstore"
 	"github.com/qclaogui/golang-api-server/pkg/service/library"
+	"github.com/qclaogui/golang-api-server/pkg/service/project"
 	"github.com/qclaogui/golang-api-server/pkg/service/routeguide"
 	"github.com/qclaogui/golang-api-server/pkg/service/todo"
 	"github.com/qclaogui/golang-api-server/pkg/vault"
@@ -34,7 +35,9 @@ type Application struct {
 
 	bookstore *bookstore.Server
 	library   *library.Server
-	Vault     *vault.Vault
+	project   *project.Server
+
+	Vault *vault.Vault
 }
 
 // initVault init Vault
@@ -71,13 +74,23 @@ func (app *Application) initBookstore() (*bookstore.Server, error) {
 }
 
 func (app *Application) initLibrary() (*library.Server, error) {
-	srv, err := library.NewServiceServer(app.Cfg.Library)
+	srv, err := library.NewServer(app.Cfg.Library)
 	if err != nil {
 		return nil, err
 	}
 
 	app.library = srv
 
+	return srv, nil
+}
+
+func (app *Application) initProject() (*project.Server, error) {
+	srv, err := project.NewServer(app.Cfg.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	app.project = srv
 	return srv, nil
 }
 
@@ -130,11 +143,24 @@ func (app *Application) Bootstrap() error {
 		return err
 	}
 
+	projectSrv, err := app.initProject()
+	if err != nil {
+		return err
+	}
+
 	// Start the REST server in goroutine
 	go func() {
 		err = rest.RunRESTServer(ctx, app.Cfg.Server)
 		lg.CheckFatal("running REST server", err)
 	}()
 
-	return grpc.RunGRPCServer(ctx, app.Cfg.Server, toDoSrv, routeGuideSrv, bookstoreSrv, librarySrv)
+	return grpc.RunGRPCServer(
+		ctx,
+		app.Cfg.Server,
+		toDoSrv,
+		routeGuideSrv,
+		bookstoreSrv,
+		librarySrv,
+		projectSrv,
+	)
 }
