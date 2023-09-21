@@ -7,11 +7,16 @@ package repository
 import (
 	"context"
 	"flag"
+	"log"
+	"sort"
+	"strconv"
 	"sync"
 
 	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/golang-api-server/pkg/service/project/name"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 const (
@@ -41,7 +46,6 @@ func (cfg *MemoryConfig) Validate() error {
 //
 // MemoryRepo is used to implement ProjectServiceServer.
 type MemoryRepo struct {
-	projectpb.UnimplementedProjectServiceServer
 	mu sync.Mutex // global mutex to synchronize service access
 
 	projects map[string]*projectpb.Project
@@ -70,14 +74,128 @@ func validatePageSize(ps int32) (int32, error) {
 	return ps, nil
 }
 
-func (mr *MemoryRepo) CreateProject(ctx context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
+// Parses the page token to an int. Returns defaultValue if parsing fails
+func parsePageToken(pageToken string, defaultValue int) int {
+	if pageToken == "" {
+		return defaultValue
+	}
+	parsed, err := strconv.Atoi(pageToken)
+	if err != nil {
+		return defaultValue
+	}
+	return parsed
+}
+
+// nextPageToken returns the next page token (the next item index or empty if not more items are left)
+func nextPageToken(lastPage, total int) string {
+	if lastPage == total {
+		return ""
+	}
+	return strconv.Itoa(lastPage)
+}
+
+func (mr *MemoryRepo) CreateProject(_ context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
+	proj := req.Project
+	if proj == nil {
+		log.Print("Project must not be empty.")
+		return nil, status.Errorf(codes.InvalidArgument, "Project must not be empty")
+	}
+
+	if proj.Name == "" {
+		log.Printf("Project name must not be empty: %v", proj.Name)
+		return nil, status.Errorf(codes.InvalidArgument, "Project name must not be empty")
+	}
+
+	pID, err := name.ParseProject(proj.Name)
+	if err != nil {
+		log.Printf("Invalid project name: %v", proj.Name)
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid project name")
+	}
+
 	mr.mu.Lock()
 	defer mr.mu.Unlock()
-	_ = ctx
-	_ = req
+
+	if _, ok := mr.projects[pID]; ok {
+		return nil, status.Errorf(codes.AlreadyExists, "Project with name %q already exists", pID)
+	}
+
+	mr.projects[pID] = proj
+	return mr.projects[pID], nil
+}
+
+func (mr *MemoryRepo) GetProject(_ context.Context, req *projectpb.GetProjectRequest) (*projectpb.Project, error) {
+	mr.mu.Lock()
+	defer mr.mu.Unlock()
+
+	pID, err := name.ParseProject(req.Name)
+	if err != nil {
+		log.Printf("Invalid project name: %v", req.Name)
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid project name")
+	}
+
+	p, ok := mr.projects[pID]
+	if !ok {
+		return nil, status.Errorf(codes.AlreadyExists, "Project with name %q already exists", pID)
+	}
+
+	return p, nil
+}
+
+// ListProjects returns up to pageSize number of projects beginning at pageToken, or from
+// start if pageToken is the empty string.
+func (mr *MemoryRepo) ListProjects(_ context.Context, req *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
+	mr.mu.Lock()
+	defer mr.mu.Unlock()
 
 	_ = maxBatchSize
-	_, _ = validatePageSize(1)
-	//TODO implement me
-	panic("implement me")
+	size, _ := validatePageSize(req.PageSize)
+
+	projects := make([]*projectpb.Project, len(mr.projects))
+	i := 0
+	for k := range mr.projects {
+		projects[i] = mr.projects[k]
+		i++
+	}
+
+	sort.Slice(projects, func(i, j int) bool {
+		return projects[i].Name < projects[j].Name
+	})
+
+	startPos := parsePageToken(req.PageToken, 0)
+
+	endPos := minx(startPos+int(size), len(projects))
+
+	resp := projectpb.ListProjectsResponse{
+		Projects:      projects[startPos:endPos],
+		NextPageToken: nextPageToken(endPos, len(projects)),
+	}
+
+	return &resp, nil
+
+}
+
+// Returns the smallest of a and b
+func minx(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func (mr *MemoryRepo) DeleteProject(_ context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
+	mr.mu.Lock()
+	defer mr.mu.Unlock()
+
+	pID, err := name.ParseProject(req.Name)
+	if err != nil {
+		log.Printf("Invalid project name: %v", req.Name)
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid project name")
+	}
+	_, ok := mr.projects[pID]
+	if !ok {
+		return nil, status.Errorf(codes.AlreadyExists, "Project with name %q already exists", pID)
+	}
+
+	delete(mr.projects, pID)
+	return &emptypb.Empty{}, nil
 }

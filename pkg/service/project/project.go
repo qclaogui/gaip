@@ -44,30 +44,18 @@ func (srv *Server) RegisterGRPC(s *grpc.Server) {
 	s.RegisterService(&projectpb.ProjectService_ServiceDesc, srv)
 }
 
-func (srv *Server) CreateProject(ctx context.Context, request *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
-	_ = ctx
-	_ = request
-	//TODO implement me
-	panic("implement me")
+func (srv *Server) CreateProject(ctx context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
+	return srv.repo.CreateProject(ctx, req)
 }
 
-func (srv *Server) GetProject(ctx context.Context, request *projectpb.GetProjectRequest) (*projectpb.Project, error) {
-	_ = ctx
-	_ = request
-	//TODO implement me
-	panic("implement me")
+func (srv *Server) GetProject(ctx context.Context, req *projectpb.GetProjectRequest) (*projectpb.Project, error) {
+	return srv.repo.GetProject(ctx, req)
 }
 
-func (srv *Server) ListProjects(ctx context.Context, request *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
-	_ = ctx
-	_ = request
-	//TODO implement me
-	panic("implement me")
+func (srv *Server) ListProjects(ctx context.Context, req *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
+	return srv.repo.ListProjects(ctx, req)
 }
 
-func (srv *Server) DeleteProject(ctx context.Context, request *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
-	_ = ctx
-	_ = request
-	//TODO implement me
-	panic("implement me")
+func (srv *Server) DeleteProject(ctx context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
+	return srv.repo.DeleteProject(ctx, req)
 }
