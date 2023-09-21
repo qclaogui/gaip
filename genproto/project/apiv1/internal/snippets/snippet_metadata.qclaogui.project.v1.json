@@ -12,8 +12,8 @@
   },
   "snippets": [
     {
-      "regionTag": "project_v1_generated_ProjectService_CreateProject_sync",
-      "title": "project CreateProject Sample",
+      "regionTag": "localhost: 9095_v1_generated_ProjectService_CreateProject_sync",
+      "title": "localhost: 9095 CreateProject Sample",
       "description": "CreateProject creates a new project.",
       "file": "Client/CreateProject/main.go",
       "language": "GO",
@@ -58,8 +58,8 @@
       ]
     },
     {
-      "regionTag": "project_v1_generated_ProjectService_DeleteProject_sync",
-      "title": "project DeleteProject Sample",
+      "regionTag": "localhost: 9095_v1_generated_ProjectService_DeleteProject_sync",
+      "title": "localhost: 9095 DeleteProject Sample",
       "description": "DeleteProject deletes the specified project.",
       "file": "Client/DeleteProject/main.go",
       "language": "GO",
@@ -103,8 +103,8 @@
       ]
     },
     {
-      "regionTag": "project_v1_generated_ProjectService_GetProject_sync",
-      "title": "project GetProject Sample",
+      "regionTag": "localhost: 9095_v1_generated_ProjectService_GetProject_sync",
+      "title": "localhost: 9095 GetProject Sample",
       "description": "GetProject gets the specified project.",
       "file": "Client/GetProject/main.go",
       "language": "GO",
@@ -149,8 +149,8 @@
       ]
     },
     {
-      "regionTag": "project_v1_generated_ProjectService_ListProjects_sync",
-      "title": "project ListProjects Sample",
+      "regionTag": "localhost: 9095_v1_generated_ProjectService_ListProjects_sync",
+      "title": "localhost: 9095 ListProjects Sample",
       "description": "ListProjects lists projects.",
       "file": "Client/ListProjects/main.go",
       "language": "GO",

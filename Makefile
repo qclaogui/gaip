@@ -24,7 +24,7 @@ GOARCH           ?= $(shell go env GOARCH)
 GOARM            ?= $(shell go env GOARM)
 CGO_ENABLED      ?= 0
 
-GO_FILES_TO_FMT  ?= $(shell find . -path ./vendor -prune -o -path ./genproto -prune -o -name '*.go' -print)
+GO_FILES_TO_FMT  ?= $(shell find . -path ./vendor -prune -o -name '*.go' -print)
 # Support gsed on OSX (brew install gnu-sed), falling back to sed. On Linux
 # systems gsed won't be installed, so will use sed as expected.
 SED ?= $(shell which gsed 2>/dev/null || which sed)
@@ -252,6 +252,13 @@ go-lint: $(GOLANGCI_LINT) ## examining all of the Go files.
 buf-lint: $(BUF) buf-fmt ## Lint all of the proto files.
 	@echo ">> run buf lint"
 	@cd proto/ && $(BUF) lint
+
+.PHONY: api-linter
+api-linter: $(API_LINTER) buf-fmt ## Lint all of the proto files.
+	@echo ">> run api-linter lint"
+	@cd proto/ && $(API_LINTER) \
+	qclaogui/project/v1/service.proto \
+	--set-exit-status
 
 .PHONY: fix-lint
 fix-lint: $(GOLANGCI_LINT) ## fix lint issue of the Go files

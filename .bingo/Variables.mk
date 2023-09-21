@@ -7,16 +7,22 @@ GO     ?= $(shell which go)
 
 # Below generated variables ensure that every time a tool under each variable is invoked, the correct version
 # will be used; reinstalling only if needed.
-# For example for bingo variable:
+# For example for api-linter variable:
 #
 # In your main Makefile (for non array binaries):
 #
 #include .bingo/Variables.mk # Assuming -dir was set to .bingo .
 #
-#command: $(BINGO)
-#	@echo "Running bingo"
-#	@$(BINGO) <flags/args..>
+#command: $(API_LINTER)
+#	@echo "Running api-linter"
+#	@$(API_LINTER) <flags/args..>
 #
+API_LINTER := $(GOBIN)/api-linter-v1.57.1
+$(API_LINTER): $(BINGO_DIR)/api-linter.mod
+	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
+	@echo "(re)installing $(GOBIN)/api-linter-v1.57.1"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=api-linter.mod -o=$(GOBIN)/api-linter-v1.57.1 "github.com/googleapis/api-linter/cmd/api-linter"
+
 BINGO := $(GOBIN)/bingo-v0.8.1-0.20230820182247-0568407746a2
 $(BINGO): $(BINGO_DIR)/bingo.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.

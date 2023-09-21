@@ -11,7 +11,7 @@ option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv
 message Project {
   option (google.api.resource) = {
     type: "project.qclaogui.com/Project",
-    pattern: "projects/{project_id}"
+    pattern: "projects/{project}"
   };
   string name = 1;
 }
@@ -24,7 +24,7 @@ message CreateProjectRequest {
 
 // Request to get a project.
 message GetProjectRequest {
-  // The name of the project in the form of `projects/{project_id}`.
+  // The name of the project in the form of `projects/{project}`.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference).type = "project.qclaogui.com/Project"
@@ -34,13 +34,13 @@ message GetProjectRequest {
 // Request to list projects.
 message ListProjectsRequest {
   // The filter expression.
-  string filter = 1;
+  string filter = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Number of projects to return in the list.
-  int32 page_size = 2;
+  int32 page_size = 2 [(google.api.field_behavior) = OPTIONAL];
 
   // Token to provide to skip to a particular spot in the list.
-  string page_token = 3;
+  string page_token = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response for listing projects.
@@ -56,7 +56,7 @@ message ListProjectsResponse {
 
 // Request to delete a project.
 message DeleteProjectRequest {
-  // The name of the project in the form of `projects/{project_id}`.
+  // The name of the project in the form of `projects/{project}`.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference).type = "project.qclaogui.com/Project"

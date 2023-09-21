@@ -52,9 +52,9 @@ type CallOptions struct {
 
 func defaultGRPCClientOptions() []option.ClientOption {
 	return []option.ClientOption{
-		internaloption.WithDefaultEndpoint("project.qclaogui.com:443"),
-		internaloption.WithDefaultMTLSEndpoint("project.qclaogui.com:443"),
-		internaloption.WithDefaultAudience("https://project.qclaogui.com/"),
+		internaloption.WithDefaultEndpoint("localhost:9095"),
+		internaloption.WithDefaultMTLSEndpoint("localhost:9095"),
+		internaloption.WithDefaultAudience("https://localhost/"),
 		internaloption.WithDefaultScopes(DefaultAuthScopes()...),
 		internaloption.EnableJwtWithScope(),
 		option.WithGRPCDialOption(grpc.WithDefaultCallOptions(
@@ -354,9 +354,9 @@ func NewRESTClient(ctx context.Context, opts ...option.ClientOption) (*Client, e
 
 func defaultRESTClientOptions() []option.ClientOption {
 	return []option.ClientOption{
-		internaloption.WithDefaultEndpoint("https://project.qclaogui.com"),
-		internaloption.WithDefaultMTLSEndpoint("https://project.qclaogui.com"),
-		internaloption.WithDefaultAudience("https://project.qclaogui.com/"),
+		internaloption.WithDefaultEndpoint("https://localhost:9095"),
+		internaloption.WithDefaultMTLSEndpoint("https://localhost:9095"),
+		internaloption.WithDefaultAudience("https://localhost/"),
 		internaloption.WithDefaultScopes(DefaultAuthScopes()...),
 	}
 }
@@ -610,9 +610,7 @@ func (c *restClient) ListProjects(ctx context.Context, req *projectpb.ListProjec
 		baseUrl.Path += fmt.Sprintf("/v1/projects")
 
 		params := url.Values{}
-		if req.GetFilter() != "" {
-			params.Add("filter", fmt.Sprintf("%v", req.GetFilter()))
-		}
+		params.Add("filter", fmt.Sprintf("%v", req.GetFilter()))
 		if req.GetPageSize() != 0 {
 			params.Add("pageSize", fmt.Sprintf("%v", req.GetPageSize()))
 		}
