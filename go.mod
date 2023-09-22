@@ -26,7 +26,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.17.0
 	google.golang.org/api v0.140.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230911183012-2d3300fd4832
-	google.golang.org/grpc v1.57.0
+	google.golang.org/grpc v1.58.2
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
