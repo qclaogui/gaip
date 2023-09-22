@@ -58,6 +58,189 @@
       ]
     },
     {
+      "regionTag": "localhost: 9095_v1_generated_IdentityService_DeleteUser_sync",
+      "title": "localhost: 9095 DeleteUser Sample",
+      "description": "DeleteUser deletes a user, their profile, and all of their authored messages.",
+      "file": "IdentityClient/DeleteUser/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "DeleteUser",
+        "fullName": "qclaogui.project.v1.IdentityClient.DeleteUser",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.DeleteUserRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "client": {
+          "shortName": "IdentityClient",
+          "fullName": "qclaogui.project.v1.IdentityClient"
+        },
+        "method": {
+          "shortName": "DeleteUser",
+          "fullName": "qclaogui.project.v1.IdentityService.DeleteUser",
+          "service": {
+            "shortName": "IdentityService",
+            "fullName": "qclaogui.project.v1.IdentityService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 51,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "localhost: 9095_v1_generated_IdentityService_GetUser_sync",
+      "title": "localhost: 9095 GetUser Sample",
+      "description": "GetUser retrieves the User with the given uri.",
+      "file": "IdentityClient/GetUser/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "GetUser",
+        "fullName": "qclaogui.project.v1.IdentityClient.GetUser",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.GetUserRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.User",
+        "client": {
+          "shortName": "IdentityClient",
+          "fullName": "qclaogui.project.v1.IdentityClient"
+        },
+        "method": {
+          "shortName": "GetUser",
+          "fullName": "qclaogui.project.v1.IdentityService.GetUser",
+          "service": {
+            "shortName": "IdentityService",
+            "fullName": "qclaogui.project.v1.IdentityService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "localhost: 9095_v1_generated_IdentityService_ListUsers_sync",
+      "title": "localhost: 9095 ListUsers Sample",
+      "description": "ListUsers lists all users.",
+      "file": "IdentityClient/ListUsers/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "ListUsers",
+        "fullName": "qclaogui.project.v1.IdentityClient.ListUsers",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.ListUsersRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "UserIterator",
+        "client": {
+          "shortName": "IdentityClient",
+          "fullName": "qclaogui.project.v1.IdentityClient"
+        },
+        "method": {
+          "shortName": "ListUsers",
+          "fullName": "qclaogui.project.v1.IdentityService.ListUsers",
+          "service": {
+            "shortName": "IdentityService",
+            "fullName": "qclaogui.project.v1.IdentityService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 60,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "localhost: 9095_v1_generated_IdentityService_UpdateUser_sync",
+      "title": "localhost: 9095 UpdateUser Sample",
+      "description": "UpdateUser updates a user.",
+      "file": "IdentityClient/UpdateUser/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "UpdateUser",
+        "fullName": "qclaogui.project.v1.IdentityClient.UpdateUser",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.UpdateUserRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.User",
+        "client": {
+          "shortName": "IdentityClient",
+          "fullName": "qclaogui.project.v1.IdentityClient"
+        },
+        "method": {
+          "shortName": "UpdateUser",
+          "fullName": "qclaogui.project.v1.IdentityService.UpdateUser",
+          "service": {
+            "shortName": "IdentityService",
+            "fullName": "qclaogui.project.v1.IdentityService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_ProjectService_CreateProject_sync",
       "title": "localhost: 9095 CreateProject Sample",
       "description": "CreateProject creates a new project.",

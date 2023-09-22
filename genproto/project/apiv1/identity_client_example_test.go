@@ -21,6 +21,7 @@ import (
 
 	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
 	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	"google.golang.org/api/iterator"
 )
 
 func ExampleNewIdentityClient() {
@@ -80,4 +81,108 @@ func ExampleIdentityClient_CreateUser() {
 	}
 	// TODO: Use resp.
 	_ = resp
+}
+
+func ExampleIdentityClient_GetUser() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewIdentityClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.GetUserRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#GetUserRequest.
+	}
+	resp, err := c.GetUser(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleIdentityClient_ListUsers() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewIdentityClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.ListUsersRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#ListUsersRequest.
+	}
+	it := c.ListUsers(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
+		}
+		// TODO: Use resp.
+		_ = resp
+	}
+}
+
+func ExampleIdentityClient_UpdateUser() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewIdentityClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.UpdateUserRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#UpdateUserRequest.
+	}
+	resp, err := c.UpdateUser(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleIdentityClient_DeleteUser() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewIdentityClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.DeleteUserRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#DeleteUserRequest.
+	}
+	err = c.DeleteUser(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
 }

@@ -65,4 +65,31 @@ service IdentityService {
 
     option (google.api.method_signature) = "user";
   }
+
+  // Retrieves the User with the given uri.
+  rpc GetUser(GetUserRequest) returns (User) {
+    option (google.api.http) = {get: "/v1/{name=users/*}"};
+
+    option (google.api.method_signature) = "name";
+  }
+
+  // Lists all users.
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {get: "/v1/users"};
+  }
+
+  // Updates a user.
+  rpc UpdateUser(UpdateUserRequest) returns (User) {
+    option (google.api.http) = {
+      patch: "/v1/{user.name=users/*}"
+      body: "user"
+    };
+  }
+
+  // Deletes a user, their profile, and all of their authored messages.
+  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/v1/{name=users/*}"};
+
+    option (google.api.method_signature) = "name";
+  }
 }
