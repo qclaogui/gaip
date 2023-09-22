@@ -13,6 +13,8 @@ message Project {
     type: "project.qclaogui.com/Project",
     pattern: "projects/{project}"
   };
+
+  // The resource name of the project.
   string name = 1;
 }
 

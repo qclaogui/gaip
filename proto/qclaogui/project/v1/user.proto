@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package qclaogui.project.v1;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+
+// A user.
+message User {
+  option (google.api.resource) = {
+    type: "project.qclaogui.com/User"
+    pattern: "users/{user}"
+  };
+
+  // The resource name of the user.
+  string name = 1;
+
+  // The display_name of the user.
+  string display_name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The email address of the user.
+  string email = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // The timestamp at which the user was created.
+  google.protobuf.Timestamp create_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The latest timestamp at which the user was updated.
+  google.protobuf.Timestamp update_time = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The age of the user in years.
+  optional int32 age = 6;
+
+  // The height of the user in feet.
+  optional double height_feet = 7;
+
+  // The nickname of the user.
+  //
+  // (-- aip.dev/not-precedent: An empty string is a valid nickname.
+  //     Ordinarily, proto3_optional should not be used on a `string` field. --)
+  optional string nickname = 8;
+
+  // Enables the receiving of notifications. The default is true if unset.
+  //
+  // (-- aip.dev/not-precedent: The default for the feature is true.
+  //     Ordinarily, the default for a `bool` field should be false. --)
+  optional bool enable_notifications = 9;
+}
+
+// The request message for the qclaogui.project.v1.Identity\CreateUser
+// method.
+message CreateUserRequest {
+  // The user to create.
+  User user = 1;
+}

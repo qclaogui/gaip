@@ -12,6 +12,52 @@
   },
   "snippets": [
     {
+      "regionTag": "localhost: 9095_v1_generated_IdentityService_CreateUser_sync",
+      "title": "localhost: 9095 CreateUser Sample",
+      "description": "CreateUser creates a user.",
+      "file": "IdentityClient/CreateUser/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateUser",
+        "fullName": "qclaogui.project.v1.IdentityClient.CreateUser",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.CreateUserRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.User",
+        "client": {
+          "shortName": "IdentityClient",
+          "fullName": "qclaogui.project.v1.IdentityClient"
+        },
+        "method": {
+          "shortName": "CreateUser",
+          "fullName": "qclaogui.project.v1.IdentityService.CreateUser",
+          "service": {
+            "shortName": "IdentityService",
+            "fullName": "qclaogui.project.v1.IdentityService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_ProjectService_CreateProject_sync",
       "title": "localhost: 9095 CreateProject Sample",
       "description": "CreateProject creates a new project.",
