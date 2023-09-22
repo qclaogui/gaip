@@ -33,9 +33,9 @@ type Application struct {
 
 	Server *server.Server
 
-	bookstore *bookstore.Server
-	library   *library.Server
-	project   *project.Server
+	BookstoreServer bookstore.Server
+	LibraryServer   library.Server
+	ProjectServer   project.Server
 
 	Vault *vault.Vault
 }
@@ -61,36 +61,33 @@ func (app *Application) initVault() error {
 	return nil
 }
 
-// initBookstore init bookstore Server
-func (app *Application) initBookstore() (*bookstore.Server, error) {
-	srv, err := bookstore.NewServiceServer(app.Cfg.Bookstore)
+func (app *Application) initBookstore() (bookstore.Server, error) {
+	srv, err := bookstore.NewBookstoreServer(app.Cfg.Bookstore)
 	if err != nil {
 		return nil, err
 	}
 
-	app.bookstore = srv
-
+	app.BookstoreServer = srv
 	return srv, nil
 }
 
-func (app *Application) initLibrary() (*library.Server, error) {
-	srv, err := library.NewServer(app.Cfg.Library)
+func (app *Application) initLibrary() (library.Server, error) {
+	srv, err := library.NewLibraryServer(app.Cfg.Library)
 	if err != nil {
 		return nil, err
 	}
 
-	app.library = srv
-
+	app.LibraryServer = srv
 	return srv, nil
 }
 
-func (app *Application) initProject() (*project.Server, error) {
-	srv, err := project.NewServer(app.Cfg.Project)
+func (app *Application) initProject() (project.Server, error) {
+	srv, err := project.NewProjectServer(app.Cfg.Project)
 	if err != nil {
 		return nil, err
 	}
 
-	app.project = srv
+	app.ProjectServer = srv
 	return srv, nil
 }
 
@@ -133,18 +130,15 @@ func (app *Application) Bootstrap() error {
 		return err
 	}
 
-	bookstoreSrv, err := app.initBookstore()
-	if err != nil {
+	if _, err = app.initBookstore(); err != nil {
 		return err
 	}
 
-	librarySrv, err := app.initLibrary()
-	if err != nil {
+	if _, err = app.initLibrary(); err != nil {
 		return err
 	}
 
-	projectSrv, err := app.initProject()
-	if err != nil {
+	if _, err = app.initProject(); err != nil {
 		return err
 	}
 
@@ -159,8 +153,8 @@ func (app *Application) Bootstrap() error {
 		app.Cfg.Server,
 		toDoSrv,
 		routeGuideSrv,
-		bookstoreSrv,
-		librarySrv,
-		projectSrv,
+		app.BookstoreServer,
+		app.LibraryServer,
+		app.ProjectServer,
 	)
 }

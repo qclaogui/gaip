@@ -41,7 +41,7 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 
 	fs.BoolVar(&c.PrintConfig, "print.config", false, "Print the config and exit.")
 
-	// Register Server Config
+	// Register projectServerImpl Config
 	c.registerServerFlagsWithChangedDefaultValues(fs)
 
 	// Register bookstore Config
@@ -56,9 +56,9 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 // Validate the app config and return an error if the validation doesn't pass
 func (c *Config) Validate(_ log.Logger) error {
 
-	// Validate Bookstore Config
+	// Validate BookstoreServer Config
 	if err := c.Bookstore.Validate(); err != nil {
-		return errors.Wrap(err, "invalid Bookstore config")
+		return errors.Wrap(err, "invalid BookstoreServer config")
 	}
 
 	// Validate Library Config
@@ -66,9 +66,9 @@ func (c *Config) Validate(_ log.Logger) error {
 		return errors.Wrap(err, "invalid Library config")
 	}
 
-	// Validate Project Config
+	// Validate ProjectServer Config
 	if err := c.Project.Validate(); err != nil {
-		return errors.Wrap(err, "invalid Project config")
+		return errors.Wrap(err, "invalid ProjectServer config")
 	}
 
 	// Validate Vault Config
