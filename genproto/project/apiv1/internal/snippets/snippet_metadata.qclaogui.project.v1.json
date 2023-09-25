@@ -12,6 +12,52 @@
   },
   "snippets": [
     {
+      "regionTag": "localhost: 9095_v1_generated_EchoService_Wait_sync",
+      "title": "localhost: 9095 Wait Sample",
+      "description": "Wait this method will wait for the requested amount of time and then return.\nThis method showcases how a client handles a request timeout.",
+      "file": "EchoClient/Wait/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "Wait",
+        "fullName": "qclaogui.project.v1.EchoClient.Wait",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.WaitRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "WaitOperation",
+        "client": {
+          "shortName": "EchoClient",
+          "fullName": "qclaogui.project.v1.EchoClient"
+        },
+        "method": {
+          "shortName": "Wait",
+          "fullName": "qclaogui.project.v1.EchoService.Wait",
+          "service": {
+            "shortName": "EchoService",
+            "fullName": "qclaogui.project.v1.EchoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 58,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_IdentityService_CreateUser_sync",
       "title": "localhost: 9095 CreateUser Sample",
       "description": "CreateUser creates a user.",

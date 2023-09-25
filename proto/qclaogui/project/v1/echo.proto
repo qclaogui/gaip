@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package qclaogui.project.v1;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "google/rpc/status.proto";
+
+option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+
+// The request for Wait method.
+message WaitRequest {
+  oneof end {
+    // The time that this operation will complete.
+    google.protobuf.Timestamp end_time = 1;
+
+    // The duration of this operation.
+    google.protobuf.Duration ttl = 2;
+  }
+
+  oneof response {
+    // The error that will be returned by the server. If this code is specified
+    // to be the OK rpc code, an empty response will be returned.
+    google.rpc.Status error = 3;
+  }
+
+  // The response to be returned on operation completion.
+  WaitResponse success = 4;
+}
+
+// The result of the Wait operation.
+message WaitResponse {
+  // This content of the result.
+  string content = 1;
+}
+
+// The metadata for Wait operation.
+message WaitMetadata {
+  // The time that this operation will complete.
+  google.protobuf.Timestamp end_time = 1;
+}

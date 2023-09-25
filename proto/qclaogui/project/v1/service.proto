@@ -8,7 +8,9 @@ package qclaogui.project.v1;
 
 import "google/api/annotations.proto";
 import "google/api/client.proto";
+import "google/longrunning/operations.proto";
 import "google/protobuf/empty.proto";
+import "qclaogui/project/v1/echo.proto";
 import "qclaogui/project/v1/project.proto";
 import "qclaogui/project/v1/user.proto";
 
@@ -91,5 +93,30 @@ service IdentityService {
     option (google.api.http) = {delete: "/v1/{name=users/*}"};
 
     option (google.api.method_signature) = "name";
+  }
+}
+
+// This service is used showcase the four main types of rpcs - unary, server
+// side streaming, client side streaming, and bidirectional streaming. This
+// service also exposes methods that explicitly implement server delay, and
+// paginated calls. Set the 'showcase-trailer' metadata key on any method
+// to have the values echoed in the response trailers. Set the
+// 'x-goog-request-params' metadata key on any method to have the values
+// echoed in the response headers.
+service EchoService {
+  option (google.api.default_host) = "localhost:9095";
+
+  // This method will wait for the requested amount of time and then return.
+  // This method showcases how a client handles a request timeout.
+  rpc Wait(WaitRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1/echo:wait"
+      body: "*"
+    };
+
+    option (google.longrunning.operation_info) = {
+      response_type: "WaitResponse"
+      metadata_type: "WaitMetadata"
+    };
   }
 }

@@ -3,6 +3,7 @@ module github.com/qclaogui/golang-api-server
 go 1.20
 
 require (
+	cloud.google.com/go/longrunning v0.5.1
 	dagger.io/dagger v0.8.7
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/containerd/containerd v1.7.6
@@ -26,6 +27,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.18.0
 	google.golang.org/api v0.142.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230920204549-e6e6cdab5c13
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20230920204549-e6e6cdab5c13
 	google.golang.org/grpc v1.58.2
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
@@ -33,6 +35,7 @@ require (
 )
 
 require (
+	cloud.google.com/go v0.110.8 // indirect
 	cloud.google.com/go/compute v1.23.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	github.com/99designs/gqlgen v0.17.38 // indirect
@@ -115,7 +118,6 @@ require (
 	golang.org/x/tools v0.13.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto v0.0.0-20230920204549-e6e6cdab5c13 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20230920204549-e6e6cdab5c13 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

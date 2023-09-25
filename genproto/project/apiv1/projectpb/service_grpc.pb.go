@@ -14,6 +14,7 @@ package projectpb
 import (
 	context "context"
 
+	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -472,6 +473,98 @@ var IdentityService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteUser",
 			Handler:    _IdentityService_DeleteUser_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "qclaogui/project/v1/service.proto",
+}
+
+const (
+	EchoService_Wait_FullMethodName = "/qclaogui.project.v1.EchoService/Wait"
+)
+
+// EchoServiceClient is the client API for EchoService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type EchoServiceClient interface {
+	// This method will wait for the requested amount of time and then return.
+	// This method showcases how a client handles a request timeout.
+	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
+}
+
+type echoServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewEchoServiceClient(cc grpc.ClientConnInterface) EchoServiceClient {
+	return &echoServiceClient{cc}
+}
+
+func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
+	out := new(longrunningpb.Operation)
+	err := c.cc.Invoke(ctx, EchoService_Wait_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// EchoServiceServer is the server API for EchoService service.
+// All implementations should embed UnimplementedEchoServiceServer
+// for forward compatibility
+type EchoServiceServer interface {
+	// This method will wait for the requested amount of time and then return.
+	// This method showcases how a client handles a request timeout.
+	Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error)
+}
+
+// UnimplementedEchoServiceServer should be embedded to have forward compatible implementations.
+type UnimplementedEchoServiceServer struct {
+}
+
+func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
+}
+
+// UnsafeEchoServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to EchoServiceServer will
+// result in compilation errors.
+type UnsafeEchoServiceServer interface {
+	mustEmbedUnimplementedEchoServiceServer()
+}
+
+func RegisterEchoServiceServer(s grpc.ServiceRegistrar, srv EchoServiceServer) {
+	s.RegisterService(&EchoService_ServiceDesc, srv)
+}
+
+func _EchoService_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WaitRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EchoServiceServer).Wait(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EchoService_Wait_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EchoServiceServer).Wait(ctx, req.(*WaitRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// EchoService_ServiceDesc is the grpc.ServiceDesc for EchoService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var EchoService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "qclaogui.project.v1.EchoService",
+	HandlerType: (*EchoServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Wait",
+			Handler:    _EchoService_Wait_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
