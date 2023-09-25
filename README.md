@@ -66,3 +66,10 @@ General
   help                                      Display this help. Thanks to https://www.thapaliya.com/en/writings/well-documented-makefiles/
 
 ```
+
+
+[Automatic Migration planning script](https://entgo.io/docs/versioned/programmatically#2-automatic-migration-planning-script)
+
+```shell
+docker run --rm --name atlas-db-dev -d -p 3306:3306 -e MYSQL_DATABASE=dev -e MYSQL_ROOT_PASSWORD=pass mysql:8
+```

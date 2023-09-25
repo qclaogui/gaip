@@ -15,8 +15,9 @@ import (
 )
 
 const (
-	BackendMemory = "memory"
-	BackendMysql  = "mysql"
+	BackendMemory   = "memory"
+	BackendMysql    = "mysql"
+	BackendPostgres = "postgres"
 )
 
 var supportedDatabaseBackends = []string{BackendMemory, BackendMysql}
@@ -30,8 +31,9 @@ type Repository interface {
 type Config struct {
 	Backend string `yaml:"backend"`
 
-	Memory MemoryConfig `yaml:"memory"`
-	//Mysql MysqlConfig `yaml:"mysql"`
+	Memory   MemoryConfig   `yaml:"memory"`
+	Mysql    MysqlConfig    `yaml:"mysql"`
+	Postgres PostgresConfig `yaml:"postgres"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
@@ -52,8 +54,10 @@ func (cfg *Config) Validate() error {
 	switch cfg.Backend {
 	case BackendMemory:
 		return cfg.Memory.Validate()
-		//case BackendMysql:
-		//	return cfg.Mysql.Validate()
+	case BackendMysql:
+		return cfg.Mysql.Validate()
+	case BackendPostgres:
+		return cfg.Postgres.Validate()
 	}
 	return nil
 }
@@ -63,9 +67,11 @@ func NewRepository(cfg Config) (Repository, error) {
 	case "":
 		return nil, errors.Errorf("empty database backend %s", cfg.Backend)
 	case BackendMemory:
-		return NewMemoryRepo()
+		return NewMemoryRepo(cfg.Memory)
 	case BackendMysql:
-		return nil, nil //TODO(qc)
+		return NewMysqlRepo(cfg.Mysql)
+	case BackendPostgres:
+		return NewPostgresRepo(cfg.Postgres)
 	default:
 		return nil, errors.Errorf("unsupported backend for database %s", cfg.Backend)
 	}

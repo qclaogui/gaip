@@ -20,8 +20,8 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// IdentityServer Identity service server
-type IdentityServer interface {
+// IdentityService Identity service server
+type IdentityService interface {
 	service.Backend
 
 	projectpb.IdentityServiceServer
@@ -32,16 +32,16 @@ type userEntry struct {
 	deleted bool
 }
 
-func NewIdentityServer() (IdentityServer, error) {
-	s := &identityServerImpl{
+func NewIdentityService() (IdentityService, error) {
+	s := &identityServiceImpl{
 		token: service.NewTokenGenerator(),
 		keys:  map[string]int{},
 	}
 	return s, nil
 }
 
-// The identityServerImpl type implements a project server.
-type identityServerImpl struct {
+// The identityServiceImpl type implements a project server.
+type identityServiceImpl struct {
 	uid   service.UniqID
 	token service.TokenGenerator
 
@@ -50,12 +50,12 @@ type identityServerImpl struct {
 	users []userEntry
 }
 
-func (s *identityServerImpl) RegisterGRPC(grpcServer *grpc.Server) {
+func (s *identityServiceImpl) RegisterGRPC(grpcServer *grpc.Server) {
 	grpcServer.RegisterService(&projectpb.IdentityService_ServiceDesc, s)
 }
 
 // validate validate
-func (s *identityServerImpl) validate(u *projectpb.User) error {
+func (s *identityServiceImpl) validate(u *projectpb.User) error {
 	// Validate Required Fields.
 	if u.GetDisplayName() == "" {
 		return status.Errorf(codes.InvalidArgument, "The field `display_name` is required.")
@@ -79,7 +79,7 @@ func (s *identityServerImpl) validate(u *projectpb.User) error {
 }
 
 // CreateUser Create User
-func (s *identityServerImpl) CreateUser(_ context.Context, req *projectpb.CreateUserRequest) (*projectpb.User, error) {
+func (s *identityServiceImpl) CreateUser(_ context.Context, req *projectpb.CreateUserRequest) (*projectpb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -111,7 +111,7 @@ func (s *identityServerImpl) CreateUser(_ context.Context, req *projectpb.Create
 }
 
 // GetUser Get User
-func (s *identityServerImpl) GetUser(_ context.Context, req *projectpb.GetUserRequest) (*projectpb.User, error) {
+func (s *identityServiceImpl) GetUser(_ context.Context, req *projectpb.GetUserRequest) (*projectpb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -127,7 +127,7 @@ func (s *identityServerImpl) GetUser(_ context.Context, req *projectpb.GetUserRe
 }
 
 // ListUsers List Users
-func (s *identityServerImpl) ListUsers(_ context.Context, req *projectpb.ListUsersRequest) (*projectpb.ListUsersResponse, error) {
+func (s *identityServiceImpl) ListUsers(_ context.Context, req *projectpb.ListUsersRequest) (*projectpb.ListUsersResponse, error) {
 	start, err := s.token.GetIndex(req.GetPageToken())
 	if err != nil {
 		return nil, err
@@ -155,7 +155,7 @@ func (s *identityServerImpl) ListUsers(_ context.Context, req *projectpb.ListUse
 }
 
 // UpdateUser Update User
-func (s *identityServerImpl) UpdateUser(_ context.Context, req *projectpb.UpdateUserRequest) (*projectpb.User, error) {
+func (s *identityServiceImpl) UpdateUser(_ context.Context, req *projectpb.UpdateUserRequest) (*projectpb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -184,7 +184,7 @@ func (s *identityServerImpl) UpdateUser(_ context.Context, req *projectpb.Update
 }
 
 // DeleteUser Delete User
-func (s *identityServerImpl) DeleteUser(_ context.Context, req *projectpb.DeleteUserRequest) (*emptypb.Empty, error) {
+func (s *identityServiceImpl) DeleteUser(_ context.Context, req *projectpb.DeleteUserRequest) (*emptypb.Empty, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 

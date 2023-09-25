@@ -53,7 +53,7 @@ type MemoryRepo struct {
 }
 
 // NewMemoryRepo is a factory function to generate a new repository
-func NewMemoryRepo() (*MemoryRepo, error) {
+func NewMemoryRepo(_ MemoryConfig) (*MemoryRepo, error) {
 	mr := &MemoryRepo{
 		Shelves: map[int64]*librarypb.Shelf{},
 		Books:   map[int64]map[int64]*librarypb.Book{},

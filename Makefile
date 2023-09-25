@@ -22,7 +22,7 @@ PROTOC :=${GOBIN}/protoc-${PROTOC_VERSION}
 GOOS             ?= $(shell go env GOOS)
 GOARCH           ?= $(shell go env GOARCH)
 GOARM            ?= $(shell go env GOARM)
-CGO_ENABLED      ?= 0
+CGO_ENABLED      ?= 1
 
 GO_FILES_TO_FMT  ?= $(shell find . -path ./vendor -prune -o -name '*.go' -print)
 # Support gsed on OSX (brew install gnu-sed), falling back to sed. On Linux
@@ -91,6 +91,40 @@ install-build-deps: protoc-install ## Install dependencies tools
 	@echo ">> building bingo and setup dependencies tools"
 	@go install github.com/bwplotka/bingo@0568407746a2915ba57f9fa1def47694728b831e
 
+
+##@ Generate the schema under internal/ent/schema/ directory
+.PHONY: ent-new
+ent-new: $(ENT) ## Get a description of graph schema
+	@$(ENT) new --target=internal/ent/schema \
+			Todo
+
+.PHONY: ent-gen
+ent-gen: ## Regenerate schema
+	@go generate ./internal/ent
+
+.PHONY: ent-describe
+ent-describe: $(ENT) ## Get a description of graph schema
+	@$(ENT) describe ./internal/ent/schema
+
+.PHONY: atlas-lint
+atlas-lint: $(ATLAS) ## Verifying and linting migrations
+	@$(ATLAS) migrate lint \
+      --dir "file://migrations" \
+      --dev-url "docker://mysql/8/test" \
+      --latest 1
+
+.PHONY: atlas-diff
+atlas-diff: $(ATLAS) ## Generating Versioned Migration Files
+	@$(ATLAS) migrate diff migration_name \
+      --dir "file://migrations" \
+      --to "ent://internal/ent/schema" \
+      --dev-url "docker://mysql/8/ent"
+
+.PHONY: atlas-apply
+atlas-apply: $(ATLAS) ## Apply generated migration files onto the database
+	@$(ATLAS) migrate apply \
+      --dir="file://migrations" \
+      --url="mysql://root:pass@localhost:3306/example"
 
 ##@ Regenerate gRPC code
 

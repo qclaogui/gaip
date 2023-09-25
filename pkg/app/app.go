@@ -34,8 +34,8 @@ type Application struct {
 	Server *server.Server
 
 	BookstoreServer bookstore.Server
-	LibraryServer   library.Server
-	ProjectServer   project.Server
+	LibraryServer   library.Service
+	ProjectServer   project.Service
 
 	Vault *vault.Vault
 }
@@ -71,8 +71,8 @@ func (app *Application) initBookstore() (bookstore.Server, error) {
 	return srv, nil
 }
 
-func (app *Application) initLibrary() (library.Server, error) {
-	srv, err := library.NewLibraryServer(app.Cfg.Library)
+func (app *Application) initLibrary() (library.Service, error) {
+	srv, err := library.NewLibraryService(app.Cfg.Library)
 	if err != nil {
 		return nil, err
 	}
@@ -81,8 +81,8 @@ func (app *Application) initLibrary() (library.Server, error) {
 	return srv, nil
 }
 
-func (app *Application) initProject() (project.Server, error) {
-	srv, err := project.NewProjectServer(app.Cfg.Project)
+func (app *Application) initProject() (project.Service, error) {
+	srv, err := project.NewProjectService(app.Cfg.Project)
 	if err != nil {
 		return nil, err
 	}

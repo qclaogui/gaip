@@ -14,22 +14,22 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// Server Project server
-type Server interface {
+// Service Project server
+type Service interface {
 	service.Backend
 
 	projectpb.ProjectServiceServer
 }
 
-// The projectServerImpl type implements a project server.
-type projectServerImpl struct {
+// The projectServiceImpl type implements a project server.
+type projectServiceImpl struct {
 	Cfg Config
 
 	repo repository.Repository
 }
 
-func NewProjectServer(cfg Config) (Server, error) {
-	s := &projectServerImpl{Cfg: cfg}
+func NewProjectService(cfg Config) (Service, error) {
+	s := &projectServiceImpl{Cfg: cfg}
 	if err := s.setupRepo(); err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func NewProjectServer(cfg Config) (Server, error) {
 	return s, nil
 }
 
-func (srv *projectServerImpl) setupRepo() error {
+func (srv *projectServiceImpl) setupRepo() error {
 	repo, err := repository.NewRepository(srv.Cfg.RepoCfg)
 	if err != nil {
 		return err
@@ -47,22 +47,22 @@ func (srv *projectServerImpl) setupRepo() error {
 	return nil
 }
 
-func (srv *projectServerImpl) RegisterGRPC(s *grpc.Server) {
+func (srv *projectServiceImpl) RegisterGRPC(s *grpc.Server) {
 	s.RegisterService(&projectpb.ProjectService_ServiceDesc, srv)
 }
 
-func (srv *projectServerImpl) CreateProject(ctx context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
+func (srv *projectServiceImpl) CreateProject(ctx context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
 	return srv.repo.CreateProject(ctx, req)
 }
 
-func (srv *projectServerImpl) GetProject(ctx context.Context, req *projectpb.GetProjectRequest) (*projectpb.Project, error) {
+func (srv *projectServiceImpl) GetProject(ctx context.Context, req *projectpb.GetProjectRequest) (*projectpb.Project, error) {
 	return srv.repo.GetProject(ctx, req)
 }
 
-func (srv *projectServerImpl) ListProjects(ctx context.Context, req *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
+func (srv *projectServiceImpl) ListProjects(ctx context.Context, req *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
 	return srv.repo.ListProjects(ctx, req)
 }
 
-func (srv *projectServerImpl) DeleteProject(ctx context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
+func (srv *projectServiceImpl) DeleteProject(ctx context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
 	return srv.repo.DeleteProject(ctx, req)
 }
