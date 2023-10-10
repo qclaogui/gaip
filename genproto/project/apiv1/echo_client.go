@@ -24,6 +24,8 @@ import (
 	"math"
 	"net/http"
 	"net/url"
+	"regexp"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/longrunning"
@@ -44,6 +46,7 @@ var newEchoClientHook clientHook
 
 // EchoCallOptions contains the retry settings for each method of EchoClient.
 type EchoCallOptions struct {
+	Echo []gax.CallOption
 	Wait []gax.CallOption
 }
 
@@ -61,12 +64,14 @@ func defaultEchoGRPCClientOptions() []option.ClientOption {
 
 func defaultEchoCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
+		Echo: []gax.CallOption{},
 		Wait: []gax.CallOption{},
 	}
 }
 
 func defaultEchoRESTCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
+		Echo: []gax.CallOption{},
 		Wait: []gax.CallOption{},
 	}
 }
@@ -76,6 +81,7 @@ type internalEchoClient interface {
 	Close() error
 	setGoogleClientInfo(...string)
 	Connection() *grpc.ClientConn
+	Echo(context.Context, *projectpb.EchoRequest, ...gax.CallOption) (*projectpb.EchoResponse, error)
 	Wait(context.Context, *projectpb.WaitRequest, ...gax.CallOption) (*WaitOperation, error)
 	WaitOperation(name string) *WaitOperation
 }
@@ -124,6 +130,11 @@ func (c *EchoClient) setGoogleClientInfo(keyval ...string) {
 // return the same resource.
 func (c *EchoClient) Connection() *grpc.ClientConn {
 	return c.internalClient.Connection()
+}
+
+// Echo this method simply echoes the request. This method showcases unary RPCs.
+func (c *EchoClient) Echo(ctx context.Context, req *projectpb.EchoRequest, opts ...gax.CallOption) (*projectpb.EchoResponse, error) {
+	return c.internalClient.Echo(ctx, req, opts...)
 }
 
 // Wait this method will wait for the requested amount of time and then return.
@@ -321,6 +332,54 @@ func (c *echoRESTClient) Close() error {
 func (c *echoRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+func (c *echoGRPCClient) Echo(ctx context.Context, req *projectpb.EchoRequest, opts ...gax.CallOption) (*projectpb.EchoResponse, error) {
+	routingHeaders := ""
+	routingHeadersMap := make(map[string]string)
+	if reg := regexp.MustCompile("(.*)"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["header"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<routing_id>.*)"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["routing_id"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<table_name>regions/[^/]+/zones/[^/]+(?:/.*)?)"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["table_name"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<super_id>projects/[^/]+)(?:/.*)?"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["super_id"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<table_name>projects/[^/]+/instances/[^/]+(?:/.*)?)"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["table_name"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("projects/[^/]+/(?P<instance_id>instances/[^/]+)(?:/.*)?"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["instance_id"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<baz>.*)"); reg.MatchString(req.GetOtherHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetOtherHeader())[1])) > 0 {
+		routingHeadersMap["baz"] = url.QueryEscape(reg.FindStringSubmatch(req.GetOtherHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<qux>projects/[^/]+)(?:/.*)?"); reg.MatchString(req.GetOtherHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetOtherHeader())[1])) > 0 {
+		routingHeadersMap["qux"] = url.QueryEscape(reg.FindStringSubmatch(req.GetOtherHeader())[1])
+	}
+	for headerName, headerValue := range routingHeadersMap {
+		routingHeaders = fmt.Sprintf("%s%s=%s&", routingHeaders, headerName, headerValue)
+	}
+	routingHeaders = strings.TrimSuffix(routingHeaders, "&")
+	hds := []string{"x-goog-request-params", routingHeaders}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).Echo[0:len((*c.CallOptions).Echo):len((*c.CallOptions).Echo)], opts...)
+	var resp *projectpb.EchoResponse
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.echoClient.Echo(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (c *echoGRPCClient) Wait(ctx context.Context, req *projectpb.WaitRequest, opts ...gax.CallOption) (*WaitOperation, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).Wait[0:len((*c.CallOptions).Wait):len((*c.CallOptions).Wait)], opts...)
@@ -336,6 +395,97 @@ func (c *echoGRPCClient) Wait(ctx context.Context, req *projectpb.WaitRequest, o
 	return &WaitOperation{
 		lro: longrunning.InternalNewOperation(*c.LROClient, resp),
 	}, nil
+}
+
+// Echo this method simply echoes the request. This method showcases unary RPCs.
+func (c *echoRESTClient) Echo(ctx context.Context, req *projectpb.EchoRequest, opts ...gax.CallOption) (*projectpb.EchoResponse, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("v1/echo:echo")
+
+	// Build HTTP headers from client and context metadata.
+	routingHeaders := ""
+	routingHeadersMap := make(map[string]string)
+	if reg := regexp.MustCompile("(.*)"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["header"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<routing_id>.*)"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["routing_id"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<table_name>regions/[^/]+/zones/[^/]+(?:/.*)?)"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["table_name"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<super_id>projects/[^/]+)(?:/.*)?"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["super_id"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<table_name>projects/[^/]+/instances/[^/]+(?:/.*)?)"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["table_name"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("projects/[^/]+/(?P<instance_id>instances/[^/]+)(?:/.*)?"); reg.MatchString(req.GetHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])) > 0 {
+		routingHeadersMap["instance_id"] = url.QueryEscape(reg.FindStringSubmatch(req.GetHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<baz>.*)"); reg.MatchString(req.GetOtherHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetOtherHeader())[1])) > 0 {
+		routingHeadersMap["baz"] = url.QueryEscape(reg.FindStringSubmatch(req.GetOtherHeader())[1])
+	}
+	if reg := regexp.MustCompile("(?P<qux>projects/[^/]+)(?:/.*)?"); reg.MatchString(req.GetOtherHeader()) && len(url.QueryEscape(reg.FindStringSubmatch(req.GetOtherHeader())[1])) > 0 {
+		routingHeadersMap["qux"] = url.QueryEscape(reg.FindStringSubmatch(req.GetOtherHeader())[1])
+	}
+	for headerName, headerValue := range routingHeadersMap {
+		routingHeaders = fmt.Sprintf("%s%s=%s&", routingHeaders, headerName, headerValue)
+	}
+	routingHeaders = strings.TrimSuffix(routingHeaders, "&")
+	hds := []string{"x-goog-request-params", routingHeaders}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).Echo[0:len((*c.CallOptions).Echo):len((*c.CallOptions).Echo)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &projectpb.EchoResponse{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
 }
 
 // Wait this method will wait for the requested amount of time and then return.

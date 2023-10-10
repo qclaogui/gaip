@@ -12,6 +12,52 @@
   },
   "snippets": [
     {
+      "regionTag": "localhost: 9095_v1_generated_EchoService_Echo_sync",
+      "title": "localhost: 9095 Echo Sample",
+      "description": "Echo this method simply echoes the request. This method showcases unary RPCs.",
+      "file": "EchoClient/Echo/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "Echo",
+        "fullName": "qclaogui.project.v1.EchoClient.Echo",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.EchoRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.EchoResponse",
+        "client": {
+          "shortName": "EchoClient",
+          "fullName": "qclaogui.project.v1.EchoClient"
+        },
+        "method": {
+          "shortName": "Echo",
+          "fullName": "qclaogui.project.v1.EchoService.Echo",
+          "service": {
+            "shortName": "EchoService",
+            "fullName": "qclaogui.project.v1.EchoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_EchoService_Wait_sync",
       "title": "localhost: 9095 Wait Sample",
       "description": "Wait this method will wait for the requested amount of time and then return.\nThis method showcases how a client handles a request timeout.",

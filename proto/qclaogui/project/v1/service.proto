@@ -8,6 +8,7 @@ package qclaogui.project.v1;
 
 import "google/api/annotations.proto";
 import "google/api/client.proto";
+import "google/api/routing.proto";
 import "google/longrunning/operations.proto";
 import "google/protobuf/empty.proto";
 import "qclaogui/project/v1/echo.proto";
@@ -105,6 +106,49 @@ service IdentityService {
 // echoed in the response headers.
 service EchoService {
   option (google.api.default_host) = "localhost:9095";
+
+  // This method simply echoes the request. This method showcases unary RPCs.
+  rpc Echo(EchoRequest) returns (EchoResponse) {
+    option (google.api.http) = {
+      post: "v1/echo:echo"
+      body: "*"
+    };
+
+    option (google.api.routing) = {
+      routing_parameters {field: "header"}
+
+      routing_parameters {
+        field: "header"
+        path_template: "{routing_id=**}"
+      }
+
+      routing_parameters {
+        field: "header"
+        path_template: "{table_name=regions/*/zones/*/**}"
+      }
+      routing_parameters {
+        field: "header"
+        path_template: "{super_id=projects/*}/**"
+      }
+      routing_parameters {
+        field: "header"
+        path_template: "{table_name=projects/*/instances/*/**}"
+      }
+      routing_parameters {
+        field: "header"
+        path_template: "projects/*/{instance_id=instances/*}/**"
+      }
+
+      routing_parameters {
+        field: "other_header"
+        path_template: "{baz=**}"
+      }
+      routing_parameters {
+        field: "other_header"
+        path_template: "{qux=projects/*}/**"
+      }
+    };
+  }
 
   // This method will wait for the requested amount of time and then return.
   // This method showcases how a client handles a request timeout.

@@ -8,6 +8,47 @@ import "google/rpc/status.proto";
 
 option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
 
+// a severity enum used to test enum capabilities in gapic surfaces.
+enum Severity {
+  SEVERITY_UNSPECIFIED = 0;
+  SEVERITY_UNNECESSARY = 1;
+  SEVERITY_NECESSARY = 2;
+  SEVERITY_URGENT = 3;
+  SEVERITY_CRITICAL = 4;
+}
+
+// The request message used for the Echo, Collect and Chat methods.
+// If content or opt are set in this message then the request will succeed.
+// If status is set in this message then the status will be returned as an
+// error.
+message EchoRequest {
+  oneof response {
+    // The content to be echoed by the server.
+    string content = 1;
+
+    // The error to be thrown by the server.
+    google.rpc.Status error = 2;
+  }
+
+  // The severity to be echoed by the server.
+  Severity severity = 3;
+
+  // Optional. This field can be set to test the routing annotation on the Echo method.
+  string header = 4;
+
+  // Optional. This field can be set to test the routing annotation on the Echo method.
+  string other_header = 5;
+}
+
+// The response message for the Echo methods.
+message EchoResponse {
+  // The content specified in the request.
+  string content = 1;
+
+  // The severity specified in the request.
+  Severity severity = 2;
+}
+
 // The request for Wait method.
 message WaitRequest {
   oneof end {

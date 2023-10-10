@@ -480,6 +480,7 @@ var IdentityService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
+	EchoService_Echo_FullMethodName = "/qclaogui.project.v1.EchoService/Echo"
 	EchoService_Wait_FullMethodName = "/qclaogui.project.v1.EchoService/Wait"
 )
 
@@ -487,6 +488,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type EchoServiceClient interface {
+	// This method simply echoes the request. This method showcases unary RPCs.
+	Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
@@ -498,6 +501,15 @@ type echoServiceClient struct {
 
 func NewEchoServiceClient(cc grpc.ClientConnInterface) EchoServiceClient {
 	return &echoServiceClient{cc}
+}
+
+func (c *echoServiceClient) Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error) {
+	out := new(EchoResponse)
+	err := c.cc.Invoke(ctx, EchoService_Echo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
@@ -513,6 +525,8 @@ func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...g
 // All implementations should embed UnimplementedEchoServiceServer
 // for forward compatibility
 type EchoServiceServer interface {
+	// This method simply echoes the request. This method showcases unary RPCs.
+	Echo(context.Context, *EchoRequest) (*EchoResponse, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error)
@@ -522,6 +536,9 @@ type EchoServiceServer interface {
 type UnimplementedEchoServiceServer struct {
 }
 
+func (UnimplementedEchoServiceServer) Echo(context.Context, *EchoRequest) (*EchoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Echo not implemented")
+}
 func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
 }
@@ -535,6 +552,24 @@ type UnsafeEchoServiceServer interface {
 
 func RegisterEchoServiceServer(s grpc.ServiceRegistrar, srv EchoServiceServer) {
 	s.RegisterService(&EchoService_ServiceDesc, srv)
+}
+
+func _EchoService_Echo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EchoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EchoServiceServer).Echo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EchoService_Echo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EchoServiceServer).Echo(ctx, req.(*EchoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _EchoService_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -562,6 +597,10 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "qclaogui.project.v1.EchoService",
 	HandlerType: (*EchoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Echo",
+			Handler:    _EchoService_Echo_Handler,
+		},
 		{
 			MethodName: "Wait",
 			Handler:    _EchoService_Wait_Handler,

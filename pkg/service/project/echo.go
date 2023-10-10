@@ -14,6 +14,8 @@ import (
 	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/golang-api-server/pkg/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -38,6 +40,46 @@ func NewEchoService() (EchoService, error) {
 
 func (s *echoServiceImpl) RegisterGRPC(grpcServer *grpc.Server) {
 	grpcServer.RegisterService(&projectpb.EchoService_ServiceDesc, s)
+}
+
+func (s *echoServiceImpl) Echo(ctx context.Context, req *projectpb.EchoRequest) (*projectpb.EchoResponse, error) {
+	err := status.ErrorProto(req.GetError())
+	if err != nil {
+		return nil, err
+	}
+
+	echoHeaders(ctx)
+	echoTrailers(ctx)
+
+	return &projectpb.EchoResponse{Content: req.GetContent(), Severity: req.GetSeverity()}, nil
+}
+
+// echo any provided headers in the metadata
+func echoHeaders(ctx context.Context) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return
+	}
+
+	values := md.Get("x-goog-request-params")
+	for _, value := range values {
+		header := metadata.Pairs("x-goog-request-params", value)
+		_ = grpc.SetHeader(ctx, header)
+	}
+}
+
+// echo any provided trailing metadata
+func echoTrailers(ctx context.Context) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return
+	}
+
+	values := md.Get("showcase-trailer")
+	for _, value := range values {
+		trailer := metadata.Pairs("showcase-trailer", value)
+		_ = grpc.SetTrailer(ctx, trailer)
+	}
 }
 
 func (s *echoServiceImpl) Wait(_ context.Context, req *projectpb.WaitRequest) (*longrunningpb.Operation, error) {
