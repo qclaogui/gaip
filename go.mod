@@ -1,6 +1,6 @@
 module github.com/qclaogui/golang-api-server
 
-go 1.20
+go 1.21
 
 require (
 	cloud.google.com/go/longrunning v0.5.1

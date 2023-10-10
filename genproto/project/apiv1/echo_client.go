@@ -34,6 +34,7 @@ import (
 	gax "github.com/googleapis/gax-go/v2"
 	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
 	"google.golang.org/api/googleapi"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
 	gtransport "google.golang.org/api/transport/grpc"
@@ -41,17 +42,19 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 var newEchoClientHook clientHook
 
 // EchoCallOptions contains the retry settings for each method of EchoClient.
 type EchoCallOptions struct {
-	Echo    []gax.CallOption
-	Expand  []gax.CallOption
-	Collect []gax.CallOption
-	Chat    []gax.CallOption
-	Wait    []gax.CallOption
+	Echo        []gax.CallOption
+	Expand      []gax.CallOption
+	Collect     []gax.CallOption
+	Chat        []gax.CallOption
+	PagedExpand []gax.CallOption
+	Wait        []gax.CallOption
 }
 
 func defaultEchoGRPCClientOptions() []option.ClientOption {
@@ -68,21 +71,23 @@ func defaultEchoGRPCClientOptions() []option.ClientOption {
 
 func defaultEchoCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
-		Echo:    []gax.CallOption{},
-		Expand:  []gax.CallOption{},
-		Collect: []gax.CallOption{},
-		Chat:    []gax.CallOption{},
-		Wait:    []gax.CallOption{},
+		Echo:        []gax.CallOption{},
+		Expand:      []gax.CallOption{},
+		Collect:     []gax.CallOption{},
+		Chat:        []gax.CallOption{},
+		PagedExpand: []gax.CallOption{},
+		Wait:        []gax.CallOption{},
 	}
 }
 
 func defaultEchoRESTCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
-		Echo:    []gax.CallOption{},
-		Expand:  []gax.CallOption{},
-		Collect: []gax.CallOption{},
-		Chat:    []gax.CallOption{},
-		Wait:    []gax.CallOption{},
+		Echo:        []gax.CallOption{},
+		Expand:      []gax.CallOption{},
+		Collect:     []gax.CallOption{},
+		Chat:        []gax.CallOption{},
+		PagedExpand: []gax.CallOption{},
+		Wait:        []gax.CallOption{},
 	}
 }
 
@@ -95,6 +100,7 @@ type internalEchoClient interface {
 	Expand(context.Context, *projectpb.ExpandRequest, ...gax.CallOption) (projectpb.EchoService_ExpandClient, error)
 	Collect(context.Context, ...gax.CallOption) (projectpb.EchoService_CollectClient, error)
 	Chat(context.Context, ...gax.CallOption) (projectpb.EchoService_ChatClient, error)
+	PagedExpand(context.Context, *projectpb.PagedExpandRequest, ...gax.CallOption) *EchoResponseIterator
 	Wait(context.Context, *projectpb.WaitRequest, ...gax.CallOption) (*WaitOperation, error)
 	WaitOperation(name string) *WaitOperation
 }
@@ -172,6 +178,12 @@ func (c *EchoClient) Collect(ctx context.Context, opts ...gax.CallOption) (proje
 // This method is not supported for the REST transport.
 func (c *EchoClient) Chat(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_ChatClient, error) {
 	return c.internalClient.Chat(ctx, opts...)
+}
+
+// PagedExpand this is similar to the Expand method but instead of returning a stream of
+// expanded words, this method returns a paged list of expanded words.
+func (c *EchoClient) PagedExpand(ctx context.Context, req *projectpb.PagedExpandRequest, opts ...gax.CallOption) *EchoResponseIterator {
+	return c.internalClient.PagedExpand(ctx, req, opts...)
 }
 
 // Wait this method will wait for the requested amount of time and then return.
@@ -462,6 +474,49 @@ func (c *echoGRPCClient) Chat(ctx context.Context, opts ...gax.CallOption) (proj
 	return resp, nil
 }
 
+func (c *echoGRPCClient) PagedExpand(ctx context.Context, req *projectpb.PagedExpandRequest, opts ...gax.CallOption) *EchoResponseIterator {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).PagedExpand[0:len((*c.CallOptions).PagedExpand):len((*c.CallOptions).PagedExpand)], opts...)
+	it := &EchoResponseIterator{}
+	req = proto.Clone(req).(*projectpb.PagedExpandRequest)
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*projectpb.EchoResponse, string, error) {
+		resp := &projectpb.PagedExpandResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			var err error
+			resp, err = c.echoClient.PagedExpand(ctx, req, settings.GRPC...)
+			return err
+		}, opts...)
+		if err != nil {
+			return nil, "", err
+		}
+
+		it.Response = resp
+		return resp.GetResponses(), resp.GetNextPageToken(), nil
+	}
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
 func (c *echoGRPCClient) Wait(ctx context.Context, req *projectpb.WaitRequest, opts ...gax.CallOption) (*WaitOperation, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).Wait[0:len((*c.CallOptions).Wait):len((*c.CallOptions).Wait)], opts...)
@@ -687,6 +742,91 @@ func (c *echoRESTClient) Chat(ctx context.Context, opts ...gax.CallOption) (proj
 	return nil, fmt.Errorf("Chat not yet supported for REST clients")
 }
 
+// PagedExpand this is similar to the Expand method but instead of returning a stream of
+// expanded words, this method returns a paged list of expanded words.
+func (c *echoRESTClient) PagedExpand(ctx context.Context, req *projectpb.PagedExpandRequest, opts ...gax.CallOption) *EchoResponseIterator {
+	it := &EchoResponseIterator{}
+	req = proto.Clone(req).(*projectpb.PagedExpandRequest)
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*projectpb.EchoResponse, string, error) {
+		resp := &projectpb.PagedExpandResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		jsonReq, err := m.Marshal(req)
+		if err != nil {
+			return nil, "", err
+		}
+
+		baseUrl, err := url.Parse(c.endpoint)
+		if err != nil {
+			return nil, "", err
+		}
+		baseUrl.Path += fmt.Sprintf("/v1/echo:pagedExpand")
+
+		// Build HTTP headers from client and context metadata.
+		hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+		headers := gax.BuildHeaders(ctx, hds...)
+		e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			if settings.Path != "" {
+				baseUrl.Path = settings.Path
+			}
+			httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+			if err != nil {
+				return err
+			}
+			httpReq.Header = headers
+
+			httpRsp, err := c.httpClient.Do(httpReq)
+			if err != nil {
+				return err
+			}
+			defer httpRsp.Body.Close()
+
+			if err = googleapi.CheckResponse(httpRsp); err != nil {
+				return err
+			}
+
+			buf, err := io.ReadAll(httpRsp.Body)
+			if err != nil {
+				return err
+			}
+
+			if err := unm.Unmarshal(buf, resp); err != nil {
+				return err
+			}
+
+			return nil
+		}, opts...)
+		if e != nil {
+			return nil, "", e
+		}
+		it.Response = resp
+		return resp.GetResponses(), resp.GetNextPageToken(), nil
+	}
+
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
 // Wait this method will wait for the requested amount of time and then return.
 // This method showcases how a client handles a request timeout.
 func (c *echoRESTClient) Wait(ctx context.Context, req *projectpb.WaitRequest, opts ...gax.CallOption) (*WaitOperation, error) {
@@ -830,4 +970,51 @@ func (op *WaitOperation) Done() bool {
 // The name is assigned by the server and is unique within the service from which the operation is created.
 func (op *WaitOperation) Name() string {
 	return op.lro.Name()
+}
+
+// EchoResponseIterator manages a stream of *projectpb.EchoResponse.
+type EchoResponseIterator struct {
+	items    []*projectpb.EchoResponse
+	pageInfo *iterator.PageInfo
+	nextFunc func() error
+
+	// Response is the raw response for the current page.
+	// It must be cast to the RPC response type.
+	// Calling Next() or InternalFetch() updates this value.
+	Response interface{}
+
+	// InternalFetch is for use by the Google Cloud Libraries only.
+	// It is not part of the stable interface of this package.
+	//
+	// InternalFetch returns results from a single call to the underlying RPC.
+	// The number of results is no greater than pageSize.
+	// If there are no more results, nextPageToken is empty and err is nil.
+	InternalFetch func(pageSize int, pageToken string) (results []*projectpb.EchoResponse, nextPageToken string, err error)
+}
+
+// PageInfo supports pagination. See the google.golang.org/api/iterator package for details.
+func (it *EchoResponseIterator) PageInfo() *iterator.PageInfo {
+	return it.pageInfo
+}
+
+// Next returns the next result. Its second return value is iterator.Done if there are no more
+// results. Once Next returns Done, all subsequent calls will return Done.
+func (it *EchoResponseIterator) Next() (*projectpb.EchoResponse, error) {
+	var item *projectpb.EchoResponse
+	if err := it.nextFunc(); err != nil {
+		return item, err
+	}
+	item = it.items[0]
+	it.items = it.items[1:]
+	return item, nil
+}
+
+func (it *EchoResponseIterator) bufLen() int {
+	return len(it.items)
+}
+
+func (it *EchoResponseIterator) takeBuf() interface{} {
+	b := it.items
+	it.items = nil
+	return b
 }

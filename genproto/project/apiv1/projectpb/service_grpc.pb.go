@@ -480,11 +480,12 @@ var IdentityService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	EchoService_Echo_FullMethodName    = "/qclaogui.project.v1.EchoService/Echo"
-	EchoService_Expand_FullMethodName  = "/qclaogui.project.v1.EchoService/Expand"
-	EchoService_Collect_FullMethodName = "/qclaogui.project.v1.EchoService/Collect"
-	EchoService_Chat_FullMethodName    = "/qclaogui.project.v1.EchoService/Chat"
-	EchoService_Wait_FullMethodName    = "/qclaogui.project.v1.EchoService/Wait"
+	EchoService_Echo_FullMethodName        = "/qclaogui.project.v1.EchoService/Echo"
+	EchoService_Expand_FullMethodName      = "/qclaogui.project.v1.EchoService/Expand"
+	EchoService_Collect_FullMethodName     = "/qclaogui.project.v1.EchoService/Collect"
+	EchoService_Chat_FullMethodName        = "/qclaogui.project.v1.EchoService/Chat"
+	EchoService_PagedExpand_FullMethodName = "/qclaogui.project.v1.EchoService/PagedExpand"
+	EchoService_Wait_FullMethodName        = "/qclaogui.project.v1.EchoService/Wait"
 )
 
 // EchoServiceClient is the client API for EchoService service.
@@ -504,6 +505,9 @@ type EchoServiceClient interface {
 	// content back on the stream. This method showcases bidirectional
 	// streaming RPCs.
 	Chat(ctx context.Context, opts ...grpc.CallOption) (EchoService_ChatClient, error)
+	// This is similar to the Expand method but instead of returning a stream of
+	// expanded words, this method returns a paged list of expanded words.
+	PagedExpand(ctx context.Context, in *PagedExpandRequest, opts ...grpc.CallOption) (*PagedExpandResponse, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
@@ -623,6 +627,15 @@ func (x *echoServiceChatClient) Recv() (*EchoResponse, error) {
 	return m, nil
 }
 
+func (c *echoServiceClient) PagedExpand(ctx context.Context, in *PagedExpandRequest, opts ...grpc.CallOption) (*PagedExpandResponse, error) {
+	out := new(PagedExpandResponse)
+	err := c.cc.Invoke(ctx, EchoService_PagedExpand_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
 	out := new(longrunningpb.Operation)
 	err := c.cc.Invoke(ctx, EchoService_Wait_FullMethodName, in, out, opts...)
@@ -649,6 +662,9 @@ type EchoServiceServer interface {
 	// content back on the stream. This method showcases bidirectional
 	// streaming RPCs.
 	Chat(EchoService_ChatServer) error
+	// This is similar to the Expand method but instead of returning a stream of
+	// expanded words, this method returns a paged list of expanded words.
+	PagedExpand(context.Context, *PagedExpandRequest) (*PagedExpandResponse, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error)
@@ -669,6 +685,9 @@ func (UnimplementedEchoServiceServer) Collect(EchoService_CollectServer) error {
 }
 func (UnimplementedEchoServiceServer) Chat(EchoService_ChatServer) error {
 	return status.Errorf(codes.Unimplemented, "method Chat not implemented")
+}
+func (UnimplementedEchoServiceServer) PagedExpand(context.Context, *PagedExpandRequest) (*PagedExpandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PagedExpand not implemented")
 }
 func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
@@ -776,6 +795,24 @@ func (x *echoServiceChatServer) Recv() (*EchoRequest, error) {
 	return m, nil
 }
 
+func _EchoService_PagedExpand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PagedExpandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EchoServiceServer).PagedExpand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EchoService_PagedExpand_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EchoServiceServer).PagedExpand(ctx, req.(*PagedExpandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _EchoService_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WaitRequest)
 	if err := dec(in); err != nil {
@@ -804,6 +841,10 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Echo",
 			Handler:    _EchoService_Echo_Handler,
+		},
+		{
+			MethodName: "PagedExpand",
+			Handler:    _EchoService_PagedExpand_Handler,
 		},
 		{
 			MethodName: "Wait",

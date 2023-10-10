@@ -100,6 +100,52 @@
       ]
     },
     {
+      "regionTag": "localhost: 9095_v1_generated_EchoService_PagedExpand_sync",
+      "title": "localhost: 9095 PagedExpand Sample",
+      "description": "PagedExpand this is similar to the Expand method but instead of returning a stream of\nexpanded words, this method returns a paged list of expanded words.",
+      "file": "EchoClient/PagedExpand/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "PagedExpand",
+        "fullName": "qclaogui.project.v1.EchoClient.PagedExpand",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.PagedExpandRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "EchoResponseIterator",
+        "client": {
+          "shortName": "EchoClient",
+          "fullName": "qclaogui.project.v1.EchoClient"
+        },
+        "method": {
+          "shortName": "PagedExpand",
+          "fullName": "qclaogui.project.v1.EchoService.PagedExpand",
+          "service": {
+            "shortName": "EchoService",
+            "fullName": "qclaogui.project.v1.EchoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 60,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_EchoService_Wait_sync",
       "title": "localhost: 9095 Wait Sample",
       "description": "Wait this method will wait for the requested amount of time and then return.\nThis method showcases how a client handles a request timeout.",

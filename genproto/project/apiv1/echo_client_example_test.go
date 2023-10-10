@@ -22,6 +22,7 @@ import (
 
 	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
 	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	"google.golang.org/api/iterator"
 )
 
 func ExampleNewEchoClient() {
@@ -117,6 +118,37 @@ func ExampleEchoClient_Chat() {
 		}
 		if err != nil {
 			// TODO: handle error.
+		}
+		// TODO: Use resp.
+		_ = resp
+	}
+}
+
+func ExampleEchoClient_PagedExpand() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewEchoClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.PagedExpandRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#PagedExpandRequest.
+	}
+	it := c.PagedExpand(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
 		}
 		// TODO: Use resp.
 		_ = resp

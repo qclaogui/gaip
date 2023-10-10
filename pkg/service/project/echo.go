@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strconv"
 	"strings"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/golang-api-server/pkg/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
@@ -163,6 +165,62 @@ func (s *echoServiceImpl) Chat(stream projectpb.EchoService_ChatServer) error {
 		echoStreamingHeaders(stream)
 		_ = stream.Send(&projectpb.EchoResponse{Content: req.GetContent()})
 	}
+}
+
+// PagedExpand This is similar to the Expand method but instead of returning a stream of
+// expanded words, this method returns a paged list of expanded words.
+func (s *echoServiceImpl) PagedExpand(ctx context.Context, req *projectpb.PagedExpandRequest) (*projectpb.PagedExpandResponse, error) {
+	words := strings.Fields(req.GetContent())
+
+	start, end, nextToken, err := processPageTokens(len(words), req.GetPageSize(), req.GetPageToken())
+	if err != nil {
+		return nil, err
+	}
+
+	var responses []*projectpb.EchoResponse
+	for _, word := range words[start:end] {
+		responses = append(responses, &projectpb.EchoResponse{Content: word})
+	}
+
+	echoHeaders(ctx)
+	echoTrailers(ctx)
+
+	return &projectpb.PagedExpandResponse{
+		Responses:     responses,
+		NextPageToken: nextToken,
+	}, nil
+}
+
+func processPageTokens(numElements int, pageSize int32, pageToken string) (start, end int32, nextToken string, err error) {
+	if pageSize < 0 {
+		return 0, 0, "", status.Error(codes.InvalidArgument, "the page size provided must not be negative.")
+	}
+
+	if pageToken != "" {
+		token, err := strconv.Atoi(pageToken)
+		token32 := int32(token)
+
+		if err != nil || token32 < 0 || token32 >= int32(numElements) {
+			return 0, 0, "", status.Errorf(
+				codes.InvalidArgument,
+				"invalid page token: %s. Token must be within the range [0, %d)",
+				pageToken,
+				numElements)
+		}
+		start = token32
+	}
+
+	if pageSize == 0 {
+		pageSize = int32(numElements)
+	}
+
+	end = min(start+pageSize, int32(numElements))
+
+	if end < int32(numElements) {
+		nextToken = strconv.Itoa(int(end))
+	}
+
+	return start, end, nextToken, nil
 }
 
 func echoStreamingHeaders(stream grpc.ServerStream) {

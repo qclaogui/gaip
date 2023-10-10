@@ -176,6 +176,15 @@ service EchoService {
   // streaming RPCs.
   rpc Chat(stream EchoRequest) returns (stream EchoResponse);
 
+  // This is similar to the Expand method but instead of returning a stream of
+  // expanded words, this method returns a paged list of expanded words.
+  rpc PagedExpand(PagedExpandRequest) returns (PagedExpandResponse) {
+    option (google.api.http) = {
+      post: "/v1/echo:pagedExpand"
+      body: "*"
+    };
+  }
+
   // This method will wait for the requested amount of time and then return.
   // This method showcases how a client handles a request timeout.
   rpc Wait(WaitRequest) returns (google.longrunning.Operation) {
