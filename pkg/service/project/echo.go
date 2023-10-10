@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
@@ -42,6 +43,9 @@ func (s *echoServiceImpl) RegisterGRPC(grpcServer *grpc.Server) {
 	grpcServer.RegisterService(&projectpb.EchoService_ServiceDesc, s)
 }
 
+// Echo This method simply echoes the request.
+//
+// This method showcases unary RPCs.
 func (s *echoServiceImpl) Echo(ctx context.Context, req *projectpb.EchoRequest) (*projectpb.EchoResponse, error) {
 	err := status.ErrorProto(req.GetError())
 	if err != nil {
@@ -82,6 +86,61 @@ func echoTrailers(ctx context.Context) {
 	}
 }
 
+// Expand This method splits the given content into words and will pass each word back
+// through the stream.
+//
+// This method showcases server-side streaming RPCs.
+func (s *echoServiceImpl) Expand(req *projectpb.ExpandRequest, stream projectpb.EchoService_ExpandServer) error {
+	for _, word := range strings.Fields(req.GetContent()) {
+		err := stream.Send(&projectpb.EchoResponse{Content: word})
+		if err != nil {
+			return err
+		}
+
+		time.Sleep(req.GetStreamWaitTime().AsDuration())
+	}
+
+	echoStreamingHeaders(stream)
+
+	if req.GetError() != nil {
+		return status.ErrorProto(req.GetError())
+	}
+
+	echoStreamingTrailers(stream)
+	return nil
+}
+
+func echoStreamingHeaders(stream grpc.ServerStream) {
+	md, ok := metadata.FromIncomingContext(stream.Context())
+	if !ok {
+		return
+	}
+
+	values := md.Get("x-goog-request-params")
+	for _, value := range values {
+		header := metadata.Pairs("x-goog-request-params", value)
+		if stream.SetHeader(header) != nil {
+			return
+		}
+	}
+}
+
+func echoStreamingTrailers(stream grpc.ServerStream) {
+	md, ok := metadata.FromIncomingContext(stream.Context())
+	if !ok {
+		return
+	}
+
+	values := md.Get("showcase-trailer")
+	for _, value := range values {
+		trailer := metadata.Pairs("showcase-trailer", value)
+		stream.SetTrailer(trailer)
+	}
+}
+
+// Wait This method will wait for the requested amount of time and then return.
+//
+// This method showcases how a client handles a request timeout.
 func (s *echoServiceImpl) Wait(_ context.Context, req *projectpb.WaitRequest) (*longrunningpb.Operation, error) {
 	endTime := time.Unix(0, 0).UTC()
 	if ttl := req.GetTtl(); ttl != nil {

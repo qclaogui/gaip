@@ -150,6 +150,17 @@ service EchoService {
     };
   }
 
+  // This method splits the given content into words and will pass each word back
+  // through the stream. This method showcases server-side streaming RPCs.
+  rpc Expand(ExpandRequest) returns (stream EchoResponse) {
+    option (google.api.http) = {
+      post: "/v1/echo:expand"
+      body: "*"
+    };
+
+    option (google.api.method_signature) = "content,error";
+  }
+
   // This method will wait for the requested amount of time and then return.
   // This method showcases how a client handles a request timeout.
   rpc Wait(WaitRequest) returns (google.longrunning.Operation) {

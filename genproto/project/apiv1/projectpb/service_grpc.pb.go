@@ -480,8 +480,9 @@ var IdentityService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	EchoService_Echo_FullMethodName = "/qclaogui.project.v1.EchoService/Echo"
-	EchoService_Wait_FullMethodName = "/qclaogui.project.v1.EchoService/Wait"
+	EchoService_Echo_FullMethodName   = "/qclaogui.project.v1.EchoService/Echo"
+	EchoService_Expand_FullMethodName = "/qclaogui.project.v1.EchoService/Expand"
+	EchoService_Wait_FullMethodName   = "/qclaogui.project.v1.EchoService/Wait"
 )
 
 // EchoServiceClient is the client API for EchoService service.
@@ -490,6 +491,9 @@ const (
 type EchoServiceClient interface {
 	// This method simply echoes the request. This method showcases unary RPCs.
 	Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error)
+	// This method splits the given content into words and will pass each word back
+	// through the stream. This method showcases server-side streaming RPCs.
+	Expand(ctx context.Context, in *ExpandRequest, opts ...grpc.CallOption) (EchoService_ExpandClient, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
@@ -512,6 +516,38 @@ func (c *echoServiceClient) Echo(ctx context.Context, in *EchoRequest, opts ...g
 	return out, nil
 }
 
+func (c *echoServiceClient) Expand(ctx context.Context, in *ExpandRequest, opts ...grpc.CallOption) (EchoService_ExpandClient, error) {
+	stream, err := c.cc.NewStream(ctx, &EchoService_ServiceDesc.Streams[0], EchoService_Expand_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &echoServiceExpandClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type EchoService_ExpandClient interface {
+	Recv() (*EchoResponse, error)
+	grpc.ClientStream
+}
+
+type echoServiceExpandClient struct {
+	grpc.ClientStream
+}
+
+func (x *echoServiceExpandClient) Recv() (*EchoResponse, error) {
+	m := new(EchoResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
 	out := new(longrunningpb.Operation)
 	err := c.cc.Invoke(ctx, EchoService_Wait_FullMethodName, in, out, opts...)
@@ -527,6 +563,9 @@ func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...g
 type EchoServiceServer interface {
 	// This method simply echoes the request. This method showcases unary RPCs.
 	Echo(context.Context, *EchoRequest) (*EchoResponse, error)
+	// This method splits the given content into words and will pass each word back
+	// through the stream. This method showcases server-side streaming RPCs.
+	Expand(*ExpandRequest, EchoService_ExpandServer) error
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error)
@@ -538,6 +577,9 @@ type UnimplementedEchoServiceServer struct {
 
 func (UnimplementedEchoServiceServer) Echo(context.Context, *EchoRequest) (*EchoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Echo not implemented")
+}
+func (UnimplementedEchoServiceServer) Expand(*ExpandRequest, EchoService_ExpandServer) error {
+	return status.Errorf(codes.Unimplemented, "method Expand not implemented")
 }
 func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
@@ -570,6 +612,27 @@ func _EchoService_Echo_Handler(srv interface{}, ctx context.Context, dec func(in
 		return srv.(EchoServiceServer).Echo(ctx, req.(*EchoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _EchoService_Expand_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ExpandRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(EchoServiceServer).Expand(m, &echoServiceExpandServer{stream})
+}
+
+type EchoService_ExpandServer interface {
+	Send(*EchoResponse) error
+	grpc.ServerStream
+}
+
+type echoServiceExpandServer struct {
+	grpc.ServerStream
+}
+
+func (x *echoServiceExpandServer) Send(m *EchoResponse) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 func _EchoService_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -606,6 +669,12 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _EchoService_Wait_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Expand",
+			Handler:       _EchoService_Expand_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "qclaogui/project/v1/service.proto",
 }

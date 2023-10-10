@@ -39,6 +39,7 @@ import (
 	gtransport "google.golang.org/api/transport/grpc"
 	httptransport "google.golang.org/api/transport/http"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -46,8 +47,9 @@ var newEchoClientHook clientHook
 
 // EchoCallOptions contains the retry settings for each method of EchoClient.
 type EchoCallOptions struct {
-	Echo []gax.CallOption
-	Wait []gax.CallOption
+	Echo   []gax.CallOption
+	Expand []gax.CallOption
+	Wait   []gax.CallOption
 }
 
 func defaultEchoGRPCClientOptions() []option.ClientOption {
@@ -64,15 +66,17 @@ func defaultEchoGRPCClientOptions() []option.ClientOption {
 
 func defaultEchoCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
-		Echo: []gax.CallOption{},
-		Wait: []gax.CallOption{},
+		Echo:   []gax.CallOption{},
+		Expand: []gax.CallOption{},
+		Wait:   []gax.CallOption{},
 	}
 }
 
 func defaultEchoRESTCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
-		Echo: []gax.CallOption{},
-		Wait: []gax.CallOption{},
+		Echo:   []gax.CallOption{},
+		Expand: []gax.CallOption{},
+		Wait:   []gax.CallOption{},
 	}
 }
 
@@ -82,6 +86,7 @@ type internalEchoClient interface {
 	setGoogleClientInfo(...string)
 	Connection() *grpc.ClientConn
 	Echo(context.Context, *projectpb.EchoRequest, ...gax.CallOption) (*projectpb.EchoResponse, error)
+	Expand(context.Context, *projectpb.ExpandRequest, ...gax.CallOption) (projectpb.EchoService_ExpandClient, error)
 	Wait(context.Context, *projectpb.WaitRequest, ...gax.CallOption) (*WaitOperation, error)
 	WaitOperation(name string) *WaitOperation
 }
@@ -135,6 +140,12 @@ func (c *EchoClient) Connection() *grpc.ClientConn {
 // Echo this method simply echoes the request. This method showcases unary RPCs.
 func (c *EchoClient) Echo(ctx context.Context, req *projectpb.EchoRequest, opts ...gax.CallOption) (*projectpb.EchoResponse, error) {
 	return c.internalClient.Echo(ctx, req, opts...)
+}
+
+// Expand this method splits the given content into words and will pass each word back
+// through the stream. This method showcases server-side streaming RPCs.
+func (c *EchoClient) Expand(ctx context.Context, req *projectpb.ExpandRequest, opts ...gax.CallOption) (projectpb.EchoService_ExpandClient, error) {
+	return c.internalClient.Expand(ctx, req, opts...)
 }
 
 // Wait this method will wait for the requested amount of time and then return.
@@ -380,6 +391,21 @@ func (c *echoGRPCClient) Echo(ctx context.Context, req *projectpb.EchoRequest, o
 	return resp, nil
 }
 
+func (c *echoGRPCClient) Expand(ctx context.Context, req *projectpb.ExpandRequest, opts ...gax.CallOption) (projectpb.EchoService_ExpandClient, error) {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).Expand[0:len((*c.CallOptions).Expand):len((*c.CallOptions).Expand)], opts...)
+	var resp projectpb.EchoService_ExpandClient
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.echoClient.Expand(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (c *echoGRPCClient) Wait(ctx context.Context, req *projectpb.WaitRequest, opts ...gax.CallOption) (*WaitOperation, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).Wait[0:len((*c.CallOptions).Wait):len((*c.CallOptions).Wait)], opts...)
@@ -486,6 +512,105 @@ func (c *echoRESTClient) Echo(ctx context.Context, req *projectpb.EchoRequest, o
 		return nil, e
 	}
 	return resp, nil
+}
+
+// Expand this method splits the given content into words and will pass each word back
+// through the stream. This method showcases server-side streaming RPCs.
+func (c *echoRESTClient) Expand(ctx context.Context, req *projectpb.ExpandRequest, opts ...gax.CallOption) (projectpb.EchoService_ExpandClient, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1/echo:expand")
+
+	// Build HTTP headers from client and context metadata.
+	hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	var streamClient *expandRESTClient
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		streamClient = &expandRESTClient{
+			ctx:    ctx,
+			md:     metadata.MD(httpRsp.Header),
+			stream: gax.NewProtoJSONStreamReader(httpRsp.Body, (&projectpb.EchoResponse{}).ProtoReflect().Type()),
+		}
+		return nil
+	}, opts...)
+
+	return streamClient, e
+}
+
+// expandRESTClient is the stream client used to consume the server stream created by
+// the REST implementation of Expand.
+type expandRESTClient struct {
+	ctx    context.Context
+	md     metadata.MD
+	stream *gax.ProtoJSONStream
+}
+
+func (c *expandRESTClient) Recv() (*projectpb.EchoResponse, error) {
+	if err := c.ctx.Err(); err != nil {
+		defer c.stream.Close()
+		return nil, err
+	}
+	msg, err := c.stream.Recv()
+	if err != nil {
+		defer c.stream.Close()
+		return nil, err
+	}
+	res := msg.(*projectpb.EchoResponse)
+	return res, nil
+}
+
+func (c *expandRESTClient) Header() (metadata.MD, error) {
+	return c.md, nil
+}
+
+func (c *expandRESTClient) Trailer() metadata.MD {
+	return c.md
+}
+
+func (c *expandRESTClient) CloseSend() error {
+	// This is a no-op to fulfill the interface.
+	return fmt.Errorf("this method is not implemented for a server-stream")
+}
+
+func (c *expandRESTClient) Context() context.Context {
+	return c.ctx
+}
+
+func (c *expandRESTClient) SendMsg(m interface{}) error {
+	// This is a no-op to fulfill the interface.
+	return fmt.Errorf("this method is not implemented for a server-stream")
+}
+
+func (c *expandRESTClient) RecvMsg(m interface{}) error {
+	// This is a no-op to fulfill the interface.
+	return fmt.Errorf("this method is not implemented, use Recv")
 }
 
 // Wait this method will wait for the requested amount of time and then return.
