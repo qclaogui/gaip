@@ -12,6 +12,48 @@
   },
   "snippets": [
     {
+      "regionTag": "localhost: 9095_v1_generated_EchoService_Chat_sync",
+      "title": "localhost: 9095 Chat Sample",
+      "description": "Chat this method, upon receiving a request on the stream, will pass the same\ncontent back on the stream. This method showcases bidirectional\nstreaming RPCs.\n\n\nThis method is not supported for the REST transport.",
+      "file": "EchoClient/Chat/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "Chat",
+        "fullName": "qclaogui.project.v1.EchoClient.Chat",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "projectpb.EchoService_ChatClient",
+        "client": {
+          "shortName": "EchoClient",
+          "fullName": "qclaogui.project.v1.EchoClient"
+        },
+        "method": {
+          "shortName": "Chat",
+          "fullName": "qclaogui.project.v1.EchoService.Chat",
+          "service": {
+            "shortName": "EchoService",
+            "fullName": "qclaogui.project.v1.EchoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 69,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_EchoService_Echo_sync",
       "title": "localhost: 9095 Echo Sample",
       "description": "Echo this method simply echoes the request. This method showcases unary RPCs.",

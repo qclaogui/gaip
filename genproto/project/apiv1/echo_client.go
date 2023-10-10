@@ -50,6 +50,7 @@ type EchoCallOptions struct {
 	Echo    []gax.CallOption
 	Expand  []gax.CallOption
 	Collect []gax.CallOption
+	Chat    []gax.CallOption
 	Wait    []gax.CallOption
 }
 
@@ -70,6 +71,7 @@ func defaultEchoCallOptions() *EchoCallOptions {
 		Echo:    []gax.CallOption{},
 		Expand:  []gax.CallOption{},
 		Collect: []gax.CallOption{},
+		Chat:    []gax.CallOption{},
 		Wait:    []gax.CallOption{},
 	}
 }
@@ -79,6 +81,7 @@ func defaultEchoRESTCallOptions() *EchoCallOptions {
 		Echo:    []gax.CallOption{},
 		Expand:  []gax.CallOption{},
 		Collect: []gax.CallOption{},
+		Chat:    []gax.CallOption{},
 		Wait:    []gax.CallOption{},
 	}
 }
@@ -91,6 +94,7 @@ type internalEchoClient interface {
 	Echo(context.Context, *projectpb.EchoRequest, ...gax.CallOption) (*projectpb.EchoResponse, error)
 	Expand(context.Context, *projectpb.ExpandRequest, ...gax.CallOption) (projectpb.EchoService_ExpandClient, error)
 	Collect(context.Context, ...gax.CallOption) (projectpb.EchoService_CollectClient, error)
+	Chat(context.Context, ...gax.CallOption) (projectpb.EchoService_ChatClient, error)
 	Wait(context.Context, *projectpb.WaitRequest, ...gax.CallOption) (*WaitOperation, error)
 	WaitOperation(name string) *WaitOperation
 }
@@ -159,6 +163,15 @@ func (c *EchoClient) Expand(ctx context.Context, req *projectpb.ExpandRequest, o
 // This method is not supported for the REST transport.
 func (c *EchoClient) Collect(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_CollectClient, error) {
 	return c.internalClient.Collect(ctx, opts...)
+}
+
+// Chat this method, upon receiving a request on the stream, will pass the same
+// content back on the stream. This method showcases bidirectional
+// streaming RPCs.
+//
+// This method is not supported for the REST transport.
+func (c *EchoClient) Chat(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_ChatClient, error) {
+	return c.internalClient.Chat(ctx, opts...)
 }
 
 // Wait this method will wait for the requested amount of time and then return.
@@ -434,6 +447,21 @@ func (c *echoGRPCClient) Collect(ctx context.Context, opts ...gax.CallOption) (p
 	return resp, nil
 }
 
+func (c *echoGRPCClient) Chat(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_ChatClient, error) {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	var resp projectpb.EchoService_ChatClient
+	opts = append((*c.CallOptions).Chat[0:len((*c.CallOptions).Chat):len((*c.CallOptions).Chat)], opts...)
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.echoClient.Chat(ctx, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (c *echoGRPCClient) Wait(ctx context.Context, req *projectpb.WaitRequest, opts ...gax.CallOption) (*WaitOperation, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).Wait[0:len((*c.CallOptions).Wait):len((*c.CallOptions).Wait)], opts...)
@@ -648,6 +676,15 @@ func (c *expandRESTClient) RecvMsg(m interface{}) error {
 // This method is not supported for the REST transport.
 func (c *echoRESTClient) Collect(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_CollectClient, error) {
 	return nil, fmt.Errorf("Collect not yet supported for REST clients")
+}
+
+// Chat this method, upon receiving a request on the stream, will pass the same
+// content back on the stream. This method showcases bidirectional
+// streaming RPCs.
+//
+// This method is not supported for the REST transport.
+func (c *echoRESTClient) Chat(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_ChatClient, error) {
+	return nil, fmt.Errorf("Chat not yet supported for REST clients")
 }
 
 // Wait this method will wait for the requested amount of time and then return.

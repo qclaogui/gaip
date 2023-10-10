@@ -171,6 +171,11 @@ service EchoService {
     };
   }
 
+  // This method, upon receiving a request on the stream, will pass the same
+  // content back on the stream. This method showcases bidirectional
+  // streaming RPCs.
+  rpc Chat(stream EchoRequest) returns (stream EchoResponse);
+
   // This method will wait for the requested amount of time and then return.
   // This method showcases how a client handles a request timeout.
   rpc Wait(WaitRequest) returns (google.longrunning.Operation) {

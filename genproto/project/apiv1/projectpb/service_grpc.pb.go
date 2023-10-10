@@ -483,6 +483,7 @@ const (
 	EchoService_Echo_FullMethodName    = "/qclaogui.project.v1.EchoService/Echo"
 	EchoService_Expand_FullMethodName  = "/qclaogui.project.v1.EchoService/Expand"
 	EchoService_Collect_FullMethodName = "/qclaogui.project.v1.EchoService/Collect"
+	EchoService_Chat_FullMethodName    = "/qclaogui.project.v1.EchoService/Chat"
 	EchoService_Wait_FullMethodName    = "/qclaogui.project.v1.EchoService/Wait"
 )
 
@@ -499,6 +500,10 @@ type EchoServiceClient interface {
 	// by the client, this method will return the a concatenation of the strings
 	// passed to it. This method showcases client-side streaming RPCs.
 	Collect(ctx context.Context, opts ...grpc.CallOption) (EchoService_CollectClient, error)
+	// This method, upon receiving a request on the stream, will pass the same
+	// content back on the stream. This method showcases bidirectional
+	// streaming RPCs.
+	Chat(ctx context.Context, opts ...grpc.CallOption) (EchoService_ChatClient, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
@@ -587,6 +592,37 @@ func (x *echoServiceCollectClient) CloseAndRecv() (*EchoResponse, error) {
 	return m, nil
 }
 
+func (c *echoServiceClient) Chat(ctx context.Context, opts ...grpc.CallOption) (EchoService_ChatClient, error) {
+	stream, err := c.cc.NewStream(ctx, &EchoService_ServiceDesc.Streams[2], EchoService_Chat_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &echoServiceChatClient{stream}
+	return x, nil
+}
+
+type EchoService_ChatClient interface {
+	Send(*EchoRequest) error
+	Recv() (*EchoResponse, error)
+	grpc.ClientStream
+}
+
+type echoServiceChatClient struct {
+	grpc.ClientStream
+}
+
+func (x *echoServiceChatClient) Send(m *EchoRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *echoServiceChatClient) Recv() (*EchoResponse, error) {
+	m := new(EchoResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
 	out := new(longrunningpb.Operation)
 	err := c.cc.Invoke(ctx, EchoService_Wait_FullMethodName, in, out, opts...)
@@ -609,6 +645,10 @@ type EchoServiceServer interface {
 	// by the client, this method will return the a concatenation of the strings
 	// passed to it. This method showcases client-side streaming RPCs.
 	Collect(EchoService_CollectServer) error
+	// This method, upon receiving a request on the stream, will pass the same
+	// content back on the stream. This method showcases bidirectional
+	// streaming RPCs.
+	Chat(EchoService_ChatServer) error
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error)
@@ -626,6 +666,9 @@ func (UnimplementedEchoServiceServer) Expand(*ExpandRequest, EchoService_ExpandS
 }
 func (UnimplementedEchoServiceServer) Collect(EchoService_CollectServer) error {
 	return status.Errorf(codes.Unimplemented, "method Collect not implemented")
+}
+func (UnimplementedEchoServiceServer) Chat(EchoService_ChatServer) error {
+	return status.Errorf(codes.Unimplemented, "method Chat not implemented")
 }
 func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
@@ -707,6 +750,32 @@ func (x *echoServiceCollectServer) Recv() (*EchoRequest, error) {
 	return m, nil
 }
 
+func _EchoService_Chat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(EchoServiceServer).Chat(&echoServiceChatServer{stream})
+}
+
+type EchoService_ChatServer interface {
+	Send(*EchoResponse) error
+	Recv() (*EchoRequest, error)
+	grpc.ServerStream
+}
+
+type echoServiceChatServer struct {
+	grpc.ServerStream
+}
+
+func (x *echoServiceChatServer) Send(m *EchoResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *echoServiceChatServer) Recv() (*EchoRequest, error) {
+	m := new(EchoRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func _EchoService_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WaitRequest)
 	if err := dec(in); err != nil {
@@ -750,6 +819,12 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "Collect",
 			Handler:       _EchoService_Collect_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Chat",
+			Handler:       _EchoService_Chat_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

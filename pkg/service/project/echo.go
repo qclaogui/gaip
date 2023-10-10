@@ -141,6 +141,30 @@ func (s *echoServiceImpl) Collect(stream projectpb.EchoService_CollectServer) er
 	}
 }
 
+// Chat This method, upon receiving a request on the stream, will pass the same
+// content back on the stream.
+//
+// This method showcases bidirectional streaming RPCs.
+func (s *echoServiceImpl) Chat(stream projectpb.EchoService_ChatServer) error {
+	for {
+		req, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			echoStreamingTrailers(stream)
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+
+		if err = status.ErrorProto(req.GetError()); err != nil {
+			return err
+		}
+
+		echoStreamingHeaders(stream)
+		_ = stream.Send(&projectpb.EchoResponse{Content: req.GetContent()})
+	}
+}
+
 func echoStreamingHeaders(stream grpc.ServerStream) {
 	md, ok := metadata.FromIncomingContext(stream.Context())
 	if !ok {
