@@ -7,7 +7,9 @@ package project
 import (
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
+	"io"
 	"strings"
 	"time"
 
@@ -108,6 +110,35 @@ func (s *echoServiceImpl) Expand(req *projectpb.ExpandRequest, stream projectpb.
 
 	echoStreamingTrailers(stream)
 	return nil
+}
+
+// Collect This method will collect the words given to it. When the stream is closed
+// by the client, this method will return the a concatenation of the strings
+// passed to it.
+//
+// This method showcases client-side streaming RPCs.
+func (s *echoServiceImpl) Collect(stream projectpb.EchoService_CollectServer) error {
+	var resp []string
+
+	for {
+		req, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			echoStreamingHeaders(stream)
+			echoStreamingTrailers(stream)
+			return stream.SendAndClose(&projectpb.EchoResponse{Content: strings.Join(resp, " ")})
+		}
+		if err != nil {
+			return err
+		}
+
+		if err = status.ErrorProto(req.GetError()); err != nil {
+			return err
+		}
+
+		if req.GetContent() != "" {
+			resp = append(resp, req.GetContent())
+		}
+	}
 }
 
 func echoStreamingHeaders(stream grpc.ServerStream) {

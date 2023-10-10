@@ -47,9 +47,10 @@ var newEchoClientHook clientHook
 
 // EchoCallOptions contains the retry settings for each method of EchoClient.
 type EchoCallOptions struct {
-	Echo   []gax.CallOption
-	Expand []gax.CallOption
-	Wait   []gax.CallOption
+	Echo    []gax.CallOption
+	Expand  []gax.CallOption
+	Collect []gax.CallOption
+	Wait    []gax.CallOption
 }
 
 func defaultEchoGRPCClientOptions() []option.ClientOption {
@@ -66,17 +67,19 @@ func defaultEchoGRPCClientOptions() []option.ClientOption {
 
 func defaultEchoCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
-		Echo:   []gax.CallOption{},
-		Expand: []gax.CallOption{},
-		Wait:   []gax.CallOption{},
+		Echo:    []gax.CallOption{},
+		Expand:  []gax.CallOption{},
+		Collect: []gax.CallOption{},
+		Wait:    []gax.CallOption{},
 	}
 }
 
 func defaultEchoRESTCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
-		Echo:   []gax.CallOption{},
-		Expand: []gax.CallOption{},
-		Wait:   []gax.CallOption{},
+		Echo:    []gax.CallOption{},
+		Expand:  []gax.CallOption{},
+		Collect: []gax.CallOption{},
+		Wait:    []gax.CallOption{},
 	}
 }
 
@@ -87,6 +90,7 @@ type internalEchoClient interface {
 	Connection() *grpc.ClientConn
 	Echo(context.Context, *projectpb.EchoRequest, ...gax.CallOption) (*projectpb.EchoResponse, error)
 	Expand(context.Context, *projectpb.ExpandRequest, ...gax.CallOption) (projectpb.EchoService_ExpandClient, error)
+	Collect(context.Context, ...gax.CallOption) (projectpb.EchoService_CollectClient, error)
 	Wait(context.Context, *projectpb.WaitRequest, ...gax.CallOption) (*WaitOperation, error)
 	WaitOperation(name string) *WaitOperation
 }
@@ -146,6 +150,15 @@ func (c *EchoClient) Echo(ctx context.Context, req *projectpb.EchoRequest, opts 
 // through the stream. This method showcases server-side streaming RPCs.
 func (c *EchoClient) Expand(ctx context.Context, req *projectpb.ExpandRequest, opts ...gax.CallOption) (projectpb.EchoService_ExpandClient, error) {
 	return c.internalClient.Expand(ctx, req, opts...)
+}
+
+// Collect this method will collect the words given to it. When the stream is closed
+// by the client, this method will return the a concatenation of the strings
+// passed to it. This method showcases client-side streaming RPCs.
+//
+// This method is not supported for the REST transport.
+func (c *EchoClient) Collect(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_CollectClient, error) {
+	return c.internalClient.Collect(ctx, opts...)
 }
 
 // Wait this method will wait for the requested amount of time and then return.
@@ -406,6 +419,21 @@ func (c *echoGRPCClient) Expand(ctx context.Context, req *projectpb.ExpandReques
 	return resp, nil
 }
 
+func (c *echoGRPCClient) Collect(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_CollectClient, error) {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	var resp projectpb.EchoService_CollectClient
+	opts = append((*c.CallOptions).Collect[0:len((*c.CallOptions).Collect):len((*c.CallOptions).Collect)], opts...)
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.echoClient.Collect(ctx, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (c *echoGRPCClient) Wait(ctx context.Context, req *projectpb.WaitRequest, opts ...gax.CallOption) (*WaitOperation, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).Wait[0:len((*c.CallOptions).Wait):len((*c.CallOptions).Wait)], opts...)
@@ -611,6 +639,15 @@ func (c *expandRESTClient) SendMsg(m interface{}) error {
 func (c *expandRESTClient) RecvMsg(m interface{}) error {
 	// This is a no-op to fulfill the interface.
 	return fmt.Errorf("this method is not implemented, use Recv")
+}
+
+// Collect this method will collect the words given to it. When the stream is closed
+// by the client, this method will return the a concatenation of the strings
+// passed to it. This method showcases client-side streaming RPCs.
+//
+// This method is not supported for the REST transport.
+func (c *echoRESTClient) Collect(ctx context.Context, opts ...gax.CallOption) (projectpb.EchoService_CollectClient, error) {
+	return nil, fmt.Errorf("Collect not yet supported for REST clients")
 }
 
 // Wait this method will wait for the requested amount of time and then return.

@@ -480,9 +480,10 @@ var IdentityService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	EchoService_Echo_FullMethodName   = "/qclaogui.project.v1.EchoService/Echo"
-	EchoService_Expand_FullMethodName = "/qclaogui.project.v1.EchoService/Expand"
-	EchoService_Wait_FullMethodName   = "/qclaogui.project.v1.EchoService/Wait"
+	EchoService_Echo_FullMethodName    = "/qclaogui.project.v1.EchoService/Echo"
+	EchoService_Expand_FullMethodName  = "/qclaogui.project.v1.EchoService/Expand"
+	EchoService_Collect_FullMethodName = "/qclaogui.project.v1.EchoService/Collect"
+	EchoService_Wait_FullMethodName    = "/qclaogui.project.v1.EchoService/Wait"
 )
 
 // EchoServiceClient is the client API for EchoService service.
@@ -494,6 +495,10 @@ type EchoServiceClient interface {
 	// This method splits the given content into words and will pass each word back
 	// through the stream. This method showcases server-side streaming RPCs.
 	Expand(ctx context.Context, in *ExpandRequest, opts ...grpc.CallOption) (EchoService_ExpandClient, error)
+	// This method will collect the words given to it. When the stream is closed
+	// by the client, this method will return the a concatenation of the strings
+	// passed to it. This method showcases client-side streaming RPCs.
+	Collect(ctx context.Context, opts ...grpc.CallOption) (EchoService_CollectClient, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
@@ -548,6 +553,40 @@ func (x *echoServiceExpandClient) Recv() (*EchoResponse, error) {
 	return m, nil
 }
 
+func (c *echoServiceClient) Collect(ctx context.Context, opts ...grpc.CallOption) (EchoService_CollectClient, error) {
+	stream, err := c.cc.NewStream(ctx, &EchoService_ServiceDesc.Streams[1], EchoService_Collect_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &echoServiceCollectClient{stream}
+	return x, nil
+}
+
+type EchoService_CollectClient interface {
+	Send(*EchoRequest) error
+	CloseAndRecv() (*EchoResponse, error)
+	grpc.ClientStream
+}
+
+type echoServiceCollectClient struct {
+	grpc.ClientStream
+}
+
+func (x *echoServiceCollectClient) Send(m *EchoRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *echoServiceCollectClient) CloseAndRecv() (*EchoResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(EchoResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
 	out := new(longrunningpb.Operation)
 	err := c.cc.Invoke(ctx, EchoService_Wait_FullMethodName, in, out, opts...)
@@ -566,6 +605,10 @@ type EchoServiceServer interface {
 	// This method splits the given content into words and will pass each word back
 	// through the stream. This method showcases server-side streaming RPCs.
 	Expand(*ExpandRequest, EchoService_ExpandServer) error
+	// This method will collect the words given to it. When the stream is closed
+	// by the client, this method will return the a concatenation of the strings
+	// passed to it. This method showcases client-side streaming RPCs.
+	Collect(EchoService_CollectServer) error
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error)
@@ -580,6 +623,9 @@ func (UnimplementedEchoServiceServer) Echo(context.Context, *EchoRequest) (*Echo
 }
 func (UnimplementedEchoServiceServer) Expand(*ExpandRequest, EchoService_ExpandServer) error {
 	return status.Errorf(codes.Unimplemented, "method Expand not implemented")
+}
+func (UnimplementedEchoServiceServer) Collect(EchoService_CollectServer) error {
+	return status.Errorf(codes.Unimplemented, "method Collect not implemented")
 }
 func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
@@ -635,6 +681,32 @@ func (x *echoServiceExpandServer) Send(m *EchoResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _EchoService_Collect_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(EchoServiceServer).Collect(&echoServiceCollectServer{stream})
+}
+
+type EchoService_CollectServer interface {
+	SendAndClose(*EchoResponse) error
+	Recv() (*EchoRequest, error)
+	grpc.ServerStream
+}
+
+type echoServiceCollectServer struct {
+	grpc.ServerStream
+}
+
+func (x *echoServiceCollectServer) SendAndClose(m *EchoResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *echoServiceCollectServer) Recv() (*EchoRequest, error) {
+	m := new(EchoRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func _EchoService_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WaitRequest)
 	if err := dec(in); err != nil {
@@ -674,6 +746,11 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "Expand",
 			Handler:       _EchoService_Expand_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "Collect",
+			Handler:       _EchoService_Collect_Handler,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "qclaogui/project/v1/service.proto",
