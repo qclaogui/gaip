@@ -1,0 +1,51 @@
+// (-- api-linter: core::0191::java-package=disabled
+// (-- api-linter: core::0191::java-multiple-files=disabled
+// (-- api-linter: core::0191::java-outer-classname=disabled
+//     aip.dev/not-precedent: We need to do this because reasons. --)
+syntax = "proto3";
+
+package qclaogui.project.v1;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/protobuf/empty.proto";
+import "qclaogui/project/v1/project.proto";
+
+option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+
+// [Projects] API.
+//
+// Manages `Projects`. Projects contain sets of other entities
+service ProjectService {
+  // This service is meant to only run locally on the port 9095
+  option (google.api.default_host) = "localhost:9095";
+
+  // Creates a new project.
+  rpc CreateProject(CreateProjectRequest) returns (Project) {
+    option (google.api.http) = {
+      post: "/v1/projects"
+      body: "project"
+    };
+
+    option (google.api.method_signature) = "project";
+  }
+
+  // Gets the specified project.
+  rpc GetProject(GetProjectRequest) returns (Project) {
+    option (google.api.http) = {get: "/v1/{name=projects/*}"};
+
+    option (google.api.method_signature) = "name";
+  }
+
+  // Lists projects.
+  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse) {
+    option (google.api.http) = {get: "/v1/projects"};
+  }
+
+  // Deletes the specified project.
+  rpc DeleteProject(DeleteProjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/v1/{name=projects/*}"};
+
+    option (google.api.method_signature) = "name";
+  }
+}

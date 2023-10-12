@@ -291,7 +291,8 @@ buf-lint: $(BUF) buf-fmt ## Lint all of the proto files.
 api-linter: $(API_LINTER) buf-fmt ## Lint all of the proto files.
 	@echo ">> run api-linter lint"
 	@cd proto/ && $(API_LINTER) \
-	qclaogui/project/v1/service.proto \
+	qclaogui/project/v1/echo_service.proto \
+	qclaogui/project/v1/project_service.proto \
 	--set-exit-status
 
 .PHONY: fix-lint

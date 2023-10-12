@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
-	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	pb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/golang-api-server/pkg/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -29,11 +29,11 @@ import (
 type EchoService interface {
 	service.Backend
 
-	projectpb.EchoServiceServer
+	pb.EchoServiceServer
 }
 
 type echoServiceImpl struct {
-	projectpb.UnimplementedEchoServiceServer
+	pb.UnimplementedEchoServiceServer
 
 	nowF func() time.Time
 }
@@ -44,13 +44,13 @@ func NewEchoService() (EchoService, error) {
 }
 
 func (s *echoServiceImpl) RegisterGRPC(grpcServer *grpc.Server) {
-	grpcServer.RegisterService(&projectpb.EchoService_ServiceDesc, s)
+	grpcServer.RegisterService(&pb.EchoService_ServiceDesc, s)
 }
 
 // Echo This method simply echoes the request.
 //
 // This method showcases unary RPCs.
-func (s *echoServiceImpl) Echo(ctx context.Context, req *projectpb.EchoRequest) (*projectpb.EchoResponse, error) {
+func (s *echoServiceImpl) Echo(ctx context.Context, req *pb.EchoRequest) (*pb.EchoResponse, error) {
 	err := status.ErrorProto(req.GetError())
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (s *echoServiceImpl) Echo(ctx context.Context, req *projectpb.EchoRequest) 
 	echoHeaders(ctx)
 	echoTrailers(ctx)
 
-	return &projectpb.EchoResponse{Content: req.GetContent(), Severity: req.GetSeverity()}, nil
+	return &pb.EchoResponse{Content: req.GetContent(), Severity: req.GetSeverity()}, nil
 }
 
 // echo any provided headers in the metadata
@@ -94,9 +94,9 @@ func echoTrailers(ctx context.Context) {
 // through the stream.
 //
 // This method showcases server-side streaming RPCs.
-func (s *echoServiceImpl) Expand(req *projectpb.ExpandRequest, stream projectpb.EchoService_ExpandServer) error {
+func (s *echoServiceImpl) Expand(req *pb.ExpandRequest, stream pb.EchoService_ExpandServer) error {
 	for _, word := range strings.Fields(req.GetContent()) {
-		err := stream.Send(&projectpb.EchoResponse{Content: word})
+		err := stream.Send(&pb.EchoResponse{Content: word})
 		if err != nil {
 			return err
 		}
@@ -119,7 +119,7 @@ func (s *echoServiceImpl) Expand(req *projectpb.ExpandRequest, stream projectpb.
 // passed to it.
 //
 // This method showcases client-side streaming RPCs.
-func (s *echoServiceImpl) Collect(stream projectpb.EchoService_CollectServer) error {
+func (s *echoServiceImpl) Collect(stream pb.EchoService_CollectServer) error {
 	var resp []string
 
 	for {
@@ -127,7 +127,7 @@ func (s *echoServiceImpl) Collect(stream projectpb.EchoService_CollectServer) er
 		if errors.Is(err, io.EOF) {
 			echoStreamingHeaders(stream)
 			echoStreamingTrailers(stream)
-			return stream.SendAndClose(&projectpb.EchoResponse{Content: strings.Join(resp, " ")})
+			return stream.SendAndClose(&pb.EchoResponse{Content: strings.Join(resp, " ")})
 		}
 		if err != nil {
 			return err
@@ -147,7 +147,7 @@ func (s *echoServiceImpl) Collect(stream projectpb.EchoService_CollectServer) er
 // content back on the stream.
 //
 // This method showcases bidirectional streaming RPCs.
-func (s *echoServiceImpl) Chat(stream projectpb.EchoService_ChatServer) error {
+func (s *echoServiceImpl) Chat(stream pb.EchoService_ChatServer) error {
 	for {
 		req, err := stream.Recv()
 		if errors.Is(err, io.EOF) {
@@ -163,13 +163,13 @@ func (s *echoServiceImpl) Chat(stream projectpb.EchoService_ChatServer) error {
 		}
 
 		echoStreamingHeaders(stream)
-		_ = stream.Send(&projectpb.EchoResponse{Content: req.GetContent()})
+		_ = stream.Send(&pb.EchoResponse{Content: req.GetContent()})
 	}
 }
 
 // PagedExpand This is similar to the Expand method but instead of returning a stream of
 // expanded words, this method returns a paged list of expanded words.
-func (s *echoServiceImpl) PagedExpand(ctx context.Context, req *projectpb.PagedExpandRequest) (*projectpb.PagedExpandResponse, error) {
+func (s *echoServiceImpl) PagedExpand(ctx context.Context, req *pb.PagedExpandRequest) (*pb.PagedExpandResponse, error) {
 	words := strings.Fields(req.GetContent())
 
 	start, end, nextToken, err := processPageTokens(len(words), req.GetPageSize(), req.GetPageToken())
@@ -177,15 +177,15 @@ func (s *echoServiceImpl) PagedExpand(ctx context.Context, req *projectpb.PagedE
 		return nil, err
 	}
 
-	var responses []*projectpb.EchoResponse
+	var responses []*pb.EchoResponse
 	for _, word := range words[start:end] {
-		responses = append(responses, &projectpb.EchoResponse{Content: word})
+		responses = append(responses, &pb.EchoResponse{Content: word})
 	}
 
 	echoHeaders(ctx)
 	echoTrailers(ctx)
 
-	return &projectpb.PagedExpandResponse{
+	return &pb.PagedExpandResponse{
 		Responses:     responses,
 		NextPageToken: nextToken,
 	}, nil
@@ -251,10 +251,26 @@ func echoStreamingTrailers(stream grpc.ServerStream) {
 	}
 }
 
+// Block This method will block (wait) for the requested amount of time
+// and then return the response or error.
+//
+// This method showcases how a client handles delays or retries.
+func (s *echoServiceImpl) Block(ctx context.Context, req *pb.BlockRequest) (*pb.BlockResponse, error) {
+	d := req.GetResponseDelay().AsDuration()
+	time.Sleep(d)
+	if req.GetError() != nil {
+		return nil, status.ErrorProto(req.GetError())
+	}
+
+	echoHeaders(ctx)
+	echoTrailers(ctx)
+	return req.GetSuccess(), nil
+}
+
 // Wait This method will wait for the requested amount of time and then return.
 //
 // This method showcases how a client handles a request timeout.
-func (s *echoServiceImpl) Wait(_ context.Context, req *projectpb.WaitRequest) (*longrunningpb.Operation, error) {
+func (s *echoServiceImpl) Wait(_ context.Context, req *pb.WaitRequest) (*longrunningpb.Operation, error) {
 	endTime := time.Unix(0, 0).UTC()
 	if ttl := req.GetTtl(); ttl != nil {
 		endTime = s.nowF().Add(ttl.AsDuration())
@@ -263,7 +279,7 @@ func (s *echoServiceImpl) Wait(_ context.Context, req *projectpb.WaitRequest) (*
 		endTime = end.AsTime()
 	}
 	endTimeProto := timestamppb.New(endTime)
-	req.End = &projectpb.WaitRequest_EndTime{
+	req.End = &pb.WaitRequest_EndTime{
 		EndTime: endTimeProto,
 	}
 
@@ -289,7 +305,7 @@ func (s *echoServiceImpl) Wait(_ context.Context, req *projectpb.WaitRequest) (*
 	}
 
 	if !done {
-		meta, _ := anypb.New(&projectpb.WaitMetadata{EndTime: endTimeProto})
+		meta, _ := anypb.New(&pb.WaitMetadata{EndTime: endTimeProto})
 		answer.Metadata = meta
 	}
 

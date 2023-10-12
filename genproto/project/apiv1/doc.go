@@ -38,7 +38,7 @@
 //	// - It may require correct/in-range values for request initialization.
 //	// - It may require specifying regional endpoints when creating the service client as shown in:
 //	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-//	c, err := project.NewClient(ctx)
+//	c, err := project.NewEchoClient(ctx)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}
@@ -58,17 +58,17 @@
 //	// - It may require correct/in-range values for request initialization.
 //	// - It may require specifying regional endpoints when creating the service client as shown in:
 //	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-//	c, err := project.NewClient(ctx)
+//	c, err := project.NewEchoClient(ctx)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}
 //	defer c.Close()
 //
-//	req := &projectpb.CreateProjectRequest{
+//	req := &projectpb.EchoRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#CreateProjectRequest.
+//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#EchoRequest.
 //	}
-//	resp, err := c.CreateProject(ctx, req)
+//	resp, err := c.Echo(ctx, req)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}
@@ -77,7 +77,7 @@
 //
 // # Use of Context
 //
-// The ctx passed to NewClient is used for authentication requests and
+// The ctx passed to NewEchoClient is used for authentication requests and
 // for creating the underlying connection, but is not used for subsequent calls.
 // Individual methods on the client use the ctx given to them.
 //

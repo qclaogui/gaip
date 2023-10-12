@@ -114,3 +114,23 @@ message WaitMetadata {
   // The time that this operation will complete.
   google.protobuf.Timestamp end_time = 1;
 }
+
+message BlockRequest {
+  // The amount of time to block before returning a response.
+  google.protobuf.Duration response_delay = 1;
+
+  oneof response {
+    // The error that will be returned by the server. If this code is specified
+    // to be the OK rpc code, an empty response will be returned.
+    google.rpc.Status error = 2;
+
+    // The response to be returned that will signify successful method call.
+    BlockResponse success = 3;
+  }
+}
+
+message BlockResponse {
+  // This content can contain anything, the server will not depend on a value
+  // here.
+  string content = 1;
+}

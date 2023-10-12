@@ -55,6 +55,7 @@ type EchoCallOptions struct {
 	Chat        []gax.CallOption
 	PagedExpand []gax.CallOption
 	Wait        []gax.CallOption
+	Block       []gax.CallOption
 }
 
 func defaultEchoGRPCClientOptions() []option.ClientOption {
@@ -77,6 +78,7 @@ func defaultEchoCallOptions() *EchoCallOptions {
 		Chat:        []gax.CallOption{},
 		PagedExpand: []gax.CallOption{},
 		Wait:        []gax.CallOption{},
+		Block:       []gax.CallOption{},
 	}
 }
 
@@ -88,6 +90,7 @@ func defaultEchoRESTCallOptions() *EchoCallOptions {
 		Chat:        []gax.CallOption{},
 		PagedExpand: []gax.CallOption{},
 		Wait:        []gax.CallOption{},
+		Block:       []gax.CallOption{},
 	}
 }
 
@@ -103,6 +106,7 @@ type internalEchoClient interface {
 	PagedExpand(context.Context, *projectpb.PagedExpandRequest, ...gax.CallOption) *EchoResponseIterator
 	Wait(context.Context, *projectpb.WaitRequest, ...gax.CallOption) (*WaitOperation, error)
 	WaitOperation(name string) *WaitOperation
+	Block(context.Context, *projectpb.BlockRequest, ...gax.CallOption) (*projectpb.BlockResponse, error)
 }
 
 // EchoClient is a client for interacting with .
@@ -196,6 +200,13 @@ func (c *EchoClient) Wait(ctx context.Context, req *projectpb.WaitRequest, opts 
 // The name must be that of a previously created WaitOperation, possibly from a different process.
 func (c *EchoClient) WaitOperation(name string) *WaitOperation {
 	return c.internalClient.WaitOperation(name)
+}
+
+// Block this method will block (wait) for the requested amount of time
+// and then return the response or error.
+// This method showcases how a client handles delays or retries.
+func (c *EchoClient) Block(ctx context.Context, req *projectpb.BlockRequest, opts ...gax.CallOption) (*projectpb.BlockResponse, error) {
+	return c.internalClient.Block(ctx, req, opts...)
 }
 
 // echoGRPCClient is a client for interacting with  over gRPC transport.
@@ -532,6 +543,21 @@ func (c *echoGRPCClient) Wait(ctx context.Context, req *projectpb.WaitRequest, o
 	return &WaitOperation{
 		lro: longrunning.InternalNewOperation(*c.LROClient, resp),
 	}, nil
+}
+
+func (c *echoGRPCClient) Block(ctx context.Context, req *projectpb.BlockRequest, opts ...gax.CallOption) (*projectpb.BlockResponse, error) {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).Block[0:len((*c.CallOptions).Block):len((*c.CallOptions).Block)], opts...)
+	var resp *projectpb.BlockResponse
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.echoClient.Block(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 // Echo this method simply echoes the request. This method showcases unary RPCs.
@@ -888,6 +914,66 @@ func (c *echoRESTClient) Wait(ctx context.Context, req *projectpb.WaitRequest, o
 		lro:      longrunning.InternalNewOperation(*c.LROClient, resp),
 		pollPath: override,
 	}, nil
+}
+
+// Block this method will block (wait) for the requested amount of time
+// and then return the response or error.
+// This method showcases how a client handles delays or retries.
+func (c *echoRESTClient) Block(ctx context.Context, req *projectpb.BlockRequest, opts ...gax.CallOption) (*projectpb.BlockResponse, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1/echo:block")
+
+	// Build HTTP headers from client and context metadata.
+	hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).Block[0:len((*c.CallOptions).Block):len((*c.CallOptions).Block)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &projectpb.BlockResponse{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
 }
 
 // WaitOperation manages a long-running operation from Wait.

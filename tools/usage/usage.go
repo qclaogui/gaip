@@ -93,6 +93,7 @@ func Usage(printAll bool, configs ...interface{}) error {
 			b.WriteString("[experimental] ")
 		case fieldcategory.Deprecated:
 			b.WriteString("[deprecated] ")
+		default:
 		}
 
 		b.WriteString(strings.ReplaceAll(fl.Usage, "\n", "\n    \t"))

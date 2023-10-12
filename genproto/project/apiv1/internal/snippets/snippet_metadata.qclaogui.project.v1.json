@@ -12,6 +12,52 @@
   },
   "snippets": [
     {
+      "regionTag": "localhost: 9095_v1_generated_EchoService_Block_sync",
+      "title": "localhost: 9095 Block Sample",
+      "description": "Block this method will block (wait) for the requested amount of time\nand then return the response or error.\nThis method showcases how a client handles delays or retries.",
+      "file": "EchoClient/Block/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "Block",
+        "fullName": "qclaogui.project.v1.EchoClient.Block",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.BlockRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.BlockResponse",
+        "client": {
+          "shortName": "EchoClient",
+          "fullName": "qclaogui.project.v1.EchoClient"
+        },
+        "method": {
+          "shortName": "Block",
+          "fullName": "qclaogui.project.v1.EchoService.Block",
+          "service": {
+            "shortName": "EchoService",
+            "fullName": "qclaogui.project.v1.EchoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_EchoService_Chat_sync",
       "title": "localhost: 9095 Chat Sample",
       "description": "Chat this method, upon receiving a request on the stream, will pass the same\ncontent back on the stream. This method showcases bidirectional\nstreaming RPCs.\n\n\nThis method is not supported for the REST transport.",

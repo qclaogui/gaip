@@ -10,92 +10,9 @@ import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/routing.proto";
 import "google/longrunning/operations.proto";
-import "google/protobuf/empty.proto";
 import "qclaogui/project/v1/echo.proto";
-import "qclaogui/project/v1/project.proto";
-import "qclaogui/project/v1/user.proto";
 
 option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
-
-// [Projects] API.
-//
-// Manages `Projects`. Projects contain sets of other entities
-service ProjectService {
-  // This service is meant to only run locally on the port 9095
-  option (google.api.default_host) = "localhost:9095";
-
-  // Creates a new project.
-  rpc CreateProject(CreateProjectRequest) returns (Project) {
-    option (google.api.http) = {
-      post: "/v1/projects"
-      body: "project"
-    };
-
-    option (google.api.method_signature) = "project";
-  }
-
-  // Gets the specified project.
-  rpc GetProject(GetProjectRequest) returns (Project) {
-    option (google.api.http) = {get: "/v1/{name=projects/*}"};
-
-    option (google.api.method_signature) = "name";
-  }
-
-  // Lists projects.
-  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse) {
-    option (google.api.http) = {get: "/v1/projects"};
-  }
-
-  // Deletes the specified project.
-  rpc DeleteProject(DeleteProjectRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {delete: "/v1/{name=projects/*}"};
-
-    option (google.api.method_signature) = "name";
-  }
-}
-
-// A simple identity service.
-service IdentityService {
-  // This service is meant to only run locally on the port 9095
-  option (google.api.default_host) = "localhost:9095";
-
-  // Creates a user.
-  rpc CreateUser(CreateUserRequest) returns (User) {
-    option (google.api.http) = {
-      post: "v1/users"
-      body: "user"
-    };
-
-    option (google.api.method_signature) = "user";
-  }
-
-  // Retrieves the User with the given uri.
-  rpc GetUser(GetUserRequest) returns (User) {
-    option (google.api.http) = {get: "/v1/{name=users/*}"};
-
-    option (google.api.method_signature) = "name";
-  }
-
-  // Lists all users.
-  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
-    option (google.api.http) = {get: "/v1/users"};
-  }
-
-  // Updates a user.
-  rpc UpdateUser(UpdateUserRequest) returns (User) {
-    option (google.api.http) = {
-      patch: "/v1/{user.name=users/*}"
-      body: "user"
-    };
-  }
-
-  // Deletes a user, their profile, and all of their authored messages.
-  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {delete: "/v1/{name=users/*}"};
-
-    option (google.api.method_signature) = "name";
-  }
-}
 
 // This service is used showcase the four main types of rpcs - unary, server
 // side streaming, client side streaming, and bidirectional streaming. This
@@ -110,7 +27,7 @@ service EchoService {
   // This method simply echoes the request. This method showcases unary RPCs.
   rpc Echo(EchoRequest) returns (EchoResponse) {
     option (google.api.http) = {
-      post: "v1/echo:echo"
+      post: "/v1/echo:echo"
       body: "*"
     };
 
@@ -196,6 +113,16 @@ service EchoService {
     option (google.longrunning.operation_info) = {
       response_type: "WaitResponse"
       metadata_type: "WaitMetadata"
+    };
+  }
+
+  // This method will block (wait) for the requested amount of time
+  // and then return the response or error.
+  // This method showcases how a client handles delays or retries.
+  rpc Block(BlockRequest) returns (BlockResponse) {
+    option (google.api.http) = {
+      post: "/v1/echo:block"
+      body: "*"
     };
   }
 }
