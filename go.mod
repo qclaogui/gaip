@@ -21,7 +21,7 @@ require (
 	github.com/jackc/pgx/v5 v5.4.3
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.27.10
+	github.com/onsi/gomega v1.28.1
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.17.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.45.0
