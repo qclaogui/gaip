@@ -572,7 +572,7 @@ func (c *echoRESTClient) Echo(ctx context.Context, req *projectpb.EchoRequest, o
 	if err != nil {
 		return nil, err
 	}
-	baseUrl.Path += fmt.Sprintf("v1/echo:echo")
+	baseUrl.Path += fmt.Sprintf("/v1/echo:echo")
 
 	// Build HTTP headers from client and context metadata.
 	routingHeaders := ""

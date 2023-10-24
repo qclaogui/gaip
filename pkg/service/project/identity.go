@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/golang-api-server/internal/pagination"
 	"github.com/qclaogui/golang-api-server/pkg/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -128,13 +129,22 @@ func (s *identityServiceImpl) GetUser(_ context.Context, req *projectpb.GetUserR
 
 // ListUsers List Users
 func (s *identityServiceImpl) ListUsers(_ context.Context, req *projectpb.ListUsersRequest) (*projectpb.ListUsersResponse, error) {
+
+	pageToken, err := pagination.ParsePageToken(req)
+	if err != nil {
+		return nil, err
+	}
+
+	startPos := pageToken.Offset
+	//endPos := startPos + int64(req.GetPageSize())
+
 	start, err := s.token.GetIndex(req.GetPageToken())
 	if err != nil {
 		return nil, err
 	}
 	var users []*projectpb.User
 	offset := 0
-	for _, entry := range s.users[start:] {
+	for _, entry := range s.users[startPos:] {
 		offset++
 		if entry.deleted {
 			continue
@@ -241,7 +251,7 @@ func applyFieldMask(src, dst protoreflect.Message, paths []string) {
 		if setOneof == nil && fullUpdate {
 			// Full update with no field set in this oneof of
 			// src means clear all fields for this oneof in dst.
-			fields := oneof.Fields()
+			fields = oneof.Fields()
 			for j := 0; j < fields.Len(); j++ {
 				dst.Clear(fields.Get(j))
 			}
