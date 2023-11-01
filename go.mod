@@ -12,7 +12,7 @@ require (
 	github.com/go-kit/log v0.2.1
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/golang/protobuf v1.5.3
-	github.com/google/uuid v1.3.1
+	github.com/google/uuid v1.4.0
 	github.com/googleapis/gax-go/v2 v2.12.0
 	github.com/grafana/dskit v0.0.0-20231017083947-7b512eb54d47
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
@@ -28,7 +28,7 @@ require (
 	go.opentelemetry.io/otel v1.19.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.19.0
 	go.opentelemetry.io/otel/sdk v1.19.0
-	google.golang.org/api v0.147.0
+	google.golang.org/api v0.149.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231016165738-49dd2c1f3d0b
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b
 	google.golang.org/grpc v1.59.0
@@ -74,7 +74,7 @@ require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20210720184732-4bb14d4b1be1 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.3.1 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/grafana/gomemcache v0.0.0-20230920151301-bbcdec66d3d1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
