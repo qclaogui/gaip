@@ -47,11 +47,11 @@ $(COPYRIGHT): $(BINGO_DIR)/copyright.mod
 	@echo "(re)installing $(GOBIN)/copyright-v0.0.0-20230505153745-6b7392939a60"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=copyright.mod -o=$(GOBIN)/copyright-v0.0.0-20230505153745-6b7392939a60 "github.com/efficientgo/tools/copyright"
 
-ENT := $(GOBIN)/ent-v0.12.4
+ENT := $(GOBIN)/ent-v0.12.5
 $(ENT): $(BINGO_DIR)/ent.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/ent-v0.12.4"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=ent.mod -o=$(GOBIN)/ent-v0.12.4 "entgo.io/ent/cmd/ent"
+	@echo "(re)installing $(GOBIN)/ent-v0.12.5"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=ent.mod -o=$(GOBIN)/ent-v0.12.5 "entgo.io/ent/cmd/ent"
 
 GOIMPORTS := $(GOBIN)/goimports-v0.15.0
 $(GOIMPORTS): $(BINGO_DIR)/goimports.mod

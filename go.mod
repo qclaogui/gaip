@@ -5,7 +5,7 @@ go 1.21
 require (
 	cloud.google.com/go/longrunning v0.5.4
 	dagger.io/dagger v0.9.3
-	entgo.io/ent v0.12.4
+	entgo.io/ent v0.12.5
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/containerd/containerd v1.7.8
 	github.com/dave/jennifer v1.7.0
@@ -14,7 +14,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/google/uuid v1.4.0
 	github.com/googleapis/gax-go/v2 v2.12.0
-	github.com/grafana/dskit v0.0.0-20231113123315-1c838e0f9168
+	github.com/grafana/dskit v0.0.0-20231113165309-40e91edb6190
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.1
 	github.com/hashicorp/vault/api v1.10.0
