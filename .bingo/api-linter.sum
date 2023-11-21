@@ -24,6 +24,8 @@ github.com/googleapis/api-linter v1.58.1 h1:qF40SZT9xMChzIuB7UoTSMnp87DFgb5hQPI4
 github.com/googleapis/api-linter v1.58.1/go.mod h1:uGXcmS7llr+R39T/a9S6OlZb3E8dmyVrJS0r2ZfktGM=
 github.com/googleapis/api-linter v1.59.1 h1:IuZOkEzwHwbEZffE89/cjsNR6qysqDQiwo0Mhr25GD8=
 github.com/googleapis/api-linter v1.59.1/go.mod h1:H8YpL4QdmUnM/0tXef+zZRIGDNWNMHRM+ygQADaxRGc=
+github.com/googleapis/api-linter v1.59.2 h1:dXHrxT6R/R0ctyEazCBUO4SKuAvnA8YE7Ut1lufB/uM=
+github.com/googleapis/api-linter v1.59.2/go.mod h1:H8YpL4QdmUnM/0tXef+zZRIGDNWNMHRM+ygQADaxRGc=
 github.com/jhump/protoreflect v1.15.2 h1:7YppbATX94jEt9KLAc5hICx4h6Yt3SaavhQRsIUEHP0=
 github.com/jhump/protoreflect v1.15.2/go.mod h1:4ORHmSBmlCW8fh3xHmJMGyul1zNqZK4Elxc8qKP+p1k=
 github.com/jhump/protoreflect v1.15.3 h1:6SFRuqU45u9hIZPJAoZ8c28T3nK64BNdp9w6jFonzls=

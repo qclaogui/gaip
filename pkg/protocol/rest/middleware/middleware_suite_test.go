@@ -7,11 +7,11 @@ package middleware_test
 import (
 	"testing"
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	"github.com/onsi/ginkgo"
+	"github.com/onsi/gomega"
 )
 
 func TestMiddlewareSuite(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Middleware REST")
+	gomega.RegisterFailHandler(ginkgo.Fail)
+	ginkgo.RunSpecs(t, "Middleware REST")
 }

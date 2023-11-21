@@ -46,6 +46,11 @@ linters-settings:
     # See the https://github.com/polyfloyd/go-errorlint for caveats.
     # Default: true
     errorf: false
+  
+  goconst:
+    min-len: 5
+    min-occurrences: 5
+    ignore-tests: true
 
 issues:
   exclude-rules:

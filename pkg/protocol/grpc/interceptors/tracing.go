@@ -18,29 +18,17 @@ import (
 
 // ServerOptionTracing Use the OpenTelemetry gRPC server interceptor for tracing
 func ServerOptionTracing(serverOpts []grpc.ServerOption) []grpc.ServerOption {
-	// Add unary interceptor
-	serverOpts = append(serverOpts, grpc.ChainUnaryInterceptor(
-		otelgrpc.UnaryServerInterceptor(),
-	))
-	// Add stream interceptor
-	serverOpts = append(serverOpts, grpc.ChainStreamInterceptor(
-		otelgrpc.StreamServerInterceptor(),
-	))
+
+	serverOpts = append(serverOpts, grpc.StatsHandler(otelgrpc.NewServerHandler()))
+
 	return serverOpts
 }
 
 // WithDailOptionTracing Use the OpenTelemetry gRPC client interceptor for tracing
 func WithDailOptionTracing(dialOpts []grpc.DialOption) []grpc.DialOption {
 
-	// Add unary interceptor
-	dialOpts = append(dialOpts, grpc.WithChainUnaryInterceptor(
-		otelgrpc.UnaryClientInterceptor(),
-	))
+	dialOpts = append(dialOpts, grpc.WithStatsHandler(otelgrpc.NewClientHandler()))
 
-	// Add stream interceptor
-	dialOpts = append(dialOpts, grpc.WithChainStreamInterceptor(
-		otelgrpc.StreamClientInterceptor(),
-	))
 	return dialOpts
 }
 

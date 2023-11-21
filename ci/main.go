@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	goImage   = "golang:1.21.3"                     // use golang:1.21.3 container as builder
+	goImage   = "golang:1.21.4"                     // use golang:1.21.4 container as builder
 	runImage  = "gcr.io/distroless/static"          // use gcr.io/distroless/static container as runtime
 	imageRepo = "docker.io"                         // the container registry for the app image
 	appImage  = "qclaogui/golang-api-server:latest" // the app image
