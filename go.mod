@@ -7,7 +7,7 @@ require (
 	dagger.io/dagger v0.9.3
 	entgo.io/ent v0.12.5
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/containerd/containerd v1.7.9
+	github.com/containerd/containerd v1.7.10
 	github.com/dave/jennifer v1.7.0
 	github.com/go-kit/log v0.2.1
 	github.com/go-sql-driver/mysql v1.7.1
