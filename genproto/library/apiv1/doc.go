@@ -64,11 +64,11 @@
 //	}
 //	defer c.Close()
 //
-//	req := &librarypb.CreateShelfRequest{
+//	req := &librarypb.CreateBookRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#CreateShelfRequest.
+//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#CreateBookRequest.
 //	}
-//	resp, err := c.CreateShelf(ctx, req)
+//	resp, err := c.CreateBook(ctx, req)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}

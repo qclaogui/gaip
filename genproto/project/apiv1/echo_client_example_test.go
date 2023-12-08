@@ -59,7 +59,7 @@ func ExampleNewEchoRESTClient() {
 	_ = c
 }
 
-func ExampleEchoClient_Echo() {
+func ExampleEchoClient_Block() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -72,11 +72,11 @@ func ExampleEchoClient_Echo() {
 	}
 	defer c.Close()
 
-	req := &projectpb.EchoRequest{
+	req := &projectpb.BlockRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#EchoRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#BlockRequest.
 	}
-	resp, err := c.Echo(ctx, req)
+	resp, err := c.Block(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -122,6 +122,31 @@ func ExampleEchoClient_Chat() {
 		// TODO: Use resp.
 		_ = resp
 	}
+}
+
+func ExampleEchoClient_Echo() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewEchoClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.EchoRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#EchoRequest.
+	}
+	resp, err := c.Echo(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
 }
 
 func ExampleEchoClient_PagedExpand() {
@@ -178,31 +203,6 @@ func ExampleEchoClient_Wait() {
 	}
 
 	resp, err := op.Wait(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	// TODO: Use resp.
-	_ = resp
-}
-
-func ExampleEchoClient_Block() {
-	ctx := context.Background()
-	// This snippet has been automatically generated and should be regarded as a code template only.
-	// It will require modifications to work:
-	// - It may require correct/in-range values for request initialization.
-	// - It may require specifying regional endpoints when creating the service client as shown in:
-	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := project.NewEchoClient(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	defer c.Close()
-
-	req := &projectpb.BlockRequest{
-		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#BlockRequest.
-	}
-	resp, err := c.Block(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}

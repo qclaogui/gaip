@@ -41,7 +41,7 @@ func ExampleNewClient() {
 	_ = c
 }
 
-func ExampleClient_ListShelves() {
+func ExampleClient_CreateBook() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -54,11 +54,11 @@ func ExampleClient_ListShelves() {
 	}
 	defer c.Close()
 
-	req := &emptypb.Empty{
+	req := &bookstorepb.CreateBookRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/google.golang.org/protobuf/types/known/emptypb#Empty.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#CreateBookRequest.
 	}
-	resp, err := c.ListShelves(ctx, req)
+	resp, err := c.CreateBook(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -91,7 +91,7 @@ func ExampleClient_CreateShelf() {
 	_ = resp
 }
 
-func ExampleClient_GetShelf() {
+func ExampleClient_DeleteBook() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -104,16 +104,14 @@ func ExampleClient_GetShelf() {
 	}
 	defer c.Close()
 
-	req := &bookstorepb.GetShelfRequest{
+	req := &bookstorepb.DeleteBookRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#GetShelfRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#DeleteBookRequest.
 	}
-	resp, err := c.GetShelf(ctx, req)
+	err = c.DeleteBook(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
-	// TODO: Use resp.
-	_ = resp
 }
 
 func ExampleClient_DeleteShelf() {
@@ -137,56 +135,6 @@ func ExampleClient_DeleteShelf() {
 	if err != nil {
 		// TODO: Handle error.
 	}
-}
-
-func ExampleClient_ListBooks() {
-	ctx := context.Background()
-	// This snippet has been automatically generated and should be regarded as a code template only.
-	// It will require modifications to work:
-	// - It may require correct/in-range values for request initialization.
-	// - It may require specifying regional endpoints when creating the service client as shown in:
-	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := bookstore.NewClient(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	defer c.Close()
-
-	req := &bookstorepb.ListBooksRequest{
-		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#ListBooksRequest.
-	}
-	resp, err := c.ListBooks(ctx, req)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	// TODO: Use resp.
-	_ = resp
-}
-
-func ExampleClient_CreateBook() {
-	ctx := context.Background()
-	// This snippet has been automatically generated and should be regarded as a code template only.
-	// It will require modifications to work:
-	// - It may require correct/in-range values for request initialization.
-	// - It may require specifying regional endpoints when creating the service client as shown in:
-	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := bookstore.NewClient(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	defer c.Close()
-
-	req := &bookstorepb.CreateBookRequest{
-		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#CreateBookRequest.
-	}
-	resp, err := c.CreateBook(ctx, req)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	// TODO: Use resp.
-	_ = resp
 }
 
 func ExampleClient_GetBook() {
@@ -214,7 +162,7 @@ func ExampleClient_GetBook() {
 	_ = resp
 }
 
-func ExampleClient_DeleteBook() {
+func ExampleClient_GetShelf() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -227,12 +175,64 @@ func ExampleClient_DeleteBook() {
 	}
 	defer c.Close()
 
-	req := &bookstorepb.DeleteBookRequest{
+	req := &bookstorepb.GetShelfRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#DeleteBookRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#GetShelfRequest.
 	}
-	err = c.DeleteBook(ctx, req)
+	resp, err := c.GetShelf(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleClient_ListBooks() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := bookstore.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &bookstorepb.ListBooksRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#ListBooksRequest.
+	}
+	resp, err := c.ListBooks(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleClient_ListShelves() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := bookstore.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &emptypb.Empty{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/google.golang.org/protobuf/types/known/emptypb#Empty.
+	}
+	resp, err := c.ListShelves(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
 }

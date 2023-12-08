@@ -2,6 +2,8 @@ github.com/Masterminds/semver v1.5.0 h1:H65muMkzWKEuNDnfl9d70GUjFniHKHRbFPGBuZ3Q
 github.com/Masterminds/semver v1.5.0/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
 github.com/bwplotka/bingo v0.8.1-0.20230820182247-0568407746a2 h1:nvLMMDf/Lw2JdJe2KzXjnL7IhIU+j48CXFZEuR9uPHQ=
 github.com/bwplotka/bingo v0.8.1-0.20230820182247-0568407746a2/go.mod h1:GxC/y/xbmOK5P29cn+B3HuOSw0s2gruddT3r+rDizDw=
+github.com/bwplotka/bingo v0.9.0 h1:slnsdJYExR4iRalHR6/ZiYnr9vSazOuFGmc2LdX293g=
+github.com/bwplotka/bingo v0.9.0/go.mod h1:GxC/y/xbmOK5P29cn+B3HuOSw0s2gruddT3r+rDizDw=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/efficientgo/core v1.0.0-rc.0 h1:jJoA0N+C4/knWYVZ6GrdHOtDyrg8Y/TR4vFpTaqTsqs=
 github.com/efficientgo/core v1.0.0-rc.0/go.mod h1:kQa0V74HNYMfuJH6jiPiwNdpWXl4xd/K4tzlrcvYDQI=

@@ -64,11 +64,11 @@
 //	}
 //	defer c.Close()
 //
-//	req := &emptypb.Empty{
+//	req := &bookstorepb.CreateBookRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/google.golang.org/protobuf/types/known/emptypb#Empty.
+//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#CreateBookRequest.
 //	}
-//	resp, err := c.ListShelves(ctx, req)
+//	resp, err := c.CreateBook(ctx, req)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}

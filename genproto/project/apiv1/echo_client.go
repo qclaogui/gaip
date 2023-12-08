@@ -26,7 +26,6 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
-	"time"
 
 	"cloud.google.com/go/longrunning"
 	lroauto "cloud.google.com/go/longrunning/autogen"
@@ -976,12 +975,6 @@ func (c *echoRESTClient) Block(ctx context.Context, req *projectpb.BlockRequest,
 	return resp, nil
 }
 
-// WaitOperation manages a long-running operation from Wait.
-type WaitOperation struct {
-	lro      *longrunning.Operation
-	pollPath string
-}
-
 // WaitOperation returns a new WaitOperation from a given name.
 // The name must be that of a previously created WaitOperation, possibly from a different process.
 func (c *echoGRPCClient) WaitOperation(name string) *WaitOperation {
@@ -998,109 +991,4 @@ func (c *echoRESTClient) WaitOperation(name string) *WaitOperation {
 		lro:      longrunning.InternalNewOperation(*c.LROClient, &longrunningpb.Operation{Name: name}),
 		pollPath: override,
 	}
-}
-
-// Wait blocks until the long-running operation is completed, returning the response and any errors encountered.
-//
-// See documentation of Poll for error-handling information.
-func (op *WaitOperation) Wait(ctx context.Context, opts ...gax.CallOption) (*projectpb.WaitResponse, error) {
-	opts = append([]gax.CallOption{gax.WithPath(op.pollPath)}, opts...)
-	var resp projectpb.WaitResponse
-	if err := op.lro.WaitWithInterval(ctx, &resp, time.Minute, opts...); err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-// Poll fetches the latest state of the long-running operation.
-//
-// Poll also fetches the latest metadata, which can be retrieved by Metadata.
-//
-// If Poll fails, the error is returned and op is unmodified. If Poll succeeds and
-// the operation has completed with failure, the error is returned and op.Done will return true.
-// If Poll succeeds and the operation has completed successfully,
-// op.Done will return true, and the response of the operation is returned.
-// If Poll succeeds and the operation has not completed, the returned response and error are both nil.
-func (op *WaitOperation) Poll(ctx context.Context, opts ...gax.CallOption) (*projectpb.WaitResponse, error) {
-	opts = append([]gax.CallOption{gax.WithPath(op.pollPath)}, opts...)
-	var resp projectpb.WaitResponse
-	if err := op.lro.Poll(ctx, &resp, opts...); err != nil {
-		return nil, err
-	}
-	if !op.Done() {
-		return nil, nil
-	}
-	return &resp, nil
-}
-
-// Metadata returns metadata associated with the long-running operation.
-// Metadata itself does not contact the server, but Poll does.
-// To get the latest metadata, call this method after a successful call to Poll.
-// If the metadata is not available, the returned metadata and error are both nil.
-func (op *WaitOperation) Metadata() (*projectpb.WaitMetadata, error) {
-	var meta projectpb.WaitMetadata
-	if err := op.lro.Metadata(&meta); err == longrunning.ErrNoMetadata {
-		return nil, nil
-	} else if err != nil {
-		return nil, err
-	}
-	return &meta, nil
-}
-
-// Done reports whether the long-running operation has completed.
-func (op *WaitOperation) Done() bool {
-	return op.lro.Done()
-}
-
-// Name returns the name of the long-running operation.
-// The name is assigned by the server and is unique within the service from which the operation is created.
-func (op *WaitOperation) Name() string {
-	return op.lro.Name()
-}
-
-// EchoResponseIterator manages a stream of *projectpb.EchoResponse.
-type EchoResponseIterator struct {
-	items    []*projectpb.EchoResponse
-	pageInfo *iterator.PageInfo
-	nextFunc func() error
-
-	// Response is the raw response for the current page.
-	// It must be cast to the RPC response type.
-	// Calling Next() or InternalFetch() updates this value.
-	Response interface{}
-
-	// InternalFetch is for use by the Google Cloud Libraries only.
-	// It is not part of the stable interface of this package.
-	//
-	// InternalFetch returns results from a single call to the underlying RPC.
-	// The number of results is no greater than pageSize.
-	// If there are no more results, nextPageToken is empty and err is nil.
-	InternalFetch func(pageSize int, pageToken string) (results []*projectpb.EchoResponse, nextPageToken string, err error)
-}
-
-// PageInfo supports pagination. See the google.golang.org/api/iterator package for details.
-func (it *EchoResponseIterator) PageInfo() *iterator.PageInfo {
-	return it.pageInfo
-}
-
-// Next returns the next result. Its second return value is iterator.Done if there are no more
-// results. Once Next returns Done, all subsequent calls will return Done.
-func (it *EchoResponseIterator) Next() (*projectpb.EchoResponse, error) {
-	var item *projectpb.EchoResponse
-	if err := it.nextFunc(); err != nil {
-		return item, err
-	}
-	item = it.items[0]
-	it.items = it.items[1:]
-	return item, nil
-}
-
-func (it *EchoResponseIterator) bufLen() int {
-	return len(it.items)
-}
-
-func (it *EchoResponseIterator) takeBuf() interface{} {
-	b := it.items
-	it.items = nil
-	return b
 }

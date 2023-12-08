@@ -65,6 +65,31 @@ func ExampleClient_Create() {
 	_ = resp
 }
 
+func ExampleClient_Delete() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := todo.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &todopb.DeleteRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#DeleteRequest.
+	}
+	resp, err := c.Delete(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
 func ExampleClient_Get() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
@@ -83,31 +108,6 @@ func ExampleClient_Get() {
 		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#GetRequest.
 	}
 	resp, err := c.Get(ctx, req)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	// TODO: Use resp.
-	_ = resp
-}
-
-func ExampleClient_Update() {
-	ctx := context.Background()
-	// This snippet has been automatically generated and should be regarded as a code template only.
-	// It will require modifications to work:
-	// - It may require correct/in-range values for request initialization.
-	// - It may require specifying regional endpoints when creating the service client as shown in:
-	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := todo.NewClient(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	defer c.Close()
-
-	req := &todopb.UpdateRequest{
-		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#UpdateRequest.
-	}
-	resp, err := c.Update(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -140,7 +140,7 @@ func ExampleClient_List() {
 	_ = resp
 }
 
-func ExampleClient_Delete() {
+func ExampleClient_Update() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -153,11 +153,11 @@ func ExampleClient_Delete() {
 	}
 	defer c.Close()
 
-	req := &todopb.DeleteRequest{
+	req := &todopb.UpdateRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#DeleteRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#UpdateRequest.
 	}
-	resp, err := c.Delete(ctx, req)
+	resp, err := c.Update(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}

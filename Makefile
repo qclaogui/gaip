@@ -2,8 +2,8 @@ include .bingo/Variables.mk
 
 .DEFAULT_GOAL := help
 
-SWAGGER_UI_VERSION	:=v5.5.0
-PROTOC_VERSION		:=24.3
+SWAGGER_UI_VERSION	:=v5.10.3
+PROTOC_VERSION		:=25.1
 
 # Download the proper protoc version for Darwin (osx) and Linux.
 PROTOC_URL := https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/
@@ -89,7 +89,7 @@ endif
 install-build-deps: protoc-install ## Install dependencies tools
 	$(info ******************** downloading dependencies ********************)
 	@echo ">> building bingo and setup dependencies tools"
-	@go install github.com/bwplotka/bingo@0568407746a2915ba57f9fa1def47694728b831e
+	@go install github.com/bwplotka/bingo@v0.9.0
 
 
 ##@ Generate the schema under internal/ent/schema/ directory
