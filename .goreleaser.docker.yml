@@ -1,0 +1,47 @@
+# https://goreleaser.com/customization/docker/
+dockers:
+- image_templates:
+  - "qclaogui/golang-api-server:{{.Version}}-linux-amd64"
+  build_flag_templates:
+  - "--platform=linux/amd64"
+  goos: linux
+  goarch: amd64
+  goamd64: v4
+  skip_push: true
+- image_templates:
+  - "qclaogui/golang-api-server:{{.Version}}-linux-arm64v8"
+  build_flag_templates:
+  - "--platform=linux/arm64/v8"
+  goos: linux
+  goarch: arm64
+  skip_push: true
+
+# - image_templates:
+#   - "qclaogui/golang-api-server:{{.Version}}-darwin-amd64"
+#   build_flag_templates:
+#   - "--platform=darwin/amd64"
+#   goos: darwin
+#   goarch: amd64
+#   goamd64: v4
+#   skip_push: true
+# - image_templates:
+#   - "qclaogui/golang-api-server:{{.Version}}-darwin-arm64v8"
+#   build_flag_templates:
+#   - "--platform=darwin/arm64/v8"
+#   goos: darwin
+#   goarch: arm64
+#   skip_push: true
+
+
+docker_manifests:
+- name_template: "qclaogui/golang-api-server:{{.Version}}"
+  image_templates:
+  - "qclaogui/golang-api-server:{{.Version}}-linux-amd64"
+  - "qclaogui/golang-api-server:{{.Version}}-linux-arm64v8"
+  - "qclaogui/golang-api-server:{{.Version}}-darwin-amd64"
+  - "qclaogui/golang-api-server:{{.Version}}-darwin-arm64v8"
+  create_flags:
+  - --insecure
+  skip_push: true
+  push_flags:
+  - --insecure

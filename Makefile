@@ -51,7 +51,9 @@ build: ## Build binary for current OS and place it at ./bin/gaip
 
 .PHONY: build-all
 build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
-	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.yml --snapshot --skip=publish --clean
+	@cat ./.goreleaser.yml ./.goreleaser.docker.yml > .goreleaser.combined.yml
+	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.combined.yml --snapshot --skip=publish --clean
+	@rm .goreleaser.combined.yml
 
 .PHONY: clean
 clean: ## Remove artefacts or generated files from previous build

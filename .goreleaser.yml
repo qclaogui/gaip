@@ -1,41 +1,46 @@
 release:
-  name_template: "{{ .ProjectName }} {{ .Env.RELEASE_DESCRIPTION }}"
+  name_template: "{{ .ProjectName }} {{ .Version }} {{ .Env.RELEASE_DESCRIPTION }}"
   prerelease: auto # this should detect a release candidate and mark it as pre-release in GitHub
   skip_upload: true
 
 builds:
-  - id: gaip
-    main: ./cmd
-    binary: gaip
-    env:
-      - CGO_ENABLED=0
-    flags:
-      - -trimpath
-    ldflags:
-      - -s -w
-      - -extldflags "-static"
-      - -X github.com/qclaogui/golang-api-server/pkg/version.Version={{.Version}}
-      - -X github.com/qclaogui/golang-api-server/pkg/version.GitCommit={{.ShortCommit}}
-      - -X github.com/qclaogui/golang-api-server/pkg/version.BuildDate={{.Date}}
-      - -X github.com/qclaogui/golang-api-server/pkg/version.PreReleaseID={{.Env.PRE_RELEASE_ID}}
+- id: gaip
+  main: ./cmd
+  binary: /bin/gaip
+  env:
+  - CGO_ENABLED=0
+  flags:
+  - -trimpath
+  ldflags:
+  - -s -w
+  - -extldflags "-static"
+  - -X github.com/qclaogui/golang-api-server/pkg/version.Version={{.Version}}
+  - -X github.com/qclaogui/golang-api-server/pkg/version.GitCommit={{.ShortCommit}}
+  - -X github.com/qclaogui/golang-api-server/pkg/version.BuildDate={{.Date}}
+  - -X github.com/qclaogui/golang-api-server/pkg/version.PreReleaseID={{.Env.PRE_RELEASE_ID}}
 
-    # GOOS list to build for.
-    # For more info refer to: https://golang.org/doc/install/source#environment
-    #
-    # Default: [ 'darwin', 'linux', 'windows' ]
-    goos:
-      - linux
-    goarch:
-      - amd64
-      - arm64
+  # GOOS list to build for.
+  # For more info refer to: https://golang.org/doc/install/source#environment
+  #
+  # Default: [ 'darwin', 'linux', 'windows' ]
+  goos:
+  - linux
+  - darwin
+  goarch:
+  - amd64
+  - arm64
+
+  # https://github.com/golang/go/wiki/MinimumRequirements#amd64
+  goamd64:
+  - v4
 
 archives:
-  - builds:
-      - gaip
-    name_template: "gaip_{{ .Os }}_{{ .Arch }}"
-    format: tar.gz
-    files:
-      - none*
+- builds:
+  - gaip
+  name_template: "gaip_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  format: tar.gz
+  files:
+  - none*
 
 checksum:
   name_template: "checksums.txt"
