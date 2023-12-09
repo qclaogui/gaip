@@ -1,0 +1,12 @@
+# syntax=docker/dockerfile:1
+
+##
+## Deploy the application binary into a lean image
+##
+FROM   gcr.io/distroless/static
+
+COPY   bin/gaip /bin/gaip
+EXPOSE 8080
+USER   nonroot:nonroot
+
+ENTRYPOINT ["/bin/gaip"]

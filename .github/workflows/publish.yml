@@ -39,18 +39,16 @@ jobs:
           password: ${{ secrets.dhPassword }}
 
       - name: Install GoReleaser
-        uses: goreleaser/goreleaser-action@v5
-        with:
-          install-only: true
+        run: go install github.com/goreleaser/goreleaser@v1.22.1
   
       - name: Publish release
         if: ${{ !inputs.isReleaseCandidate }}
         env:
           GITHUB_TOKEN: ${{ secrets.ghPAT }}
-        run: GORELEASER=$(which goreleaser) ./tools/scripts/do-release.sh
+        run: GORELEASER=/home/runner/go/bin/goreleaser ./tools/scripts/do-release.sh
 
       - name: Publish release candidate
         if: ${{ inputs.isReleaseCandidate }}
         env:
           GITHUB_TOKEN: ${{ secrets.ghPAT }}
-        run: GORELEASER=$(which goreleaser) ./tools/scripts/do-release-candidate.sh
+        run: GORELEASER=/home/runner/go/bin/goreleaser ./tools/scripts/do-release-candidate.sh
