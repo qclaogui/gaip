@@ -1,18 +1,21 @@
-apiVersion: skaffold/v4beta7
+apiVersion: skaffold/v4beta8
 kind: Config
 metadata:
-  name: golang-api-server
+  name: gaip
 build:
-  platforms: ["linux/amd64"]
   artifacts:
     - image: golang-api-server
       ko:
         main: ./cmd
+  platforms:
+    - linux/amd64
 manifests:
-  rawYaml: ["deploy/overlays/dev/k8s-all-in-one.yaml"]
+  rawYaml:
+    - deploy/overlays/dev/k8s-all-in-one.yaml
 deploy:
   kubectl:
-    remoteManifests: ["deploy/overlays/dev/k8s-all-in-one.yaml"]
+    remoteManifests:
+      - deploy/overlays/dev/k8s-all-in-one.yaml
 # portForward:
 #   - resourceType: Deployment
 #     resourceName: golang-api-server
@@ -26,16 +29,17 @@ profiles:
       artifacts:
         - image: qclaogui/golang-api-server
           ko:
-            main: ./cmd
             ldflags:
               - -s -w
               - -extldflags "-static"
+            main: ./cmd
     manifests:
-      rawYaml: ["deploy/overlays/dev/k8s-all-in-one.yaml"]
+      rawYaml:
+        - deploy/overlays/dev/k8s-all-in-one.yaml
     deploy:
       kubectl:
-        remoteManifests: ["deploy/overlays/dev/k8s-all-in-one.yaml"]
-
+        remoteManifests:
+          - deploy/overlays/dev/k8s-all-in-one.yaml
   - name: prod
     build:
       artifacts:
@@ -45,4 +49,5 @@ profiles:
       cluster: {}
     manifests:
       kustomize:
-        paths: ["deploy/overlays/prod"]
+        paths:
+          - deploy/overlays/prod

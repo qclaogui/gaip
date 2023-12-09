@@ -4,8 +4,9 @@ release:
   skip_upload: true
 
 builds:
-  - id: binary
+  - id: gaip
     main: ./cmd
+    binary: gaip
     env:
       - CGO_ENABLED=0
     flags:
@@ -30,8 +31,8 @@ builds:
 
 archives:
   - builds:
-      - binary
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+      - gaip
+    name_template: "gaip_{{ .Os }}_{{ .Arch }}"
     format: tar.gz
     files:
       - none*

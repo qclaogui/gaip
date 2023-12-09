@@ -46,12 +46,12 @@ GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
 GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
 .PHONY: build
-build: ## Build binary for current OS and place it at ./bin/golang-api-server
-	@$(GO_ENV) go build $(GO_FLAGS) -o bin/golang-api-server ./cmd/server
+build: ## Build binary for current OS and place it at ./bin/gaip
+	@$(GO_ENV) go build $(GO_FLAGS) -o bin/gaip ./cmd/server
 
 .PHONY: build-all
 build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
-	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.yml --snapshot --skip-publish --clean
+	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.yml --snapshot --skip=publish --clean
 
 .PHONY: clean
 clean: ## Remove artefacts or generated files from previous build

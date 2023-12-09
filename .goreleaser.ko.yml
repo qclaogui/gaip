@@ -1,9 +1,13 @@
 # https://goreleaser.com/customization/ko/
 kos:
-- id: ko-image
-  build: binary
+- id: gaip-image
+  build: gaip
   repository: qclaogui/golang-api-server
   base_image: cgr.dev/chainguard/static
+  labels:
+    org.opencontainers.image.title: "gaip"
+    org.opencontainers.image.source: "https://github.com/qclaogui/golang-api-server"
+    org.opencontainers.image.description: "Practices for implementing Google API Improvement Proposals (AIP) in Go."
   env:
     - CGO_ENABLED=0
   flags:

@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>golang api server demo</h1>
+  <h1>golang AIP server demo</h1>
 </div>
 <p align="center">
 
@@ -21,6 +21,8 @@
 
 </p>
 
+Practices for implementing [Google API Improvement Proposals](https://aip.dev/) (AIP) in Go.
+
 Share knowledge and help others.
 
 ```shell
@@ -30,7 +32,7 @@ Usage:
   make <target>
 
 Build
-  build                                     Build binary for current OS and place it at ./bin/golang-api-server
+  build                                     Build binary for current OS and place it at ./bin/gaip
   build-all                                 Build binaries for Linux, Windows and Mac and place them in dist/
   clean                                     Remove artefacts or generated files from previous build
 
@@ -40,6 +42,14 @@ Dependencies
   buf-mod                                   Run buf mod update after adding a dependency to your buf.yaml
   install-build-deps                        Install dependencies tools
 
+Generate the schema under internal/ent/schema/ directory
+  ent-new                                   Get a description of graph schema
+  ent-gen                                   Regenerate schema
+  ent-describe                              Get a description of graph schema
+  atlas-lint                                Verifying and linting migrations
+  atlas-diff                                Generating Versioned Migration Files
+  atlas-apply                               Apply generated migration files onto the database
+
 Regenerate gRPC code
   buf-gen                                   Regenerate proto by buf https://buf.build/
   swagger-ui                                Generate Swagger UI
@@ -48,12 +58,13 @@ Regenerate gRPC code
 Testing Lint & fmt
   test                                      Run tests.
   lint                                      Runs various static analysis against our code.
-  fmt                                       Runs fmt code. (go-fmt buf-fmt)
+  fmt                                       Runs fmt code (automatically fix lint errors)
   go-fmt                                    Runs gofmt code
   buf-fmt                                   examining all of the proto files.
   goreleaser-lint                           Lint .goreleaser*.yml files.
   go-lint                                   examining all of the Go files.
   buf-lint                                  Lint all of the proto files.
+  api-linter                                Lint all of the proto files.
   fix-lint                                  fix lint issue of the Go files
 
 Release
@@ -66,7 +77,6 @@ General
   help                                      Display this help. Thanks to https://www.thapaliya.com/en/writings/well-documented-makefiles/
 
 ```
-
 
 [Automatic Migration planning script](https://entgo.io/docs/versioned/programmatically#2-automatic-migration-planning-script)
 
