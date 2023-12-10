@@ -14,10 +14,10 @@ import (
 )
 
 const (
-	goImage   = "golang:1.21.4"                     // use golang:1.21.4 container as builder
-	runImage  = "gcr.io/distroless/static"          // use gcr.io/distroless/static container as runtime
-	imageRepo = "docker.io"                         // the container registry for the app image
-	appImage  = "qclaogui/gaip:latest" // the app image
+	goImage   = "golang:1.21.5"            // use golang:1.21.5 container as builder
+	runImage  = "gcr.io/distroless/static" // use gcr.io/distroless/static container as runtime
+	imageRepo = "docker.io"                // the container registry for the app image
+	appImage  = "qclaogui/gaip:latest"     // the app image
 )
 
 var platforms = []dagger.Platform{"linux/amd64", "linux/arm64"}
@@ -61,6 +61,7 @@ func main() {
 	platformVariants := make([]*dagger.Container, 0, len(platforms))
 	for _, platform := range platforms {
 		goContainer = goContainer.
+			WithEnvVariable("CGO_ENABLED", "0").
 			WithEnvVariable("GOOS", platformFormat.MustParse(string(platform)).OS).             // setup platform GOOS
 			WithEnvVariable("GOARCH", platformFormat.MustParse(string(platform)).Architecture). // setup platform  GOARCH
 			WithExec([]string{"make", "install-build-deps"})                                    // install dependencies tools
@@ -84,8 +85,8 @@ func main() {
 		// copy binary file from builder
 		app := client.Container(dagger.ContainerOpts{Platform: platform}).
 			From(runImage).
-			WithFile("/bin/main", builder.File("bin/gaip")).
-			WithEntrypoint([]string{"main"})
+			WithFile("/bin/gaip", builder.File("bin/gaip")).
+			WithEntrypoint([]string{"/bin/gaip"})
 
 		platformVariants = append(platformVariants, app)
 	}

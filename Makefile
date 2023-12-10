@@ -72,10 +72,10 @@ go-mod: ## go mod download && go mod tidy
 check-go-mod: go-mod ## Ensures fresh go.mod and go.sum.
 	@git --no-pager diff --exit-code -- go.sum go.mod vendor/ || { echo ">> There are unstaged changes in go vendoring run 'make go-mod'"; exit 1; }
 
-.PHONY: buf-mod
-buf-mod: ## Run buf mod update after adding a dependency to your buf.yaml
-	@echo ">> run buf mod update"
-	@cd proto/ && $(BUF) mod update
+# .PHONY: buf-mod
+# buf-mod: ## Run buf mod update after adding a dependency to your buf.yaml
+# 	@echo ">> run buf mod update"
+# 	@cd proto/ && $(BUF) mod update
 
 .PHONY: protoc-install
 protoc-install:
@@ -88,7 +88,7 @@ ifeq ("$(wildcard $(PROTOC))","")
 endif
 
 .PHONY: install-build-deps
-install-build-deps: protoc-install ## Install dependencies tools
+install-build-deps: ## Install dependencies tools
 	$(info ******************** downloading dependencies ********************)
 	@echo ">> building bingo and setup dependencies tools"
 	@go install github.com/bwplotka/bingo@v0.9.0
@@ -130,14 +130,14 @@ atlas-apply: $(ATLAS) ## Apply generated migration files onto the database
 
 ##@ Regenerate gRPC code
 
-.PHONY: buf-gen
-buf-gen: ## Regenerate proto by buf https://buf.build/
-buf-gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
-	@#rm -Rf genproto third_party/gen
-	@cd proto/ && $(BUF) generate \
-		--path qclaogui/library/v1/*.proto
-	@make swagger-ui
-	@make lint
+# .PHONY: buf-gen
+# buf-gen: ## Regenerate proto by buf https://buf.build/
+# buf-gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
+# #	@rm -Rf genproto third_party/gen
+# 	@cd proto/ && $(BUF) generate \
+# 		--path qclaogui/library/v1
+# 	@make swagger-ui
+# 	@make lint
 
 .PHONY: swagger-ui
 swagger-ui: ## Generate Swagger UI

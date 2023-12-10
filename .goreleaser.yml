@@ -30,10 +30,6 @@ builds:
   - amd64
   - arm64
 
-  # https://github.com/golang/go/wiki/MinimumRequirements#amd64
-  goamd64:
-  - v4
-
 archives:
 - builds:
   - gaip

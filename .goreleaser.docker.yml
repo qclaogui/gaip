@@ -12,7 +12,6 @@ dockers:
   - "--platform=linux/amd64"
   goos: linux
   goarch: amd64
-  goamd64: v4
   skip_push: true
 - image_templates:
   - "qclaogui/gaip:{{.Version}}-arm64"
