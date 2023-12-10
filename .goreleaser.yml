@@ -1,5 +1,5 @@
 release:
-  name_template: "{{ .ProjectName }} {{ .Version }} {{ .Env.RELEASE_DESCRIPTION }}"
+  name_template: "{{ .ProjectName }} {{ .Env.RELEASE_DESCRIPTION }}"
   prerelease: auto # this should detect a release candidate and mark it as pre-release in GitHub
   skip_upload: true
 
