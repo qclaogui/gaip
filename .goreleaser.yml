@@ -6,7 +6,7 @@ release:
 builds:
 - id: gaip
   main: ./cmd
-  binary: /bin/gaip
+  binary: bin/gaip
   env:
   - CGO_ENABLED=0
   flags:

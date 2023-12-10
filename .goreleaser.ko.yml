@@ -2,6 +2,7 @@
 kos:
 - id: gaip-image
   build: gaip
+  main: ./cmd
   repository: qclaogui/gaip
   base_image: cgr.dev/chainguard/static
   labels:

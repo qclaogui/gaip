@@ -7,7 +7,6 @@ dockers:
   - "--pull"
   - "--label=org.opencontainers.image.title=gaip"
   - "--label=org.opencontainers.image.source={{.GitURL}}"
-  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
   - "--label=org.opencontainers.image.description=Practices for implementing Google API Improvement Proposals (AIP) in Go."
   - "--platform=linux/amd64"
   goos: linux
@@ -20,7 +19,6 @@ dockers:
   - "--pull"
   - "--label=org.opencontainers.image.title=gaip"
   - "--label=org.opencontainers.image.source={{.GitURL}}"
-  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
   - "--label=org.opencontainers.image.description=Practices for implementing Google API Improvement Proposals (AIP) in Go."
   - "--platform=linux/arm64"
   goos: linux
