@@ -60,38 +60,50 @@ func main() {
 
 	platformVariants := make([]*dagger.Container, 0, len(platforms))
 	for _, platform := range platforms {
+		goos := platformFormat.MustParse(string(platform)).OS
+		goarch := platformFormat.MustParse(string(platform)).Architecture
+
+		path := fmt.Sprintf("bin/gaip_%s_%s", goos, goarch)
+
 		goContainer = goContainer.
 			WithEnvVariable("CGO_ENABLED", "0").
-			WithEnvVariable("GOOS", platformFormat.MustParse(string(platform)).OS).             // setup platform GOOS
-			WithEnvVariable("GOARCH", platformFormat.MustParse(string(platform)).Architecture). // setup platform  GOARCH
-			WithExec([]string{"make", "install-build-deps"})                                    // install dependencies tools
+			WithEnvVariable("GOOS", goos).     // setup platform GOOS
+			WithEnvVariable("GOARCH", goarch). // setup platform  GOARCH
+			WithExec([]string{"go", "build", "-o", path, "cmd/main.go"})
 
-		// Running lint
-		if _, err = goContainer.WithExec([]string{"make", "lint"}).Sync(ctx); err != nil {
-			panic(err)
-		}
-
-		// Running tests
-		if _, err = goContainer.WithExec([]string{"make", "test"}).Sync(ctx); err != nil {
-			panic(err)
-		}
-
-		// Running build
-		builder, err := goContainer.WithExec([]string{"make", "build"}).Sync(ctx)
-		if err != nil {
-			panic(err)
-		}
+		// // install dependencies tools
+		// if _, err = goContainer.WithExec([]string{"make", "install-build-deps"}).Sync(ctx); err != nil {
+		// 	panic(err)
+		// }
+		// // Running lint
+		// if _, err = goContainer.WithExec([]string{"make", "lint"}).Sync(ctx); err != nil {
+		// 	panic(err)
+		// }
+		// // Running tests
+		// if _, err = goContainer.WithExec([]string{"make", "test"}).Sync(ctx); err != nil {
+		// 	panic(err)
+		// }
+		// // Running build
+		// builder, err := goContainer.WithExec([]string{"make", "build"}).Sync(ctx)
+		// if err != nil {
+		// 	panic(err)
+		// }
 
 		// copy binary file from builder
 		app := client.Container(dagger.ContainerOpts{Platform: platform}).
 			From(runImage).
-			WithFile("/bin/gaip", builder.File("bin/gaip")).
+			WithFile("/bin/gaip", goContainer.File(path)).
 			WithEntrypoint([]string{"/bin/gaip"})
 
 		platformVariants = append(platformVariants, app)
 	}
 
-	// CD: publish image to RepoCfg
+	// // generate uuid for ttl.sh publish
+	// _, _ = username, password
+	// imageDigest, err := client.Container().
+	// 	Publish(ctx, fmt.Sprintf("ttl.sh/gaip-%s:1h", uuid.New().String()), dagger.ContainerPublishOpts{PlatformVariants: platformVariants})
+
+	// publish image
 	imageDigest, err := client.Container().WithRegistryAuth(imageRepo, username, password).
 		Publish(ctx, appImage, dagger.ContainerPublishOpts{PlatformVariants: platformVariants})
 	if err != nil {

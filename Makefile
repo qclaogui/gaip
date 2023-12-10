@@ -46,8 +46,8 @@ GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
 GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
 .PHONY: build
-build: ## Build binary for current OS and place it at ./bin/gaip
-	@$(GO_ENV) go build $(GO_FLAGS) -o bin/gaip ./cmd/server
+build: ## Build binary for current OS and place it at ./bin/gaip_$(GOOS)_$(GOARCH)
+	@$(GO_ENV) go build $(GO_FLAGS) -o bin/gaip_$(GOOS)_$(GOARCH) ./cmd/server
 
 .PHONY: build-all
 build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
