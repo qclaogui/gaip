@@ -5,7 +5,7 @@
 package routeguide
 
 import (
-	"github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 )
 
 type Repository interface {

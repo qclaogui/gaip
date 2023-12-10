@@ -66,7 +66,7 @@
 //
 //	req := &projectpb.BlockRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#BlockRequest.
+//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#BlockRequest.
 //	}
 //	resp, err := c.Block(ctx, req)
 //	if err != nil {
@@ -88,7 +88,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package project // import "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
+package project // import "github.com/qclaogui/gaip/genproto/project/apiv1"
 
 import (
 	"context"

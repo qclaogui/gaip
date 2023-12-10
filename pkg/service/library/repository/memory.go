@@ -9,7 +9,7 @@ import (
 	"flag"
 	"sync"
 
-	"github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

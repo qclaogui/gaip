@@ -7,7 +7,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "google/rpc/status.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+option go_package = "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb";
 
 // a severity enum used to test enum capabilities in gapic surfaces.
 enum Severity {

@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/qclaogui/golang-api-server/internal/ent/todo"
+	"github.com/qclaogui/gaip/internal/ent/todo"
 )
 
 // Todo is the model entity for the Todo schema.

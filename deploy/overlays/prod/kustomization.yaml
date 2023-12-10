@@ -13,7 +13,7 @@ labels:
 
 replicas:
 - count: 1
-  name: golang-api-server
+  name: gaip
 
 configMapGenerator:
 - behavior: merge
@@ -21,7 +21,7 @@ configMapGenerator:
   - tracing.env
   literals:
   - DEPLOY_ENV=prod
-  name: golang-api-server
+  name: gaip
 
 # https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-immutable
 generatorOptions:
@@ -36,15 +36,15 @@ patches:
 - path: patch-ingress-name.yaml
   target:
     kind: Ingress
-    name: golang-api-server
+    name: gaip
     version: v1
 - patch: |-
     - op: replace
       path: /metadata/name
-      value: golang-api-server-canary
+      value: gaip-canary
   target:
     kind: Ingress
-    name: golang-api-server-canary
+    name: gaip-canary
     version: v1
 - path: patch_healthcheck.yaml
 - path: patch_strategy.yaml
@@ -57,6 +57,6 @@ patches:
 
 
 images:
-- name: golang-api-server
-  newName: qclaogui/golang-api-server
+- name: gaip
+  newName: qclaogui/gaip
   newTag: IMAGE_TAG

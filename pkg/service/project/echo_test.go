@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
-	pb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

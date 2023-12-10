@@ -12,7 +12,7 @@ import "google/api/routing.proto";
 import "google/longrunning/operations.proto";
 import "qclaogui/project/v1/echo.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+option go_package = "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb";
 
 // This service is used showcase the four main types of rpcs - unary, server
 // side streaming, client side streaming, and bidirectional streaming. This

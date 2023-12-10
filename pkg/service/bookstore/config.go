@@ -8,7 +8,7 @@ import (
 	"flag"
 
 	"github.com/grafana/dskit/cache"
-	"github.com/qclaogui/golang-api-server/pkg/service/bookstore/repository"
+	"github.com/qclaogui/gaip/pkg/service/bookstore/repository"
 )
 
 type Config struct {

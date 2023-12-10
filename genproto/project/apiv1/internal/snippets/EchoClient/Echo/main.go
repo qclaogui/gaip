@@ -21,8 +21,8 @@ package main
 import (
 	"context"
 
-	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
-	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	project "github.com/qclaogui/gaip/genproto/project/apiv1"
+	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 
 	req := &projectpb.EchoRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#EchoRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#EchoRequest.
 	}
 	resp, err := c.Echo(ctx, req)
 	if err != nil {

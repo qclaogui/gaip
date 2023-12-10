@@ -11,20 +11,20 @@ import (
 
 	"github.com/grafana/dskit/server"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
-	"github.com/qclaogui/golang-api-server/pkg/protocol/rest"
-	"github.com/qclaogui/golang-api-server/pkg/service/bookstore"
-	"github.com/qclaogui/golang-api-server/pkg/service/library"
-	"github.com/qclaogui/golang-api-server/pkg/service/project"
-	"github.com/qclaogui/golang-api-server/pkg/service/routeguide"
-	"github.com/qclaogui/golang-api-server/pkg/service/todo"
-	"github.com/qclaogui/golang-api-server/pkg/vault"
-	lg "github.com/qclaogui/golang-api-server/tools/log"
+	"github.com/qclaogui/gaip/pkg/protocol/grpc/interceptors"
+	"github.com/qclaogui/gaip/pkg/protocol/rest"
+	"github.com/qclaogui/gaip/pkg/service/bookstore"
+	"github.com/qclaogui/gaip/pkg/service/library"
+	"github.com/qclaogui/gaip/pkg/service/project"
+	"github.com/qclaogui/gaip/pkg/service/routeguide"
+	"github.com/qclaogui/gaip/pkg/service/todo"
+	"github.com/qclaogui/gaip/pkg/vault"
+	lg "github.com/qclaogui/gaip/tools/log"
 	"gopkg.in/yaml.v3"
 
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc"
+	"github.com/qclaogui/gaip/pkg/protocol/grpc"
 )
 
 type Application struct {

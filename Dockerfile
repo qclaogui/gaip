@@ -19,7 +19,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o /bin/gaip
 FROM gcr.io/distroless/static
 
 LABEL  org.opencontainers.image.title="gaip" \
-       org.opencontainers.image.source="https://github.com/qclaogui/golang-api-server" \
+       org.opencontainers.image.source="https://github.com/qclaogui/gaip" \
        org.opencontainers.image.description="Practices for implementing Google API Improvement Proposals (AIP) in Go."
 
 COPY --from=builder /bin/gaip /bin/gaip

@@ -7,9 +7,9 @@ package bookstore
 import (
 	"context"
 
-	"github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
-	"github.com/qclaogui/golang-api-server/pkg/service"
-	"github.com/qclaogui/golang-api-server/pkg/service/bookstore/repository"
+	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/gaip/pkg/service"
+	"github.com/qclaogui/gaip/pkg/service/bookstore/repository"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )

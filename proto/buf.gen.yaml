@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
 #  go_package_prefix:
-#    default: github.com/qclaogui/golang-api-server/genproto
+#    default: github.com/qclaogui/gaip/genproto
 #    except:
 #      - buf.build/googleapis/googleapis
 #      - buf.build/grpc-ecosystem/grpc-gateway
@@ -15,14 +15,14 @@ plugins:
   - plugin: go
     out: ../genproto
     opt:
-    - module=github.com/qclaogui/golang-api-server/genproto
+    - module=github.com/qclaogui/gaip/genproto
     path: /Users/Shared/code/golang/bin/protoc-gen-go-v1.31.0
     protoc_path: /Users/Shared/code/golang/bin/protoc-25.1.0
 
   - plugin: go-grpc
     out: ../genproto
     opt:
-    - module=github.com/qclaogui/golang-api-server/genproto
+    - module=github.com/qclaogui/gaip/genproto
     - require_unimplemented_servers=false
     path: /Users/Shared/code/golang/bin/protoc-gen-go-grpc-v1.3.0
     protoc_path: /Users/Shared/code/golang/bin/protoc-25.1.0
@@ -30,9 +30,9 @@ plugins:
   - plugin: go_gapic
     out: ../genproto
     opt:
-    - go-gapic-package=github.com/qclaogui/golang-api-server/genproto/library/apiv1;library
+    - go-gapic-package=github.com/qclaogui/gaip/genproto/library/apiv1;library
     - metadata=false
-    - module=github.com/qclaogui/golang-api-server/genproto
+    - module=github.com/qclaogui/gaip/genproto
     - grpc-service-config=qclaogui/library/v1/library_grpc_service_config.json
     - release-level=alpha
     - transport=grpc+rest
@@ -43,7 +43,7 @@ plugins:
   - plugin: grpc-gateway
     out: ../genproto
     opt:
-    - module=github.com/qclaogui/golang-api-server/genproto
+    - module=github.com/qclaogui/gaip/genproto
     - generate_unbound_methods=true
     path: /Users/Shared/code/golang/bin/protoc-gen-grpc-gateway-v2.18.1
     protoc_path: /Users/Shared/code/golang/bin/protoc-25.1.0

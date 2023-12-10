@@ -66,7 +66,7 @@
 //
 //	req := &librarypb.CreateBookRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#CreateBookRequest.
+//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/library/apiv1/librarypb#CreateBookRequest.
 //	}
 //	resp, err := c.CreateBook(ctx, req)
 //	if err != nil {
@@ -88,7 +88,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package library // import "github.com/qclaogui/golang-api-server/genproto/library/apiv1"
+package library // import "github.com/qclaogui/gaip/genproto/library/apiv1"
 
 import (
 	"context"

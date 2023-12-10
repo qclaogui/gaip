@@ -6,7 +6,7 @@ import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 import "google/protobuf/field_mask.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb";
+option go_package = "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb";
 
 // A single book in the library.
 message Book {

@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: golang-api-server
+  name: gaip
 spec:
   template:
     spec:
       containers:
-      - name: golang-api-server
+      - name: gaip
         envFrom:
         - configMapRef:
-            name: golang-api-server
+            name: gaip

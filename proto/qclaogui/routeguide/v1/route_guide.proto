@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package qclaogui.routeguide.v1;
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb";
+option go_package = "github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb";
 
 // Interface exported by the server.
 service RouteGuideService {

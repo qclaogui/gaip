@@ -18,10 +18,10 @@ import (
 
 	"github.com/grafana/dskit/server"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
-	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
-	"github.com/qclaogui/golang-api-server/pkg/protocol/rest/middleware"
-	"github.com/qclaogui/golang-api-server/third_party"
+	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/gaip/pkg/protocol/grpc/interceptors"
+	"github.com/qclaogui/gaip/pkg/protocol/rest/middleware"
+	"github.com/qclaogui/gaip/third_party"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

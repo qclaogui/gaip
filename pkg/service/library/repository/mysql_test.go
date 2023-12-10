@@ -7,9 +7,9 @@ package repository
 import (
 	"testing"
 
-	"github.com/qclaogui/golang-api-server/internal/ent"
-	"github.com/qclaogui/golang-api-server/internal/ent/enttest"
-	"github.com/qclaogui/golang-api-server/internal/ent/migrate"
+	"github.com/qclaogui/gaip/internal/ent"
+	"github.com/qclaogui/gaip/internal/ent/enttest"
+	"github.com/qclaogui/gaip/internal/ent/migrate"
 
 	// go-sqlite3
 	_ "github.com/mattn/go-sqlite3"

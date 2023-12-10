@@ -21,8 +21,8 @@ package main
 import (
 	"context"
 
-	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
-	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	project "github.com/qclaogui/gaip/genproto/project/apiv1"
+	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"google.golang.org/api/iterator"
 )
 
@@ -41,7 +41,7 @@ func main() {
 
 	req := &projectpb.PagedExpandRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#PagedExpandRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#PagedExpandRequest.
 	}
 	it := c.PagedExpand(ctx, req)
 	for {

@@ -11,7 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/qclaogui/golang-api-server/internal/ent/predicate"
+	"github.com/qclaogui/gaip/internal/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

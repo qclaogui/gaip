@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: golang-api-server-canary
+  name: gaip-canary
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/enable-access-log: "false"
@@ -17,14 +17,14 @@ metadata:
 
 spec:
   rules:
-  - host: golang-api-server.k8s.qclaogui.com
+  - host: gaip.k8s.qclaogui.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: golang-api-server-svc-v0-0-1
+            name: gaip-svc-v0-0-1
             port:
               name: http-metrics
 #              number: 80 # name和number不能同时指定

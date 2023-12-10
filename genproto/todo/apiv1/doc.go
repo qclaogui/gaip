@@ -66,7 +66,7 @@
 //
 //	req := &todopb.CreateRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#CreateRequest.
+//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#CreateRequest.
 //	}
 //	resp, err := c.Create(ctx, req)
 //	if err != nil {
@@ -88,7 +88,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package todo // import "github.com/qclaogui/golang-api-server/genproto/todo/apiv1"
+package todo // import "github.com/qclaogui/gaip/genproto/todo/apiv1"
 
 import (
 	"context"

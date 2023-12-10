@@ -8,8 +8,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
-	lg "github.com/qclaogui/golang-api-server/tools/log"
+	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
+	lg "github.com/qclaogui/gaip/tools/log"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -16,7 +16,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql/schema"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/qclaogui/golang-api-server/internal/ent/migrate"
+	"github.com/qclaogui/gaip/internal/ent/migrate"
 )
 
 func main() {

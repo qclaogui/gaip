@@ -9,9 +9,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
-	"github.com/qclaogui/golang-api-server/internal/pagination"
-	"github.com/qclaogui/golang-api-server/pkg/service"
+	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/internal/pagination"
+	"github.com/qclaogui/gaip/pkg/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

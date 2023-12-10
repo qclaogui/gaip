@@ -21,8 +21,8 @@ package main
 import (
 	"context"
 
-	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
-	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	project "github.com/qclaogui/gaip/genproto/project/apiv1"
+	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 
 	req := &projectpb.WaitRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#WaitRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#WaitRequest.
 	}
 	op, err := c.Wait(ctx, req)
 	if err != nil {

@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
-	util_log "github.com/qclaogui/golang-api-server/tools/log"
+	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
+	util_log "github.com/qclaogui/gaip/tools/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )

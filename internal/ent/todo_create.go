@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/qclaogui/golang-api-server/internal/ent/todo"
+	"github.com/qclaogui/gaip/internal/ent/todo"
 )
 
 // TodoCreate is the builder for creating a Todo entity.

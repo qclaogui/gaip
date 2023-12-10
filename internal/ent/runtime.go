@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/qclaogui/golang-api-server/internal/ent/schema"
-	"github.com/qclaogui/golang-api-server/internal/ent/user"
+	"github.com/qclaogui/gaip/internal/ent/schema"
+	"github.com/qclaogui/gaip/internal/ent/user"
 )
 
 // The init function reads all schema descriptors with runtime code

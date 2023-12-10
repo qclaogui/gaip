@@ -27,7 +27,7 @@ import (
 	"time"
 
 	gax "github.com/googleapis/gax-go/v2"
-	librarypb "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	librarypb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"

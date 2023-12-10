@@ -19,8 +19,8 @@ package todo_test
 import (
 	"context"
 
-	todo "github.com/qclaogui/golang-api-server/genproto/todo/apiv1"
-	todopb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	todo "github.com/qclaogui/gaip/genproto/todo/apiv1"
+	todopb "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 )
 
 func ExampleNewClient() {
@@ -55,7 +55,7 @@ func ExampleClient_Create() {
 
 	req := &todopb.CreateRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#CreateRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#CreateRequest.
 	}
 	resp, err := c.Create(ctx, req)
 	if err != nil {
@@ -80,7 +80,7 @@ func ExampleClient_Delete() {
 
 	req := &todopb.DeleteRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#DeleteRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#DeleteRequest.
 	}
 	resp, err := c.Delete(ctx, req)
 	if err != nil {
@@ -105,7 +105,7 @@ func ExampleClient_Get() {
 
 	req := &todopb.GetRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#GetRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#GetRequest.
 	}
 	resp, err := c.Get(ctx, req)
 	if err != nil {
@@ -130,7 +130,7 @@ func ExampleClient_List() {
 
 	req := &todopb.ListRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#ListRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#ListRequest.
 	}
 	resp, err := c.List(ctx, req)
 	if err != nil {
@@ -155,7 +155,7 @@ func ExampleClient_Update() {
 
 	req := &todopb.UpdateRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#UpdateRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#UpdateRequest.
 	}
 	resp, err := c.Update(ctx, req)
 	if err != nil {

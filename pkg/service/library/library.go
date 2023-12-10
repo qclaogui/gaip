@@ -8,9 +8,9 @@ import (
 	"context"
 
 	"github.com/go-kit/log"
-	"github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
-	"github.com/qclaogui/golang-api-server/pkg/service"
-	"github.com/qclaogui/golang-api-server/pkg/service/library/repository"
+	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
+	"github.com/qclaogui/gaip/pkg/service"
+	"github.com/qclaogui/gaip/pkg/service/library/repository"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )

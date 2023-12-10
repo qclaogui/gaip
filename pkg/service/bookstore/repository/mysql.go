@@ -11,7 +11,7 @@ import (
 	"fmt"
 
 	"github.com/grafana/dskit/flagext"
-	"github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

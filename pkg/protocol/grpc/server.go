@@ -13,8 +13,8 @@ import (
 	"os/signal"
 
 	"github.com/grafana/dskit/server"
-	"github.com/qclaogui/golang-api-server/pkg/protocol/grpc/interceptors"
-	"github.com/qclaogui/golang-api-server/pkg/service"
+	"github.com/qclaogui/gaip/pkg/protocol/grpc/interceptors"
+	"github.com/qclaogui/gaip/pkg/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/qclaogui/golang-api-server/internal/ent/user"
+	"github.com/qclaogui/gaip/internal/ent/user"
 )
 
 // User is the model entity for the User schema.

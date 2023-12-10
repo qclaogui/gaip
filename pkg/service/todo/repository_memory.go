@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

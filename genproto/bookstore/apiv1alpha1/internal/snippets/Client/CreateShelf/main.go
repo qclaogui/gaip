@@ -21,8 +21,8 @@ package main
 import (
 	"context"
 
-	bookstore "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1"
-	bookstorepb "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	bookstore "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1"
+	bookstorepb "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 
 	req := &bookstorepb.CreateShelfRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#CreateShelfRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#CreateShelfRequest.
 	}
 	resp, err := c.CreateShelf(ctx, req)
 	if err != nil {

@@ -16,8 +16,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/qclaogui/golang-api-server/internal/ent/todo"
-	"github.com/qclaogui/golang-api-server/internal/ent/user"
+	"github.com/qclaogui/gaip/internal/ent/todo"
+	"github.com/qclaogui/gaip/internal/ent/user"
 )
 
 // ent aliases to avoid import conflicts in user's code.

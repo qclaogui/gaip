@@ -22,7 +22,7 @@ import (
 	"time"
 
 	gax "github.com/googleapis/gax-go/v2"
-	todopb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	todopb "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
 	gtransport "google.golang.org/api/transport/grpc"

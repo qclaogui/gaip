@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/grafana/dskit/flagext"
-	"github.com/qclaogui/golang-api-server/tools/fieldcategory"
+	"github.com/qclaogui/gaip/tools/fieldcategory"
 )
 
 const (

@@ -8,7 +8,7 @@ import "google/protobuf/empty.proto";
 import "qclaogui/library/v1/book.proto";
 import "qclaogui/library/v1/shelf.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb";
+option go_package = "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb";
 
 // This API represents a simple digital library. It lets you manage Shelf
 // resources and Book resources in the library. It defines the following

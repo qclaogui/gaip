@@ -17,7 +17,7 @@ const (
 	goImage   = "golang:1.21.4"                     // use golang:1.21.4 container as builder
 	runImage  = "gcr.io/distroless/static"          // use gcr.io/distroless/static container as runtime
 	imageRepo = "docker.io"                         // the container registry for the app image
-	appImage  = "qclaogui/golang-api-server:latest" // the app image
+	appImage  = "qclaogui/gaip:latest" // the app image
 )
 
 var platforms = []dagger.Platform{"linux/amd64", "linux/arm64"}
@@ -84,7 +84,7 @@ func main() {
 		// copy binary file from builder
 		app := client.Container(dagger.ContainerOpts{Platform: platform}).
 			From(runImage).
-			WithFile("/bin/main", builder.File("bin/golang-api-server")).
+			WithFile("/bin/main", builder.File("bin/gaip")).
 			WithEntrypoint([]string{"main"})
 
 		platformVariants = append(platformVariants, app)

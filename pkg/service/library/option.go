@@ -6,7 +6,7 @@ package library
 
 import (
 	"github.com/go-kit/log"
-	"github.com/qclaogui/golang-api-server/pkg/service/library/repository"
+	"github.com/qclaogui/gaip/pkg/service/library/repository"
 )
 
 // Option is an alias for a function that will take in a pointer to

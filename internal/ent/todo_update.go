@@ -14,8 +14,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/qclaogui/golang-api-server/internal/ent/predicate"
-	"github.com/qclaogui/golang-api-server/internal/ent/todo"
+	"github.com/qclaogui/gaip/internal/ent/predicate"
+	"github.com/qclaogui/gaip/internal/ent/todo"
 )
 
 // TodoUpdate is the builder for updating Todo entities.

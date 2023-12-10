@@ -21,8 +21,8 @@ package main
 import (
 	"context"
 
-	todo "github.com/qclaogui/golang-api-server/genproto/todo/apiv1"
-	todopb "github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	todo "github.com/qclaogui/gaip/genproto/todo/apiv1"
+	todopb "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 
 	req := &todopb.DeleteRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb#DeleteRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#DeleteRequest.
 	}
 	resp, err := c.Delete(ctx, req)
 	if err != nil {

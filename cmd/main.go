@@ -11,12 +11,12 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/qclaogui/golang-api-server/pkg/version"
+	"github.com/qclaogui/gaip/pkg/version"
 )
 
 var port = "8080"
 
-var sourceLink = "https://github.com/qclaogui/golang-api-server"
+var sourceLink = "https://github.com/qclaogui/gaip"
 
 func handleHello(w http.ResponseWriter, r *http.Request) {
 	slog.Info("new request", "method", r.Method, "uri", r.URL.String(), "userAgent", r.Header.Get("User-Agent"))

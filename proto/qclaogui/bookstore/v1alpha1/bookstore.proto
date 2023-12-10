@@ -21,7 +21,7 @@ package qclaogui.bookstore.v1alpha1;
 import "google/api/client.proto";
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb";
+option go_package = "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb";
 
 // A simple Bookstore API.
 //

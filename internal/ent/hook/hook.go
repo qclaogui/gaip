@@ -10,7 +10,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/qclaogui/golang-api-server/internal/ent"
+	"github.com/qclaogui/gaip/internal/ent"
 )
 
 // The TodoFunc type is an adapter to allow the use of ordinary

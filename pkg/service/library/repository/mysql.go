@@ -11,8 +11,8 @@ import (
 
 	"entgo.io/ent/dialect"
 	"github.com/grafana/dskit/flagext"
-	"github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
-	"github.com/qclaogui/golang-api-server/internal/ent"
+	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
+	"github.com/qclaogui/gaip/internal/ent"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

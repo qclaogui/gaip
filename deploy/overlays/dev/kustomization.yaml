@@ -14,7 +14,7 @@ labels:
 
 replicas:
 - count: 1
-  name: golang-api-server
+  name: gaip
 
 patches:
 - path: patch_healthcheck.yaml
@@ -25,7 +25,7 @@ configMapGenerator:
 - behavior: merge
   literals:
   - DEPLOY_ENV=dev
-  name: golang-api-server
+  name: gaip
 
 # https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-immutable
 generatorOptions:
@@ -35,6 +35,6 @@ resources:
 - ../../base
 
 images:
-- name: golang-api-server
-  newName: qclaogui/golang-api-server
+- name: gaip
+  newName: qclaogui/gaip
   newTag: IMAGE_TAG

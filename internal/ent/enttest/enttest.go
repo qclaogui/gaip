@@ -9,12 +9,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/qclaogui/golang-api-server/internal/ent"
+	"github.com/qclaogui/gaip/internal/ent"
 
 	// required by schema hooks.
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/qclaogui/golang-api-server/internal/ent/migrate"
-	_ "github.com/qclaogui/golang-api-server/internal/ent/runtime"
+	"github.com/qclaogui/gaip/internal/ent/migrate"
+	_ "github.com/qclaogui/gaip/internal/ent/runtime"
 )
 
 type (

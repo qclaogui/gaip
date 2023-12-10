@@ -6,18 +6,18 @@ immutable: true
 kind: ConfigMap
 metadata:
   labels:
-    app: golang-api-server
+    app: gaip
     version: v0.0.1
-  name: golang-api-server-5gmfdfg6fh
+  name: gaip-5gmfdfg6fh
   namespace: default
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: golang-api-server
+    app: gaip
     version: v0.0.1
-  name: golang-api-server-svc
+  name: gaip-svc
   namespace: default
 spec:
   ports:
@@ -26,40 +26,40 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    app: golang-api-server
+    app: gaip
     version: v0.0.1
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: golang-api-server
+    app: gaip
     version: v0.0.1
-  name: golang-api-server
+  name: gaip
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: golang-api-server
+      app: gaip
       version: v0.0.1
   template:
     metadata:
       labels:
-        app: golang-api-server
+        app: gaip
         version: v0.0.1
     spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: golang-api-server-5gmfdfg6fh
-        image: qclaogui/golang-api-server:IMAGE_TAG
+            name: gaip-5gmfdfg6fh
+        image: qclaogui/gaip:IMAGE_TAG
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
             path: /healthz
             port: http-metrics
-        name: golang-api-server
+        name: gaip
         ports:
         - containerPort: 8080
           name: http-metrics

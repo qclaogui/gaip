@@ -22,8 +22,8 @@ import (
 	"context"
 	"io"
 
-	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
-	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	project "github.com/qclaogui/gaip/genproto/project/apiv1"
+	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 )
 
 func main() {

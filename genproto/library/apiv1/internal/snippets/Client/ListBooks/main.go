@@ -21,8 +21,8 @@ package main
 import (
 	"context"
 
-	library "github.com/qclaogui/golang-api-server/genproto/library/apiv1"
-	librarypb "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	library "github.com/qclaogui/gaip/genproto/library/apiv1"
+	librarypb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"google.golang.org/api/iterator"
 )
 
@@ -41,7 +41,7 @@ func main() {
 
 	req := &librarypb.ListBooksRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#ListBooksRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/library/apiv1/librarypb#ListBooksRequest.
 	}
 	it := c.ListBooks(ctx, req)
 	for {

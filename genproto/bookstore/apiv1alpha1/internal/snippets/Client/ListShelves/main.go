@@ -21,7 +21,7 @@ package main
 import (
 	"context"
 
-	bookstore "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1"
+	bookstore "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 

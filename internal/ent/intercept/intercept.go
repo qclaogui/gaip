@@ -11,10 +11,10 @@ import (
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/qclaogui/golang-api-server/internal/ent"
-	"github.com/qclaogui/golang-api-server/internal/ent/predicate"
-	"github.com/qclaogui/golang-api-server/internal/ent/todo"
-	"github.com/qclaogui/golang-api-server/internal/ent/user"
+	"github.com/qclaogui/gaip/internal/ent"
+	"github.com/qclaogui/gaip/internal/ent/predicate"
+	"github.com/qclaogui/gaip/internal/ent/todo"
+	"github.com/qclaogui/gaip/internal/ent/user"
 )
 
 // The Query interface represents an operation that queries a graph.

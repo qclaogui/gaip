@@ -11,10 +11,10 @@ import (
 	"github.com/go-kit/log"
 	"github.com/grafana/dskit/server"
 	"github.com/pkg/errors"
-	"github.com/qclaogui/golang-api-server/pkg/service/bookstore"
-	"github.com/qclaogui/golang-api-server/pkg/service/library"
-	"github.com/qclaogui/golang-api-server/pkg/service/project"
-	"github.com/qclaogui/golang-api-server/pkg/vault"
+	"github.com/qclaogui/gaip/pkg/service/bookstore"
+	"github.com/qclaogui/gaip/pkg/service/library"
+	"github.com/qclaogui/gaip/pkg/service/project"
+	"github.com/qclaogui/gaip/pkg/vault"
 )
 
 // Config is configuration for Server

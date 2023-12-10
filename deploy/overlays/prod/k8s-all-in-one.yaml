@@ -6,19 +6,19 @@ immutable: true
 kind: ConfigMap
 metadata:
   labels:
-    app: golang-api-server
+    app: gaip
     version: v0.0.1
-  name: golang-api-server-fk6dm666t8
+  name: gaip-fk6dm666t8
   namespace: default
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: golang-api-server
+    app: gaip
     monitoring.qclaogui.com: "true"
     version: v0.0.1
-  name: golang-api-server-svc
+  name: gaip-svc
   namespace: default
 spec:
   ports:
@@ -27,22 +27,22 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    app: golang-api-server
+    app: gaip
     version: v0.0.1
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: golang-api-server
+    app: gaip
     version: v0.0.1
-  name: golang-api-server
+  name: gaip
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: golang-api-server
+      app: gaip
       version: v0.0.1
   strategy:
     rollingUpdate:
@@ -52,7 +52,7 @@ spec:
   template:
     metadata:
       labels:
-        app: golang-api-server
+        app: gaip
         logging.qclaogui.com: "true"
         version: v0.0.1
     spec:
@@ -65,20 +65,20 @@ spec:
                 - key: app
                   operator: In
                   values:
-                  - golang-api-server
+                  - gaip
               topologyKey: kubernetes.io/hostname
             weight: 100
       containers:
       - envFrom:
         - configMapRef:
-            name: golang-api-server-fk6dm666t8
-        image: qclaogui/golang-api-server:IMAGE_TAG
+            name: gaip-fk6dm666t8
+        image: qclaogui/gaip:IMAGE_TAG
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
             path: /healthz
             port: http-metrics
-        name: golang-api-server
+        name: gaip
         ports:
         - containerPort: 8080
           name: http-metrics
@@ -109,7 +109,7 @@ spec:
       topologySpreadConstraints:
       - labelSelector:
           matchLabels:
-            app: golang-api-server
+            app: gaip
             version: v0.0.1
         maxSkew: 2
         topologyKey: topology.kubernetes.io/zone
@@ -126,16 +126,16 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
   labels:
     version: v0.0.1
-  name: golang-api-server
+  name: gaip
   namespace: default
 spec:
   rules:
-  - host: golang-api-server.k8s.qclaogui.com
+  - host: gaip.k8s.qclaogui.com
     http:
       paths:
       - backend:
           service:
-            name: golang-api-server-svc-v0-0-1
+            name: gaip-svc-v0-0-1
             port:
               name: http-metrics
         path: /
@@ -155,16 +155,16 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
   labels:
     version: v0.0.1
-  name: golang-api-server-canary
+  name: gaip-canary
   namespace: default
 spec:
   rules:
-  - host: golang-api-server.k8s.qclaogui.com
+  - host: gaip.k8s.qclaogui.com
     http:
       paths:
       - backend:
           service:
-            name: golang-api-server-svc-v0-0-1
+            name: gaip-svc-v0-0-1
             port:
               name: http-metrics
         path: /

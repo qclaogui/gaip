@@ -6,7 +6,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/qclaogui/golang-api-server/internal/ent/runtime.go
+// The schema-stitching logic is generated in github.com/qclaogui/gaip/internal/ent/runtime.go
 
 const (
 	Version = "v0.12.4"                                         // Version of ent codegen.

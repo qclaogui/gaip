@@ -21,8 +21,8 @@ package main
 import (
 	"context"
 
-	library "github.com/qclaogui/golang-api-server/genproto/library/apiv1"
-	librarypb "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	library "github.com/qclaogui/gaip/genproto/library/apiv1"
+	librarypb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 
 	req := &librarypb.DeleteShelfRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#DeleteShelfRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/library/apiv1/librarypb#DeleteShelfRequest.
 	}
 	err = c.DeleteShelf(ctx, req)
 	if err != nil {

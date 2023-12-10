@@ -17,10 +17,10 @@ import (
 	"github.com/grafana/dskit/flagext"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/qclaogui/golang-api-server/pkg/app"
-	"github.com/qclaogui/golang-api-server/pkg/version"
-	util_log "github.com/qclaogui/golang-api-server/tools/log"
-	"github.com/qclaogui/golang-api-server/tools/usage"
+	"github.com/qclaogui/gaip/pkg/app"
+	"github.com/qclaogui/gaip/pkg/version"
+	util_log "github.com/qclaogui/gaip/tools/log"
+	"github.com/qclaogui/gaip/tools/usage"
 	"gopkg.in/yaml.v3"
 )
 

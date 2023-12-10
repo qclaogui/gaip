@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: golang-api-server
+  name: gaip
 spec:
   replicas: 1
   template:
@@ -9,9 +9,9 @@ spec:
       imagePullSecrets:
       - name: ucloud-registry
       containers:
-      - name: golang-api-server
+      - name: gaip
         imagePullPolicy: Always
-        image: golang-api-server
+        image: gaip
         ports:
         - name: http-metrics
           containerPort: 8080

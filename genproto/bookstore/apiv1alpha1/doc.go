@@ -66,7 +66,7 @@
 //
 //	req := &bookstorepb.CreateBookRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#CreateBookRequest.
+//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#CreateBookRequest.
 //	}
 //	resp, err := c.CreateBook(ctx, req)
 //	if err != nil {
@@ -88,7 +88,7 @@
 // [Testing against Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Testing
 // [Debugging Client Libraries]: https://pkg.go.dev/cloud.google.com/go#hdr-Debugging
 // [Inspecting errors]: https://pkg.go.dev/cloud.google.com/go#hdr-Inspecting_errors
-package bookstore // import "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1"
+package bookstore // import "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1"
 
 import (
 	"context"

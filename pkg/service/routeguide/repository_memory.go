@@ -15,7 +15,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/qclaogui/golang-api-server/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"google.golang.org/protobuf/proto"
 )
 

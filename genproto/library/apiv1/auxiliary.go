@@ -17,7 +17,7 @@
 package library
 
 import (
-	librarypb "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	librarypb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"google.golang.org/api/iterator"
 )
 

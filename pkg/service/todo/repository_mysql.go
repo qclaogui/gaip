@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/qclaogui/golang-api-server/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"

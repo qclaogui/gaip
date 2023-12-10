@@ -6,7 +6,7 @@ kind: Kustomization
 labels:
 - includeSelectors: true
   pairs:
-    app: golang-api-server
+    app: gaip
 
 patches:
 - path: patch_env.yaml
@@ -15,7 +15,7 @@ patches:
 configMapGenerator:
 - literals:
   - APP_PORT=8080
-  name: golang-api-server
+  name: gaip
 
 resources:
 - deployment.yaml

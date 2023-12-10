@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: golang-api-server
+  name: gaip
 spec:
   template:
     spec:
@@ -14,16 +14,16 @@ spec:
                 - key: app
                   operator: In
                   values:
-                  - golang-api-server
+                  - gaip
               topologyKey: kubernetes.io/hostname
             weight: 100
 #          requiredDuringSchedulingIgnoredDuringExecution:
 #          - labelSelector:
 #              matchLabels:
-#                app: golang-api-server
+#                app: gaip
 ##              matchExpressions:
 ##              - key: app
 ##                operator: In
 ##                values:
-##                - golang-api-server
+##                - gaip
 #            topologyKey: kubernetes.io/hostname

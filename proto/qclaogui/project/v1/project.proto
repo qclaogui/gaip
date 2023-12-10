@@ -5,7 +5,7 @@ package qclaogui.project.v1;
 import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+option go_package = "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb";
 
 // Describes a project.
 message Project {

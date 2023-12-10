@@ -7,7 +7,7 @@ package project
 import (
 	"flag"
 
-	"github.com/qclaogui/golang-api-server/pkg/service/project/repository"
+	"github.com/qclaogui/gaip/pkg/service/project/repository"
 )
 
 type Config struct {

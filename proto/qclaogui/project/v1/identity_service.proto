@@ -11,7 +11,7 @@ import "google/api/client.proto";
 import "google/protobuf/empty.proto";
 import "qclaogui/project/v1/user.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+option go_package = "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb";
 
 // A simple identity service.
 service IdentityService {

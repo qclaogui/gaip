@@ -7,7 +7,7 @@ import "google/api/resource.proto";
 import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb";
+option go_package = "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb";
 
 // A user.
 message User {

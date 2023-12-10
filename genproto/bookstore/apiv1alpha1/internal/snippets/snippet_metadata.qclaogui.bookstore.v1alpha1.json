@@ -1,6 +1,6 @@
 {
   "clientLibrary": {
-    "name": "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1",
+    "name": "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1",
     "version": "$VERSION",
     "language": "GO",
     "apis": [

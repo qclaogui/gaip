@@ -22,7 +22,7 @@ import (
 	"time"
 
 	gax "github.com/googleapis/gax-go/v2"
-	bookstorepb "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	bookstorepb "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
 	gtransport "google.golang.org/api/transport/grpc"

@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

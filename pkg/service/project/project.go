@@ -7,9 +7,9 @@ package project
 import (
 	"context"
 
-	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
-	"github.com/qclaogui/golang-api-server/pkg/service"
-	"github.com/qclaogui/golang-api-server/pkg/service/project/repository"
+	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/pkg/service"
+	"github.com/qclaogui/gaip/pkg/service/project/repository"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )

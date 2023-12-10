@@ -21,8 +21,8 @@ package main
 import (
 	"context"
 
-	library "github.com/qclaogui/golang-api-server/genproto/library/apiv1"
-	librarypb "github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	library "github.com/qclaogui/gaip/genproto/library/apiv1"
+	librarypb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 
 	req := &librarypb.GetShelfRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb#GetShelfRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/library/apiv1/librarypb#GetShelfRequest.
 	}
 	resp, err := c.GetShelf(ctx, req)
 	if err != nil {

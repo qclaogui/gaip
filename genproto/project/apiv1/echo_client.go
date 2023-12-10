@@ -31,7 +31,7 @@ import (
 	lroauto "cloud.google.com/go/longrunning/autogen"
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	gax "github.com/googleapis/gax-go/v2"
-	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"

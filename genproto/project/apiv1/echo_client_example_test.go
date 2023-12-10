@@ -20,8 +20,8 @@ import (
 	"context"
 	"io"
 
-	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
-	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	project "github.com/qclaogui/gaip/genproto/project/apiv1"
+	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"google.golang.org/api/iterator"
 )
 
@@ -74,7 +74,7 @@ func ExampleEchoClient_Block() {
 
 	req := &projectpb.BlockRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#BlockRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#BlockRequest.
 	}
 	resp, err := c.Block(ctx, req)
 	if err != nil {
@@ -139,7 +139,7 @@ func ExampleEchoClient_Echo() {
 
 	req := &projectpb.EchoRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#EchoRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#EchoRequest.
 	}
 	resp, err := c.Echo(ctx, req)
 	if err != nil {
@@ -164,7 +164,7 @@ func ExampleEchoClient_PagedExpand() {
 
 	req := &projectpb.PagedExpandRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#PagedExpandRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#PagedExpandRequest.
 	}
 	it := c.PagedExpand(ctx, req)
 	for {
@@ -195,7 +195,7 @@ func ExampleEchoClient_Wait() {
 
 	req := &projectpb.WaitRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#WaitRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#WaitRequest.
 	}
 	op, err := c.Wait(ctx, req)
 	if err != nil {

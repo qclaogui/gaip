@@ -12,8 +12,8 @@ import (
 
 	// go-sqlite3
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
-	"github.com/qclaogui/golang-api-server/internal/ent/enttest"
+	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/internal/ent/enttest"
 )
 
 func TestService(t *testing.T) {

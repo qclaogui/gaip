@@ -1,4 +1,4 @@
-module github.com/qclaogui/golang-api-server
+module github.com/qclaogui/gaip
 
 go 1.21
 

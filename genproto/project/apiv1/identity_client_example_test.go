@@ -19,8 +19,8 @@ package project_test
 import (
 	"context"
 
-	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
-	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	project "github.com/qclaogui/gaip/genproto/project/apiv1"
+	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"google.golang.org/api/iterator"
 )
 
@@ -73,7 +73,7 @@ func ExampleIdentityClient_CreateUser() {
 
 	req := &projectpb.CreateUserRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#CreateUserRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#CreateUserRequest.
 	}
 	resp, err := c.CreateUser(ctx, req)
 	if err != nil {
@@ -98,7 +98,7 @@ func ExampleIdentityClient_DeleteUser() {
 
 	req := &projectpb.DeleteUserRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#DeleteUserRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#DeleteUserRequest.
 	}
 	err = c.DeleteUser(ctx, req)
 	if err != nil {
@@ -121,7 +121,7 @@ func ExampleIdentityClient_GetUser() {
 
 	req := &projectpb.GetUserRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#GetUserRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#GetUserRequest.
 	}
 	resp, err := c.GetUser(ctx, req)
 	if err != nil {
@@ -146,7 +146,7 @@ func ExampleIdentityClient_ListUsers() {
 
 	req := &projectpb.ListUsersRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#ListUsersRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#ListUsersRequest.
 	}
 	it := c.ListUsers(ctx, req)
 	for {
@@ -177,7 +177,7 @@ func ExampleIdentityClient_UpdateUser() {
 
 	req := &projectpb.UpdateUserRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#UpdateUserRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#UpdateUserRequest.
 	}
 	resp, err := c.UpdateUser(ctx, req)
 	if err != nil {

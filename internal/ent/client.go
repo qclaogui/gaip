@@ -16,9 +16,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
-	"github.com/qclaogui/golang-api-server/internal/ent/migrate"
-	"github.com/qclaogui/golang-api-server/internal/ent/todo"
-	"github.com/qclaogui/golang-api-server/internal/ent/user"
+	"github.com/qclaogui/gaip/internal/ent/migrate"
+	"github.com/qclaogui/gaip/internal/ent/todo"
+	"github.com/qclaogui/gaip/internal/ent/user"
 )
 
 // Client is the client that holds all ent builders.

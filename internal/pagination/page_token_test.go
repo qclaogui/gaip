@@ -7,7 +7,7 @@ package pagination
 import (
 	"testing"
 
-	"github.com/qclaogui/golang-api-server/genproto/library/apiv1/librarypb"
+	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 )
 
 func TestParsePageToken(t *testing.T) {

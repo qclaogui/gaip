@@ -16,7 +16,7 @@ import (
 
 	"github.com/blang/semver"
 	"github.com/dave/jennifer/jen"
-	"github.com/qclaogui/golang-api-server/pkg/version"
+	"github.com/qclaogui/gaip/pkg/version"
 )
 
 const (

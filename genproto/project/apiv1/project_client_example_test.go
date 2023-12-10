@@ -19,8 +19,8 @@ package project_test
 import (
 	"context"
 
-	project "github.com/qclaogui/golang-api-server/genproto/project/apiv1"
-	projectpb "github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	project "github.com/qclaogui/gaip/genproto/project/apiv1"
+	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"google.golang.org/api/iterator"
 )
 
@@ -73,7 +73,7 @@ func ExampleClient_CreateProject() {
 
 	req := &projectpb.CreateProjectRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#CreateProjectRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#CreateProjectRequest.
 	}
 	resp, err := c.CreateProject(ctx, req)
 	if err != nil {
@@ -98,7 +98,7 @@ func ExampleClient_DeleteProject() {
 
 	req := &projectpb.DeleteProjectRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#DeleteProjectRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#DeleteProjectRequest.
 	}
 	err = c.DeleteProject(ctx, req)
 	if err != nil {
@@ -121,7 +121,7 @@ func ExampleClient_GetProject() {
 
 	req := &projectpb.GetProjectRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#GetProjectRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#GetProjectRequest.
 	}
 	resp, err := c.GetProject(ctx, req)
 	if err != nil {
@@ -146,7 +146,7 @@ func ExampleClient_ListProjects() {
 
 	req := &projectpb.ListProjectsRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb#ListProjectsRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#ListProjectsRequest.
 	}
 	it := c.ListProjects(ctx, req)
 	for {

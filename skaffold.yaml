@@ -4,7 +4,7 @@ metadata:
   name: gaip
 build:
   artifacts:
-    - image: golang-api-server
+    - image: gaip
       ko:
         main: ./cmd
   platforms:
@@ -18,7 +18,7 @@ deploy:
       - deploy/overlays/dev/k8s-all-in-one.yaml
 # portForward:
 #   - resourceType: Deployment
-#     resourceName: golang-api-server
+#     resourceName: gaip
 #     namespace: default
 #     port: 8080
 #     localPort: 8080
@@ -27,7 +27,7 @@ profiles:
   - name: dev
     build:
       artifacts:
-        - image: qclaogui/golang-api-server
+        - image: qclaogui/gaip
           ko:
             ldflags:
               - -s -w
@@ -43,7 +43,7 @@ profiles:
   - name: prod
     build:
       artifacts:
-        - image: uhub.service.ucloud.cn/qclaogui/golang-api-server
+        - image: uhub.service.ucloud.cn/qclaogui/gaip
           kaniko:
             image: uhub.service.ucloud.cn/qclaogui/executor:debug
       cluster: {}

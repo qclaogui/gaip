@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 )
 
 const (

@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/qclaogui/golang-api-server/genproto/project/apiv1/projectpb"
-	"github.com/qclaogui/golang-api-server/pkg/service/project/name"
+	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/pkg/service/project/name"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"

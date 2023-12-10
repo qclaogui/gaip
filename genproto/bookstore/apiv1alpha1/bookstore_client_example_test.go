@@ -19,8 +19,8 @@ package bookstore_test
 import (
 	"context"
 
-	bookstore "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1"
-	bookstorepb "github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb"
+	bookstore "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1"
+	bookstorepb "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -56,7 +56,7 @@ func ExampleClient_CreateBook() {
 
 	req := &bookstorepb.CreateBookRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#CreateBookRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#CreateBookRequest.
 	}
 	resp, err := c.CreateBook(ctx, req)
 	if err != nil {
@@ -81,7 +81,7 @@ func ExampleClient_CreateShelf() {
 
 	req := &bookstorepb.CreateShelfRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#CreateShelfRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#CreateShelfRequest.
 	}
 	resp, err := c.CreateShelf(ctx, req)
 	if err != nil {
@@ -106,7 +106,7 @@ func ExampleClient_DeleteBook() {
 
 	req := &bookstorepb.DeleteBookRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#DeleteBookRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#DeleteBookRequest.
 	}
 	err = c.DeleteBook(ctx, req)
 	if err != nil {
@@ -129,7 +129,7 @@ func ExampleClient_DeleteShelf() {
 
 	req := &bookstorepb.DeleteShelfRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#DeleteShelfRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#DeleteShelfRequest.
 	}
 	err = c.DeleteShelf(ctx, req)
 	if err != nil {
@@ -152,7 +152,7 @@ func ExampleClient_GetBook() {
 
 	req := &bookstorepb.GetBookRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#GetBookRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#GetBookRequest.
 	}
 	resp, err := c.GetBook(ctx, req)
 	if err != nil {
@@ -177,7 +177,7 @@ func ExampleClient_GetShelf() {
 
 	req := &bookstorepb.GetShelfRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#GetShelfRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#GetShelfRequest.
 	}
 	resp, err := c.GetShelf(ctx, req)
 	if err != nil {
@@ -202,7 +202,7 @@ func ExampleClient_ListBooks() {
 
 	req := &bookstorepb.ListBooksRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/golang-api-server/genproto/bookstore/apiv1alpha1/bookstorepb#ListBooksRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb#ListBooksRequest.
 	}
 	resp, err := c.ListBooks(ctx, req)
 	if err != nil {
