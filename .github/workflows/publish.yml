@@ -39,16 +39,18 @@ jobs:
           password: ${{ secrets.dhPassword }}
 
       - name: Install GoReleaser
-        run: go install github.com/goreleaser/goreleaser@v1.22.1
-  
+        run: |
+          wget https://github.com/goreleaser/goreleaser/releases/download/v1.22.1/goreleaser_Linux_x86_64.tar.gz
+          tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/go/bin/goreleaser-v1.22.1 -f goreleaser_Linux_x86_64.tar.gz
+
       - name: Publish release
         if: ${{ !inputs.isReleaseCandidate }}
         env:
           GITHUB_TOKEN: ${{ secrets.ghPAT }}
-        run: GORELEASER=/home/runner/go/bin/goreleaser ./tools/scripts/do-release.sh
+        run: ./tools/scripts/do-release.sh
 
       - name: Publish release candidate
         if: ${{ inputs.isReleaseCandidate }}
         env:
           GITHUB_TOKEN: ${{ secrets.ghPAT }}
-        run: GORELEASER=/home/runner/go/bin/goreleaser ./tools/scripts/do-release-candidate.sh
+        run: ./tools/scripts/do-release-candidate.sh
