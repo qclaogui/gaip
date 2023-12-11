@@ -4,10 +4,10 @@ go 1.21
 
 require (
 	cloud.google.com/go/longrunning v0.5.4
-	dagger.io/dagger v0.9.3
+	dagger.io/dagger v0.9.4
 	entgo.io/ent v0.12.5
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/containerd/containerd v1.7.10
+	github.com/containerd/containerd v1.7.11
 	github.com/dave/jennifer v1.7.0
 	github.com/go-kit/log v0.2.1
 	github.com/go-sql-driver/mysql v1.7.1
@@ -18,7 +18,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.1
 	github.com/hashicorp/vault/api v1.10.0
-	github.com/jackc/pgx/v5 v5.5.0
+	github.com/jackc/pgx/v5 v5.5.1
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.27.10
@@ -106,7 +106,7 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.45.0 // indirect
-	github.com/prometheus/exporter-toolkit v0.10.1-0.20230714054209-2f4150c63f97 // indirect
+	github.com/prometheus/exporter-toolkit v0.11.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/sercand/kuberesolver/v5 v5.1.1 // indirect
