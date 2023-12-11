@@ -23,7 +23,7 @@
 
 Practices for implementing [Google API Improvement Proposals](https://aip.dev/) (AIP) in Go.
 
-Share knowledge and help others.
+Apply knowledge and experience to improve open source
 
 ```shell
 ❯ make help
@@ -32,14 +32,13 @@ Usage:
   make <target>
 
 Build
-  build                                     Build binary for current OS and place it at ./bin/gaip
+  build                                     Build binary for current OS and place it at ./bin/gaip_$(GOOS)_$(GOARCH)
   build-all                                 Build binaries for Linux, Windows and Mac and place them in dist/
   clean                                     Remove artefacts or generated files from previous build
 
 Dependencies
   go-mod                                    go mod download && go mod tidy
   check-go-mod                              Ensures fresh go.mod and go.sum.
-  buf-mod                                   Run buf mod update after adding a dependency to your buf.yaml
   install-build-deps                        Install dependencies tools
 
 Generate the schema under internal/ent/schema/ directory
@@ -51,7 +50,6 @@ Generate the schema under internal/ent/schema/ directory
   atlas-apply                               Apply generated migration files onto the database
 
 Regenerate gRPC code
-  buf-gen                                   Regenerate proto by buf https://buf.build/
   swagger-ui                                Generate Swagger UI
   protoc-gen                                Regenerate proto by protoc
 
@@ -67,15 +65,17 @@ Testing Lint & fmt
   api-linter                                Lint all of the proto files.
   fix-lint                                  fix lint issue of the Go files
 
+Kubernetes
+  cluster                                   Create k3s cluster
+  manifests                                 Generates the k8s manifests
+
 Release
   prepare-release-candidate                 Create release candidate
   prepare-release                           Create release
   print-version                             Prints the upcoming release number
-  manifests                                 Generates the k8s manifests
 
 General
   help                                      Display this help. Thanks to https://www.thapaliya.com/en/writings/well-documented-makefiles/
-
 ```
 
 [Automatic Migration planning script](https://entgo.io/docs/versioned/programmatically#2-automatic-migration-planning-script)

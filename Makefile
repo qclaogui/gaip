@@ -303,6 +303,20 @@ fix-lint: $(GOLANGCI_LINT) ## fix lint issue of the Go files
 	@$(GOLANGCI_LINT) run --fix
 
 
+
+##@ Kubernetes
+
+.PHONY: cluster
+cluster: ## Create k3s cluster
+	k3d cluster create k3s-gaip --config deploy/k3d-k3s-config.yaml
+#	k3d image import -c k3s-gaip qclaogui/gaip:latest
+
+.PHONY: manifests
+manifests: $(KUSTOMIZE) ## Generates the k8s manifests
+	@$(KUSTOMIZE) build deploy/overlays/dev > deploy/overlays/dev/k8s-all-in-one.yaml
+	@$(KUSTOMIZE) build deploy/overlays/prod > deploy/overlays/prod/k8s-all-in-one.yaml
+
+
 ##@ Release
 
 .PHONY: prepare-release-candidate
@@ -316,11 +330,6 @@ prepare-release: ## Create release
 .PHONY: print-version
 print-version: ## Prints the upcoming release number
 	@go run pkg/version/generate/release_generate.go print-version
-
-.PHONY: manifests
-manifests: $(KUSTOMIZE) ## Generates the k8s manifests
-	@$(KUSTOMIZE) build deploy/overlays/dev > deploy/overlays/dev/k8s-all-in-one.yaml
-	@$(KUSTOMIZE) build deploy/overlays/prod > deploy/overlays/prod/k8s-all-in-one.yaml
 
 
 ##@ General

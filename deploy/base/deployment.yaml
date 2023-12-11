@@ -10,7 +10,7 @@ spec:
       - name: ucloud-registry
       containers:
       - name: gaip
-        imagePullPolicy: Always
+        # imagePullPolicy: Always
         image: gaip
         ports:
         - name: http-metrics

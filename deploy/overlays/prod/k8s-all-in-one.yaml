@@ -73,7 +73,6 @@ spec:
         - configMapRef:
             name: gaip-fk6dm666t8
         image: qclaogui/gaip:IMAGE_TAG
-        imagePullPolicy: Always
         livenessProbe:
           httpGet:
             path: /healthz

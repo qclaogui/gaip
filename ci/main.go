@@ -55,8 +55,8 @@ func main() {
 		WithMountedCache("/go/pkg/mod", client.CacheVolume("go-mod")).
 		WithMountedCache("/root/.cache/go-build", client.CacheVolume("go-build")).
 		WithEnvVariable("GOCACHE", "/root/.cache/go-build").
-		WithMountedDirectory("/app", source).
-		WithWorkdir("/app")
+		WithMountedDirectory("/workspace", source).
+		WithWorkdir("/workspace")
 
 	platformVariants := make([]*dagger.Container, 0, len(platforms))
 	for _, platform := range platforms {

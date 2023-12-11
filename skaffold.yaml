@@ -6,40 +6,28 @@ build:
   artifacts:
     - image: gaip
       ko:
-        main: ./cmd
-  platforms:
-    - linux/amd64
-manifests:
-  rawYaml:
-    - deploy/overlays/dev/k8s-all-in-one.yaml
-deploy:
-  kubectl:
-    remoteManifests:
-      - deploy/overlays/dev/k8s-all-in-one.yaml
-# portForward:
-#   - resourceType: Deployment
-#     resourceName: gaip
-#     namespace: default
-#     port: 8080
-#     localPort: 8080
+        fromImage: cgr.dev/chainguard/static
+        main: ./cmd/server
 
+# Profiles
 profiles:
-  - name: dev
-    build:
-      artifacts:
-        - image: qclaogui/gaip
-          ko:
-            ldflags:
-              - -s -w
-              - -extldflags "-static"
-            main: ./cmd
+  - name: k3d-k3s
     manifests:
-      rawYaml:
-        - deploy/overlays/dev/k8s-all-in-one.yaml
-    deploy:
-      kubectl:
-        remoteManifests:
-          - deploy/overlays/dev/k8s-all-in-one.yaml
+      kustomize:
+        paths:
+          - deploy/base
+    # override the default base image with one that supports CGO when running 'skaffold dev'
+    activation:
+      - command: dev
+        kubeContext: k3d-k3s-gaip
+    patches:
+      - op: replace
+        path: /build/artifacts/0/ko/fromImage
+        value: cgr.dev/chainguard/glibc-dynamic
+      - op: add
+        path: /build/artifacts/0/ko/env/0
+        value: CGO_ENABLED=1
+  
   - name: prod
     build:
       artifacts:
