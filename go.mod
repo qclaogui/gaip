@@ -14,7 +14,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/google/uuid v1.4.0
 	github.com/googleapis/gax-go/v2 v2.12.0
-	github.com/grafana/dskit v0.0.0-20231204113943-3040f31404f8
+	github.com/grafana/dskit v0.0.0-20231212004558-69248346b5cf
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.1
 	github.com/hashicorp/vault/api v1.10.0
@@ -29,9 +29,9 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.21.0
 	go.opentelemetry.io/otel/sdk v1.21.0
 	google.golang.org/api v0.153.0
-	google.golang.org/genproto/googleapis/api v0.0.0-20231127180814-3a041ad873d4
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231127180814-3a041ad873d4
-	google.golang.org/grpc v1.59.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20231211222908-989df2bf70f3
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231211222908-989df2bf70f3
+	google.golang.org/grpc v1.60.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -132,7 +132,7 @@ require (
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.16.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
-	google.golang.org/genproto v0.0.0-20231127180814-3a041ad873d4 // indirect
+	google.golang.org/genproto v0.0.0-20231211222908-989df2bf70f3 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

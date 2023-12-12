@@ -33,7 +33,7 @@ Usage:
 
 Build
   build                                     Build binary for current OS and place it at ./bin/gaip_$(GOOS)_$(GOARCH)
-  build-all                                 Build binaries for Linux, Windows and Mac and place them in dist/
+  build-all                                 Build binaries for Linux and Mac and place them in dist/
   clean                                     Remove artefacts or generated files from previous build
 
 Dependencies
@@ -41,13 +41,9 @@ Dependencies
   check-go-mod                              Ensures fresh go.mod and go.sum.
   install-build-deps                        Install dependencies tools
 
-Generate the schema under internal/ent/schema/ directory
-  ent-new                                   Get a description of graph schema
+Ent schema
   ent-gen                                   Regenerate schema
-  ent-describe                              Get a description of graph schema
   atlas-lint                                Verifying and linting migrations
-  atlas-diff                                Generating Versioned Migration Files
-  atlas-apply                               Apply generated migration files onto the database
 
 Regenerate gRPC code
   swagger-ui                                Generate Swagger UI

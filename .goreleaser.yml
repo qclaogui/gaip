@@ -33,7 +33,7 @@ builds:
 archives:
 - builds:
   - gaip
-  name_template: "gaip_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  name_template: "gaip-{{ .Os }}-{{ .Arch }}"
   format: tar.gz
   files:
   - none*

@@ -50,7 +50,7 @@ build: ## Build binary for current OS and place it at ./bin/gaip_$(GOOS)_$(GOARC
 	@$(GO_ENV) go build $(GO_FLAGS) -o bin/gaip_$(GOOS)_$(GOARCH) ./cmd/server
 
 .PHONY: build-all
-build-all: ## Build binaries for Linux, Windows and Mac and place them in dist/
+build-all: ## Build binaries for Linux and Mac and place them in dist/
 	@cat ./.goreleaser.yml ./.goreleaser.docker.yml > .goreleaser.combined.yml
 	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.combined.yml --snapshot --skip=publish --clean
 	@rm .goreleaser.combined.yml
@@ -94,9 +94,10 @@ install-build-deps: ## Install dependencies tools
 	@go install github.com/bwplotka/bingo@v0.9.0
 
 
-##@ Generate the schema under internal/ent/schema/ directory
-.PHONY: ent-new
-ent-new: $(ENT) ## Get a description of graph schema
+##@ Ent schema
+
+# Generate the schema under internal/ent/schema/ directory
+ent-new: $(ENT)
 	@$(ENT) new --target=internal/ent/schema \
 			Todo
 
@@ -104,8 +105,8 @@ ent-new: $(ENT) ## Get a description of graph schema
 ent-gen: ## Regenerate schema
 	@go generate ./internal/ent
 
-.PHONY: ent-describe
-ent-describe: $(ENT) ## Get a description of graph schema
+# Get a description of graph schema
+ent-describe: $(ENT)
 	@$(ENT) describe ./internal/ent/schema
 
 .PHONY: atlas-lint
@@ -115,15 +116,15 @@ atlas-lint: $(ATLAS) ## Verifying and linting migrations
       --dev-url "docker://mysql/8/test" \
       --latest 1
 
-.PHONY: atlas-diff
-atlas-diff: $(ATLAS) ## Generating Versioned Migration Files
+# Generating Versioned Migration Files
+atlas-diff: $(ATLAS)
 	@$(ATLAS) migrate diff migration_name \
       --dir "file://migrations" \
       --to "ent://internal/ent/schema" \
       --dev-url "docker://mysql/8/ent"
 
-.PHONY: atlas-apply
-atlas-apply: $(ATLAS) ## Apply generated migration files onto the database
+# Apply generated migration files onto the database
+atlas-apply: $(ATLAS)
 	@$(ATLAS) migrate apply \
       --dir="file://migrations" \
       --url="mysql://root:pass@localhost:3306/example"
