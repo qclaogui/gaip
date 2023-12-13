@@ -27,9 +27,8 @@ import (
 // configHash exposes information about the loaded config
 var configHash = prometheus.NewGaugeVec(
 	prometheus.GaugeOpts{
-		Namespace: "qclaogui",
-		Name:      "server_config_hash",
-		Help:      "Hash of the currently active config file.",
+		Name: "gaip_config_hash",
+		Help: "Hash of the currently active config file.",
 	},
 	[]string{"sha256"},
 )
@@ -41,7 +40,6 @@ func init() {
 }
 
 type mainFlags struct {
-	useBufferedLogger             bool
 	rateLimitedLogsEnabled        bool
 	rateLimitedLogsPerSecond      float64
 	rateLimitedLogsPerSecondBurst int
@@ -52,7 +50,6 @@ type mainFlags struct {
 }
 
 func (mf *mainFlags) registerFlags(f *flag.FlagSet) {
-	f.BoolVar(&mf.useBufferedLogger, "log.buffered", false, "Use a buffered logger to reduce write contention.")
 	f.BoolVar(&mf.rateLimitedLogsEnabled, "log.rate-limit-enabled", false, "Use rate limited logger to reduce the number of logged messages per second.")
 	f.Float64Var(&mf.rateLimitedLogsPerSecond, "log.rate-limit-logs-per-second", 10000, "Maximum number of messages per second to be logged.")
 	f.IntVar(&mf.rateLimitedLogsPerSecondBurst, "log.rate-limit-logs-per-second-burst", 25000, "Burst size, i.e., maximum number of messages that can be logged in a second, temporarily exceeding the configured maximum logs per second.")
@@ -119,7 +116,7 @@ func main() {
 	}
 
 	reg := prometheus.DefaultRegisterer
-	cfg.Server.Log = util_log.InitLogger(cfg.Server.LogFormat, cfg.Server.LogLevel, mf.useBufferedLogger, util_log.LoggerConfig{
+	cfg.Server.Log = util_log.InitLogger(cfg.Server.LogFormat, cfg.Server.LogLevel, util_log.LoggerConfig{
 		Enabled:            mf.rateLimitedLogsEnabled,
 		LogsPerSecond:      mf.rateLimitedLogsPerSecond,
 		LogsPerSecondBurst: mf.rateLimitedLogsPerSecondBurst,

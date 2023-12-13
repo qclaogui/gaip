@@ -7,7 +7,6 @@ package log
 import (
 	"context"
 	"fmt"
-	"io"
 	"os"
 	"time"
 
@@ -31,8 +30,18 @@ type LoggerConfig struct {
 }
 
 // InitLogger initialises the global gokit logger and returns that logger.
-func InitLogger(logFormat string, logLevel dslog.Level, buffered bool, cfg LoggerConfig) log.Logger {
-	writer := getWriter(buffered)
+func InitLogger(logFormat string, logLevel dslog.Level, cfg LoggerConfig) log.Logger {
+	var (
+		logEntries    uint32 = 256                    // buffer up to 256 log lines in memory before flushing to a write(2) syscall
+		logBufferSize uint32 = 10e6                   // 10MB
+		flushTimeout         = 100 * time.Millisecond // flush the buffer after 100ms regardless of how full it is, to prevent losing many logs in case of ungraceful termination
+	)
+
+	writer := dslog.NewBufferedLogger(os.Stderr, logEntries,
+		dslog.WithFlushPeriod(flushTimeout),
+		dslog.WithPrellocatedBuffer(logBufferSize),
+	)
+
 	logger := dslog.NewGoKitWithWriter(logFormat, writer)
 
 	if cfg.Enabled {
@@ -66,28 +75,6 @@ func newFilter(logger log.Logger, lvl dslog.Level) log.Logger {
 
 func (f *levelFilter) DebugEnabled() bool {
 	return f.debugEnabled
-}
-
-func getWriter(buffered bool) io.Writer {
-	writer := os.Stderr
-
-	if buffered {
-		var (
-			logEntries    uint32 = 256                    // buffer up to 256 log lines in memory before flushing to a write(2) syscall
-			logBufferSize uint32 = 10e6                   // 10MB
-			flushTimeout         = 100 * time.Millisecond // flush the buffer after 100ms regardless of how full it is, to prevent losing many logs in case of ungraceful termination
-		)
-
-		// retain a reference to this logger because it doesn't conform to the standard Logger interface,
-		// and we can't unwrap it to get the underlying logger when we flush on shutdown
-		bufferedLogger = dslog.NewBufferedLogger(writer, logEntries,
-			dslog.WithFlushPeriod(flushTimeout),
-			dslog.WithPrellocatedBuffer(logBufferSize),
-		)
-
-		return bufferedLogger
-	}
-	return log.NewSyncWriter(writer)
 }
 
 // CheckFatal prints an error and exits with error code 1 if err is non-nil
