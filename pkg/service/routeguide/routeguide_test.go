@@ -8,16 +8,21 @@ import (
 	"context"
 	"testing"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/gaip/pkg/service/routeguide/repository"
 	lg "github.com/qclaogui/gaip/tools/log"
 	"google.golang.org/protobuf/proto"
 )
 
 func Test_ServiceServer_GetFeature(t *testing.T) {
 	ctx := context.Background()
-	ssv, err := NewServiceServer(lg.Logger, WithMemoryRepository())
+	var cfg = Config{}
+	cfg.RepoCfg.Backend = repository.BackendMemory
+
+	ssv, err := NewRouteGuideService(cfg, lg.Logger, prometheus.DefaultRegisterer)
 	if err != nil {
-		t.Fatalf("an error '%s' was not expected when NewServiceServer", err)
+		t.Fatalf("an error '%s' was not expected when NewRouteGuideService", err)
 	}
 
 	type args struct {

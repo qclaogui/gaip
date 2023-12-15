@@ -101,13 +101,13 @@ func nextPageToken(lastPage, total int) string {
 func (mr *MemoryRepo) CreateProject(_ context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
 	proj := req.Project
 	if proj == nil {
-		log.Print("ProjectServer must not be empty.")
-		return nil, status.Errorf(codes.InvalidArgument, "ProjectServer must not be empty")
+		log.Print("ProjectSrv must not be empty.")
+		return nil, status.Errorf(codes.InvalidArgument, "ProjectSrv must not be empty")
 	}
 
 	if proj.Name == "" {
-		log.Printf("ProjectServer name must not be empty: %v", proj.Name)
-		return nil, status.Errorf(codes.InvalidArgument, "ProjectServer name must not be empty")
+		log.Printf("ProjectSrv name must not be empty: %v", proj.Name)
+		return nil, status.Errorf(codes.InvalidArgument, "ProjectSrv name must not be empty")
 	}
 
 	pID, err := name.ParseProject(proj.Name)
@@ -120,7 +120,7 @@ func (mr *MemoryRepo) CreateProject(_ context.Context, req *projectpb.CreateProj
 	defer mr.mu.Unlock()
 
 	if _, ok := mr.projects[pID]; ok {
-		return nil, status.Errorf(codes.AlreadyExists, "ProjectServer with name %q already exists", pID)
+		return nil, status.Errorf(codes.AlreadyExists, "ProjectSrv with name %q already exists", pID)
 	}
 
 	mr.projects[pID] = proj
@@ -139,7 +139,7 @@ func (mr *MemoryRepo) GetProject(_ context.Context, req *projectpb.GetProjectReq
 
 	p, ok := mr.projects[pID]
 	if !ok {
-		return nil, status.Errorf(codes.AlreadyExists, "ProjectServer with name %q already exists", pID)
+		return nil, status.Errorf(codes.AlreadyExists, "ProjectSrv with name %q already exists", pID)
 	}
 
 	return p, nil
@@ -197,7 +197,7 @@ func (mr *MemoryRepo) DeleteProject(_ context.Context, req *projectpb.DeleteProj
 	}
 	_, ok := mr.projects[pID]
 	if !ok {
-		return nil, status.Errorf(codes.AlreadyExists, "ProjectServer with name %q already exists", pID)
+		return nil, status.Errorf(codes.AlreadyExists, "ProjectSrv with name %q already exists", pID)
 	}
 
 	delete(mr.projects, pID)

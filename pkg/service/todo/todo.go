@@ -6,91 +6,85 @@ package todo
 
 import (
 	"context"
-	"database/sql"
+	"flag"
 	"fmt"
 
 	"github.com/go-kit/log"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
-	"google.golang.org/grpc"
+	"github.com/qclaogui/gaip/pkg/service/todo/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 const (
-	apiVersion = "v1"
+	APIVersion = "v1"
 )
 
-// Option is an alias for a function that will take in a pointer to
-// an ServiceServer and modify it
-type Option func(*ServiceServer) error
+// Service Library Service Server
+type Service interface {
+	todopb.ToDoServiceServer
+}
 
-// WithRepository applies a given repository to the ServiceServer
-func WithRepository(repo Repository) Option {
-	return func(srv *ServiceServer) error {
-		srv.repo = repo
-		return nil
+type Config struct {
+	RepoCfg repository.Config `yaml:"database"`
+}
+
+func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
+	cfg.RepoCfg.RegisterFlags(fs)
+}
+
+func (cfg *Config) Validate() error {
+	if err := cfg.RepoCfg.Validate(); err != nil {
+		return err
 	}
+	return nil
 }
 
-// WithMemoryRepository applies a memory repository to the Option
-func WithMemoryRepository() Option {
-	repo := NewMemoryRepo()
-	return WithRepository(repo)
-}
-
-// WithMysqlRepository applies a memory repository to the Option
-func WithMysqlRepository(dsn string) Option {
-	// Create the memory repo, if we needed parameters, such as connection
-	// strings they could be inputted here
-	return func(svc *ServiceServer) error {
-		db, err := sql.Open("mysql", dsn)
-		if err != nil {
-			return fmt.Errorf("failed to open database: %v", err)
-		}
-
-		repo, err := NewMysqlRepo(db)
-		if err != nil {
-			return err
-		}
-		svc.repo = repo
-		return nil
-	}
-}
-
-type ServiceServer struct {
+type todoServiceImpl struct {
 	todopb.UnimplementedToDoServiceServer
-	repo   Repository
-	logger log.Logger
+	repo repository.Repository
+
+	Cfg        Config
+	logger     log.Logger
+	Registerer prometheus.Registerer
 }
 
-func NewServiceServer(logger log.Logger, opts ...Option) (*ServiceServer, error) {
-	// Create the ServiceServer
-	s := &ServiceServer{logger: logger}
-	// Apply all Configurations passed in
-	for _, opt := range opts {
-		// Pass the service into the config option function
-		if err := opt(s); err != nil {
-			return nil, err
-		}
+func NewServiceServer(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
+	// Create the todoServiceImpl
+	s := &todoServiceImpl{
+		Cfg:        cfg,
+		logger:     logger,
+		Registerer: reg,
 	}
+
+	if err := s.setupRepo(); err != nil {
+		return nil, err
+	}
+
 	return s, nil
 }
 
-func (srv *ServiceServer) RegisterGRPC(s *grpc.Server) {
-	s.RegisterService(&todopb.ToDoService_ServiceDesc, srv)
+func (srv *todoServiceImpl) setupRepo() error {
+	var err error
+	if srv.repo, err = repository.NewRepository(srv.Cfg.RepoCfg); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (srv *ServiceServer) checkAPI(api string) error {
+func (srv *todoServiceImpl) checkAPI(api string) error {
 	// API version is "" means use current version of the service
 	if len(api) > 0 {
-		if apiVersion != api {
-			return fmt.Errorf("unsupported API version: service implements API version '%s', but asked for '%s'", apiVersion, api)
+		if APIVersion != api {
+			return fmt.Errorf("unsupported API version: service implements API version '%s', but asked for '%s'", APIVersion, api)
 		}
 	}
 	return nil
 }
 
-func (srv *ServiceServer) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+func (srv *todoServiceImpl) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -103,7 +97,7 @@ func (srv *ServiceServer) Create(ctx context.Context, req *todopb.CreateRequest)
 	return srv.repo.Create(ctx, req)
 }
 
-func (srv *ServiceServer) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
+func (srv *todoServiceImpl) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -112,7 +106,7 @@ func (srv *ServiceServer) Update(ctx context.Context, req *todopb.UpdateRequest)
 	return srv.repo.Update(ctx, req)
 }
 
-func (srv *ServiceServer) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
+func (srv *todoServiceImpl) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -121,7 +115,7 @@ func (srv *ServiceServer) Get(ctx context.Context, req *todopb.GetRequest) (*tod
 	return srv.repo.Get(ctx, req)
 }
 
-func (srv *ServiceServer) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
+func (srv *todoServiceImpl) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -130,7 +124,7 @@ func (srv *ServiceServer) Delete(ctx context.Context, req *todopb.DeleteRequest)
 	return srv.repo.Delete(ctx, req)
 }
 
-func (srv *ServiceServer) List(ctx context.Context, req *todopb.ListRequest) (*todopb.ListResponse, error) {
+func (srv *todoServiceImpl) List(ctx context.Context, req *todopb.ListRequest) (*todopb.ListResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())

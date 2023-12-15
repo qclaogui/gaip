@@ -11,18 +11,17 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 )
 
 const (
 	BackendMemory = "memory"
-	BackendMysql  = "mysql"
 )
 
-var supportedDatabaseBackends = []string{BackendMemory, BackendMysql}
+var supportedDatabaseBackends = []string{BackendMemory}
 
 type Repository interface {
-	bookstorepb.BookstoreServiceServer
+	routeguidepb.RouteGuideServiceServer
 }
 
 // Config RepoCfg Connections config
@@ -31,16 +30,14 @@ type Config struct {
 	Backend string `yaml:"backend"`
 
 	Memory MemoryConfig `yaml:"memory"`
-	Mysql  MysqlConfig  `yaml:"mysql"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
-	prefix := "bookstore.database."
+	prefix := "routeguide.database."
 
 	fs.StringVar(&cfg.Backend, prefix+"backend", BackendMemory, fmt.Sprintf("Backend storage to use. Supported backends are: %s.", strings.Join(supportedDatabaseBackends, ", ")))
 
 	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
-	cfg.Mysql.RegisterFlagsWithPrefix(prefix, fs)
 }
 
 // Validate RepoCfg config.
@@ -52,8 +49,6 @@ func (cfg *Config) Validate() error {
 	switch cfg.Backend {
 	case BackendMemory:
 		return cfg.Memory.Validate()
-	case BackendMysql:
-		return cfg.Mysql.Validate()
 	}
 	return nil
 }
@@ -63,9 +58,7 @@ func NewRepository(cfg Config) (Repository, error) {
 	case "":
 		return nil, errors.Errorf("empty database backend %s", cfg.Backend)
 	case BackendMemory:
-		return NewMemoryRepo()
-	case BackendMysql:
-		return nil, nil //TODO(qc)
+		return NewMemoryRepo(cfg.Memory)
 	default:
 		return nil, errors.Errorf("unsupported backend for database %s", cfg.Backend)
 	}

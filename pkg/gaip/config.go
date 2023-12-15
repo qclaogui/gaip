@@ -2,37 +2,42 @@
 //
 // Licensed under the Apache License 2.0.
 
-package app
+package gaip
 
 import (
 	"flag"
 	"strconv"
 
 	"github.com/go-kit/log"
-	"github.com/grafana/dskit/server"
 	"github.com/pkg/errors"
+	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/bookstore"
 	"github.com/qclaogui/gaip/pkg/service/library"
 	"github.com/qclaogui/gaip/pkg/service/project"
+	"github.com/qclaogui/gaip/pkg/service/routeguide"
+	"github.com/qclaogui/gaip/pkg/service/todo"
 	"github.com/qclaogui/gaip/pkg/vault"
 )
 
 // Config is configuration for Server
 type Config struct {
-	PrintConfig bool `yaml:"-"`
+	PrintConfig            bool `yaml:"-"`
+	EnableGoRuntimeMetrics bool `yaml:"enable_go_runtime_metrics" category:"advanced"`
 
-	Server server.Config `yaml:"server"`
+	Server service.Config `yaml:"server"`
 
-	Bookstore bookstore.Config `yaml:"bookstore"`
-	Library   library.Config   `yaml:"library"`
-	Project   project.Config   `yaml:"project"`
+	Todo       todo.Config       `yaml:"todo"`
+	RouteGuide routeguide.Config `yaml:"todo"`
+	Bookstore  bookstore.Config  `yaml:"bookstore"`
+	Library    library.Config    `yaml:"library"`
+	Project    project.Config    `yaml:"project"`
 
 	Vault vault.Config `yaml:"vault"`
 }
 
 // RegisterFlags registers flag.
 func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
-	c.Server.MetricsNamespace = "qclaogui"
+	c.Server.MetricsNamespace = "gaip"
 
 	// Enable native histograms for enabled scrapers with 10% bucket growth.
 	c.Server.MetricsNativeHistogramFactor = 1.1
@@ -42,9 +47,12 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 	fs.BoolVar(&c.PrintConfig, "print.config", false, "Print the config and exit.")
 
 	// Register projectServerImpl Config
+	// Register service server Config
 	c.registerServerFlagsWithChangedDefaultValues(fs)
 
 	// Register bookstore Config
+	c.Todo.RegisterFlags(fs)
+	c.RouteGuide.RegisterFlags(fs)
 	c.Bookstore.RegisterFlags(fs)
 	c.Library.RegisterFlags(fs)
 	c.Project.RegisterFlags(fs)
@@ -56,22 +64,26 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 // Validate the app config and return an error if the validation doesn't pass
 func (c *Config) Validate(_ log.Logger) error {
 
-	// Validate BookstoreServer Config
-	if err := c.Bookstore.Validate(); err != nil {
-		return errors.Wrap(err, "invalid BookstoreServer config")
+	if err := c.Todo.Validate(); err != nil {
+		return errors.Wrap(err, "invalid Todo config")
 	}
 
-	// Validate Library Config
+	if err := c.RouteGuide.Validate(); err != nil {
+		return errors.Wrap(err, "invalid RouteGuide config")
+	}
+
+	if err := c.Bookstore.Validate(); err != nil {
+		return errors.Wrap(err, "invalid Bookstore config")
+	}
+
 	if err := c.Library.Validate(); err != nil {
 		return errors.Wrap(err, "invalid Library config")
 	}
 
-	// Validate ProjectServer Config
 	if err := c.Project.Validate(); err != nil {
-		return errors.Wrap(err, "invalid ProjectServer config")
+		return errors.Wrap(err, "invalid Project config")
 	}
 
-	// Validate Vault Config
 	if err := c.Vault.Validate(); err != nil {
 		return errors.Wrap(err, "invalid Vault config")
 	}
@@ -86,10 +98,10 @@ func (c *Config) registerServerFlagsWithChangedDefaultValues(fs *flag.FlagSet) {
 	c.Server.RegisterFlags(throwaway)
 
 	defaultsOverrides := map[string]string{
+		"server.http-listen-port":                           "8080",
 		"server.http-write-timeout":                         "2m",
 		"server.grpc.keepalive.min-time-between-pings":      "10s",
 		"server.grpc.keepalive.ping-without-stream-allowed": "true",
-		"server.http-listen-port":                           "8080",
 		"server.grpc-max-recv-msg-size-bytes":               strconv.Itoa(100 * 1024 * 1024),
 		"server.grpc-max-send-msg-size-bytes":               strconv.Itoa(100 * 1024 * 1024),
 	}

@@ -12,7 +12,6 @@ import (
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/internal/pagination"
 	"github.com/qclaogui/gaip/pkg/service"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
@@ -23,8 +22,6 @@ import (
 
 // IdentityService Identity service server
 type IdentityService interface {
-	service.Backend
-
 	projectpb.IdentityServiceServer
 }
 
@@ -49,10 +46,6 @@ type identityServiceImpl struct {
 	mu    sync.Mutex
 	keys  map[string]int
 	users []userEntry
-}
-
-func (s *identityServiceImpl) RegisterGRPC(grpcServer *grpc.Server) {
-	grpcServer.RegisterService(&projectpb.IdentityService_ServiceDesc, s)
 }
 
 // validate validate

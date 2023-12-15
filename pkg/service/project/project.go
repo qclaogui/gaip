@@ -7,48 +7,46 @@ package project
 import (
 	"context"
 
+	"github.com/go-kit/log"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
-	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/project/repository"
-	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// Service Project server
+// Service Project Service Server
 type Service interface {
-	service.Backend
-
 	projectpb.ProjectServiceServer
 }
 
 // The projectServiceImpl type implements a project server.
 type projectServiceImpl struct {
-	Cfg Config
+	Cfg        Config
+	logger     log.Logger
+	Registerer prometheus.Registerer
 
 	repo repository.Repository
 }
 
-func NewProjectService(cfg Config) (Service, error) {
-	s := &projectServiceImpl{Cfg: cfg}
-	if err := s.setupRepo(); err != nil {
+func NewProjectService(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
+	srv := &projectServiceImpl{
+		Cfg:        cfg,
+		logger:     logger,
+		Registerer: reg,
+	}
+	if err := srv.setupRepo(); err != nil {
 		return nil, err
 	}
 
-	return s, nil
+	return srv, nil
 }
 
 func (srv *projectServiceImpl) setupRepo() error {
-	repo, err := repository.NewRepository(srv.Cfg.RepoCfg)
-	if err != nil {
+	var err error
+	if srv.repo, err = repository.NewRepository(srv.Cfg.RepoCfg); err != nil {
 		return err
 	}
-
-	srv.repo = repo
 	return nil
-}
-
-func (srv *projectServiceImpl) RegisterGRPC(s *grpc.Server) {
-	s.RegisterService(&projectpb.ProjectService_ServiceDesc, srv)
 }
 
 func (srv *projectServiceImpl) CreateProject(ctx context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {

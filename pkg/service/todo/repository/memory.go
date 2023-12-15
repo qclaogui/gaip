@@ -2,10 +2,11 @@
 //
 // Licensed under the Apache License 2.0.
 
-package todo
+package repository
 
 import (
 	"context"
+	"flag"
 	"log/slog"
 	"sync"
 
@@ -14,6 +15,22 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
+
+type MemoryConfig struct {
+	Enabled bool `yaml:"enabled"`
+}
+
+func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
+	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", false, "Enables memory Repository")
+}
+
+func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
+	cfg.RegisterFlagsWithPrefix("", fs)
+}
+
+func (cfg *MemoryConfig) Validate() error {
+	return nil
+}
 
 // MemoryRepo fulfills the Repository interface
 type MemoryRepo struct {
@@ -42,7 +59,7 @@ func (m *MemoryRepo) Create(_ context.Context, req *todopb.CreateRequest) (*todo
 	todo.Id = id.String()
 
 	m.mem[id] = todo
-	return &todopb.CreateResponse{Api: apiVersion, Id: todo.Id}, nil
+	return &todopb.CreateResponse{Api: "v1", Id: todo.Id}, nil
 }
 
 func (m *MemoryRepo) Get(_ context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
@@ -51,13 +68,13 @@ func (m *MemoryRepo) Get(_ context.Context, req *todopb.GetRequest) (*todopb.Get
 
 	id, _ := uuid.Parse(req.GetId())
 
-	slog.Warn("RepoCfg info", "req_id", req.GetId(), "id", id, "mem", m.mem)
+	slog.Warn("Get todo from MemoryRepo", "req_id", req.GetId(), "id", id, "mem", m.mem)
 	todo, ok := m.mem[id]
 	if !ok {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
 
-	return &todopb.GetResponse{Api: apiVersion, Item: todo}, nil
+	return &todopb.GetResponse{Api: "v1", Item: todo}, nil
 }
 
 func (m *MemoryRepo) Update(_ context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
@@ -72,7 +89,7 @@ func (m *MemoryRepo) Update(_ context.Context, req *todopb.UpdateRequest) (*todo
 	}
 
 	m.mem[id] = todo
-	return &todopb.UpdateResponse{Api: apiVersion, Updated: 1}, nil
+	return &todopb.UpdateResponse{Api: "v1", Updated: 1}, nil
 }
 
 func (m *MemoryRepo) Delete(_ context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
@@ -85,7 +102,7 @@ func (m *MemoryRepo) Delete(_ context.Context, req *todopb.DeleteRequest) (*todo
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
 	delete(m.mem, id)
-	return &todopb.DeleteResponse{Api: apiVersion, Deleted: 1}, nil
+	return &todopb.DeleteResponse{Api: "v1", Deleted: 1}, nil
 }
 
 func (m *MemoryRepo) List(_ context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
@@ -100,5 +117,5 @@ func (m *MemoryRepo) List(_ context.Context, _ *todopb.ListRequest) (*todopb.Lis
 	if len(todos) < 1 {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
-	return &todopb.ListResponse{Api: apiVersion, Items: todos}, nil
+	return &todopb.ListResponse{Api: "v1", Items: todos}, nil
 }

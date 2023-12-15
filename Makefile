@@ -47,7 +47,7 @@ GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
 
 .PHONY: build
 build: ## Build binary for current OS and place it at ./bin/gaip_$(GOOS)_$(GOARCH)
-	@$(GO_ENV) go build $(GO_FLAGS) -o bin/gaip_$(GOOS)_$(GOARCH) ./cmd/server
+	@$(GO_ENV) go build $(GO_FLAGS) -o bin/gaip_$(GOOS)_$(GOARCH) ./cmd/gaip
 
 .PHONY: build-all
 build-all: ## Build binaries for Linux and Mac and place them in dist/
@@ -105,8 +105,8 @@ ent-new: $(ENT)
 ent-gen: ## Regenerate schema
 	@go generate ./internal/ent
 
-# Get a description of graph schema
-ent-describe: $(ENT)
+.PHONY: ent-describe
+ent-describe: $(ENT) ## Get a description of graph schema
 	@$(ENT) describe ./internal/ent/schema
 
 .PHONY: atlas-lint

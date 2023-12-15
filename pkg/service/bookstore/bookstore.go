@@ -6,49 +6,69 @@ package bookstore
 
 import (
 	"context"
+	"flag"
+	"github.com/grafana/dskit/cache"
 
+	"github.com/go-kit/log"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
-	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/bookstore/repository"
-	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// Server bookstore server
-type Server interface {
-	service.Backend
-
+// Service Bookstore Service Service
+type Service interface {
 	bookstorepb.BookstoreServiceServer
+}
+
+type Config struct {
+	//RepoCfg holds the configuration used for the repository.
+	RepoCfg repository.Config `yaml:"database"`
+
+	// CacheCfg holds the configuration used for the cache.
+	CacheCfg cache.BackendConfig `yaml:"cache"`
+}
+
+func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
+	//Register RepoCfg Config
+	cfg.RepoCfg.RegisterFlags(fs)
+}
+
+func (cfg *Config) Validate() error {
+	//Validate RepoCfg Config
+	if err := cfg.RepoCfg.Validate(); err != nil {
+		return err
+	}
+	return nil
 }
 
 // The bookstoreServerImpl type implements a bookstore server.
 type bookstoreServerImpl struct {
-	Cfg Config
-
-	repo repository.Repository
+	Cfg        Config
+	logger     log.Logger
+	repo       repository.Repository
+	Registerer prometheus.Registerer
 }
 
-func NewBookstoreServer(cfg Config) (Server, error) {
-	s := &bookstoreServerImpl{Cfg: cfg}
-	if err := s.setupRepo(); err != nil {
+func NewBookstoreServer(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
+	srv := &bookstoreServerImpl{
+		Cfg:        cfg,
+		logger:     logger,
+		Registerer: reg,
+	}
+	if err := srv.setupRepo(); err != nil {
 		return nil, err
 	}
 
-	return s, nil
+	return srv, nil
 }
 
 func (srv *bookstoreServerImpl) setupRepo() error {
-	repo, err := repository.NewRepository(srv.Cfg.RepoCfg)
-	if err != nil {
+	var err error
+	if srv.repo, err = repository.NewRepository(srv.Cfg.RepoCfg); err != nil {
 		return err
 	}
-
-	srv.repo = repo
 	return nil
-}
-
-func (srv *bookstoreServerImpl) RegisterGRPC(s *grpc.Server) {
-	s.RegisterService(&bookstorepb.BookstoreService_ServiceDesc, srv)
 }
 
 func (srv *bookstoreServerImpl) ListShelves(ctx context.Context, req *emptypb.Empty) (*bookstorepb.ListShelvesResponse, error) {

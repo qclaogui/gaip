@@ -17,9 +17,9 @@ import (
 	"github.com/grafana/dskit/flagext"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/qclaogui/gaip/pkg/app"
+	"github.com/qclaogui/gaip/pkg/gaip"
 	"github.com/qclaogui/gaip/pkg/version"
-	util_log "github.com/qclaogui/gaip/tools/log"
+	lg "github.com/qclaogui/gaip/tools/log"
 	"github.com/qclaogui/gaip/tools/usage"
 	"gopkg.in/yaml.v3"
 )
@@ -66,8 +66,8 @@ func main() {
 
 	// This sets default values from flags to the config.
 	// It needs to be called before parsing the config file!
-	var cfg app.Config
-	cfg.RegisterFlags(flag.CommandLine, util_log.Logger)
+	var cfg gaip.Config
+	cfg.RegisterFlags(flag.CommandLine, lg.Logger)
 
 	if configFile := parseConfigFileParameter(os.Args[1:]); configFile != "" {
 		if err := LoadConfig(configFile, &cfg); err != nil {
@@ -106,7 +106,7 @@ func main() {
 
 	// Validate the config once both the config file has been loaded
 	// and CLI flags parsed.
-	if err := cfg.Validate(util_log.Logger); err != nil {
+	if err := cfg.Validate(lg.Logger); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "error validating config: %v\n", err)
 	}
 
@@ -116,23 +116,23 @@ func main() {
 	}
 
 	reg := prometheus.DefaultRegisterer
-	cfg.Server.Log = util_log.InitLogger(cfg.Server.LogFormat, cfg.Server.LogLevel, util_log.LoggerConfig{
+	cfg.Server.Log = lg.InitLogger(cfg.Server.LogFormat, cfg.Server.LogLevel, lg.LoggerConfig{
 		Enabled:            mf.rateLimitedLogsEnabled,
 		LogsPerSecond:      mf.rateLimitedLogsPerSecond,
 		LogsPerSecondBurst: mf.rateLimitedLogsPerSecondBurst,
 		Registry:           reg,
 	})
-	_ = level.Info(util_log.Logger).Log("msg", "Starting application", "version", version.GetVersion())
+	_ = level.Info(lg.Logger).Log("msg", "Starting application", "version", version.GetVersion())
 
-	application, err := app.NewApplication(cfg, reg)
-	util_log.CheckFatal("initializing application", err)
+	g, err := gaip.New(cfg, reg)
+	lg.CheckFatal("initializing application", err)
 
-	err = application.Bootstrap()
-	util_log.CheckFatal("running application", err)
+	err = g.Bootstrap()
+	lg.CheckFatal("running application", err)
 }
 
 func exit(code int) {
-	if err := util_log.Flush(); err != nil {
+	if err := lg.Flush(); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, "Could not flush logger", err)
 	}
 	os.Exit(code)
@@ -158,7 +158,7 @@ func parseConfigFileParameter(args []string) (configFile string) {
 }
 
 // LoadConfig read YAML-formatted config from filename into cfg.
-func LoadConfig(filename string, cfg *app.Config) error {
+func LoadConfig(filename string, cfg *gaip.Config) error {
 	buf, err := os.ReadFile(filename)
 	if err != nil {
 		return errors.Wrap(err, "Error reading config file")
@@ -196,7 +196,7 @@ func expandEnvironmentVariables(config []byte) []byte {
 	}))
 }
 
-func DumpYaml(cfg *app.Config) {
+func DumpYaml(cfg *gaip.Config) {
 	out, err := yaml.Marshal(cfg)
 	if err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)

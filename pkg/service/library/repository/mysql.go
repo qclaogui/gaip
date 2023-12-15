@@ -16,11 +16,6 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// MysqlRepo is used to implement LibraryServiceServer.
-type MysqlRepo struct {
-	db *ent.Client
-}
-
 type MysqlConfig struct {
 	Enabled bool `yaml:"enabled"`
 
@@ -47,6 +42,11 @@ func (cfg *MysqlConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet)
 
 func (cfg *MysqlConfig) Validate() error {
 	return nil
+}
+
+// MysqlRepo is used to implement LibraryServiceServer.
+type MysqlRepo struct {
+	db *ent.Client
 }
 
 // NewMysqlRepo is a factory function to generate a new repository

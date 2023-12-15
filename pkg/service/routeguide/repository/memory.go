@@ -2,12 +2,13 @@
 //
 // Licensed under the Apache License 2.0.
 
-package routeguide
+package repository
 
 import (
 	"context"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"io"
 	"math"
@@ -19,8 +20,27 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// MemoryRepository fulfills the Repository interface
-type MemoryRepository struct {
+type MemoryConfig struct {
+	Enabled bool `yaml:"enabled"`
+
+	FilePath string `yaml:"file_path"`
+}
+
+func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
+	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", false, "Enables memory Repository")
+	fs.StringVar(&cfg.FilePath, prefix+"memory.file-path", "", "Path of JSON file for loads features")
+}
+
+func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
+	cfg.RegisterFlagsWithPrefix("", fs)
+}
+
+func (cfg *MemoryConfig) Validate() error {
+	return nil
+}
+
+// MemoryRepo fulfills the Repository interface
+type MemoryRepo struct {
 	routeguidepb.UnimplementedRouteGuideServiceServer
 	mem []*routeguidepb.Feature // read-only after initialized
 
@@ -28,37 +48,37 @@ type MemoryRepository struct {
 	routeNotes map[string][]*routeguidepb.RouteNote
 }
 
-// NewMemoryRepository is a factory function to generate a new repository
-func NewMemoryRepository(filePath string) (*MemoryRepository, error) {
-	mr := &MemoryRepository{
-		routeNotes: make(map[string][]*routeguidepb.RouteNote, 0),
+// NewMemoryRepo is a factory function to generate a new repository
+func NewMemoryRepo(cfg MemoryConfig) (*MemoryRepo, error) {
+	mr := &MemoryRepo{
+		routeNotes: make(map[string][]*routeguidepb.RouteNote),
 	}
 	// load Features
-	if err := mr.loadFeatures(filePath); err != nil {
+	if err := mr.loadFeatures(cfg.FilePath); err != nil {
 		return nil, err
 	}
 	return mr, nil
 }
 
 // loadFeatures loads features from a JSON file.
-func (mr *MemoryRepository) loadFeatures(filePath string) error {
+func (mr *MemoryRepo) loadFeatures(filePath string) error {
 	var data []byte
 	var err error
 	if filePath != "" {
 		if data, err = os.ReadFile(filePath); err != nil {
-			return fmt.Errorf("Failed to load default features: %v", err)
+			return fmt.Errorf("failed to load default features: %v", err)
 		}
 	} else {
 		data = exampleData
 	}
 	if err = json.Unmarshal(data, &mr.mem); err != nil {
-		return fmt.Errorf("Failed to load default features: %v", err)
+		return fmt.Errorf("failed to load default features: %v", err)
 	}
 	return nil
 }
 
 // GetFeature returns the feature at the given point.
-func (mr *MemoryRepository) GetFeature(_ context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
+func (mr *MemoryRepo) GetFeature(_ context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
 	for _, feature := range mr.mem {
 		if proto.Equal(feature.Location, req.Point) {
 			return &routeguidepb.GetFeatureResponse{Feature: feature}, nil
@@ -68,7 +88,7 @@ func (mr *MemoryRepository) GetFeature(_ context.Context, req *routeguidepb.GetF
 	return &routeguidepb.GetFeatureResponse{Feature: &routeguidepb.Feature{Location: req.Point}}, nil
 }
 
-func (mr *MemoryRepository) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
+func (mr *MemoryRepo) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
 	for _, feature := range mr.mem {
 		if inRange(feature.Location, req.GetRectangle()) {
 			if err := stream.Send(&routeguidepb.ListFeaturesResponse{Feature: feature}); err != nil {
@@ -79,7 +99,7 @@ func (mr *MemoryRepository) ListFeatures(req *routeguidepb.ListFeaturesRequest, 
 	return nil
 }
 
-func (mr *MemoryRepository) RecordRoute(stream routeguidepb.RouteGuideService_RecordRouteServer) error {
+func (mr *MemoryRepo) RecordRoute(stream routeguidepb.RouteGuideService_RecordRouteServer) error {
 	var pointCount, featureCount, distance int32
 	var lastPoint *routeguidepb.Point
 	startTime := time.Now()
@@ -147,7 +167,7 @@ func serialize(point *routeguidepb.Point) string {
 	return fmt.Sprintf("%d %d", point.Latitude, point.Longitude)
 }
 
-func (mr *MemoryRepository) RouteChat(stream routeguidepb.RouteGuideService_RouteChatServer) error {
+func (mr *MemoryRepo) RouteChat(stream routeguidepb.RouteGuideService_RouteChatServer) error {
 	for {
 		req, err := stream.Recv()
 		if errors.Is(err, io.EOF) {

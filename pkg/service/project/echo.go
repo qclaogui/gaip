@@ -16,7 +16,6 @@ import (
 
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
-	"github.com/qclaogui/gaip/pkg/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -27,8 +26,6 @@ import (
 )
 
 type EchoService interface {
-	service.Backend
-
 	pb.EchoServiceServer
 }
 
@@ -41,10 +38,6 @@ type echoServiceImpl struct {
 func NewEchoService() (EchoService, error) {
 	s := &echoServiceImpl{}
 	return s, nil
-}
-
-func (s *echoServiceImpl) RegisterGRPC(grpcServer *grpc.Server) {
-	grpcServer.RegisterService(&pb.EchoService_ServiceDesc, s)
 }
 
 // Echo This method simply echoes the request.

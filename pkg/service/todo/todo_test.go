@@ -6,19 +6,33 @@ package todo
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"reflect"
 	"testing"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
-	util_log "github.com/qclaogui/gaip/tools/log"
+	"github.com/qclaogui/gaip/pkg/service/todo/repository"
+	lg "github.com/qclaogui/gaip/tools/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
 
 var ID = "e75b6f03-e5fc-488c-8f75-ad1747be3d3a"
+
+func serverSetupWithSQLDB(db *sql.DB) *todoServiceImpl {
+	var cfg = Config{}
+	repo, _ := repository.NewMysqlRepoWithSQLDB(db)
+	return &todoServiceImpl{
+		Cfg:        cfg,
+		logger:     lg.Logger,
+		Registerer: prometheus.DefaultRegisterer,
+		repo:       repo,
+	}
+}
 
 func Test_toDoServiceServer_Create(t *testing.T) {
 	ctx := context.Background()
@@ -27,9 +41,8 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 	}
 	defer func() { _ = db.Close() }()
-	//ssv, _ := NewServiceServer(util_log.Logger,WithMemoryToDoRepository())
-	repo, _ := NewMysqlRepo(db)
-	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
+
+	ssv := serverSetupWithSQLDB(db)
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -171,8 +184,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	repo, _ := NewMysqlRepo(db)
-	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
+	ssv := serverSetupWithSQLDB(db)
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -285,8 +297,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	repo, _ := NewMysqlRepo(db)
-	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
+	ssv := serverSetupWithSQLDB(db)
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -453,8 +464,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	repo, _ := NewMysqlRepo(db)
-	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
+	ssv := serverSetupWithSQLDB(db)
 
 	type args struct {
 		ctx context.Context
@@ -572,8 +582,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	repo, _ := NewMysqlRepo(db)
-	ssv, _ := NewServiceServer(util_log.Logger, WithRepository(repo))
+	ssv := serverSetupWithSQLDB(db)
 
 	tm1 := time.Now().UTC().Add(time.Minute)
 	reminder1 := timestamppb.New(tm1)

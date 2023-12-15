@@ -6,71 +6,82 @@ package routeguide
 
 import (
 	"context"
+	"flag"
 
 	"github.com/go-kit/log"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
-	"google.golang.org/grpc"
+	"github.com/qclaogui/gaip/pkg/service/routeguide/repository"
 )
 
-type Option func(*ServiceServer) error
-
-// WithRepository applies a given repository to the ServiceServer
-func WithRepository(repo Repository) Option {
-	return func(srv *ServiceServer) error {
-		srv.repo = repo
-		return nil
-	}
+// Service RouteGuide Service Server
+type Service interface {
+	routeguidepb.RouteGuideServiceServer
 }
 
-// WithMemoryRepository applies a memory repository to the ServiceServer
-func WithMemoryRepository() Option {
-	return func(srv *ServiceServer) error {
-		repo, err := NewMemoryRepository("")
-		if err != nil {
-			return err
-		}
-		srv.repo = repo
-		return nil
-	}
+type Config struct {
+	//RepoCfg holds the configuration used for the repository.
+	RepoCfg repository.Config `yaml:"database"`
 }
 
-// ServiceServer ServiceServer
-type ServiceServer struct {
+func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
+	//Register RepoCfg Config
+	cfg.RepoCfg.RegisterFlags(fs)
+}
+
+func (cfg *Config) Validate() error {
+	//Validate RepoCfg Config
+	if err := cfg.RepoCfg.Validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// routeGuideServiceImpl routeGuideServiceImpl
+type routeGuideServiceImpl struct {
 	routeguidepb.UnimplementedRouteGuideServiceServer
 
-	repo   Repository
-	logger log.Logger
+	Cfg        Config
+	logger     log.Logger
+	Registerer prometheus.Registerer
+
+	repo repository.Repository
 }
 
-func NewServiceServer(logger log.Logger, opts ...Option) (*ServiceServer, error) {
+func NewRouteGuideService(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
 	// Create the Server
-	srv := &ServiceServer{logger: logger}
-	// Apply all Configurations passed in
-	for _, opt := range opts {
-		// Pass the service into the configuration function
-		if err := opt(srv); err != nil {
-			return nil, err
-		}
+	srv := &routeGuideServiceImpl{
+		Cfg:        cfg,
+		logger:     logger,
+		Registerer: reg,
 	}
+	if err := srv.setupRepo(); err != nil {
+		return nil, err
+	}
+
 	return srv, nil
 }
 
-func (srv *ServiceServer) RegisterGRPC(s *grpc.Server) {
-	s.RegisterService(&routeguidepb.RouteGuideService_ServiceDesc, srv)
+func (srv *routeGuideServiceImpl) setupRepo() error {
+	var err error
+	if srv.repo, err = repository.NewRepository(srv.Cfg.RepoCfg); err != nil {
+		return err
+	}
+	return nil
 }
 
 // GetFeature returns the feature at the given point.
-func (srv *ServiceServer) GetFeature(ctx context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
+func (srv *routeGuideServiceImpl) GetFeature(ctx context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
 	return srv.repo.GetFeature(ctx, req)
 }
 
-func (srv *ServiceServer) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
+func (srv *routeGuideServiceImpl) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
 	return srv.repo.ListFeatures(req, stream)
 }
 
-func (srv *ServiceServer) RecordRoute(req routeguidepb.RouteGuideService_RecordRouteServer) error {
+func (srv *routeGuideServiceImpl) RecordRoute(req routeguidepb.RouteGuideService_RecordRouteServer) error {
 	return srv.repo.RecordRoute(req)
 }
-func (srv *ServiceServer) RouteChat(req routeguidepb.RouteGuideService_RouteChatServer) error {
+func (srv *routeGuideServiceImpl) RouteChat(req routeguidepb.RouteGuideService_RouteChatServer) error {
 	return srv.repo.RouteChat(req)
 }

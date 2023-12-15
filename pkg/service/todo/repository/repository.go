@@ -1,7 +1,3 @@
-// Copyright © Weifeng Wang <qclaogui@gmail.com>
-//
-// Licensed under the Apache License 2.0.
-
 package repository
 
 import (
@@ -11,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 )
 
 const (
@@ -19,14 +15,20 @@ const (
 	BackendMysql  = "mysql"
 )
 
-var supportedDatabaseBackends = []string{BackendMemory, BackendMysql}
+var (
+	supportedDatabaseBackends = []string{BackendMemory, BackendMysql}
+
+	// ErrNotFound is returned when a item is not found.
+	ErrNotFound = errors.New("the item was not found in the repository")
+
+	// ErrFailedToCreate is returned when a item is create Failed
+	ErrFailedToCreate = errors.New("failed to add the todo to the repository")
+)
 
 type Repository interface {
-	bookstorepb.BookstoreServiceServer
+	todopb.ToDoServiceServer
 }
 
-// Config RepoCfg Connections config
-// Here are each of the database connections for application.
 type Config struct {
 	Backend string `yaml:"backend"`
 
@@ -35,26 +37,18 @@ type Config struct {
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
-	prefix := "bookstore.database."
-
+	prefix := "todo.database."
 	fs.StringVar(&cfg.Backend, prefix+"backend", BackendMemory, fmt.Sprintf("Backend storage to use. Supported backends are: %s.", strings.Join(supportedDatabaseBackends, ", ")))
 
 	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
 	cfg.Mysql.RegisterFlagsWithPrefix(prefix, fs)
 }
 
-// Validate RepoCfg config.
 func (cfg *Config) Validate() error {
 	if cfg.Backend != "" && !slices.Contains(supportedDatabaseBackends, cfg.Backend) {
 		return fmt.Errorf("unsupported RepoCfg backend: %s", cfg.Backend)
 	}
 
-	switch cfg.Backend {
-	case BackendMemory:
-		return cfg.Memory.Validate()
-	case BackendMysql:
-		return cfg.Mysql.Validate()
-	}
 	return nil
 }
 
@@ -63,9 +57,9 @@ func NewRepository(cfg Config) (Repository, error) {
 	case "":
 		return nil, errors.Errorf("empty database backend %s", cfg.Backend)
 	case BackendMemory:
-		return NewMemoryRepo()
+		return NewMemoryRepo(), nil
 	case BackendMysql:
-		return nil, nil //TODO(qc)
+		return NewMysqlRepo(cfg.Mysql)
 	default:
 		return nil, errors.Errorf("unsupported backend for database %s", cfg.Backend)
 	}
