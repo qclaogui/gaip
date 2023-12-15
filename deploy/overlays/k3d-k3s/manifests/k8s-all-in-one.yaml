@@ -1,0 +1,78 @@
+apiVersion: v1
+automountServiceAccountToken: true
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: gaip
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: gaip
+    app.kubernetes.io/version: 0.0.1
+    helm.sh/chart: gaip-0.0.1
+  name: gaip
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: gaip
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: gaip
+    app.kubernetes.io/version: 0.0.1
+    helm.sh/chart: gaip-0.0.1
+  name: gaip
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: gaip
+    app.kubernetes.io/name: gaip
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: gaip
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: gaip
+    app.kubernetes.io/version: 0.0.1
+    helm.sh/chart: gaip-0.0.1
+  name: gaip
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: gaip
+      app.kubernetes.io/name: gaip
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: gaip
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: gaip
+        app.kubernetes.io/version: 0.0.1
+        helm.sh/chart: gaip-0.0.1
+    spec:
+      containers:
+      - image: qclaogui/gaip:0.0.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        name: gaip
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources: {}
+        securityContext: {}
+      securityContext: {}
+      serviceAccountName: gaip

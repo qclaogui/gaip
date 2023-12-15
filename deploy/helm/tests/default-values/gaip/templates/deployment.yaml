@@ -1,0 +1,50 @@
+---
+# Source: gaip/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaip
+  labels:
+    helm.sh/chart: gaip-0.0.1
+    app.kubernetes.io/name: gaip
+    app.kubernetes.io/instance: gaip
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gaip
+      app.kubernetes.io/instance: gaip
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: gaip-0.0.1
+        app.kubernetes.io/name: gaip
+        app.kubernetes.io/instance: gaip
+        app.kubernetes.io/version: "0.0.1"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      serviceAccountName: gaip
+      securityContext:
+        {}
+      containers:
+        - name: gaip
+          securityContext:
+            {}
+          image: "qclaogui/gaip:0.0.1"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {}

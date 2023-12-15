@@ -1,0 +1,22 @@
+# https://helm.sh/docs/topics/charts/#the-chartyaml-file
+apiVersion: v2
+name: gaip
+version: 0.0.1
+appVersion: "0.0.1"
+kubeVersion: '>=1.26.0-0'
+description: "A Helm chart for Kubernetes"
+keywords:
+  - security
+home: https://github.com/qclaogui/helm-charts
+sources:
+  - https://github.com/qclaogui/helm-charts
+maintainers:
+  - name: qclaogui
+    email: qclaogui@users.noreply.github.com
+    url: https://github.com/qclaogui
+icon: https://grafana.com/static/img/logos/logo-mimir.svg
+deprecated: false
+# https://artifacthub.io/docs/topics/annotations/helm/#example
+annotations:
+  artifacthub.io/category: security
+  artifacthub.io/license: Apache-2.0
