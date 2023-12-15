@@ -1,5 +1,11 @@
-name: Lint and Test Charts
-on: pull_request
+name: Helm CI
+on:
+  pull_request:
+    paths:
+      - "deploy/helm/**"
+env:
+  CT_CONFIGFILE: deploy/helm/ct.yaml
+
 jobs:
   regenerate-docs:
     runs-on: ubuntu-latest
@@ -12,7 +18,7 @@ jobs:
           docker run --rm \
             -v "$(pwd)/deploy/helm/charts/gaip:/helm-docs" \
             -u "$(id -u)" \
-            jnorwood/helm-docs
+            jnorwood/helm-docs:v1.11.3
           if ! git diff --exit-code; then
             echo "Helm chart documentation is not up to date. Please run 'make generate-helm-docs' and commit changes!" >&2
             exit 1
@@ -64,10 +70,10 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
-          changed=$(ct list-changed --config ./deploy/helm/ct.yaml)
+          changed=$(ct list-changed --config "${CT_CONFIGFILE}")
           if [[ -n "$changed" ]]; then
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Run chart-testing (lint)
-        run: ct lint --config ./deploy/helm/ct.yaml
+        run: ct lint --config "${CT_CONFIGFILE}"
