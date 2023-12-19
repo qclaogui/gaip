@@ -43,6 +43,7 @@ Dependencies
 
 Ent schema
   ent-gen                                   Regenerate schema
+  ent-describe                              Get a description of graph schema
   atlas-lint                                Verifying and linting migrations
 
 Regenerate gRPC code
@@ -63,7 +64,7 @@ Testing Lint & fmt
 
 Kubernetes
   cluster                                   Create k3s cluster
-  manifests                                 Generates the k8s manifests
+  manifests                                 Generates Kubernetes manifests
 
 Release
   prepare-release-candidate                 Create release candidate
