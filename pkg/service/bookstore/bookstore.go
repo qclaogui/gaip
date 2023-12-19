@@ -7,9 +7,9 @@ package bookstore
 import (
 	"context"
 	"flag"
-	"github.com/grafana/dskit/cache"
 
 	"github.com/go-kit/log"
+	"github.com/grafana/dskit/cache"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"github.com/qclaogui/gaip/pkg/service/bookstore/repository"

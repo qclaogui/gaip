@@ -27,7 +27,7 @@ type Config struct {
 	Server service.Config `yaml:"server"`
 
 	Todo       todo.Config       `yaml:"todo"`
-	RouteGuide routeguide.Config `yaml:"todo"`
+	RouteGuide routeguide.Config `yaml:"routeguide"`
 	Bookstore  bookstore.Config  `yaml:"bookstore"`
 	Library    library.Config    `yaml:"library"`
 	Project    project.Config    `yaml:"project"`
