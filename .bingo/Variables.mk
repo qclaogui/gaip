@@ -17,11 +17,11 @@ GO     ?= $(shell which go)
 #	@echo "Running api-linter"
 #	@$(API_LINTER) <flags/args..>
 #
-API_LINTER := $(GOBIN)/api-linter-v1.59.2
+API_LINTER := $(GOBIN)/api-linter-v1.60.0
 $(API_LINTER): $(BINGO_DIR)/api-linter.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/api-linter-v1.59.2"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=api-linter.mod -o=$(GOBIN)/api-linter-v1.59.2 "github.com/googleapis/api-linter/cmd/api-linter"
+	@echo "(re)installing $(GOBIN)/api-linter-v1.60.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=api-linter.mod -o=$(GOBIN)/api-linter-v1.60.0 "github.com/googleapis/api-linter/cmd/api-linter"
 
 ATLAS := $(GOBIN)/atlas-v0.13.1
 $(ATLAS): $(BINGO_DIR)/atlas.mod
@@ -53,11 +53,11 @@ $(ENT): $(BINGO_DIR)/ent.mod
 	@echo "(re)installing $(GOBIN)/ent-v0.12.5"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=ent.mod -o=$(GOBIN)/ent-v0.12.5 "entgo.io/ent/cmd/ent"
 
-GOIMPORTS := $(GOBIN)/goimports-v0.16.0
+GOIMPORTS := $(GOBIN)/goimports-v0.16.1
 $(GOIMPORTS): $(BINGO_DIR)/goimports.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/goimports-v0.16.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=goimports.mod -o=$(GOBIN)/goimports-v0.16.0 "golang.org/x/tools/cmd/goimports"
+	@echo "(re)installing $(GOBIN)/goimports-v0.16.1"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=goimports.mod -o=$(GOBIN)/goimports-v0.16.1 "golang.org/x/tools/cmd/goimports"
 
 GOLANGCI_LINT := $(GOBIN)/golangci-lint-v1.55.2
 $(GOLANGCI_LINT): $(BINGO_DIR)/golangci-lint.mod
@@ -77,11 +77,11 @@ $(HELM_DOCS): $(BINGO_DIR)/helm-docs.mod
 	@echo "(re)installing $(GOBIN)/helm-docs-v1.11.3"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=helm-docs.mod -o=$(GOBIN)/helm-docs-v1.11.3 "github.com/norwoodj/helm-docs/cmd/helm-docs"
 
-KUSTOMIZE := $(GOBIN)/kustomize-v5.2.1
+KUSTOMIZE := $(GOBIN)/kustomize-v5.3.0
 $(KUSTOMIZE): $(BINGO_DIR)/kustomize.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/kustomize-v5.2.1"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=kustomize.mod -o=$(GOBIN)/kustomize-v5.2.1 "sigs.k8s.io/kustomize/kustomize/v5"
+	@echo "(re)installing $(GOBIN)/kustomize-v5.3.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=kustomize.mod -o=$(GOBIN)/kustomize-v5.3.0 "sigs.k8s.io/kustomize/kustomize/v5"
 
 PROTOC_GEN_GO_GRPC := $(GOBIN)/protoc-gen-go-grpc-v1.3.0
 $(PROTOC_GEN_GO_GRPC): $(BINGO_DIR)/protoc-gen-go-grpc.mod

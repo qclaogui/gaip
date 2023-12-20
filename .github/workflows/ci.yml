@@ -1,6 +1,6 @@
 # This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
-name: ci
+name: CI
 
 on:
   push:
