@@ -14,6 +14,10 @@ import (
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 )
 
+type Repository interface {
+	librarypb.LibraryServiceServer
+}
+
 const (
 	DriverMemory   = "memory"
 	DriverMysql    = "mysql"
@@ -22,16 +26,11 @@ const (
 
 var supportedDatabaseDrivers = []string{DriverMemory, DriverMysql}
 
-type Repository interface {
-	librarypb.LibraryServiceServer
-}
-
 // Config RepoCfg Connections config
 // Here are each of the database connections for application.
 type Config struct {
 	Driver string `yaml:"driver"`
 
-	Memory   MemoryConfig   `yaml:"memory"`
 	Mysql    MysqlConfig    `yaml:"mysql"`
 	Postgres PostgresConfig `yaml:"postgres"`
 }
@@ -41,7 +40,6 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 
 	fs.StringVar(&cfg.Driver, prefix+"driver", DriverMemory, fmt.Sprintf("Driver storage to use. Supported drivers are: %s.", strings.Join(supportedDatabaseDrivers, ", ")))
 
-	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
 	cfg.Mysql.RegisterFlagsWithPrefix(prefix, fs)
 }
 
@@ -52,8 +50,6 @@ func (cfg *Config) Validate() error {
 	}
 
 	switch cfg.Driver {
-	case DriverMemory:
-		return cfg.Memory.Validate()
 	case DriverMysql:
 		return cfg.Mysql.Validate()
 	case DriverPostgres:
@@ -67,7 +63,7 @@ func NewRepository(cfg Config) (Repository, error) {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
 	case DriverMemory:
-		return NewMemoryRepo(cfg.Memory)
+		return NewMemoryRepo()
 	case DriverMysql:
 		return NewMysqlRepo(cfg.Mysql)
 	case DriverPostgres:

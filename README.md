@@ -53,13 +53,6 @@ Testing Lint & fmt
   test                                      Run tests.
   lint                                      Runs various static analysis against our code.
   fmt                                       Runs fmt code (automatically fix lint errors)
-  go-fmt                                    Runs gofmt code
-  buf-fmt                                   examining all of the proto files.
-  goreleaser-lint                           Lint .goreleaser*.yml files.
-  go-lint                                   examining all of the Go files.
-  buf-lint                                  Lint all of the proto files.
-  api-linter                                Lint all of the proto files.
-  fix-lint                                  fix lint issue of the Go files
 
 Kubernetes
   cluster                                   Create k3s cluster

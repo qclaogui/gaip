@@ -6,29 +6,12 @@ package repository
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"sync"
 
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
-
-type MemoryConfig struct {
-	Enabled bool `yaml:"enabled"`
-}
-
-func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
-	cfg.RegisterFlagsWithPrefix("", fs)
-}
-
-func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", false, "Enables memory Repository")
-}
-
-func (cfg *MemoryConfig) Validate() error {
-	return nil
-}
 
 // MemoryRepo fulfills the Repository interface
 // All objects are managed in an in-memory non-persistent store.

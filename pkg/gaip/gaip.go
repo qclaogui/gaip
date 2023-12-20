@@ -93,14 +93,14 @@ func New(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 
 	// TODO(qc) config gRPC and REST
 
-	if err := app.setupServices(); err != nil {
+	if err := app.initServices(); err != nil {
 		return nil, err
 	}
 
 	return app, nil
 }
 
-func (g *Gaip) setupServices() error {
+func (g *Gaip) initServices() error {
 	var err error
 	if g.Server, err = service.NewServer(g.Cfg.ServerCfg); err != nil {
 		return err
@@ -140,7 +140,7 @@ func (g *Gaip) Run() error {
 	// before starting servers, register /healthz handler.
 	g.Server.Router.Path("/healthz").Handler(g.healthzHandler())
 
-	//t.ServiceMap, err = t.ModuleManager.InitModuleServices(t.Cfg.Target...)
+	g.RegisterAPI()
 
 	//g.API.RegisterServiceMapHandler(http.HandlerFunc(g.servicesHandler))
 

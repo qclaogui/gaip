@@ -6,7 +6,6 @@ package repository
 
 import (
 	"context"
-	"flag"
 	"sync"
 
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
@@ -19,22 +18,6 @@ const (
 	maxPageSize     = 10000
 	maxBatchSize    = 1000
 )
-
-type MemoryConfig struct {
-	Enabled bool `yaml:"enabled"`
-}
-
-func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", false, "Enables memory Repository")
-}
-
-func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
-	cfg.RegisterFlagsWithPrefix("", fs)
-}
-
-func (cfg *MemoryConfig) Validate() error {
-	return nil
-}
 
 // MemoryRepo fulfills the Repository interface
 // All objects are managed in an in-memory non-persistent store.
@@ -53,7 +36,7 @@ type MemoryRepo struct {
 }
 
 // NewMemoryRepo is a factory function to generate a new repository
-func NewMemoryRepo(_ MemoryConfig) (*MemoryRepo, error) {
+func NewMemoryRepo() (*MemoryRepo, error) {
 	mr := &MemoryRepo{
 		Shelves: map[int64]*librarypb.Shelf{},
 		Books:   map[int64]map[int64]*librarypb.Book{},

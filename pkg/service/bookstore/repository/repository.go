@@ -14,6 +14,10 @@ import (
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 )
 
+type Repository interface {
+	bookstorepb.BookstoreServiceServer
+}
+
 const (
 	DriverMemory = "memory"
 	DriverMysql  = "mysql"
@@ -21,17 +25,12 @@ const (
 
 var supportedDatabaseDrivers = []string{DriverMemory, DriverMysql}
 
-type Repository interface {
-	bookstorepb.BookstoreServiceServer
-}
-
 // Config RepoCfg Connections config
 // Here are each of the database connections for application.
 type Config struct {
 	Driver string `yaml:"driver"`
 
-	Memory MemoryConfig `yaml:"memory"`
-	Mysql  MysqlConfig  `yaml:"mysql"`
+	Mysql MysqlConfig `yaml:"mysql"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
@@ -39,7 +38,6 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 
 	fs.StringVar(&cfg.Driver, prefix+"driver", DriverMemory, fmt.Sprintf("Driver storage to use. Supported drivers are: %s.", strings.Join(supportedDatabaseDrivers, ", ")))
 
-	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
 	cfg.Mysql.RegisterFlagsWithPrefix(prefix, fs)
 }
 
@@ -50,8 +48,6 @@ func (cfg *Config) Validate() error {
 	}
 
 	switch cfg.Driver {
-	case DriverMemory:
-		return cfg.Memory.Validate()
 	case DriverMysql:
 		return cfg.Mysql.Validate()
 	}

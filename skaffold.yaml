@@ -7,7 +7,7 @@ build:
     - image: gaip
       ko:
         fromImage: cgr.dev/chainguard/static
-        main: ./cmd/server
+        main: ./cmd/gaip
 
 # Profiles
 profiles:

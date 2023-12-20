@@ -14,15 +14,15 @@ import (
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 )
 
+type Repository interface {
+	routeguidepb.RouteGuideServiceServer
+}
+
 const (
 	DriverMemory = "memory"
 )
 
 var supportedDatabaseDrivers = []string{DriverMemory}
-
-type Repository interface {
-	routeguidepb.RouteGuideServiceServer
-}
 
 // Config RepoCfg Connections config
 // Here are each of the database connections for application.

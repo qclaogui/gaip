@@ -14,22 +14,20 @@ import (
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 )
 
+type Repository interface {
+	projectpb.ProjectServiceServer
+}
+
 const (
 	DriverMemory = "memory"
 )
 
 var supportedDatabaseDrivers = []string{DriverMemory}
 
-type Repository interface {
-	projectpb.ProjectServiceServer
-}
-
 // Config RepoCfg Connections config
 // Here are each of the database connections for application.
 type Config struct {
 	Driver string `yaml:"driver"`
-
-	Memory MemoryConfig `yaml:"memory"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
@@ -37,7 +35,6 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 
 	fs.StringVar(&cfg.Driver, prefix+"driver", DriverMemory, fmt.Sprintf("Driver storage to use. Supported drivers are: %s.", strings.Join(supportedDatabaseDrivers, ", ")))
 
-	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
 }
 
 // Validate RepoCfg config.
@@ -46,10 +43,6 @@ func (cfg *Config) Validate() error {
 		return fmt.Errorf("unsupported RepoCfg driver: %s", cfg.Driver)
 	}
 
-	switch cfg.Driver {
-	case DriverMemory:
-		return cfg.Memory.Validate()
-	}
 	return nil
 }
 

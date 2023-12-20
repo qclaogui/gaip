@@ -14,6 +14,10 @@ import (
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 )
 
+type Repository interface {
+	todopb.ToDoServiceServer
+}
+
 const (
 	DriverMemory = "memory"
 	DriverMysql  = "mysql"
@@ -29,22 +33,16 @@ var (
 	ErrFailedToCreate = errors.New("failed to add the todo to the repository")
 )
 
-type Repository interface {
-	todopb.ToDoServiceServer
-}
-
 type Config struct {
 	Driver string `yaml:"driver"`
 
-	Memory MemoryConfig `yaml:"memory"`
-	Mysql  MysqlConfig  `yaml:"mysql"`
+	Mysql MysqlConfig `yaml:"mysql"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	prefix := "todo.database."
 	fs.StringVar(&cfg.Driver, prefix+"driver", DriverMemory, fmt.Sprintf("Driver storage to use. Supported drivers are: %s.", strings.Join(supportedDatabaseBackends, ", ")))
 
-	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
 	cfg.Mysql.RegisterFlagsWithPrefix(prefix, fs)
 }
 

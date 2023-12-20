@@ -36,7 +36,7 @@ GO_ENV := GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) CGO_ENABLED=$(CGO_ENABLED
 
 VERSION      ?= $(shell ./tools/image-tag)
 COMMIT_NO    ?= $(shell git rev-parse --short HEAD 2> /dev/null || true)
-GIT_COMMIT 	 ?= $(if $(shell git status --porcelain --untracked-files=no),${COMMIT_NO}-dirty,${COMMIT_NO})
+GIT_COMMIT	 ?= $(if $(shell git status --porcelain --untracked-files=no),${COMMIT_NO}-dirty,${COMMIT_NO})
 VPREFIX      := github.com/qclaogui/gaip/pkg/version
 
 GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
@@ -260,9 +260,7 @@ lint: go-lint goreleaser-lint buf-lint $(COPYRIGHT) fmt
 fmt: ## Runs fmt code (automatically fix lint errors)
 fmt: fix-lint go-fmt buf-fmt
 
-
-.PHONY: go-fmt
-go-fmt: $(GOIMPORTS) ## Runs gofmt code
+go-fmt: $(GOIMPORTS)
 	@echo ">> formatting go code"
 	@gofmt -s -w $(GO_FILES_TO_FMT)
 	@for file in $(GO_FILES_TO_FMT) ; do \
@@ -270,37 +268,32 @@ go-fmt: $(GOIMPORTS) ## Runs gofmt code
 	done
 	@$(GOIMPORTS) -w $(GO_FILES_TO_FMT)
 
-.PHONY: buf-fmt
-buf-fmt: ## examining all of the proto files.
+buf-fmt:
 	@echo ">> run buf format"
 	@cd proto/ && $(BUF) format -w --exit-code
 
-.PHONY: goreleaser-lint
-goreleaser-lint: $(GORELEASER) ## Lint .goreleaser*.yml files.
+# Lint .goreleaser*.yml files.
+goreleaser-lint: $(GORELEASER)
 	@echo ">> run goreleaser check"
 	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
 	@$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
 
-.PHONY: go-lint
-go-lint: $(GOLANGCI_LINT) ## examining all of the Go files.
+go-lint: $(GOLANGCI_LINT)
 	@echo ">> run golangci-lint"
 	@$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
 
-.PHONY: buf-lint
-buf-lint: $(BUF) buf-fmt ## Lint all of the proto files.
+buf-lint: $(BUF) buf-fmt
 	@echo ">> run buf lint"
 	@cd proto/ && $(BUF) lint
 
-.PHONY: api-linter
-api-linter: $(API_LINTER) buf-fmt ## Lint all of the proto files.
+api-linter: $(API_LINTER) buf-fmt
 	@echo ">> run api-linter lint"
 	@cd proto/ && $(API_LINTER) \
 	qclaogui/project/v1/echo_service.proto \
 	qclaogui/project/v1/project_service.proto \
 	--set-exit-status
 
-.PHONY: fix-lint
-fix-lint: $(GOLANGCI_LINT) ## fix lint issue of the Go files
+fix-lint: $(GOLANGCI_LINT)
 	@echo ">> fix lint issue of the Go files"
 	@$(GOLANGCI_LINT) run --fix
 

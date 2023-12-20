@@ -6,7 +6,6 @@ package repository
 
 import (
 	"context"
-	"flag"
 	"log/slog"
 	"sync"
 
@@ -15,22 +14,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
-
-type MemoryConfig struct {
-	Enabled bool `yaml:"enabled"`
-}
-
-func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", false, "Enables memory Repository")
-}
-
-func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
-	cfg.RegisterFlagsWithPrefix("", fs)
-}
-
-func (cfg *MemoryConfig) Validate() error {
-	return nil
-}
 
 // MemoryRepo fulfills the Repository interface
 type MemoryRepo struct {

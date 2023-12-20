@@ -21,13 +21,10 @@ import (
 )
 
 type MemoryConfig struct {
-	Enabled bool `yaml:"enabled"`
-
 	FilePath string `yaml:"file_path"`
 }
 
 func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", false, "Enables memory Repository")
 	fs.StringVar(&cfg.FilePath, prefix+"memory.file-path", "", "Path of JSON file for loads features")
 }
 

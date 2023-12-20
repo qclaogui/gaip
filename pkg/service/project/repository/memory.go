@@ -6,7 +6,6 @@ package repository
 
 import (
 	"context"
-	"flag"
 	"log"
 	"sort"
 	"strconv"
@@ -24,26 +23,6 @@ const (
 	maxPageSize     = 10000
 	maxBatchSize    = 1000
 )
-
-type MemoryConfig struct {
-	Enabled bool `yaml:"enabled"`
-}
-
-func (cfg *MemoryConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, prefix+"memory.enabled", true, "Enables memory Repository")
-}
-
-func (cfg *MemoryConfig) RegisterFlags(fs *flag.FlagSet) {
-	cfg.RegisterFlagsWithPrefix("", fs)
-}
-
-func (cfg *MemoryConfig) Validate() error {
-	if !cfg.Enabled {
-		return nil
-	}
-
-	return nil
-}
 
 // MemoryRepo fulfills the Repository interface
 // All objects are managed in an in-memory non-persistent store.
