@@ -11,14 +11,10 @@ import (
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
+	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/library/repository"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
-
-// Service Library Service Server
-type Service interface {
-	librarypb.LibraryServiceServer
-}
 
 type Config struct {
 	//RepoCfg holds the configuration used for the repository.
@@ -47,19 +43,20 @@ type libraryServiceImpl struct {
 	repo repository.Repository
 }
 
-func NewLibraryService(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
+func New(cfg Config, s *service.Server) error {
 	// Create the libraryServiceImpl
 	srv := &libraryServiceImpl{
 		Cfg:        cfg,
-		logger:     logger,
-		Registerer: reg,
+		logger:     s.Log,
+		Registerer: s.Registerer,
 	}
 
 	if err := srv.setupRepo(); err != nil {
-		return nil, err
+		return err
 	}
 
-	return srv, nil
+	librarypb.RegisterLibraryServiceServer(s.GRPCServer, srv)
+	return nil
 }
 
 func (srv *libraryServiceImpl) setupRepo() error {

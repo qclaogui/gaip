@@ -62,8 +62,7 @@ clean: ## Remove artefacts or generated files from previous build
 
 ##@ Dependencies
 
-.PHONY: go-mod
-go-mod: ## go mod download && go mod tidy
+go-mod:
 	@go mod download
 	@go mod tidy
 	@go mod verify
@@ -77,15 +76,6 @@ check-go-mod: go-mod ## Ensures fresh go.mod and go.sum.
 # 	@echo ">> run buf mod update"
 # 	@cd proto/ && $(BUF) mod update
 
-.PHONY: protoc-install
-protoc-install:
-ifeq ("$(wildcard $(PROTOC))","")
-	@cd proto && curl -LO $(PROTOC_URL)$(PROTOC_ZIP)
-	@cd proto && unzip -n $(PROTOC_ZIP)
-	@cd proto && rm -Rf google/protobuf
-	@cd proto && mv -f bin/protoc ${GOBIN}/protoc-${PROTOC_VERSION} && mv -f include/google/protobuf google
-	@cd proto && rm -Rf bin include readme.txt $(PROTOC_ZIP)
-endif
 
 .PHONY: install-build-deps
 install-build-deps: ## Install dependencies tools
@@ -131,6 +121,17 @@ atlas-apply: $(ATLAS)
 
 ##@ Regenerate gRPC code
 
+.PHONY: protoc-install
+protoc-install: ## Install proper protoc version
+ifeq ("$(wildcard $(PROTOC))","")
+	@cd proto && curl -LO $(PROTOC_URL)$(PROTOC_ZIP)
+	@cd proto && unzip -n $(PROTOC_ZIP)
+	@cd proto && rm -Rf google/protobuf
+	@cd proto && mv -f bin/protoc ${GOBIN}/protoc-${PROTOC_VERSION} && mv -f include/google/protobuf google
+	@cd proto && rm -Rf bin include readme.txt $(PROTOC_ZIP)
+endif
+	@echo ">> (re)installing protobuf and proper protoc version"
+
 # .PHONY: buf-gen
 # buf-gen: ## Regenerate proto by buf https://buf.build/
 # buf-gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
@@ -140,13 +141,13 @@ atlas-apply: $(ATLAS)
 # 	@make swagger-ui
 # 	@make lint
 
-.PHONY: swagger-ui
-swagger-ui: ## Generate Swagger UI
+# Generate Swagger UI
+swagger-ui:
 	@SWAGGER_UI_VERSION=$(SWAGGER_UI_VERSION) tools/scripts/generate-swagger-ui.sh
 
 .PHONY: protoc-gen
 protoc-gen: ## Regenerate proto by protoc
-protoc-gen: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
+protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 	@rm -Rf genproto third_party/gen
 	@mkdir -p genproto third_party/gen/openapiv2
 	@$(PROTOC) --proto_path=proto \

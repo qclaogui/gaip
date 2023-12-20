@@ -12,6 +12,7 @@ import (
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/todo/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -20,11 +21,6 @@ import (
 const (
 	APIVersion = "v1"
 )
-
-// Service Library Service Server
-type Service interface {
-	todopb.ToDoServiceServer
-}
 
 type Config struct {
 	RepoCfg repository.Config `yaml:"database"`
@@ -43,26 +39,27 @@ func (cfg *Config) Validate() error {
 
 type todoServiceImpl struct {
 	todopb.UnimplementedToDoServiceServer
-	repo repository.Repository
 
 	Cfg        Config
 	logger     log.Logger
 	Registerer prometheus.Registerer
+
+	repo repository.Repository
 }
 
-func NewServiceServer(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
-	// Create the todoServiceImpl
-	s := &todoServiceImpl{
+func New(cfg Config, s *service.Server) error {
+	srv := &todoServiceImpl{
 		Cfg:        cfg,
-		logger:     logger,
-		Registerer: reg,
+		logger:     s.Log,
+		Registerer: s.Registerer,
 	}
 
-	if err := s.setupRepo(); err != nil {
-		return nil, err
+	if err := srv.setupRepo(); err != nil {
+		return err
 	}
 
-	return s, nil
+	todopb.RegisterToDoServiceServer(s.GRPCServer, srv)
+	return nil
 }
 
 func (srv *todoServiceImpl) setupRepo() error {

@@ -19,10 +19,6 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
-	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
-	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
-	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
-	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/gaip/pkg/service"
@@ -44,17 +40,9 @@ import (
 
 type Gaip struct {
 	Cfg        Config
+	Server     *service.Server
+	Vault      *vault.Vault
 	Registerer prometheus.Registerer
-
-	Server *service.Server
-
-	TodoSrv       todo.Service
-	RouteGuideSrv routeguide.Service
-	BookstoreSrv  bookstore.Service
-	LibrarySrv    library.Service
-	ProjectSrv    project.Service
-
-	Vault *vault.Vault
 }
 
 func (g *Gaip) RegisterAPI() {
@@ -63,89 +51,22 @@ func (g *Gaip) RegisterAPI() {
 
 // initVault init Vault
 func (g *Gaip) initVault() error {
-	if !g.Cfg.Vault.Enabled {
+	if !g.Cfg.VaultCfg.Enabled {
 		return nil
 	}
 
-	v, err := vault.New(g.Cfg.Vault)
+	v, err := vault.New(g.Cfg.VaultCfg)
 	if err != nil {
 		return err
 	}
 	g.Vault = v
 
 	// Update Configs - KVStore
-	//g.Cfg.MemberlistKV.TCPTransport.TLS.Reader = g.Vault
+	//g.Cfg.MemberlistKV.TCPTransport.TLS.Reader = g.VaultCfg
 
 	// Update Configs - GRPCServer Clients
-	//g.Cfg.Worker.GRPCClientConfig.TLS.Reader = g.Vault
+	//g.Cfg.Worker.GRPCClientConfig.TLS.Reader = g.VaultCfg
 
-	return nil
-}
-
-func (g *Gaip) initTodo() error {
-	var err error
-	if g.TodoSrv, err = todo.NewServiceServer(g.Cfg.Todo, lg.Logger, g.Registerer); err != nil {
-		return err
-	}
-
-	todopb.RegisterToDoServiceServer(g.Server.GRPCServer, g.TodoSrv)
-
-	// Expose HTTP endpoints.
-	g.RegisterRoute("/todo/healthz", g.healthzHandler(), false, true, "GET", "POST")
-	return nil
-}
-
-func (g *Gaip) initRouteguide() error {
-	var err error
-	if g.RouteGuideSrv, err = routeguide.NewRouteGuideService(g.Cfg.RouteGuide, lg.Logger, g.Registerer); err != nil {
-		return err
-	}
-
-	routeguidepb.RegisterRouteGuideServiceServer(g.Server.GRPCServer, g.RouteGuideSrv)
-	// Expose HTTP endpoints.
-	g.RegisterRoute("/routeguide/healthz", g.healthzHandler(), false, true, "GET", "POST")
-	return nil
-}
-
-func (g *Gaip) initBookstore() error {
-	var err error
-	if g.BookstoreSrv, err = bookstore.NewBookstoreServer(g.Cfg.Bookstore, lg.Logger, g.Registerer); err != nil {
-		return err
-	}
-
-	bookstorepb.RegisterBookstoreServiceServer(g.Server.GRPCServer, g.BookstoreSrv)
-
-	// Expose HTTP endpoints.
-	g.RegisterRoute("/bookstore/healthz", g.healthzHandler(), false, true, "GET", "POST")
-	return nil
-}
-
-func (g *Gaip) initLibrary() error {
-	var err error
-	if g.LibrarySrv, err = library.NewLibraryService(g.Cfg.Library, lg.Logger, g.Registerer); err != nil {
-		return err
-	}
-
-	librarypb.RegisterLibraryServiceServer(g.Server.GRPCServer, g.LibrarySrv)
-
-	// Expose HTTP endpoints.
-	g.RegisterRoute("/library/healthz", g.healthzHandler(), false, true, "GET", "POST")
-
-	return nil
-}
-
-func (g *Gaip) initProject() error {
-	var err error
-	if g.ProjectSrv, err = project.NewProjectService(g.Cfg.Project, lg.Logger, g.Registerer); err != nil {
-		return err
-	}
-
-	projectpb.RegisterProjectServiceServer(g.Server.GRPCServer, g.ProjectSrv)
-	//projectpb.RegisterIdentityServiceServer(g.Server.GRPCServer, nil)
-	//projectpb.RegisterEchoServiceServer(g.Server.GRPCServer, nil)
-
-	// Expose HTTP endpoints.
-	g.RegisterRoute("/project/healthz", g.healthzHandler(), false, true, "GET", "POST")
 	return nil
 }
 
@@ -161,14 +82,16 @@ func New(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 	setUpGoRuntimeMetrics(cfg, reg)
 
 	// Inject the registerer in the Server config too.
-	cfg.Server.Registerer = reg
+	cfg.ServerCfg.Registerer = reg
 
 	app := &Gaip{
 		Cfg:        cfg,
 		Registerer: reg,
 	}
 
-	app.Cfg.Server.Router = mux.NewRouter()
+	app.Cfg.ServerCfg.Router = mux.NewRouter()
+
+	// TODO(qc) config gRPC and REST
 
 	if err := app.setupServices(); err != nil {
 		return nil, err
@@ -179,27 +102,27 @@ func New(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 
 func (g *Gaip) setupServices() error {
 	var err error
-	if g.Server, err = service.NewServer(g.Cfg.Server); err != nil {
+	if g.Server, err = service.NewServer(g.Cfg.ServerCfg); err != nil {
 		return err
 	}
 
-	if err = g.initTodo(); err != nil {
+	if err = todo.New(g.Cfg.TodoCfg, g.Server); err != nil {
 		return err
 	}
 
-	if err = g.initRouteguide(); err != nil {
+	if err = routeguide.New(g.Cfg.RouteGuideCfg, g.Server); err != nil {
 		return err
 	}
 
-	if err = g.initBookstore(); err != nil {
+	if err = bookstore.New(g.Cfg.BookstoreCfg, g.Server); err != nil {
 		return err
 	}
 
-	if err = g.initLibrary(); err != nil {
+	if err = library.New(g.Cfg.LibraryCfg, g.Server); err != nil {
 		return err
 	}
 
-	if err = g.initProject(); err != nil {
+	if err = project.New(g.Cfg.ProjectCfg, g.Server); err != nil {
 		return err
 	}
 
@@ -210,8 +133,8 @@ func (g *Gaip) setupServices() error {
 	return nil
 }
 
-// Bootstrap bootstrap gRPC server and HTTP gateway
-func (g *Gaip) Bootstrap() error {
+// Run gRPC server and HTTP gateway
+func (g *Gaip) Run() error {
 	ctx := context.Background()
 
 	// before starting servers, register /healthz handler.

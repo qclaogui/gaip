@@ -12,14 +12,10 @@ import (
 	"github.com/grafana/dskit/cache"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/bookstore/repository"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
-
-// Service Bookstore Service Service
-type Service interface {
-	bookstorepb.BookstoreServiceServer
-}
 
 type Config struct {
 	//RepoCfg holds the configuration used for the repository.
@@ -46,21 +42,24 @@ func (cfg *Config) Validate() error {
 type bookstoreServerImpl struct {
 	Cfg        Config
 	logger     log.Logger
-	repo       repository.Repository
 	Registerer prometheus.Registerer
+
+	repo repository.Repository
 }
 
-func NewBookstoreServer(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
+func New(cfg Config, s *service.Server) error {
 	srv := &bookstoreServerImpl{
 		Cfg:        cfg,
-		logger:     logger,
-		Registerer: reg,
-	}
-	if err := srv.setupRepo(); err != nil {
-		return nil, err
+		logger:     s.Log,
+		Registerer: s.Registerer,
 	}
 
-	return srv, nil
+	if err := srv.setupRepo(); err != nil {
+		return err
+	}
+
+	bookstorepb.RegisterBookstoreServiceServer(s.GRPCServer, srv)
+	return nil
 }
 
 func (srv *bookstoreServerImpl) setupRepo() error {

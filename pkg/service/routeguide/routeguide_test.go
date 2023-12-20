@@ -18,11 +18,16 @@ import (
 func Test_ServiceServer_GetFeature(t *testing.T) {
 	ctx := context.Background()
 	var cfg = Config{}
-	cfg.RepoCfg.Backend = repository.BackendMemory
+	// set repository database driver
+	cfg.RepoCfg.Driver = repository.DriverMemory
 
-	ssv, err := NewRouteGuideService(cfg, lg.Logger, prometheus.DefaultRegisterer)
-	if err != nil {
-		t.Fatalf("an error '%s' was not expected when NewRouteGuideService", err)
+	repo, _ := repository.NewRepository(cfg.RepoCfg)
+
+	ssv := &routeGuideServiceImpl{
+		Cfg:        cfg,
+		logger:     lg.Logger,
+		Registerer: prometheus.DefaultRegisterer,
+		repo:       repo,
 	}
 
 	type args struct {

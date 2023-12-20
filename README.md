@@ -37,7 +37,6 @@ Build
   clean                                     Remove artefacts or generated files from previous build
 
 Dependencies
-  go-mod                                    go mod download && go mod tidy
   check-go-mod                              Ensures fresh go.mod and go.sum.
   install-build-deps                        Install dependencies tools
 
@@ -47,7 +46,7 @@ Ent schema
   atlas-lint                                Verifying and linting migrations
 
 Regenerate gRPC code
-  swagger-ui                                Generate Swagger UI
+  protoc-install                            Install proper protoc version
   protoc-gen                                Regenerate proto by protoc
 
 Testing Lint & fmt

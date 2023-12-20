@@ -169,9 +169,7 @@ func (cfg *Config) registererOrDefault() prometheus.Registerer {
 }
 
 type Server struct {
-	cfg        Config
-	Gatherer   prometheus.Gatherer
-	Registerer prometheus.Registerer
+	cfg Config
 
 	httpListener net.Listener
 	HTTPServer   *http.Server
@@ -179,8 +177,10 @@ type Server struct {
 	grpcListener net.Listener
 	GRPCServer   *grpc.Server
 
-	Router *mux.Router
-	Log    log.Logger
+	Router     *mux.Router
+	Log        log.Logger
+	Gatherer   prometheus.Gatherer
+	Registerer prometheus.Registerer
 }
 
 // NewServer makes a new Server. It will panic if the metrics cannot be registered.

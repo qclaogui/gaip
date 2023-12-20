@@ -55,7 +55,6 @@ func (mf *mainFlags) registerFlags(f *flag.FlagSet) {
 	f.IntVar(&mf.rateLimitedLogsPerSecondBurst, "log.rate-limit-logs-per-second-burst", 25000, "Burst size, i.e., maximum number of messages that can be logged in a second, temporarily exceeding the configured maximum logs per second.")
 	f.BoolVar(&mf.printVersion, "version", false, "Print application version and exit.")
 	f.BoolVar(&mf.printHelp, "help", false, "Print basic help.")
-	f.BoolVar(&mf.printHelp, "h", false, "Print basic help.")
 	f.BoolVar(&mf.printHelpAll, "help-all", false, "Print help, also including advanced and experimental parameters.")
 	f.BoolVar(&mf.dumpYaml, "dump-yaml", false, "Print full config yaml.")
 }
@@ -106,7 +105,7 @@ func main() {
 
 	// Validate the config once both the config file has been loaded
 	// and CLI flags parsed.
-	if err := cfg.Validate(lg.Logger); err != nil {
+	if err := cfg.Validate(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "error validating config: %v\n", err)
 	}
 
@@ -116,7 +115,7 @@ func main() {
 	}
 
 	reg := prometheus.DefaultRegisterer
-	cfg.Server.Log = lg.InitLogger(cfg.Server.LogFormat, cfg.Server.LogLevel, lg.LoggerConfig{
+	cfg.ServerCfg.Log = lg.InitLogger(cfg.ServerCfg.LogFormat, cfg.ServerCfg.LogLevel, lg.LoggerConfig{
 		Enabled:            mf.rateLimitedLogsEnabled,
 		LogsPerSecond:      mf.rateLimitedLogsPerSecond,
 		LogsPerSecondBurst: mf.rateLimitedLogsPerSecondBurst,
@@ -127,7 +126,7 @@ func main() {
 	g, err := gaip.New(cfg, reg)
 	lg.CheckFatal("initializing application", err)
 
-	err = g.Bootstrap()
+	err = g.Run()
 	lg.CheckFatal("running application", err)
 }
 

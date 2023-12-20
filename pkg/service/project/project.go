@@ -10,14 +10,10 @@ import (
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/project/repository"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
-
-// Service Project Service Server
-type Service interface {
-	projectpb.ProjectServiceServer
-}
 
 // The projectServiceImpl type implements a project server.
 type projectServiceImpl struct {
@@ -28,17 +24,21 @@ type projectServiceImpl struct {
 	repo repository.Repository
 }
 
-func NewProjectService(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
+func New(cfg Config, s *service.Server) error {
 	srv := &projectServiceImpl{
 		Cfg:        cfg,
-		logger:     logger,
-		Registerer: reg,
-	}
-	if err := srv.setupRepo(); err != nil {
-		return nil, err
+		logger:     s.Log,
+		Registerer: s.Registerer,
 	}
 
-	return srv, nil
+	if err := srv.setupRepo(); err != nil {
+		return err
+	}
+
+	projectpb.RegisterProjectServiceServer(s.GRPCServer, srv)
+	//projectpb.RegisterIdentityServiceServer(g.Server.GRPCServer, nil)
+	//projectpb.RegisterEchoServiceServer(g.Server.GRPCServer, nil)
+	return nil
 }
 
 func (srv *projectServiceImpl) setupRepo() error {

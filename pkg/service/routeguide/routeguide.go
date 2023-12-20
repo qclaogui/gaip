@@ -11,13 +11,9 @@ import (
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/routeguide/repository"
 )
-
-// Service RouteGuide Service Server
-type Service interface {
-	routeguidepb.RouteGuideServiceServer
-}
 
 type Config struct {
 	//RepoCfg holds the configuration used for the repository.
@@ -48,18 +44,18 @@ type routeGuideServiceImpl struct {
 	repo repository.Repository
 }
 
-func NewRouteGuideService(cfg Config, logger log.Logger, reg prometheus.Registerer) (Service, error) {
-	// Create the Server
+func New(cfg Config, s *service.Server) error {
 	srv := &routeGuideServiceImpl{
 		Cfg:        cfg,
-		logger:     logger,
-		Registerer: reg,
+		logger:     s.Log,
+		Registerer: s.Registerer,
 	}
 	if err := srv.setupRepo(); err != nil {
-		return nil, err
+		return err
 	}
 
-	return srv, nil
+	routeguidepb.RegisterRouteGuideServiceServer(s.GRPCServer, srv)
+	return nil
 }
 
 func (srv *routeGuideServiceImpl) setupRepo() error {

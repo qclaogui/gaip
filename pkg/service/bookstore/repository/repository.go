@@ -15,11 +15,11 @@ import (
 )
 
 const (
-	BackendMemory = "memory"
-	BackendMysql  = "mysql"
+	DriverMemory = "memory"
+	DriverMysql  = "mysql"
 )
 
-var supportedDatabaseBackends = []string{BackendMemory, BackendMysql}
+var supportedDatabaseDrivers = []string{DriverMemory, DriverMysql}
 
 type Repository interface {
 	bookstorepb.BookstoreServiceServer
@@ -28,7 +28,7 @@ type Repository interface {
 // Config RepoCfg Connections config
 // Here are each of the database connections for application.
 type Config struct {
-	Backend string `yaml:"backend"`
+	Driver string `yaml:"driver"`
 
 	Memory MemoryConfig `yaml:"memory"`
 	Mysql  MysqlConfig  `yaml:"mysql"`
@@ -37,7 +37,7 @@ type Config struct {
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	prefix := "bookstore.database."
 
-	fs.StringVar(&cfg.Backend, prefix+"backend", BackendMemory, fmt.Sprintf("Backend storage to use. Supported backends are: %s.", strings.Join(supportedDatabaseBackends, ", ")))
+	fs.StringVar(&cfg.Driver, prefix+"driver", DriverMemory, fmt.Sprintf("Driver storage to use. Supported drivers are: %s.", strings.Join(supportedDatabaseDrivers, ", ")))
 
 	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
 	cfg.Mysql.RegisterFlagsWithPrefix(prefix, fs)
@@ -45,28 +45,28 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 
 // Validate RepoCfg config.
 func (cfg *Config) Validate() error {
-	if cfg.Backend != "" && !slices.Contains(supportedDatabaseBackends, cfg.Backend) {
-		return fmt.Errorf("unsupported RepoCfg backend: %s", cfg.Backend)
+	if cfg.Driver != "" && !slices.Contains(supportedDatabaseDrivers, cfg.Driver) {
+		return fmt.Errorf("unsupported drivers: %s", cfg.Driver)
 	}
 
-	switch cfg.Backend {
-	case BackendMemory:
+	switch cfg.Driver {
+	case DriverMemory:
 		return cfg.Memory.Validate()
-	case BackendMysql:
+	case DriverMysql:
 		return cfg.Mysql.Validate()
 	}
 	return nil
 }
 
 func NewRepository(cfg Config) (Repository, error) {
-	switch cfg.Backend {
+	switch cfg.Driver {
 	case "":
-		return nil, errors.Errorf("empty database backend %s", cfg.Backend)
-	case BackendMemory:
+		return nil, errors.Errorf("empty database drivers %s", cfg.Driver)
+	case DriverMemory:
 		return NewMemoryRepo()
-	case BackendMysql:
+	case DriverMysql:
 		return nil, nil //TODO(qc)
 	default:
-		return nil, errors.Errorf("unsupported backend for database %s", cfg.Backend)
+		return nil, errors.Errorf("unsupported drivers for database %s", cfg.Driver)
 	}
 }

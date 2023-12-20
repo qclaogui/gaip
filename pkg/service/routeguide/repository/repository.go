@@ -15,10 +15,10 @@ import (
 )
 
 const (
-	BackendMemory = "memory"
+	DriverMemory = "memory"
 )
 
-var supportedDatabaseBackends = []string{BackendMemory}
+var supportedDatabaseDrivers = []string{DriverMemory}
 
 type Repository interface {
 	routeguidepb.RouteGuideServiceServer
@@ -27,7 +27,7 @@ type Repository interface {
 // Config RepoCfg Connections config
 // Here are each of the database connections for application.
 type Config struct {
-	Backend string `yaml:"backend"`
+	Driver string `yaml:"driver"`
 
 	Memory MemoryConfig `yaml:"memory"`
 }
@@ -35,31 +35,31 @@ type Config struct {
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	prefix := "routeguide.database."
 
-	fs.StringVar(&cfg.Backend, prefix+"backend", BackendMemory, fmt.Sprintf("Backend storage to use. Supported backends are: %s.", strings.Join(supportedDatabaseBackends, ", ")))
+	fs.StringVar(&cfg.Driver, prefix+"driver", DriverMemory, fmt.Sprintf("Driver storage to use. Supported drivers are: %s.", strings.Join(supportedDatabaseDrivers, ", ")))
 
 	cfg.Memory.RegisterFlagsWithPrefix(prefix, fs)
 }
 
 // Validate RepoCfg config.
 func (cfg *Config) Validate() error {
-	if cfg.Backend != "" && !slices.Contains(supportedDatabaseBackends, cfg.Backend) {
-		return fmt.Errorf("unsupported RepoCfg backend: %s", cfg.Backend)
+	if cfg.Driver != "" && !slices.Contains(supportedDatabaseDrivers, cfg.Driver) {
+		return fmt.Errorf("unsupported RepoCfg driver: %s", cfg.Driver)
 	}
 
-	switch cfg.Backend {
-	case BackendMemory:
+	switch cfg.Driver {
+	case DriverMemory:
 		return cfg.Memory.Validate()
 	}
 	return nil
 }
 
 func NewRepository(cfg Config) (Repository, error) {
-	switch cfg.Backend {
+	switch cfg.Driver {
 	case "":
-		return nil, errors.Errorf("empty database backend %s", cfg.Backend)
-	case BackendMemory:
+		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
+	case DriverMemory:
 		return NewMemoryRepo(cfg.Memory)
 	default:
-		return nil, errors.Errorf("unsupported backend for database %s", cfg.Backend)
+		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
 	}
 }
