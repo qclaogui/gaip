@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/pkg/service"
@@ -37,7 +38,8 @@ func (cfg *Config) Validate() error {
 	return nil
 }
 
-type todoServiceImpl struct {
+// The Todo type implements a todopb server.
+type Todo struct {
 	todopb.UnimplementedToDoServiceServer
 
 	Cfg        Config
@@ -47,22 +49,22 @@ type todoServiceImpl struct {
 	repo repository.Repository
 }
 
-func New(cfg Config, s *service.Server) error {
-	srv := &todoServiceImpl{
+func New(cfg Config, s *service.Server) (*Todo, error) {
+	srv := &Todo{
 		Cfg:        cfg,
 		logger:     s.Log,
 		Registerer: s.Registerer,
 	}
 
 	if err := srv.setupRepo(); err != nil {
-		return err
+		return nil, err
 	}
 
 	todopb.RegisterToDoServiceServer(s.GRPCServer, srv)
-	return nil
+	return srv, nil
 }
 
-func (srv *todoServiceImpl) setupRepo() error {
+func (srv *Todo) setupRepo() error {
 	var err error
 	if srv.repo, err = repository.NewRepository(srv.Cfg.RepoCfg); err != nil {
 		return err
@@ -71,7 +73,7 @@ func (srv *todoServiceImpl) setupRepo() error {
 	return nil
 }
 
-func (srv *todoServiceImpl) checkAPI(api string) error {
+func (srv *Todo) checkAPI(api string) error {
 	// API version is "" means use current version of the service
 	if len(api) > 0 {
 		if APIVersion != api {
@@ -81,7 +83,10 @@ func (srv *todoServiceImpl) checkAPI(api string) error {
 	return nil
 }
 
-func (srv *todoServiceImpl) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+func (srv *Todo) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+	_ = level.Info(srv.logger).Log("msg", "[Create] received request")
+	defer func() { _ = level.Info(srv.logger).Log("msg", "[Create] completed request") }()
+
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -94,7 +99,7 @@ func (srv *todoServiceImpl) Create(ctx context.Context, req *todopb.CreateReques
 	return srv.repo.Create(ctx, req)
 }
 
-func (srv *todoServiceImpl) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
+func (srv *Todo) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -103,7 +108,7 @@ func (srv *todoServiceImpl) Update(ctx context.Context, req *todopb.UpdateReques
 	return srv.repo.Update(ctx, req)
 }
 
-func (srv *todoServiceImpl) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
+func (srv *Todo) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -112,7 +117,7 @@ func (srv *todoServiceImpl) Get(ctx context.Context, req *todopb.GetRequest) (*t
 	return srv.repo.Get(ctx, req)
 }
 
-func (srv *todoServiceImpl) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
+func (srv *Todo) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -121,7 +126,7 @@ func (srv *todoServiceImpl) Delete(ctx context.Context, req *todopb.DeleteReques
 	return srv.repo.Delete(ctx, req)
 }
 
-func (srv *todoServiceImpl) List(ctx context.Context, req *todopb.ListRequest) (*todopb.ListResponse, error) {
+func (srv *Todo) List(ctx context.Context, req *todopb.ListRequest) (*todopb.ListResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := srv.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())

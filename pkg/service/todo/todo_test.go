@@ -23,10 +23,10 @@ import (
 
 var ID = "e75b6f03-e5fc-488c-8f75-ad1747be3d3a"
 
-func serverSetupWithSQLDB(db *sql.DB) *todoServiceImpl {
+func serverSetupWithSQLDB(db *sql.DB) *Todo {
 	var cfg = Config{}
 	repo, _ := repository.NewMysqlRepoWithSQLDB(db)
-	return &todoServiceImpl{
+	return &Todo{
 		Cfg:        cfg,
 		logger:     lg.Logger,
 		Registerer: prometheus.DefaultRegisterer,

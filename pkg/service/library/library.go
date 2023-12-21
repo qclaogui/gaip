@@ -17,7 +17,6 @@ import (
 )
 
 type Config struct {
-	//RepoCfg holds the configuration used for the repository.
 	RepoCfg repository.Config `yaml:"database"`
 }
 
@@ -34,8 +33,8 @@ func (cfg *Config) Validate() error {
 	return nil
 }
 
-// The libraryServiceImpl type implements a library server.
-type libraryServiceImpl struct {
+// The Library type implements a librarypb server.
+type Library struct {
 	Cfg        Config
 	logger     log.Logger
 	Registerer prometheus.Registerer
@@ -43,23 +42,22 @@ type libraryServiceImpl struct {
 	repo repository.Repository
 }
 
-func New(cfg Config, s *service.Server) error {
-	// Create the libraryServiceImpl
-	srv := &libraryServiceImpl{
+func New(cfg Config, s *service.Server) (*Library, error) {
+	srv := &Library{
 		Cfg:        cfg,
 		logger:     s.Log,
 		Registerer: s.Registerer,
 	}
 
 	if err := srv.setupRepo(); err != nil {
-		return err
+		return nil, err
 	}
 
 	librarypb.RegisterLibraryServiceServer(s.GRPCServer, srv)
-	return nil
+	return srv, nil
 }
 
-func (srv *libraryServiceImpl) setupRepo() error {
+func (srv *Library) setupRepo() error {
 	var err error
 	if srv.repo, err = repository.NewRepository(srv.Cfg.RepoCfg); err != nil {
 		return err
@@ -67,47 +65,47 @@ func (srv *libraryServiceImpl) setupRepo() error {
 	return nil
 }
 
-func (srv *libraryServiceImpl) CreateShelf(ctx context.Context, req *librarypb.CreateShelfRequest) (*librarypb.Shelf, error) {
+func (srv *Library) CreateShelf(ctx context.Context, req *librarypb.CreateShelfRequest) (*librarypb.Shelf, error) {
 	return srv.repo.CreateShelf(ctx, req)
 }
 
-func (srv *libraryServiceImpl) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
+func (srv *Library) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
 	return srv.repo.ListShelves(ctx, req)
 }
 
-func (srv *libraryServiceImpl) GetShelf(ctx context.Context, req *librarypb.GetShelfRequest) (*librarypb.Shelf, error) {
+func (srv *Library) GetShelf(ctx context.Context, req *librarypb.GetShelfRequest) (*librarypb.Shelf, error) {
 	return srv.repo.GetShelf(ctx, req)
 }
 
-func (srv *libraryServiceImpl) DeleteShelf(ctx context.Context, req *librarypb.DeleteShelfRequest) (*emptypb.Empty, error) {
+func (srv *Library) DeleteShelf(ctx context.Context, req *librarypb.DeleteShelfRequest) (*emptypb.Empty, error) {
 	return srv.repo.DeleteShelf(ctx, req)
 }
 
-func (srv *libraryServiceImpl) MergeShelves(ctx context.Context, req *librarypb.MergeShelvesRequest) (*librarypb.Shelf, error) {
+func (srv *Library) MergeShelves(ctx context.Context, req *librarypb.MergeShelvesRequest) (*librarypb.Shelf, error) {
 	return srv.repo.MergeShelves(ctx, req)
 }
 
-func (srv *libraryServiceImpl) CreateBook(ctx context.Context, req *librarypb.CreateBookRequest) (*librarypb.Book, error) {
+func (srv *Library) CreateBook(ctx context.Context, req *librarypb.CreateBookRequest) (*librarypb.Book, error) {
 	return srv.repo.CreateBook(ctx, req)
 }
 
-func (srv *libraryServiceImpl) GetBook(ctx context.Context, req *librarypb.GetBookRequest) (*librarypb.Book, error) {
+func (srv *Library) GetBook(ctx context.Context, req *librarypb.GetBookRequest) (*librarypb.Book, error) {
 	return srv.repo.GetBook(ctx, req)
 }
 
-func (srv *libraryServiceImpl) ListBooks(ctx context.Context, req *librarypb.ListBooksRequest) (*librarypb.ListBooksResponse, error) {
+func (srv *Library) ListBooks(ctx context.Context, req *librarypb.ListBooksRequest) (*librarypb.ListBooksResponse, error) {
 	return srv.repo.ListBooks(ctx, req)
 }
 
-func (srv *libraryServiceImpl) DeleteBook(ctx context.Context, req *librarypb.DeleteBookRequest) (*emptypb.Empty, error) {
+func (srv *Library) DeleteBook(ctx context.Context, req *librarypb.DeleteBookRequest) (*emptypb.Empty, error) {
 	return srv.repo.DeleteBook(ctx, req)
 }
 
-func (srv *libraryServiceImpl) UpdateBook(ctx context.Context, req *librarypb.UpdateBookRequest) (*librarypb.Book, error) {
+func (srv *Library) UpdateBook(ctx context.Context, req *librarypb.UpdateBookRequest) (*librarypb.Book, error) {
 	return srv.repo.UpdateBook(ctx, req)
 
 }
 
-func (srv *libraryServiceImpl) MoveBook(ctx context.Context, req *librarypb.MoveBookRequest) (*librarypb.Book, error) {
+func (srv *Library) MoveBook(ctx context.Context, req *librarypb.MoveBookRequest) (*librarypb.Book, error) {
 	return srv.repo.MoveBook(ctx, req)
 }

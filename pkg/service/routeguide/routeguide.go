@@ -33,8 +33,8 @@ func (cfg *Config) Validate() error {
 	return nil
 }
 
-// routeGuideServiceImpl routeGuideServiceImpl
-type routeGuideServiceImpl struct {
+// The RouteGuide type implements a routeguidepb server.
+type RouteGuide struct {
 	routeguidepb.UnimplementedRouteGuideServiceServer
 
 	Cfg        Config
@@ -44,21 +44,21 @@ type routeGuideServiceImpl struct {
 	repo repository.Repository
 }
 
-func New(cfg Config, s *service.Server) error {
-	srv := &routeGuideServiceImpl{
+func New(cfg Config, s *service.Server) (*RouteGuide, error) {
+	srv := &RouteGuide{
 		Cfg:        cfg,
 		logger:     s.Log,
 		Registerer: s.Registerer,
 	}
 	if err := srv.setupRepo(); err != nil {
-		return err
+		return nil, err
 	}
 
 	routeguidepb.RegisterRouteGuideServiceServer(s.GRPCServer, srv)
-	return nil
+	return srv, nil
 }
 
-func (srv *routeGuideServiceImpl) setupRepo() error {
+func (srv *RouteGuide) setupRepo() error {
 	var err error
 	if srv.repo, err = repository.NewRepository(srv.Cfg.RepoCfg); err != nil {
 		return err
@@ -67,17 +67,17 @@ func (srv *routeGuideServiceImpl) setupRepo() error {
 }
 
 // GetFeature returns the feature at the given point.
-func (srv *routeGuideServiceImpl) GetFeature(ctx context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
+func (srv *RouteGuide) GetFeature(ctx context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
 	return srv.repo.GetFeature(ctx, req)
 }
 
-func (srv *routeGuideServiceImpl) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
+func (srv *RouteGuide) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
 	return srv.repo.ListFeatures(req, stream)
 }
 
-func (srv *routeGuideServiceImpl) RecordRoute(req routeguidepb.RouteGuideService_RecordRouteServer) error {
+func (srv *RouteGuide) RecordRoute(req routeguidepb.RouteGuideService_RecordRouteServer) error {
 	return srv.repo.RecordRoute(req)
 }
-func (srv *routeGuideServiceImpl) RouteChat(req routeguidepb.RouteGuideService_RouteChatServer) error {
+func (srv *RouteGuide) RouteChat(req routeguidepb.RouteGuideService_RouteChatServer) error {
 	return srv.repo.RouteChat(req)
 }

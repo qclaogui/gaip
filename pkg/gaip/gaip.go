@@ -92,6 +92,10 @@ func New(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 	app.Cfg.ServerCfg.Router = mux.NewRouter()
 
 	// TODO(qc) config gRPC and REST
+	//app.Cfg.ServerCfg.HTTPMiddleware = nil
+
+	//app.Cfg.ServerCfg.GRPCMiddleware=nil
+	//app.Cfg.ServerCfg.GRPCStreamMiddleware=nil
 
 	if err := app.initServices(); err != nil {
 		return nil, err
@@ -106,23 +110,23 @@ func (g *Gaip) initServices() error {
 		return err
 	}
 
-	if err = todo.New(g.Cfg.TodoCfg, g.Server); err != nil {
+	if _, err = todo.New(g.Cfg.TodoCfg, g.Server); err != nil {
 		return err
 	}
 
-	if err = routeguide.New(g.Cfg.RouteGuideCfg, g.Server); err != nil {
+	if _, err = routeguide.New(g.Cfg.RouteGuideCfg, g.Server); err != nil {
 		return err
 	}
 
-	if err = bookstore.New(g.Cfg.BookstoreCfg, g.Server); err != nil {
+	if _, err = bookstore.New(g.Cfg.BookstoreCfg, g.Server); err != nil {
 		return err
 	}
 
-	if err = library.New(g.Cfg.LibraryCfg, g.Server); err != nil {
+	if _, err = library.New(g.Cfg.LibraryCfg, g.Server); err != nil {
 		return err
 	}
 
-	if err = project.New(g.Cfg.ProjectCfg, g.Server); err != nil {
+	if _, err = project.New(g.Cfg.ProjectCfg, g.Server); err != nil {
 		return err
 	}
 

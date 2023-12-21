@@ -12,6 +12,7 @@ import (
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"github.com/qclaogui/gaip/pkg/service/routeguide/repository"
 	lg "github.com/qclaogui/gaip/tools/log"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -21,9 +22,10 @@ func Test_ServiceServer_GetFeature(t *testing.T) {
 	// set repository database driver
 	cfg.RepoCfg.Driver = repository.DriverMemory
 
-	repo, _ := repository.NewRepository(cfg.RepoCfg)
+	repo, err := repository.NewRepository(cfg.RepoCfg)
+	require.NoError(t, err)
 
-	ssv := &routeGuideServiceImpl{
+	ssv := &RouteGuide{
 		Cfg:        cfg,
 		logger:     lg.Logger,
 		Registerer: prometheus.DefaultRegisterer,
