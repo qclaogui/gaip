@@ -1,0 +1,135 @@
+Usage of ./bin/gaip_darwin_amd64:
+  -bookstore.enabled
+    	Enables Bookstore Service Server
+  -config.file value
+    	Configuration file to load.
+  -database.driver string
+    	Driver storage to use. Supported drivers are: memory, mysql, postgres. (default "memory")
+  -database.memory.file-path string
+    	Path of JSON file for loads data
+  -database.mysql.host string
+    	IP or hostname and port or in case of Unix sockets the path to it.For example, for MySQL running on the same host: host = 127.0.0.1:3306 or with Unix sockets: host = /var/run/mysqld/mysqld.sock (default "127.0.0.1:3306")
+  -database.mysql.password string
+    	password
+  -database.mysql.schema string
+    	schema (default "database")
+  -database.mysql.url string
+    	Use either URL or the other fields below to configure the database. Example: mysql://user:secret@host:port/database
+  -database.mysql.user string
+    	mysql user (default "root")
+  -database.postgres.host string
+    	IP or hostname and port or in case of Unix sockets the path to it.For example, for MySQL running on the same host: host = 127.0.0.1:3306 or with Unix sockets: host = /var/run/mysqld/mysqld.sock (default "127.0.0.1:5432")
+  -database.postgres.password string
+    	password
+  -database.postgres.schema string
+    	schema (default "database")
+  -database.postgres.url string
+    	Use either URL or the other fields below to configure the database. Example: postgres://pgx_md5:secret@localhost:5432/pgx_test?sslmode=disable
+  -database.postgres.user string
+    	user (default "root")
+  -dump-yaml
+    	Print full config yaml.
+  -help
+    	Print basic help.
+  -help-all
+    	Print help, also including advanced and experimental parameters.
+  -library.enabled
+    	Enables Library Service Server (default true)
+  -log.format string
+    	Output log messages in the given format. Valid formats: [logfmt, json] (default "logfmt")
+  -log.level value
+    	Only log messages with the given severity or above. Valid levels: [debug, info, warn, error] (default info)
+  -log.rate-limit-enabled
+    	Use rate limited logger to reduce the number of logged messages per second.
+  -log.rate-limit-logs-per-second float
+    	Maximum number of messages per second to be logged. (default 10000)
+  -log.rate-limit-logs-per-second-burst int
+    	Burst size, i.e., maximum number of messages that can be logged in a second, temporarily exceeding the configured maximum logs per second. (default 25000)
+  -print.config
+    	Print the config and exit.
+  -project.database.driver string
+    	Driver storage to use. Supported drivers are: memory. (default "memory")
+  -project.enabled
+    	Enables Project Service Server (default true)
+  -routeguide.enabled
+    	Enables RouteGuide Service Server (default true)
+  -server.graceful-shutdown-timeout duration
+    	Timeout for graceful shutdowns (default 30s)
+  -server.grpc-conn-limit int
+    	Maximum number of simultaneous grpc connections, <=0 to disable
+  -server.grpc-listen-address string
+    	gRPC server listen address.
+  -server.grpc-listen-network string
+    	gRPC server listen network (default "tcp")
+  -server.grpc-listen-port int
+    	gRPC server listen port. (default 9095)
+  -server.grpc-max-concurrent-streams uint
+    	Limit on the number of concurrent streams for gRPC calls per client connection (0 = unlimited) (default 100)
+  -server.grpc-max-recv-msg-size-bytes int
+    	Limit on the size of a gRPC message this server can receive (bytes). (default 104857600)
+  -server.grpc-max-send-msg-size-bytes int
+    	Limit on the size of a gRPC message this server can send (bytes). (default 104857600)
+  -server.grpc.keepalive.max-connection-age duration
+    	The duration for the maximum amount of time a connection may exist before it will be closed. Default: infinity (default 2562047h47m16.854775807s)
+  -server.grpc.keepalive.max-connection-age-grace duration
+    	An additive period after max-connection-age after which the connection will be forcibly closed. Default: infinity (default 2562047h47m16.854775807s)
+  -server.grpc.keepalive.max-connection-idle duration
+    	The duration after which an idle connection should be closed. Default: infinity (default 2562047h47m16.854775807s)
+  -server.grpc.keepalive.min-time-between-pings duration
+    	Minimum amount of time a client should wait before sending a keepalive ping. If client sends keepalive ping more often, server will send GOAWAY and close the connection. (default 10s)
+  -server.grpc.keepalive.ping-without-stream-allowed
+    	If true, server allows keepalive pings even when there are no active streams(RPCs). If false, and client sends ping when there are no active streams, server will send GOAWAY and close the connection. (default true)
+  -server.grpc.keepalive.time duration
+    	Duration after which a keepalive probe is sent in case of no activity over the connection., Default: 2h (default 2h0m0s)
+  -server.grpc.keepalive.timeout duration
+    	After having pinged for keepalive check, the duration after which an idle connection should be closed, Default: 20s (default 20s)
+  -server.grpc.num-workers int
+    	If non-zero, configures the amount of GRPC server workers used to serve the requests.
+  -server.http-conn-limit int
+    	Maximum number of simultaneous http connections, <=0 to disable
+  -server.http-idle-timeout duration
+    	Idle timeout for Router server (default 2m0s)
+  -server.http-listen-address string
+    	Router server listen address.
+  -server.http-listen-network string
+    	Router server listen network, default tcp (default "tcp")
+  -server.http-listen-port int
+    	Router server listen port. (default 8080)
+  -server.http-log-closed-connections-without-response-enabled
+    	Log closed connections that did not receive any response, most likely because client didn't send any request within timeout.
+  -server.http-read-header-timeout duration
+    	Read timeout for Router request headers. If set to 0, value of -server.http-read-timeout is used.
+  -server.http-read-timeout duration
+    	Read timeout for entire Router request, including headers and body. (default 30s)
+  -server.http-write-timeout duration
+    	Write timeout for Router server (default 2m0s)
+  -server.log-request-at-info-level-enabled
+    	Optionally log requests at info level instead of debug level. Applies to request headers as well if server.log-request-headers is enabled.
+  -server.log-request-headers
+    	Optionally log request headers.
+  -server.log-request-headers-exclude-list string
+    	Comma separated list of headers to exclude from loggin. Only used if server.log-request-headers is true.
+  -server.log-source-ips-enabled
+    	Optionally log the source IPs.
+  -server.log-source-ips-header string
+    	Header field storing the source IPs. Only used if server.log-source-ips-enabled is true. If not set the default Forwarded, X-Real-IP and X-Forwarded-For headers are used
+  -server.log-source-ips-regex string
+    	Regex for matching the source IPs. Only used if server.log-source-ips-enabled is true. If not set the default Forwarded, X-Real-IP and X-Forwarded-For headers are used
+  -server.register-instrumentation
+    	Register the intrumentation handlers (/metrics etc). (default true)
+  -server.register-open-api
+    	Register and handlers OpenAPI UI (/openapi). (default true)
+  -server.report-grpc-codes-in-instrumentation-label-enabled
+    	If set to true, gRPC statuses will be reported in instrumentation labels with their string representations. Otherwise, they will be reported as "error".
+  -todo.enabled
+    	Enables Todo Service Server (default true)
+  -vault.enabled
+    	Enables fetching of keys and certificates from Vault
+  -vault.mount-path string
+    	Location of secrets engine within Vault
+  -vault.token string
+    	Token used to authenticate with Vault
+  -vault.url string
+    	Location of the Vault server
+  -version
+    	Print application version and exit.

@@ -1,0 +1,91 @@
+Usage of ./bin/gaip_darwin_amd64:
+  -bookstore.enabled
+    	Enables Bookstore Service Server
+  -config.file value
+    	Configuration file to load.
+  -database.driver string
+    	Driver storage to use. Supported drivers are: memory, mysql, postgres. (default "memory")
+  -database.memory.file-path string
+    	Path of JSON file for loads data
+  -database.mysql.host string
+    	IP or hostname and port or in case of Unix sockets the path to it.For example, for MySQL running on the same host: host = 127.0.0.1:3306 or with Unix sockets: host = /var/run/mysqld/mysqld.sock (default "127.0.0.1:3306")
+  -database.mysql.password string
+    	password
+  -database.mysql.schema string
+    	schema (default "database")
+  -database.mysql.url string
+    	Use either URL or the other fields below to configure the database. Example: mysql://user:secret@host:port/database
+  -database.mysql.user string
+    	mysql user (default "root")
+  -database.postgres.host string
+    	IP or hostname and port or in case of Unix sockets the path to it.For example, for MySQL running on the same host: host = 127.0.0.1:3306 or with Unix sockets: host = /var/run/mysqld/mysqld.sock (default "127.0.0.1:5432")
+  -database.postgres.password string
+    	password
+  -database.postgres.schema string
+    	schema (default "database")
+  -database.postgres.url string
+    	Use either URL or the other fields below to configure the database. Example: postgres://pgx_md5:secret@localhost:5432/pgx_test?sslmode=disable
+  -database.postgres.user string
+    	user (default "root")
+  -dump-yaml
+    	Print full config yaml.
+  -help
+    	Print basic help.
+  -help-all
+    	Print help, also including advanced and experimental parameters.
+  -library.enabled
+    	Enables Library Service Server (default true)
+  -log.format string
+    	Output log messages in the given format. Valid formats: [logfmt, json] (default "logfmt")
+  -log.level value
+    	Only log messages with the given severity or above. Valid levels: [debug, info, warn, error] (default info)
+  -log.rate-limit-enabled
+    	Use rate limited logger to reduce the number of logged messages per second.
+  -log.rate-limit-logs-per-second float
+    	Maximum number of messages per second to be logged. (default 10000)
+  -log.rate-limit-logs-per-second-burst int
+    	Burst size, i.e., maximum number of messages that can be logged in a second, temporarily exceeding the configured maximum logs per second. (default 25000)
+  -print.config
+    	Print the config and exit.
+  -project.database.driver string
+    	Driver storage to use. Supported drivers are: memory. (default "memory")
+  -project.enabled
+    	Enables Project Service Server (default true)
+  -routeguide.enabled
+    	Enables RouteGuide Service Server (default true)
+  -server.grpc-listen-address string
+    	gRPC server listen address.
+  -server.grpc-listen-port int
+    	gRPC server listen port. (default 9095)
+  -server.grpc.num-workers int
+    	If non-zero, configures the amount of GRPC server workers used to serve the requests.
+  -server.http-listen-address string
+    	Router server listen address.
+  -server.http-listen-port int
+    	Router server listen port. (default 8080)
+  -server.http-log-closed-connections-without-response-enabled
+    	Log closed connections that did not receive any response, most likely because client didn't send any request within timeout.
+  -server.http-read-header-timeout duration
+    	Read timeout for Router request headers. If set to 0, value of -server.http-read-timeout is used.
+  -server.log-request-headers
+    	Optionally log request headers.
+  -server.log-request-headers-exclude-list string
+    	Comma separated list of headers to exclude from loggin. Only used if server.log-request-headers is true.
+  -server.register-open-api
+    	Register and handlers OpenAPI UI (/openapi). (default true)
+  -server.report-grpc-codes-in-instrumentation-label-enabled
+    	If set to true, gRPC statuses will be reported in instrumentation labels with their string representations. Otherwise, they will be reported as "error".
+  -todo.enabled
+    	Enables Todo Service Server (default true)
+  -vault.enabled
+    	Enables fetching of keys and certificates from Vault
+  -vault.mount-path string
+    	Location of secrets engine within Vault
+  -vault.token string
+    	Token used to authenticate with Vault
+  -vault.url string
+    	Location of the Vault server
+  -version
+    	Print application version and exit.
+
+To see all flags, use -help-all
