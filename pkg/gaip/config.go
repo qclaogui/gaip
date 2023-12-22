@@ -8,8 +8,8 @@ import (
 	"flag"
 	"strconv"
 
-	"github.com/go-kit/log"
 	"github.com/pkg/errors"
+	"github.com/qclaogui/gaip/internal/repository"
 	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/bookstore"
 	"github.com/qclaogui/gaip/pkg/service/library"
@@ -24,19 +24,20 @@ type Config struct {
 	PrintConfig            bool `yaml:"-"`
 	EnableGoRuntimeMetrics bool `yaml:"enable_go_runtime_metrics" category:"advanced"`
 
-	ServerCfg service.Config `yaml:"server"`
+	ServerCfg service.Config    `yaml:"server"`
+	RepoCfg   repository.Config `yaml:"database"`
 
-	TodoCfg       todo.Config       `yaml:"todo"`
-	RouteGuideCfg routeguide.Config `yaml:"routeguide"`
 	BookstoreCfg  bookstore.Config  `yaml:"bookstore"`
 	LibraryCfg    library.Config    `yaml:"library"`
 	ProjectCfg    project.Config    `yaml:"project"`
+	RouteGuideCfg routeguide.Config `yaml:"routeguide"`
+	TodoCfg       todo.Config       `yaml:"todo"`
 
 	VaultCfg vault.Config `yaml:"vault"`
 }
 
 // RegisterFlags registers flag.
-func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
+func (c *Config) RegisterFlags(fs *flag.FlagSet) {
 	c.ServerCfg.MetricsNamespace = "gaip"
 
 	// Enable native histograms for enabled scrapers with 10% bucket growth.
@@ -46,15 +47,17 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 
 	fs.BoolVar(&c.PrintConfig, "print.config", false, "Print the config and exit.")
 
-	// Register service server Config
 	c.registerServerFlagsWithChangedDefaultValues(fs)
 
-	// Register bookstore Config
-	c.TodoCfg.RegisterFlags(fs)
-	c.RouteGuideCfg.RegisterFlags(fs)
+	// Register Common Repository Config
+	c.RepoCfg.RegisterFlags(fs)
+
+	// Register services server Config
 	c.BookstoreCfg.RegisterFlags(fs)
 	c.LibraryCfg.RegisterFlags(fs)
 	c.ProjectCfg.RegisterFlags(fs)
+	c.RouteGuideCfg.RegisterFlags(fs)
+	c.TodoCfg.RegisterFlags(fs)
 
 	// Register Vault Config
 	c.VaultCfg.RegisterFlags(fs)
@@ -62,15 +65,6 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet, _ log.Logger) {
 
 // Validate the app config and return an error if the validation doesn't pass
 func (c *Config) Validate() error {
-
-	if err := c.TodoCfg.Validate(); err != nil {
-		return errors.Wrap(err, "invalid Todo config")
-	}
-
-	if err := c.RouteGuideCfg.Validate(); err != nil {
-		return errors.Wrap(err, "invalid RouteGuide config")
-	}
-
 	if err := c.BookstoreCfg.Validate(); err != nil {
 		return errors.Wrap(err, "invalid Bookstore config")
 	}
@@ -81,6 +75,14 @@ func (c *Config) Validate() error {
 
 	if err := c.ProjectCfg.Validate(); err != nil {
 		return errors.Wrap(err, "invalid Project config")
+	}
+
+	if err := c.RouteGuideCfg.Validate(); err != nil {
+		return errors.Wrap(err, "invalid RouteGuide config")
+	}
+
+	if err := c.TodoCfg.Validate(); err != nil {
+		return errors.Wrap(err, "invalid Todo config")
 	}
 
 	if err := c.VaultCfg.Validate(); err != nil {

@@ -22,11 +22,6 @@ import (
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/gaip/pkg/service"
-	"github.com/qclaogui/gaip/pkg/service/bookstore"
-	"github.com/qclaogui/gaip/pkg/service/library"
-	"github.com/qclaogui/gaip/pkg/service/project"
-	"github.com/qclaogui/gaip/pkg/service/routeguide"
-	"github.com/qclaogui/gaip/pkg/service/todo"
 	"github.com/qclaogui/gaip/pkg/vault"
 	lg "github.com/qclaogui/gaip/tools/log"
 	"google.golang.org/grpc"
@@ -47,27 +42,6 @@ type Gaip struct {
 
 func (g *Gaip) RegisterAPI() {
 	g.RegisterRoute("/debug/fgprof", fgprof.Handler(), false, true, "GET")
-}
-
-// initVault init Vault
-func (g *Gaip) initVault() error {
-	if !g.Cfg.VaultCfg.Enabled {
-		return nil
-	}
-
-	v, err := vault.New(g.Cfg.VaultCfg)
-	if err != nil {
-		return err
-	}
-	g.Vault = v
-
-	// Update Configs - KVStore
-	//g.Cfg.MemberlistKV.TCPTransport.TLS.Reader = g.VaultCfg
-
-	// Update Configs - GRPCServer Clients
-	//g.Cfg.Worker.GRPCClientConfig.TLS.Reader = g.VaultCfg
-
-	return nil
 }
 
 // New makes a new Gaip.
@@ -110,23 +84,23 @@ func (g *Gaip) initServices() error {
 		return err
 	}
 
-	if _, err = todo.New(g.Cfg.TodoCfg, g.Server); err != nil {
+	if err = g.initBookstore(); err != nil {
 		return err
 	}
 
-	if _, err = routeguide.New(g.Cfg.RouteGuideCfg, g.Server); err != nil {
+	if err = g.initLibrary(); err != nil {
 		return err
 	}
 
-	if _, err = bookstore.New(g.Cfg.BookstoreCfg, g.Server); err != nil {
+	if err = g.initProject(); err != nil {
 		return err
 	}
 
-	if _, err = library.New(g.Cfg.LibraryCfg, g.Server); err != nil {
+	if err = g.initRouteGuide(); err != nil {
 		return err
 	}
 
-	if _, err = project.New(g.Cfg.ProjectCfg, g.Server); err != nil {
+	if err = g.initTodo(); err != nil {
 		return err
 	}
 
@@ -208,7 +182,7 @@ func (g *Gaip) healthzHandler() http.HandlerFunc {
 // route is expected to be specific about which HTTP methods are supported.
 func (g *Gaip) RegisterRoute(path string, handler http.Handler, auth, gzipEnabled bool, method string, methods ...string) {
 	methods = append([]string{method}, methods...)
-	_ = level.Debug(lg.Logger).Log("msg", "api: registering route", "methods", strings.Join(methods, ","), "path", path, "auth", auth, "gzip", gzipEnabled)
+	_ = level.Debug(lg.Logger).Log("msg", "gaip: registering route", "methods", strings.Join(methods, ","), "path", path, "auth", auth, "gzip", gzipEnabled)
 	g.newRoute(path, handler, false, auth, gzipEnabled, methods...)
 }
 

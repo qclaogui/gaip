@@ -2,7 +2,7 @@
 //
 // Licensed under the Apache License 2.0.
 
-package repository
+package memory
 
 import (
 	"context"
@@ -13,11 +13,11 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// MemoryRepo fulfills the Repository interface
+// Bookstore fulfills the Bookstore Repository interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// MemoryRepo is used to implement BookstoreServiceServer.
-type MemoryRepo struct {
+// Bookstore is used to implement BookstoreServiceServer.
+type Bookstore struct {
 	bookstorepb.UnimplementedBookstoreServiceServer
 
 	// shelves are stored in a map keyed by shelf id
@@ -29,30 +29,29 @@ type MemoryRepo struct {
 	Mutex       sync.Mutex // global mutex to synchronize service access
 }
 
-// NewMemoryRepo is a factory function to generate a new repository
-func NewMemoryRepo() (*MemoryRepo, error) {
-	mr := &MemoryRepo{
+// NewBookstore is a factory function to generate a new repository
+func NewBookstore() (*Bookstore, error) {
+	m := &Bookstore{
 		Shelves: map[int64]*bookstorepb.Shelf{},
 		Books:   map[int64]map[int64]*bookstorepb.Book{},
 	}
-	return mr, nil
+	return m, nil
 }
 
-// internal helpers
-func (mr *MemoryRepo) getShelf(sid int64) (shelf *bookstorepb.Shelf, err error) {
-	shelf, ok := mr.Shelves[sid]
+func (m *Bookstore) getShelf(sid int64) (shelf *bookstorepb.Shelf, err error) {
+	shelf, ok := m.Shelves[sid]
 	if !ok {
 		return nil, fmt.Errorf("couldn't find shelf %d", sid)
 	}
 	return shelf, nil
 }
 
-func (mr *MemoryRepo) getBook(sid int64, bid int64) (book *bookstorepb.Book, err error) {
-	_, err = mr.getShelf(sid)
+func (m *Bookstore) getBook(sid int64, bid int64) (book *bookstorepb.Book, err error) {
+	_, err = m.getShelf(sid)
 	if err != nil {
 		return nil, err
 	}
-	book, ok := mr.Books[sid][bid]
+	book, ok := m.Books[sid][bid]
 	if !ok {
 		return nil, fmt.Errorf("couldn't find book %d on shelf %d", bid, sid)
 	}
@@ -60,13 +59,13 @@ func (mr *MemoryRepo) getBook(sid int64, bid int64) (book *bookstorepb.Book, err
 	return book, nil
 }
 
-func (mr *MemoryRepo) ListShelves(context.Context, *emptypb.Empty) (*bookstorepb.ListShelvesResponse, error) {
-	mr.Mutex.Lock()
-	defer mr.Mutex.Unlock()
+func (m *Bookstore) ListShelves(context.Context, *emptypb.Empty) (*bookstorepb.ListShelvesResponse, error) {
+	m.Mutex.Lock()
+	defer m.Mutex.Unlock()
 
 	// copy shelf ids from Shelves map keys
-	shelves := make([]*bookstorepb.Shelf, 0, len(mr.Shelves))
-	for _, shelf := range mr.Shelves {
+	shelves := make([]*bookstorepb.Shelf, 0, len(m.Shelves))
+	for _, shelf := range m.Shelves {
 		shelves = append(shelves, shelf)
 	}
 
@@ -77,59 +76,59 @@ func (mr *MemoryRepo) ListShelves(context.Context, *emptypb.Empty) (*bookstorepb
 	return response, nil
 }
 
-func (mr *MemoryRepo) CreateShelf(_ context.Context, req *bookstorepb.CreateShelfRequest) (*bookstorepb.Shelf, error) {
-	mr.Mutex.Lock()
-	defer mr.Mutex.Unlock()
+func (m *Bookstore) CreateShelf(_ context.Context, req *bookstorepb.CreateShelfRequest) (*bookstorepb.Shelf, error) {
+	m.Mutex.Lock()
+	defer m.Mutex.Unlock()
 
 	// assign an id and name to a shelf and add it to the Shelves map.
 	shelf := req.Shelf
 
-	mr.LastShelfID++
-	sid := mr.LastShelfID
+	m.LastShelfID++
+	sid := m.LastShelfID
 
-	mr.Shelves[sid] = shelf
+	m.Shelves[sid] = shelf
 
 	return shelf, nil
 }
-func (mr *MemoryRepo) GetShelf(_ context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
+func (m *Bookstore) GetShelf(_ context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
 	sid := req.Shelf
 
-	mr.Mutex.Lock()
-	defer mr.Mutex.Unlock()
+	m.Mutex.Lock()
+	defer m.Mutex.Unlock()
 
 	// look up a shelf from the Shelves map.
-	shelf, err := mr.getShelf(sid)
+	shelf, err := m.getShelf(sid)
 	if err != nil {
 		return nil, err
 	}
 
 	return shelf, nil
 }
-func (mr *MemoryRepo) DeleteShelf(_ context.Context, req *bookstorepb.DeleteShelfRequest) (*emptypb.Empty, error) {
+func (m *Bookstore) DeleteShelf(_ context.Context, req *bookstorepb.DeleteShelfRequest) (*emptypb.Empty, error) {
 	sid := req.Shelf
 
-	mr.Mutex.Lock()
-	defer mr.Mutex.Unlock()
+	m.Mutex.Lock()
+	defer m.Mutex.Unlock()
 
 	// delete a shelf by removing the shelf from the Shelves map and the associated books from the Books map.
-	delete(mr.Shelves, sid)
-	delete(mr.Books, sid)
+	delete(m.Shelves, sid)
+	delete(m.Books, sid)
 
 	return nil, nil
 }
-func (mr *MemoryRepo) ListBooks(_ context.Context, req *bookstorepb.ListBooksRequest) (*bookstorepb.ListBooksResponse, error) {
+func (m *Bookstore) ListBooks(_ context.Context, req *bookstorepb.ListBooksRequest) (*bookstorepb.ListBooksResponse, error) {
 	sid := req.Shelf
 
-	mr.Mutex.Lock()
-	defer mr.Mutex.Unlock()
+	m.Mutex.Lock()
+	defer m.Mutex.Unlock()
 
 	// list the books in a shelf
-	_, err := mr.getShelf(sid)
+	_, err := m.getShelf(sid)
 	if err != nil {
 		return nil, err
 	}
 
-	shelfBooks := mr.Books[sid]
+	shelfBooks := m.Books[sid]
 
 	books := make([]*bookstorepb.Book, 0, len(shelfBooks))
 	for _, book := range shelfBooks {
@@ -142,57 +141,57 @@ func (mr *MemoryRepo) ListBooks(_ context.Context, req *bookstorepb.ListBooksReq
 
 	return response, nil
 }
-func (mr *MemoryRepo) CreateBook(_ context.Context, req *bookstorepb.CreateBookRequest) (*bookstorepb.Book, error) {
+func (m *Bookstore) CreateBook(_ context.Context, req *bookstorepb.CreateBookRequest) (*bookstorepb.Book, error) {
 	sid := req.Shelf
 
-	mr.Mutex.Lock()
-	defer mr.Mutex.Unlock()
+	m.Mutex.Lock()
+	defer m.Mutex.Unlock()
 
-	_, err := mr.getShelf(sid)
+	_, err := m.getShelf(sid)
 	if err != nil {
 		return nil, err
 	}
 
 	// assign an id and name to a book and add it to the Books map.
-	mr.LastBookID++
-	bid := mr.LastBookID
+	m.LastBookID++
+	bid := m.LastBookID
 
 	book := req.Book
-	if mr.Books[sid] == nil {
-		mr.Books[sid] = make(map[int64]*bookstorepb.Book)
+	if m.Books[sid] == nil {
+		m.Books[sid] = make(map[int64]*bookstorepb.Book)
 	}
 
-	mr.Books[sid][bid] = book
+	m.Books[sid][bid] = book
 
 	return book, nil
 }
-func (mr *MemoryRepo) GetBook(_ context.Context, req *bookstorepb.GetBookRequest) (*bookstorepb.Book, error) {
+func (m *Bookstore) GetBook(_ context.Context, req *bookstorepb.GetBookRequest) (*bookstorepb.Book, error) {
 	sid, bid := req.Shelf, req.Book
 
-	mr.Mutex.Lock()
-	defer mr.Mutex.Unlock()
+	m.Mutex.Lock()
+	defer m.Mutex.Unlock()
 
 	// get a book from the Books map
-	book, err := mr.getBook(sid, bid)
+	book, err := m.getBook(sid, bid)
 	if err != nil {
 		return nil, err
 	}
 
 	return book, nil
 }
-func (mr *MemoryRepo) DeleteBook(_ context.Context, req *bookstorepb.DeleteBookRequest) (*emptypb.Empty, error) {
+func (m *Bookstore) DeleteBook(_ context.Context, req *bookstorepb.DeleteBookRequest) (*emptypb.Empty, error) {
 	sid, bid := req.Shelf, req.Book
 
-	mr.Mutex.Lock()
-	defer mr.Mutex.Unlock()
+	m.Mutex.Lock()
+	defer m.Mutex.Unlock()
 
-	_, err := mr.getShelf(sid)
+	_, err := m.getShelf(sid)
 	if err != nil {
 		return nil, err
 	}
 
 	// delete a book by removing the book from the Books map.
-	delete(mr.Books[sid], bid)
+	delete(m.Books[sid], bid)
 
 	return nil, nil
 }

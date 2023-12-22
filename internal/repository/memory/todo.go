@@ -2,10 +2,11 @@
 //
 // Licensed under the Apache License 2.0.
 
-package repository
+package memory
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 	"sync"
 
@@ -15,20 +16,32 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// MemoryRepo fulfills the Repository interface
-type MemoryRepo struct {
+var (
+	ErrNotFound = errors.New("the item was not found in the repository")
+
+	ErrFailedToCreate = errors.New("failed to add the todo to the repository")
+)
+
+// Todo fulfills the Repository Todo interface
+// All objects are managed in an in-memory non-persistent store.
+//
+// Todo is used to implement ToDoServiceServer.
+type Todo struct {
+	todopb.UnimplementedToDoServiceServer
+
 	mem map[uuid.UUID]*todopb.ToDo
 	mu  sync.Mutex
 }
 
-// NewMemoryRepo is a factory function to generate a new repository
-func NewMemoryRepo() *MemoryRepo {
-	return &MemoryRepo{
+// NewTodo is a factory function to generate a new repository
+func NewTodo() (*Todo, error) {
+	m := &Todo{
 		mem: make(map[uuid.UUID]*todopb.ToDo),
 	}
+	return m, nil
 }
 
-func (m *MemoryRepo) Create(_ context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+func (m *Todo) Create(_ context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
 	// request todo
 	todo := req.GetItem()
 	if todo.GetTitle() == "" && todo.GetDescription() == "" {
@@ -45,13 +58,13 @@ func (m *MemoryRepo) Create(_ context.Context, req *todopb.CreateRequest) (*todo
 	return &todopb.CreateResponse{Api: "v1", Id: todo.Id}, nil
 }
 
-func (m *MemoryRepo) Get(_ context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
+func (m *Todo) Get(_ context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	id, _ := uuid.Parse(req.GetId())
 
-	slog.Warn("Get todo from MemoryRepo", "req_id", req.GetId(), "id", id, "mem", m.mem)
+	slog.Warn("Get todo from Todo", "req_id", req.GetId(), "id", id, "mem", m.mem)
 	todo, ok := m.mem[id]
 	if !ok {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
@@ -60,7 +73,7 @@ func (m *MemoryRepo) Get(_ context.Context, req *todopb.GetRequest) (*todopb.Get
 	return &todopb.GetResponse{Api: "v1", Item: todo}, nil
 }
 
-func (m *MemoryRepo) Update(_ context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
+func (m *Todo) Update(_ context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -75,7 +88,7 @@ func (m *MemoryRepo) Update(_ context.Context, req *todopb.UpdateRequest) (*todo
 	return &todopb.UpdateResponse{Api: "v1", Updated: 1}, nil
 }
 
-func (m *MemoryRepo) Delete(_ context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
+func (m *Todo) Delete(_ context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -88,7 +101,7 @@ func (m *MemoryRepo) Delete(_ context.Context, req *todopb.DeleteRequest) (*todo
 	return &todopb.DeleteResponse{Api: "v1", Deleted: 1}, nil
 }
 
-func (m *MemoryRepo) List(_ context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
+func (m *Todo) List(_ context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 

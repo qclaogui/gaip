@@ -15,7 +15,7 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
-	"github.com/qclaogui/gaip/pkg/service/todo/repository"
+	"github.com/qclaogui/gaip/internal/repository/mysql"
 	lg "github.com/qclaogui/gaip/tools/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
@@ -23,10 +23,10 @@ import (
 
 var ID = "e75b6f03-e5fc-488c-8f75-ad1747be3d3a"
 
-func serverSetupWithSQLDB(db *sql.DB) *Todo {
+func serverSetupWithSQLDB(db *sql.DB) *ServiceServer {
 	var cfg = Config{}
-	repo, _ := repository.NewMysqlRepoWithSQLDB(db)
-	return &Todo{
+	repo, _ := mysql.NewTodoWithSQLDB(db)
+	return &ServiceServer{
 		Cfg:        cfg,
 		logger:     lg.Logger,
 		Registerer: prometheus.DefaultRegisterer,

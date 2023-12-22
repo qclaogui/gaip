@@ -2,17 +2,15 @@
 //
 // Licensed under the Apache License 2.0.
 
-package repository
+package mysql
 
 import (
 	"context"
 	"database/sql"
-	"flag"
 	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect"
-	"github.com/grafana/dskit/flagext"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/ent"
 	"google.golang.org/grpc/codes"
@@ -20,50 +18,19 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type MysqlConfig struct {
-	Enabled bool `yaml:"enabled"`
+// Todo fulfills the Todo interface
+// All data are managed by MysqlCfg.
+//
+// Todo is used to implement ToDoServiceServer.
+type Todo struct {
+	todopb.UnimplementedToDoServiceServer
 
-	URL      string         `yaml:"url"`
-	Host     string         `yaml:"host"`
-	User     string         `yaml:"user"`
-	Password flagext.Secret `yaml:"password"`
-	Schema   string         `yaml:"schema"`
-}
-
-func (cfg *MysqlConfig) RegisterFlags(fs *flag.FlagSet) {
-	cfg.RegisterFlagsWithPrefix("", fs)
-}
-
-func (cfg *MysqlConfig) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, prefix+"mysql.enabled", false, "Enables Mysql for backend database")
-
-	fs.StringVar(&cfg.URL, prefix+"mysql.url", "", "Use either URL or the other fields below to configure the database. Example: mysql://user:secret@host:port/database")
-	fs.StringVar(&cfg.Host, prefix+"mysql.host", "127.0.0.1:3306", `IP or hostname and port or in case of Unix sockets the path to it.For example, for MySQL running on the same host: host = 127.0.0.1:3306 or with Unix sockets: host = /var/run/mysqld/mysqld.sock`)
-	fs.StringVar(&cfg.User, prefix+"mysql.user", "root", "RepoCfg user")
-	fs.Var(&cfg.Password, prefix+"mysql.password", "RepoCfg password")
-	fs.StringVar(&cfg.Schema, prefix+"mysql.schema", "database", "RepoCfg schema")
-}
-
-func (cfg *MysqlConfig) Validate() error {
-	// add MySQL driver specific parameter to parse date/time
-	// Drop it for another database
-	//param := "parseTime=true"
-
-	//dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s", cfg.User, cfg.Password, cfg.Host, cfg.Schema, param)
-	//toDoSrv, err := todov1.NewServiceServer(todov1.WithMysqlRepository(dsn))
-
-	return nil
-}
-
-// MysqlRepo fulfills the Repository interface
-type MysqlRepo struct {
-	db *sql.DB
-
+	sqlDB     *sql.DB
 	entClient *ent.Client
 }
 
-// NewMysqlRepo is a factory function to generate a new repository
-func NewMysqlRepo(cfg MysqlConfig) (*MysqlRepo, error) {
+// NewTodo is a factory function to generate a new repository
+func NewTodo(cfg Config) (*Todo, error) {
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
 	param := "parseTime=true"
@@ -73,25 +40,25 @@ func NewMysqlRepo(cfg MysqlConfig) (*MysqlRepo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed opening connection to mysql: %v", err)
 	}
-	repo := &MysqlRepo{entClient: client}
+	repo := &Todo{entClient: client}
 	return repo, nil
 }
 
-// NewMysqlRepoWithSQLDB is a factory function to generate a new repository
-func NewMysqlRepoWithSQLDB(db *sql.DB) (*MysqlRepo, error) {
-	repo := &MysqlRepo{db: db}
+// NewTodoWithSQLDB is a factory function to generate a new repository
+func NewTodoWithSQLDB(db *sql.DB) (*Todo, error) {
+	repo := &Todo{sqlDB: db}
 	return repo, nil
 }
 
-func (m *MysqlRepo) connect(ctx context.Context) (*sql.Conn, error) {
-	c, err := m.db.Conn(ctx)
+func (m *Todo) connect(ctx context.Context) (*sql.Conn, error) {
+	c, err := m.sqlDB.Conn(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database-> " + err.Error())
 	}
 	return c, nil
 }
 
-func (m *MysqlRepo) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
+func (m *Todo) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -126,7 +93,7 @@ func (m *MysqlRepo) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.Ge
 	return &todopb.GetResponse{Api: "v1", Item: todo}, nil
 }
 
-func (m *MysqlRepo) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+func (m *Todo) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -143,7 +110,7 @@ func (m *MysqlRepo) Create(ctx context.Context, req *todopb.CreateRequest) (*tod
 	return &todopb.CreateResponse{Api: "v1", Id: todo.GetId()}, nil
 }
 
-func (m *MysqlRepo) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
+func (m *Todo) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -170,7 +137,7 @@ func (m *MysqlRepo) Update(ctx context.Context, req *todopb.UpdateRequest) (*tod
 	return &todopb.UpdateResponse{Api: "v1", Updated: rows}, nil
 }
 
-func (m *MysqlRepo) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
+func (m *Todo) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -194,7 +161,7 @@ func (m *MysqlRepo) Delete(ctx context.Context, req *todopb.DeleteRequest) (*tod
 	return &todopb.DeleteResponse{Api: "v1", Deleted: rows}, nil
 }
 
-func (m *MysqlRepo) List(ctx context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
+func (m *Todo) List(ctx context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {

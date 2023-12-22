@@ -340,6 +340,12 @@ print-version: ## Prints the upcoming release number
 
 ##@ General
 
+.PHONY: reference-help
+reference-help: ## Generates the reference help documentation.
+reference-help: build
+	@(./bin/gaip_$(GOOS)_$(GOARCH) -help || true) > cmd/gaip/help.txt.tmpl
+	@(./bin/gaip_$(GOOS)_$(GOARCH) -help-all || true) > cmd/gaip/help-all.txt.tmpl
+
 .PHONY: help
 help:  ## Display this help. Thanks to https://www.thapaliya.com/en/writings/well-documented-makefiles/
 ifeq ($(OS),Windows_NT)

@@ -14,7 +14,7 @@ import (
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 )
 
-type Repository interface {
+type Project interface {
 	projectpb.ProjectServiceServer
 }
 
@@ -24,7 +24,7 @@ const (
 
 var supportedDatabaseDrivers = []string{DriverMemory}
 
-// Config RepoCfg Connections config
+// Config database connections config
 // Here are each of the database connections for application.
 type Config struct {
 	Driver string `yaml:"driver"`
@@ -40,13 +40,13 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 // Validate RepoCfg config.
 func (cfg *Config) Validate() error {
 	if cfg.Driver != "" && !slices.Contains(supportedDatabaseDrivers, cfg.Driver) {
-		return fmt.Errorf("unsupported RepoCfg driver: %s", cfg.Driver)
+		return fmt.Errorf("unsupported database driver: %s", cfg.Driver)
 	}
 
 	return nil
 }
 
-func NewRepository(cfg Config) (Repository, error) {
+func NewProject(cfg Config) (Project, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)

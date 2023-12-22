@@ -66,7 +66,7 @@ func main() {
 	// This sets default values from flags to the config.
 	// It needs to be called before parsing the config file!
 	var cfg gaip.Config
-	cfg.RegisterFlags(flag.CommandLine, lg.Logger)
+	cfg.RegisterFlags(flag.CommandLine)
 
 	if configFile := parseConfigFileParameter(os.Args[1:]); configFile != "" {
 		if err := LoadConfig(configFile, &cfg); err != nil {
