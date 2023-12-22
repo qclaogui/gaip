@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	cloud.google.com/go/longrunning v0.5.4
-	dagger.io/dagger v0.9.4
+	dagger.io/dagger v0.9.5
 	entgo.io/ent v0.12.5
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/containerd/containerd v1.7.11

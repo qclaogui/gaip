@@ -9,8 +9,8 @@ cloud.google.com/go/compute/metadata v0.2.3 h1:mg4jlk7mCAj6xXp9UJ4fjI9VUI5rubuGB
 cloud.google.com/go/compute/metadata v0.2.3/go.mod h1:VAV5nSsACxMJvgaAuX6Pk2AawlZn8kiOGuCv6gTkwuA=
 cloud.google.com/go/longrunning v0.5.4 h1:w8xEcbZodnA2BbW6sVirkkoC+1gP8wS57EUUgGS0GVg=
 cloud.google.com/go/longrunning v0.5.4/go.mod h1:zqNVncI0BOP8ST6XQD1+VcvuShMmq7+xFSzOL++V0dI=
-dagger.io/dagger v0.9.4 h1:0GNTLq1RlTOcwq6u3qMg/hLFBf2t+OlPeq9OYstLE1E=
-dagger.io/dagger v0.9.4/go.mod h1:ic2UD6gS5iBp2e6VWPxyb7h6VpAyhFN6U7/TDlriox8=
+dagger.io/dagger v0.9.5 h1:44ypKgOjKZKrzqHSoa/wIfqnrSZM87tuoAKJpo5tGV4=
+dagger.io/dagger v0.9.5/go.mod h1:ic2UD6gS5iBp2e6VWPxyb7h6VpAyhFN6U7/TDlriox8=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 entgo.io/ent v0.12.5 h1:KREM5E4CSoej4zeGa88Ou/gfturAnpUv0mzAjch1sj4=
 entgo.io/ent v0.12.5/go.mod h1:Y3JVAjtlIk8xVZYSn3t3mf8xlZIn5SAOXZQxD6kKI+Q=
