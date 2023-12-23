@@ -34,10 +34,10 @@ export GOPROXY
 
 GO_ENV := GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) CGO_ENABLED=$(CGO_ENABLED)
 
-VERSION      ?= $(shell ./tools/image-tag)
-COMMIT_NO    ?= $(shell git rev-parse --short HEAD 2> /dev/null || true)
-GIT_COMMIT	 ?= $(if $(shell git status --porcelain --untracked-files=no),${COMMIT_NO}-dirty,${COMMIT_NO})
-VPREFIX      := github.com/qclaogui/gaip/pkg/version
+VERSION 	?= $(shell ./tools/image-tag)
+COMMIT_NO 	?= $(shell git rev-parse --short HEAD 2> /dev/null || true)
+GIT_COMMIT 	?= $(if $(shell git status --porcelain --untracked-files=no),${COMMIT_NO}-dirty,${COMMIT_NO})
+VPREFIX 	:= github.com/qclaogui/gaip/pkg/version
 
 GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
                 -X $(VPREFIX).GitCommit=$(GIT_COMMIT)                    \
@@ -67,7 +67,6 @@ go-mod:
 	@go mod tidy
 	@go mod verify
 
-.PHONY: check-go-mod
 check-go-mod: go-mod ## Ensures fresh go.mod and go.sum.
 	@git --no-pager diff --exit-code -- go.sum go.mod vendor/ || { echo ">> There are unstaged changes in go vendoring run 'make go-mod'"; exit 1; }
 
@@ -76,30 +75,26 @@ check-go-mod: go-mod ## Ensures fresh go.mod and go.sum.
 # 	@echo ">> run buf mod update"
 # 	@cd proto/ && $(BUF) mod update
 
-
-.PHONY: install-build-deps
 install-build-deps: ## Install dependencies tools
 	$(info ******************** downloading dependencies ********************)
 	@echo ">> building bingo and setup dependencies tools"
 	@go install github.com/bwplotka/bingo@v0.9.0
 
 
-##@ Ent schema
+##@ Ent Schema
 
 # Generate the schema under internal/ent/schema/ directory
+.PHONY: ent-new
 ent-new: $(ENT)
 	@$(ENT) new --target=internal/ent/schema \
 			Todo
 
-.PHONY: ent-gen
 ent-gen: ## Regenerate schema
 	@go generate ./internal/ent
 
-.PHONY: ent-describe
 ent-describe: $(ENT) ## Get a description of graph schema
 	@$(ENT) describe ./internal/ent/schema
 
-.PHONY: atlas-lint
 atlas-lint: $(ATLAS) ## Verifying and linting migrations
 	@$(ATLAS) migrate lint \
       --dir "file://migrations" \
@@ -107,6 +102,7 @@ atlas-lint: $(ATLAS) ## Verifying and linting migrations
       --latest 1
 
 # Generating Versioned Migration Files
+.PHONY: atlas-diff
 atlas-diff: $(ATLAS)
 	@$(ATLAS) migrate diff migration_name \
       --dir "file://migrations" \
@@ -114,14 +110,14 @@ atlas-diff: $(ATLAS)
       --dev-url "docker://mysql/8/ent"
 
 # Apply generated migration files onto the database
+.PHONY: atlas-apply
 atlas-apply: $(ATLAS)
 	@$(ATLAS) migrate apply \
       --dir="file://migrations" \
       --url="mysql://root:pass@localhost:3306/example"
 
-##@ Regenerate gRPC code
+##@ Regenerate gRPC Code
 
-.PHONY: protoc-install
 protoc-install: ## Install proper protoc version
 ifeq ("$(wildcard $(PROTOC))","")
 	@cd proto && curl -LO $(PROTOC_URL)$(PROTOC_ZIP)
@@ -132,7 +128,6 @@ ifeq ("$(wildcard $(PROTOC))","")
 endif
 	@echo ">> (re)installing protobuf and proper protoc version"
 
-# .PHONY: buf-gen
 # buf-gen: ## Regenerate proto by buf https://buf.build/
 # buf-gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 # #	@rm -Rf genproto third_party/gen
@@ -142,10 +137,10 @@ endif
 # 	@make lint
 
 # Generate Swagger UI
+.PHONY: swagger-ui
 swagger-ui:
 	@SWAGGER_UI_VERSION=$(SWAGGER_UI_VERSION) tools/scripts/generate-swagger-ui.sh
 
-.PHONY: protoc-gen
 protoc-gen: ## Regenerate proto by protoc
 protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
 	@rm -Rf genproto third_party/gen
@@ -243,20 +238,17 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 	@make lint
 
 
-##@ Testing Lint & fmt
+##@ Testing Lint & Fmt
 
-.PHONY: test
 test: ## Run tests.
 	@$(GO_ENV) go test $(GO_FLAGS) -timeout 10m -count 1 ./...
 
 
-.PHONY: lint
 lint: ## Runs various static analysis against our code.
 lint: go-lint goreleaser-lint buf-lint $(COPYRIGHT) fmt
 	@$(COPYRIGHT) $(shell go list -f "{{.Dir}}" ./... | grep -iv "genproto/" | xargs -I {} find {} -name "*.go")
 
 
-.PHONY: fmt
 fmt: ## Runs fmt code (automatically fix lint errors)
 fmt: fix-lint go-fmt buf-fmt
 
@@ -273,6 +265,7 @@ buf-fmt:
 	@cd proto/ && $(BUF) format -w --exit-code
 
 # Lint .goreleaser*.yml files.
+.PHONY: goreleaser-lint
 goreleaser-lint: $(GORELEASER)
 	@echo ">> run goreleaser check"
 	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
@@ -301,52 +294,43 @@ fix-lint: $(GOLANGCI_LINT)
 
 ##@ Kubernetes
 
-.PHONY: cluster
 cluster: ## Create k3s cluster
 	k3d cluster create k3s-gaip --config deploy/k3d-k3s-config.yaml
 #	k3d image import -c k3s-gaip qclaogui/gaip:latest
 
 
-.PHONY: manifests
-manifests: $(notdir $(wildcard deploy/overlays/*)) ## Generates Kubernetes manifests
+manifests: $(notdir $(wildcard deploy/kustomize/overlays/*)) ## Generates Kubernetes manifests
 
 %: ## Generates overlays manifests
 	$(info ******************** generates $@ manifests ********************)
-	@$(KUSTOMIZE) build --enable-helm deploy/overlays/$@ > deploy/overlays/$@/manifests/k8s-all-in-one.yaml
+	@$(KUSTOMIZE) build --enable-helm deploy/kustomize/overlays/$@ > deploy/kustomize/overlays/$@/manifests/k8s-all-in-one.yaml
 
 
-.PHONY: generate-helm-docs
 generate-helm-docs: # Docs generated by https://github.com/norwoodj/helm-docs
 	cd deploy/helm/charts/gaip && $(HELM_DOCS)
 
-.PHONY: generate-helm-tests
 generate-helm-tests:
 	bash ./deploy/helm/scripts/rebuild-tests.sh
 
 ##@ Release
 
-.PHONY: prepare-release-candidate
 prepare-release-candidate: ## Create release candidate
 	tools/scripts/tag-release-candidate.sh
 
-.PHONY: prepare-release
 prepare-release: ## Create release
 	tools/scripts/tag-release.sh
 
-.PHONY: print-version
 print-version: ## Prints the upcoming release number
 	@go run pkg/version/generate/release_generate.go print-version
 
 
 ##@ General
 
-.PHONY: reference-help
 reference-help: ## Generates the reference help documentation.
 reference-help: build
 	@(./bin/gaip_$(GOOS)_$(GOARCH) -help || true) > cmd/gaip/help.txt.tmpl
 	@(./bin/gaip_$(GOOS)_$(GOARCH) -help-all || true) > cmd/gaip/help-all.txt.tmpl
 
-.PHONY: help
 help:  ## Display this help. Thanks to https://www.thapaliya.com/en/writings/well-documented-makefiles/
 ifeq ($(OS),Windows_NT)
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  %-40s %s\n", $$1, $$2 } /^##@/ { printf "\n%s\n", substr($$0, 5) } ' $(MAKEFILE_LIST)

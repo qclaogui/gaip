@@ -40,16 +40,16 @@ Dependencies
   check-go-mod                              Ensures fresh go.mod and go.sum.
   install-build-deps                        Install dependencies tools
 
-Ent schema
+Ent Schema
   ent-gen                                   Regenerate schema
   ent-describe                              Get a description of graph schema
   atlas-lint                                Verifying and linting migrations
 
-Regenerate gRPC code
+Regenerate gRPC Code
   protoc-install                            Install proper protoc version
   protoc-gen                                Regenerate proto by protoc
 
-Testing Lint & fmt
+Testing Lint & Fmt
   test                                      Run tests.
   lint                                      Runs various static analysis against our code.
   fmt                                       Runs fmt code (automatically fix lint errors)
@@ -64,6 +64,7 @@ Release
   print-version                             Prints the upcoming release number
 
 General
+  reference-help                            Generates the reference help documentation.
   help                                      Display this help. Thanks to https://www.thapaliya.com/en/writings/well-documented-makefiles/
 ```
 

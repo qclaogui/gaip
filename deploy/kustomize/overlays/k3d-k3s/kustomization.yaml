@@ -8,7 +8,7 @@ kind: Kustomization
 # namespace: qclaogui
 
 helmGlobals:
-  chartHome: ../../helm/charts
+  chartHome: ../../../helm/charts
 
 # https://kubectl.docs.kubernetes.io/references/kustomize/builtins/#field-name-helmcharts
 helmCharts:
