@@ -19,6 +19,10 @@
   <img src="https://img.shields.io/github/license/qclaogui/gaip.svg" alt="License">
 </a>
 
+<a href="https://github.com/qclaogui/gaip/tags">
+  <img src="https://img.shields.io/github/last-commit/qclaogui/gaip" alt="GitHub Last Commit">
+</a>
+
 </p>
 
 Practices for implementing [Google API Improvement Proposals](https://aip.dev/) (AIP) in Go.

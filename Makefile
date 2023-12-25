@@ -25,6 +25,7 @@ GOARM            ?= $(shell go env GOARM)
 CGO_ENABLED      ?= 1
 
 GO_FILES_TO_FMT  ?= $(shell find . -path ./vendor -prune -o -name '*.go' -print)
+
 # Support gsed on OSX (brew install gnu-sed), falling back to sed. On Linux
 # systems gsed won't be installed, so will use sed as expected.
 SED ?= $(shell which gsed 2>/dev/null || which sed)
@@ -298,7 +299,7 @@ cluster: ## Create k3s cluster
 	k3d cluster create k3s-gaip --config deploy/k3d-k3s-config.yaml
 #	k3d image import -c k3s-gaip qclaogui/gaip:latest
 
-
+.PHONY: manifests
 manifests: $(notdir $(wildcard deploy/kustomize/overlays/*)) ## Generates Kubernetes manifests
 
 %: ## Generates overlays manifests
