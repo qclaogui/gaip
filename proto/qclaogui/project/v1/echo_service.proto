@@ -67,6 +67,19 @@ service EchoService {
     };
   }
 
+  // This method returns error details in a repeated "google.protobuf.Any"
+  // field. This method showcases handling errors thus encoded, particularly
+  // over REST transport. Note that GAPICs only allow the type
+  // "google.protobuf.Any" for field paths ending in "error.details", and, at
+  // run-time, the actual types for these fields must be one of the types in
+  // google/rpc/error_details.proto.
+  rpc EchoErrorDetails(EchoErrorDetailsRequest) returns (EchoErrorDetailsResponse) {
+    option (google.api.http) = {
+      post: "/v1/echo:error-details"
+      body: "*"
+    };
+  }
+
   // This method splits the given content into words and will pass each word back
   // through the stream. This method showcases server-side streaming RPCs.
   rpc Expand(ExpandRequest) returns (stream EchoResponse) {
@@ -98,6 +111,28 @@ service EchoService {
   rpc PagedExpand(PagedExpandRequest) returns (PagedExpandResponse) {
     option (google.api.http) = {
       post: "/v1/echo:pagedExpand"
+      body: "*"
+    };
+  }
+
+  // This is similar to the PagedExpand except that it uses
+  // max_results instead of page_size, as some legacy APIs still
+  // do. New APIs should NOT use this pattern.
+  rpc PagedExpandLegacy(PagedExpandLegacyRequest) returns (PagedExpandResponse) {
+    option (google.api.http) = {
+      post: "/v1/echo:pagedExpandLegacy"
+      body: "*"
+    };
+  }
+
+  // This method returns a map containing lists of words that appear in the input, keyed by their
+  // initial character. The only words returned are the ones included in the current page,
+  // as determined by page_token and page_size, which both refer to the word indices in the
+  // input. This paging result consisting of a map of lists is a pattern used by some legacy
+  // APIs. New APIs should NOT use this pattern.
+  rpc PagedExpandLegacyMapped(PagedExpandRequest) returns (PagedExpandLegacyMappedResponse) {
+    option (google.api.http) = {
+      post: "/v1/echo:pagedExpandLegacyMapped"
       body: "*"
     };
   }

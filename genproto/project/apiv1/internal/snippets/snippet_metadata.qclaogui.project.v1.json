@@ -146,6 +146,52 @@
       ]
     },
     {
+      "regionTag": "localhost: 9095_v1_generated_EchoService_EchoErrorDetails_sync",
+      "title": "localhost: 9095 EchoErrorDetails Sample",
+      "description": "EchoErrorDetails this method returns error details in a repeated \"google.protobuf.Any\"\nfield. This method showcases handling errors thus encoded, particularly\nover REST transport. Note that GAPICs only allow the type\n\"google.protobuf.Any\" for field paths ending in \"error.details\", and, at\nrun-time, the actual types for these fields must be one of the types in\ngoogle/rpc/error_details.proto.",
+      "file": "EchoClient/EchoErrorDetails/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "EchoErrorDetails",
+        "fullName": "qclaogui.project.v1.EchoClient.EchoErrorDetails",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.EchoErrorDetailsRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.EchoErrorDetailsResponse",
+        "client": {
+          "shortName": "EchoClient",
+          "fullName": "qclaogui.project.v1.EchoClient"
+        },
+        "method": {
+          "shortName": "EchoErrorDetails",
+          "fullName": "qclaogui.project.v1.EchoService.EchoErrorDetails",
+          "service": {
+            "shortName": "EchoService",
+            "fullName": "qclaogui.project.v1.EchoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_EchoService_PagedExpand_sync",
       "title": "localhost: 9095 PagedExpand Sample",
       "description": "PagedExpand this is similar to the Expand method but instead of returning a stream of\nexpanded words, this method returns a paged list of expanded words.",
@@ -176,6 +222,98 @@
         "method": {
           "shortName": "PagedExpand",
           "fullName": "qclaogui.project.v1.EchoService.PagedExpand",
+          "service": {
+            "shortName": "EchoService",
+            "fullName": "qclaogui.project.v1.EchoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 60,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "localhost: 9095_v1_generated_EchoService_PagedExpandLegacy_sync",
+      "title": "localhost: 9095 PagedExpandLegacy Sample",
+      "description": "PagedExpandLegacy this is similar to the PagedExpand except that it uses\nmax_results instead of page_size, as some legacy APIs still\ndo. New APIs should NOT use this pattern.",
+      "file": "EchoClient/PagedExpandLegacy/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "PagedExpandLegacy",
+        "fullName": "qclaogui.project.v1.EchoClient.PagedExpandLegacy",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.PagedExpandLegacyRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "EchoResponseIterator",
+        "client": {
+          "shortName": "EchoClient",
+          "fullName": "qclaogui.project.v1.EchoClient"
+        },
+        "method": {
+          "shortName": "PagedExpandLegacy",
+          "fullName": "qclaogui.project.v1.EchoService.PagedExpandLegacy",
+          "service": {
+            "shortName": "EchoService",
+            "fullName": "qclaogui.project.v1.EchoService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 60,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "localhost: 9095_v1_generated_EchoService_PagedExpandLegacyMapped_sync",
+      "title": "localhost: 9095 PagedExpandLegacyMapped Sample",
+      "description": "PagedExpandLegacyMapped this method returns a map containing lists of words that appear in the input, keyed by their\ninitial character. The only words returned are the ones included in the current page,\nas determined by page_token and page_size, which both refer to the word indices in the\ninput. This paging result consisting of a map of lists is a pattern used by some legacy\nAPIs. New APIs should NOT use this pattern.",
+      "file": "EchoClient/PagedExpandLegacyMapped/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "PagedExpandLegacyMapped",
+        "fullName": "qclaogui.project.v1.EchoClient.PagedExpandLegacyMapped",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.PagedExpandRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "PagedExpandResponseListPairIterator",
+        "client": {
+          "shortName": "EchoClient",
+          "fullName": "qclaogui.project.v1.EchoClient"
+        },
+        "method": {
+          "shortName": "PagedExpandLegacyMapped",
+          "fullName": "qclaogui.project.v1.EchoService.PagedExpandLegacyMapped",
           "service": {
             "shortName": "EchoService",
             "fullName": "qclaogui.project.v1.EchoService"

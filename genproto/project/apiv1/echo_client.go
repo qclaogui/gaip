@@ -25,6 +25,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 
 	"cloud.google.com/go/longrunning"
@@ -48,13 +49,16 @@ var newEchoClientHook clientHook
 
 // EchoCallOptions contains the retry settings for each method of EchoClient.
 type EchoCallOptions struct {
-	Echo        []gax.CallOption
-	Expand      []gax.CallOption
-	Collect     []gax.CallOption
-	Chat        []gax.CallOption
-	PagedExpand []gax.CallOption
-	Wait        []gax.CallOption
-	Block       []gax.CallOption
+	Echo                    []gax.CallOption
+	EchoErrorDetails        []gax.CallOption
+	Expand                  []gax.CallOption
+	Collect                 []gax.CallOption
+	Chat                    []gax.CallOption
+	PagedExpand             []gax.CallOption
+	PagedExpandLegacy       []gax.CallOption
+	PagedExpandLegacyMapped []gax.CallOption
+	Wait                    []gax.CallOption
+	Block                   []gax.CallOption
 }
 
 func defaultEchoGRPCClientOptions() []option.ClientOption {
@@ -71,25 +75,31 @@ func defaultEchoGRPCClientOptions() []option.ClientOption {
 
 func defaultEchoCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
-		Echo:        []gax.CallOption{},
-		Expand:      []gax.CallOption{},
-		Collect:     []gax.CallOption{},
-		Chat:        []gax.CallOption{},
-		PagedExpand: []gax.CallOption{},
-		Wait:        []gax.CallOption{},
-		Block:       []gax.CallOption{},
+		Echo:                    []gax.CallOption{},
+		EchoErrorDetails:        []gax.CallOption{},
+		Expand:                  []gax.CallOption{},
+		Collect:                 []gax.CallOption{},
+		Chat:                    []gax.CallOption{},
+		PagedExpand:             []gax.CallOption{},
+		PagedExpandLegacy:       []gax.CallOption{},
+		PagedExpandLegacyMapped: []gax.CallOption{},
+		Wait:                    []gax.CallOption{},
+		Block:                   []gax.CallOption{},
 	}
 }
 
 func defaultEchoRESTCallOptions() *EchoCallOptions {
 	return &EchoCallOptions{
-		Echo:        []gax.CallOption{},
-		Expand:      []gax.CallOption{},
-		Collect:     []gax.CallOption{},
-		Chat:        []gax.CallOption{},
-		PagedExpand: []gax.CallOption{},
-		Wait:        []gax.CallOption{},
-		Block:       []gax.CallOption{},
+		Echo:                    []gax.CallOption{},
+		EchoErrorDetails:        []gax.CallOption{},
+		Expand:                  []gax.CallOption{},
+		Collect:                 []gax.CallOption{},
+		Chat:                    []gax.CallOption{},
+		PagedExpand:             []gax.CallOption{},
+		PagedExpandLegacy:       []gax.CallOption{},
+		PagedExpandLegacyMapped: []gax.CallOption{},
+		Wait:                    []gax.CallOption{},
+		Block:                   []gax.CallOption{},
 	}
 }
 
@@ -99,10 +109,13 @@ type internalEchoClient interface {
 	setGoogleClientInfo(...string)
 	Connection() *grpc.ClientConn
 	Echo(context.Context, *projectpb.EchoRequest, ...gax.CallOption) (*projectpb.EchoResponse, error)
+	EchoErrorDetails(context.Context, *projectpb.EchoErrorDetailsRequest, ...gax.CallOption) (*projectpb.EchoErrorDetailsResponse, error)
 	Expand(context.Context, *projectpb.ExpandRequest, ...gax.CallOption) (projectpb.EchoService_ExpandClient, error)
 	Collect(context.Context, ...gax.CallOption) (projectpb.EchoService_CollectClient, error)
 	Chat(context.Context, ...gax.CallOption) (projectpb.EchoService_ChatClient, error)
 	PagedExpand(context.Context, *projectpb.PagedExpandRequest, ...gax.CallOption) *EchoResponseIterator
+	PagedExpandLegacy(context.Context, *projectpb.PagedExpandLegacyRequest, ...gax.CallOption) *EchoResponseIterator
+	PagedExpandLegacyMapped(context.Context, *projectpb.PagedExpandRequest, ...gax.CallOption) *PagedExpandResponseListPairIterator
 	Wait(context.Context, *projectpb.WaitRequest, ...gax.CallOption) (*WaitOperation, error)
 	WaitOperation(name string) *WaitOperation
 	Block(context.Context, *projectpb.BlockRequest, ...gax.CallOption) (*projectpb.BlockResponse, error)
@@ -159,6 +172,16 @@ func (c *EchoClient) Echo(ctx context.Context, req *projectpb.EchoRequest, opts 
 	return c.internalClient.Echo(ctx, req, opts...)
 }
 
+// EchoErrorDetails this method returns error details in a repeated “google.protobuf.Any”
+// field. This method showcases handling errors thus encoded, particularly
+// over REST transport. Note that GAPICs only allow the type
+// “google.protobuf.Any” for field paths ending in “error.details”, and, at
+// run-time, the actual types for these fields must be one of the types in
+// google/rpc/error_details.proto.
+func (c *EchoClient) EchoErrorDetails(ctx context.Context, req *projectpb.EchoErrorDetailsRequest, opts ...gax.CallOption) (*projectpb.EchoErrorDetailsResponse, error) {
+	return c.internalClient.EchoErrorDetails(ctx, req, opts...)
+}
+
 // Expand this method splits the given content into words and will pass each word back
 // through the stream. This method showcases server-side streaming RPCs.
 func (c *EchoClient) Expand(ctx context.Context, req *projectpb.ExpandRequest, opts ...gax.CallOption) (projectpb.EchoService_ExpandClient, error) {
@@ -187,6 +210,22 @@ func (c *EchoClient) Chat(ctx context.Context, opts ...gax.CallOption) (projectp
 // expanded words, this method returns a paged list of expanded words.
 func (c *EchoClient) PagedExpand(ctx context.Context, req *projectpb.PagedExpandRequest, opts ...gax.CallOption) *EchoResponseIterator {
 	return c.internalClient.PagedExpand(ctx, req, opts...)
+}
+
+// PagedExpandLegacy this is similar to the PagedExpand except that it uses
+// max_results instead of page_size, as some legacy APIs still
+// do. New APIs should NOT use this pattern.
+func (c *EchoClient) PagedExpandLegacy(ctx context.Context, req *projectpb.PagedExpandLegacyRequest, opts ...gax.CallOption) *EchoResponseIterator {
+	return c.internalClient.PagedExpandLegacy(ctx, req, opts...)
+}
+
+// PagedExpandLegacyMapped this method returns a map containing lists of words that appear in the input, keyed by their
+// initial character. The only words returned are the ones included in the current page,
+// as determined by page_token and page_size, which both refer to the word indices in the
+// input. This paging result consisting of a map of lists is a pattern used by some legacy
+// APIs. New APIs should NOT use this pattern.
+func (c *EchoClient) PagedExpandLegacyMapped(ctx context.Context, req *projectpb.PagedExpandRequest, opts ...gax.CallOption) *PagedExpandResponseListPairIterator {
+	return c.internalClient.PagedExpandLegacyMapped(ctx, req, opts...)
 }
 
 // Wait this method will wait for the requested amount of time and then return.
@@ -439,6 +478,21 @@ func (c *echoGRPCClient) Echo(ctx context.Context, req *projectpb.EchoRequest, o
 	return resp, nil
 }
 
+func (c *echoGRPCClient) EchoErrorDetails(ctx context.Context, req *projectpb.EchoErrorDetailsRequest, opts ...gax.CallOption) (*projectpb.EchoErrorDetailsResponse, error) {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).EchoErrorDetails[0:len((*c.CallOptions).EchoErrorDetails):len((*c.CallOptions).EchoErrorDetails)], opts...)
+	var resp *projectpb.EchoErrorDetailsResponse
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.echoClient.EchoErrorDetails(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (c *echoGRPCClient) Expand(ctx context.Context, req *projectpb.ExpandRequest, opts ...gax.CallOption) (projectpb.EchoService_ExpandClient, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).Expand[0:len((*c.CallOptions).Expand):len((*c.CallOptions).Expand)], opts...)
@@ -510,6 +564,99 @@ func (c *echoGRPCClient) PagedExpand(ctx context.Context, req *projectpb.PagedEx
 
 		it.Response = resp
 		return resp.GetResponses(), resp.GetNextPageToken(), nil
+	}
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
+func (c *echoGRPCClient) PagedExpandLegacy(ctx context.Context, req *projectpb.PagedExpandLegacyRequest, opts ...gax.CallOption) *EchoResponseIterator {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).PagedExpandLegacy[0:len((*c.CallOptions).PagedExpandLegacy):len((*c.CallOptions).PagedExpandLegacy)], opts...)
+	it := &EchoResponseIterator{}
+	req = proto.Clone(req).(*projectpb.PagedExpandLegacyRequest)
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*projectpb.EchoResponse, string, error) {
+		resp := &projectpb.PagedExpandResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.MaxResults = math.MaxInt32
+		} else if pageSize != 0 {
+			req.MaxResults = int32(pageSize)
+		}
+		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			var err error
+			resp, err = c.echoClient.PagedExpandLegacy(ctx, req, settings.GRPC...)
+			return err
+		}, opts...)
+		if err != nil {
+			return nil, "", err
+		}
+
+		it.Response = resp
+		return resp.GetResponses(), resp.GetNextPageToken(), nil
+	}
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetMaxResults())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
+func (c *echoGRPCClient) PagedExpandLegacyMapped(ctx context.Context, req *projectpb.PagedExpandRequest, opts ...gax.CallOption) *PagedExpandResponseListPairIterator {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).PagedExpandLegacyMapped[0:len((*c.CallOptions).PagedExpandLegacyMapped):len((*c.CallOptions).PagedExpandLegacyMapped)], opts...)
+	it := &PagedExpandResponseListPairIterator{}
+	req = proto.Clone(req).(*projectpb.PagedExpandRequest)
+	it.InternalFetch = func(pageSize int, pageToken string) ([]PagedExpandResponseListPair, string, error) {
+		resp := &projectpb.PagedExpandLegacyMappedResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			var err error
+			resp, err = c.echoClient.PagedExpandLegacyMapped(ctx, req, settings.GRPC...)
+			return err
+		}, opts...)
+		if err != nil {
+			return nil, "", err
+		}
+
+		it.Response = resp
+
+		elems := make([]PagedExpandResponseListPair, 0, len(resp.GetAlphabetized()))
+		for k, v := range resp.GetAlphabetized() {
+			elems = append(elems, PagedExpandResponseListPair{k, v})
+		}
+		sort.Slice(elems, func(i, j int) bool { return elems[i].Key < elems[j].Key })
+
+		return elems, resp.GetNextPageToken(), nil
 	}
 	fetch := func(pageSize int, pageToken string) (string, error) {
 		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
@@ -612,6 +759,69 @@ func (c *echoRESTClient) Echo(ctx context.Context, req *projectpb.EchoRequest, o
 	opts = append((*c.CallOptions).Echo[0:len((*c.CallOptions).Echo):len((*c.CallOptions).Echo)], opts...)
 	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
 	resp := &projectpb.EchoResponse{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
+}
+
+// EchoErrorDetails this method returns error details in a repeated “google.protobuf.Any”
+// field. This method showcases handling errors thus encoded, particularly
+// over REST transport. Note that GAPICs only allow the type
+// “google.protobuf.Any” for field paths ending in “error.details”, and, at
+// run-time, the actual types for these fields must be one of the types in
+// google/rpc/error_details.proto.
+func (c *echoRESTClient) EchoErrorDetails(ctx context.Context, req *projectpb.EchoErrorDetailsRequest, opts ...gax.CallOption) (*projectpb.EchoErrorDetailsResponse, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1/echo:error-details")
+
+	// Build HTTP headers from client and context metadata.
+	hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).EchoErrorDetails[0:len((*c.CallOptions).EchoErrorDetails):len((*c.CallOptions).EchoErrorDetails)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &projectpb.EchoErrorDetailsResponse{}
 	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		if settings.Path != "" {
 			baseUrl.Path = settings.Path
@@ -834,6 +1044,187 @@ func (c *echoRESTClient) PagedExpand(ctx context.Context, req *projectpb.PagedEx
 		}
 		it.Response = resp
 		return resp.GetResponses(), resp.GetNextPageToken(), nil
+	}
+
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
+// PagedExpandLegacy this is similar to the PagedExpand except that it uses
+// max_results instead of page_size, as some legacy APIs still
+// do. New APIs should NOT use this pattern.
+func (c *echoRESTClient) PagedExpandLegacy(ctx context.Context, req *projectpb.PagedExpandLegacyRequest, opts ...gax.CallOption) *EchoResponseIterator {
+	it := &EchoResponseIterator{}
+	req = proto.Clone(req).(*projectpb.PagedExpandLegacyRequest)
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*projectpb.EchoResponse, string, error) {
+		resp := &projectpb.PagedExpandResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.MaxResults = math.MaxInt32
+		} else if pageSize != 0 {
+			req.MaxResults = int32(pageSize)
+		}
+		jsonReq, err := m.Marshal(req)
+		if err != nil {
+			return nil, "", err
+		}
+
+		baseUrl, err := url.Parse(c.endpoint)
+		if err != nil {
+			return nil, "", err
+		}
+		baseUrl.Path += fmt.Sprintf("/v1/echo:pagedExpandLegacy")
+
+		// Build HTTP headers from client and context metadata.
+		hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+		headers := gax.BuildHeaders(ctx, hds...)
+		e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			if settings.Path != "" {
+				baseUrl.Path = settings.Path
+			}
+			httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+			if err != nil {
+				return err
+			}
+			httpReq.Header = headers
+
+			httpRsp, err := c.httpClient.Do(httpReq)
+			if err != nil {
+				return err
+			}
+			defer httpRsp.Body.Close()
+
+			if err = googleapi.CheckResponse(httpRsp); err != nil {
+				return err
+			}
+
+			buf, err := io.ReadAll(httpRsp.Body)
+			if err != nil {
+				return err
+			}
+
+			if err := unm.Unmarshal(buf, resp); err != nil {
+				return err
+			}
+
+			return nil
+		}, opts...)
+		if e != nil {
+			return nil, "", e
+		}
+		it.Response = resp
+		return resp.GetResponses(), resp.GetNextPageToken(), nil
+	}
+
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetMaxResults())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
+// PagedExpandLegacyMapped this method returns a map containing lists of words that appear in the input, keyed by their
+// initial character. The only words returned are the ones included in the current page,
+// as determined by page_token and page_size, which both refer to the word indices in the
+// input. This paging result consisting of a map of lists is a pattern used by some legacy
+// APIs. New APIs should NOT use this pattern.
+func (c *echoRESTClient) PagedExpandLegacyMapped(ctx context.Context, req *projectpb.PagedExpandRequest, opts ...gax.CallOption) *PagedExpandResponseListPairIterator {
+	it := &PagedExpandResponseListPairIterator{}
+	req = proto.Clone(req).(*projectpb.PagedExpandRequest)
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	it.InternalFetch = func(pageSize int, pageToken string) ([]PagedExpandResponseListPair, string, error) {
+		resp := &projectpb.PagedExpandLegacyMappedResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		jsonReq, err := m.Marshal(req)
+		if err != nil {
+			return nil, "", err
+		}
+
+		baseUrl, err := url.Parse(c.endpoint)
+		if err != nil {
+			return nil, "", err
+		}
+		baseUrl.Path += fmt.Sprintf("/v1/echo:pagedExpandLegacyMapped")
+
+		// Build HTTP headers from client and context metadata.
+		hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+		headers := gax.BuildHeaders(ctx, hds...)
+		e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			if settings.Path != "" {
+				baseUrl.Path = settings.Path
+			}
+			httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+			if err != nil {
+				return err
+			}
+			httpReq.Header = headers
+
+			httpRsp, err := c.httpClient.Do(httpReq)
+			if err != nil {
+				return err
+			}
+			defer httpRsp.Body.Close()
+
+			if err = googleapi.CheckResponse(httpRsp); err != nil {
+				return err
+			}
+
+			buf, err := io.ReadAll(httpRsp.Body)
+			if err != nil {
+				return err
+			}
+
+			if err := unm.Unmarshal(buf, resp); err != nil {
+				return err
+			}
+
+			return nil
+		}, opts...)
+		if e != nil {
+			return nil, "", e
+		}
+		it.Response = resp
+
+		elems := make([]PagedExpandResponseListPair, 0, len(resp.GetAlphabetized()))
+		for k, v := range resp.GetAlphabetized() {
+			elems = append(elems, PagedExpandResponseListPair{k, v})
+		}
+		sort.Slice(elems, func(i, j int) bool { return elems[i].Key < elems[j].Key })
+
+		return elems, resp.GetNextPageToken(), nil
 	}
 
 	fetch := func(pageSize int, pageToken string) (string, error) {

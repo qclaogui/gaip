@@ -249,10 +249,11 @@ lint: ## Runs various static analysis against our code.
 lint: go-lint goreleaser-lint buf-lint $(COPYRIGHT) fmt
 	@$(COPYRIGHT) $(shell go list -f "{{.Dir}}" ./... | grep -iv "genproto/" | xargs -I {} find {} -name "*.go")
 
-
+.PHONY: fmt
 fmt: ## Runs fmt code (automatically fix lint errors)
 fmt: fix-lint go-fmt buf-fmt
 
+.PHONY: go-fmt
 go-fmt: $(GOIMPORTS)
 	@echo ">> formatting go code"
 	@gofmt -s -w $(GO_FILES_TO_FMT)

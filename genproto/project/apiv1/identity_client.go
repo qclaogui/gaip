@@ -414,7 +414,7 @@ func (c *identityRESTClient) CreateUser(ctx context.Context, req *projectpb.Crea
 	if err != nil {
 		return nil, err
 	}
-	baseUrl.Path += fmt.Sprintf("v1/users")
+	baseUrl.Path += fmt.Sprintf("/v1/users")
 
 	// Build HTTP headers from client and context metadata.
 	hds := append(c.xGoogHeaders, "Content-Type", "application/json")

@@ -21,7 +21,7 @@ service IdentityService {
   // Creates a user.
   rpc CreateUser(CreateUserRequest) returns (User) {
     option (google.api.http) = {
-      post: "v1/users"
+      post: "/v1/users"
       body: "user"
     };
 

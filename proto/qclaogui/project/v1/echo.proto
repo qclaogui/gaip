@@ -3,6 +3,7 @@ syntax = "proto3";
 package qclaogui.project.v1;
 
 import "google/api/field_behavior.proto";
+import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "google/rpc/status.proto";
@@ -50,6 +51,39 @@ message EchoResponse {
   Severity severity = 2;
 }
 
+// The request message used for the EchoErrorDetails method.
+message EchoErrorDetailsRequest {
+  // Content to return in a singular `*.error.details` field of type
+  // `google.protobuf.Any`
+  string single_detail_text = 1;
+
+  // Content to return in a repeated `*.error.details` field of type
+  // `google.protobuf.Any`
+  repeated string multi_detail_text = 2;
+}
+
+// The response message used for the EchoErrorDetails method.
+message EchoErrorDetailsResponse {
+  message SingleDetail {
+    ErrorWithSingleDetail error = 1;
+  }
+
+  message MultipleDetails {
+    ErrorWithMultipleDetails error = 1;
+  }
+
+  SingleDetail single_detail = 1;
+  MultipleDetails multiple_details = 2;
+}
+
+message ErrorWithSingleDetail {
+  google.protobuf.Any details = 1;
+}
+
+message ErrorWithMultipleDetails {
+  repeated google.protobuf.Any details = 1;
+}
+
 // The request message for the Expand method.
 message ExpandRequest {
   // The content that will be split into words and returned on the stream.
@@ -74,10 +108,41 @@ message PagedExpandRequest {
   string page_token = 3;
 }
 
+// The request for the PagedExpandLegacy method.  This is a pattern used by some legacy APIs. New
+// APIs should NOT use this pattern, but rather something like PagedExpandRequest which conforms to
+// aip.dev/158.
+message PagedExpandLegacyRequest {
+  // The string to expand.
+  string content = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The number of words to returned in each page.
+  // (-- aip.dev/not-precedent: This is a legacy, non-standard pattern that
+  //     violates aip.dev/158. Ordinarily, this should be page_size. --)
+  int32 max_results = 2;
+
+  // The position of the page to be returned.
+  string page_token = 3;
+}
+
 // The response for the PagedExpand method.
 message PagedExpandResponse {
   // The words that were expanded.
   repeated EchoResponse responses = 1;
+
+  // The next page token.
+  string next_page_token = 2;
+}
+
+// A list of words.
+message PagedExpandResponseList {
+  repeated string words = 1;
+}
+
+message PagedExpandLegacyMappedResponse {
+  // The words that were expanded, indexed by their initial character.
+  // (-- aip.dev/not-precedent: This is a legacy, non-standard pattern that violates
+  //     aip.dev/158. Ordinarily, this should be a `repeated` field, as in PagedExpandResponse. --)
+  map<string, PagedExpandResponseList> alphabetized = 1;
 
   // The next page token.
   string next_page_token = 2;

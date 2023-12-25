@@ -26,13 +26,16 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	EchoService_Echo_FullMethodName        = "/qclaogui.project.v1.EchoService/Echo"
-	EchoService_Expand_FullMethodName      = "/qclaogui.project.v1.EchoService/Expand"
-	EchoService_Collect_FullMethodName     = "/qclaogui.project.v1.EchoService/Collect"
-	EchoService_Chat_FullMethodName        = "/qclaogui.project.v1.EchoService/Chat"
-	EchoService_PagedExpand_FullMethodName = "/qclaogui.project.v1.EchoService/PagedExpand"
-	EchoService_Wait_FullMethodName        = "/qclaogui.project.v1.EchoService/Wait"
-	EchoService_Block_FullMethodName       = "/qclaogui.project.v1.EchoService/Block"
+	EchoService_Echo_FullMethodName                    = "/qclaogui.project.v1.EchoService/Echo"
+	EchoService_EchoErrorDetails_FullMethodName        = "/qclaogui.project.v1.EchoService/EchoErrorDetails"
+	EchoService_Expand_FullMethodName                  = "/qclaogui.project.v1.EchoService/Expand"
+	EchoService_Collect_FullMethodName                 = "/qclaogui.project.v1.EchoService/Collect"
+	EchoService_Chat_FullMethodName                    = "/qclaogui.project.v1.EchoService/Chat"
+	EchoService_PagedExpand_FullMethodName             = "/qclaogui.project.v1.EchoService/PagedExpand"
+	EchoService_PagedExpandLegacy_FullMethodName       = "/qclaogui.project.v1.EchoService/PagedExpandLegacy"
+	EchoService_PagedExpandLegacyMapped_FullMethodName = "/qclaogui.project.v1.EchoService/PagedExpandLegacyMapped"
+	EchoService_Wait_FullMethodName                    = "/qclaogui.project.v1.EchoService/Wait"
+	EchoService_Block_FullMethodName                   = "/qclaogui.project.v1.EchoService/Block"
 )
 
 // EchoServiceClient is the client API for EchoService service.
@@ -41,6 +44,13 @@ const (
 type EchoServiceClient interface {
 	// This method simply echoes the request. This method showcases unary RPCs.
 	Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error)
+	// This method returns error details in a repeated "google.protobuf.Any"
+	// field. This method showcases handling errors thus encoded, particularly
+	// over REST transport. Note that GAPICs only allow the type
+	// "google.protobuf.Any" for field paths ending in "error.details", and, at
+	// run-time, the actual types for these fields must be one of the types in
+	// google/rpc/error_details.proto.
+	EchoErrorDetails(ctx context.Context, in *EchoErrorDetailsRequest, opts ...grpc.CallOption) (*EchoErrorDetailsResponse, error)
 	// This method splits the given content into words and will pass each word back
 	// through the stream. This method showcases server-side streaming RPCs.
 	Expand(ctx context.Context, in *ExpandRequest, opts ...grpc.CallOption) (EchoService_ExpandClient, error)
@@ -55,6 +65,16 @@ type EchoServiceClient interface {
 	// This is similar to the Expand method but instead of returning a stream of
 	// expanded words, this method returns a paged list of expanded words.
 	PagedExpand(ctx context.Context, in *PagedExpandRequest, opts ...grpc.CallOption) (*PagedExpandResponse, error)
+	// This is similar to the PagedExpand except that it uses
+	// max_results instead of page_size, as some legacy APIs still
+	// do. New APIs should NOT use this pattern.
+	PagedExpandLegacy(ctx context.Context, in *PagedExpandLegacyRequest, opts ...grpc.CallOption) (*PagedExpandResponse, error)
+	// This method returns a map containing lists of words that appear in the input, keyed by their
+	// initial character. The only words returned are the ones included in the current page,
+	// as determined by page_token and page_size, which both refer to the word indices in the
+	// input. This paging result consisting of a map of lists is a pattern used by some legacy
+	// APIs. New APIs should NOT use this pattern.
+	PagedExpandLegacyMapped(ctx context.Context, in *PagedExpandRequest, opts ...grpc.CallOption) (*PagedExpandLegacyMappedResponse, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
@@ -75,6 +95,15 @@ func NewEchoServiceClient(cc grpc.ClientConnInterface) EchoServiceClient {
 func (c *echoServiceClient) Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error) {
 	out := new(EchoResponse)
 	err := c.cc.Invoke(ctx, EchoService_Echo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *echoServiceClient) EchoErrorDetails(ctx context.Context, in *EchoErrorDetailsRequest, opts ...grpc.CallOption) (*EchoErrorDetailsResponse, error) {
+	out := new(EchoErrorDetailsResponse)
+	err := c.cc.Invoke(ctx, EchoService_EchoErrorDetails_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -187,6 +216,24 @@ func (c *echoServiceClient) PagedExpand(ctx context.Context, in *PagedExpandRequ
 	return out, nil
 }
 
+func (c *echoServiceClient) PagedExpandLegacy(ctx context.Context, in *PagedExpandLegacyRequest, opts ...grpc.CallOption) (*PagedExpandResponse, error) {
+	out := new(PagedExpandResponse)
+	err := c.cc.Invoke(ctx, EchoService_PagedExpandLegacy_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *echoServiceClient) PagedExpandLegacyMapped(ctx context.Context, in *PagedExpandRequest, opts ...grpc.CallOption) (*PagedExpandLegacyMappedResponse, error) {
+	out := new(PagedExpandLegacyMappedResponse)
+	err := c.cc.Invoke(ctx, EchoService_PagedExpandLegacyMapped_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
 	out := new(longrunningpb.Operation)
 	err := c.cc.Invoke(ctx, EchoService_Wait_FullMethodName, in, out, opts...)
@@ -211,6 +258,13 @@ func (c *echoServiceClient) Block(ctx context.Context, in *BlockRequest, opts ..
 type EchoServiceServer interface {
 	// This method simply echoes the request. This method showcases unary RPCs.
 	Echo(context.Context, *EchoRequest) (*EchoResponse, error)
+	// This method returns error details in a repeated "google.protobuf.Any"
+	// field. This method showcases handling errors thus encoded, particularly
+	// over REST transport. Note that GAPICs only allow the type
+	// "google.protobuf.Any" for field paths ending in "error.details", and, at
+	// run-time, the actual types for these fields must be one of the types in
+	// google/rpc/error_details.proto.
+	EchoErrorDetails(context.Context, *EchoErrorDetailsRequest) (*EchoErrorDetailsResponse, error)
 	// This method splits the given content into words and will pass each word back
 	// through the stream. This method showcases server-side streaming RPCs.
 	Expand(*ExpandRequest, EchoService_ExpandServer) error
@@ -225,6 +279,16 @@ type EchoServiceServer interface {
 	// This is similar to the Expand method but instead of returning a stream of
 	// expanded words, this method returns a paged list of expanded words.
 	PagedExpand(context.Context, *PagedExpandRequest) (*PagedExpandResponse, error)
+	// This is similar to the PagedExpand except that it uses
+	// max_results instead of page_size, as some legacy APIs still
+	// do. New APIs should NOT use this pattern.
+	PagedExpandLegacy(context.Context, *PagedExpandLegacyRequest) (*PagedExpandResponse, error)
+	// This method returns a map containing lists of words that appear in the input, keyed by their
+	// initial character. The only words returned are the ones included in the current page,
+	// as determined by page_token and page_size, which both refer to the word indices in the
+	// input. This paging result consisting of a map of lists is a pattern used by some legacy
+	// APIs. New APIs should NOT use this pattern.
+	PagedExpandLegacyMapped(context.Context, *PagedExpandRequest) (*PagedExpandLegacyMappedResponse, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error)
@@ -241,6 +305,9 @@ type UnimplementedEchoServiceServer struct {
 func (UnimplementedEchoServiceServer) Echo(context.Context, *EchoRequest) (*EchoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Echo not implemented")
 }
+func (UnimplementedEchoServiceServer) EchoErrorDetails(context.Context, *EchoErrorDetailsRequest) (*EchoErrorDetailsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EchoErrorDetails not implemented")
+}
 func (UnimplementedEchoServiceServer) Expand(*ExpandRequest, EchoService_ExpandServer) error {
 	return status.Errorf(codes.Unimplemented, "method Expand not implemented")
 }
@@ -252,6 +319,12 @@ func (UnimplementedEchoServiceServer) Chat(EchoService_ChatServer) error {
 }
 func (UnimplementedEchoServiceServer) PagedExpand(context.Context, *PagedExpandRequest) (*PagedExpandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PagedExpand not implemented")
+}
+func (UnimplementedEchoServiceServer) PagedExpandLegacy(context.Context, *PagedExpandLegacyRequest) (*PagedExpandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PagedExpandLegacy not implemented")
+}
+func (UnimplementedEchoServiceServer) PagedExpandLegacyMapped(context.Context, *PagedExpandRequest) (*PagedExpandLegacyMappedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PagedExpandLegacyMapped not implemented")
 }
 func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
@@ -285,6 +358,24 @@ func _EchoService_Echo_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(EchoServiceServer).Echo(ctx, req.(*EchoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EchoService_EchoErrorDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EchoErrorDetailsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EchoServiceServer).EchoErrorDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EchoService_EchoErrorDetails_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EchoServiceServer).EchoErrorDetails(ctx, req.(*EchoErrorDetailsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -380,6 +471,42 @@ func _EchoService_PagedExpand_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EchoService_PagedExpandLegacy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PagedExpandLegacyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EchoServiceServer).PagedExpandLegacy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EchoService_PagedExpandLegacy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EchoServiceServer).PagedExpandLegacy(ctx, req.(*PagedExpandLegacyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EchoService_PagedExpandLegacyMapped_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PagedExpandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EchoServiceServer).PagedExpandLegacyMapped(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EchoService_PagedExpandLegacyMapped_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EchoServiceServer).PagedExpandLegacyMapped(ctx, req.(*PagedExpandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _EchoService_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WaitRequest)
 	if err := dec(in); err != nil {
@@ -428,8 +555,20 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _EchoService_Echo_Handler,
 		},
 		{
+			MethodName: "EchoErrorDetails",
+			Handler:    _EchoService_EchoErrorDetails_Handler,
+		},
+		{
 			MethodName: "PagedExpand",
 			Handler:    _EchoService_PagedExpand_Handler,
+		},
+		{
+			MethodName: "PagedExpandLegacy",
+			Handler:    _EchoService_PagedExpandLegacy_Handler,
+		},
+		{
+			MethodName: "PagedExpandLegacyMapped",
+			Handler:    _EchoService_PagedExpandLegacyMapped_Handler,
 		},
 		{
 			MethodName: "Wait",
