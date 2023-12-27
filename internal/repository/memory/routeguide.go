@@ -32,7 +32,7 @@ type RouteNote struct {
 }
 
 // NewRouteNote is a factory function to generate a new repository
-func NewRouteNote(cfg Config) (*RouteNote, error) {
+func NewRouteNote(cfg Config) (routeguidepb.RouteGuideServiceServer, error) {
 	mr := &RouteNote{
 		routeNotes: make(map[string][]*routeguidepb.RouteNote),
 	}

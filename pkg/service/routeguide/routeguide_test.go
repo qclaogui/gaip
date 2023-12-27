@@ -6,13 +6,10 @@ package routeguide
 
 import (
 	"context"
-	"net"
-	"strconv"
 	"testing"
 
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"github.com/qclaogui/gaip/internal/repository"
-	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
 )
@@ -20,21 +17,14 @@ import (
 func Test_ServiceServer_GetFeature(t *testing.T) {
 	ctx := context.Background()
 
-	serverCfg := getServerConfig(t)
-	srv, err := service.NewServer(serverCfg)
-	require.NoError(t, err)
-
 	// set repository database driver
 	repoCfg := repository.Config{Driver: repository.DriverMemory}
 	repo, err := repository.NewRouteGuide(repoCfg)
 	require.NoError(t, err)
 
 	cfg := Config{Repo: repo}
-	ssv, err := New(cfg, srv)
+	ssv, err := NewServer(cfg)
 	require.NoError(t, err)
-
-	go func() { _ = srv.Run() }()
-	t.Cleanup(srv.Stop)
 
 	type args struct {
 		ctx context.Context
@@ -84,35 +74,4 @@ func Test_ServiceServer_GetFeature(t *testing.T) {
 		})
 	}
 
-}
-
-// Generates server config, with gRPC listening on random port.
-func getServerConfig(t *testing.T) service.Config {
-	grpcHost, grpcPortNum := getHostnameAndRandomPort(t)
-	httpHost, httpPortNum := getHostnameAndRandomPort(t)
-
-	cfg := service.Config{
-		HTTPListenAddress: httpHost,
-		HTTPListenPort:    httpPortNum,
-
-		GRPCListenAddress: grpcHost,
-		GRPCListenPort:    grpcPortNum,
-
-		GRPCServerMaxRecvMsgSize: 1024,
-	}
-	require.NoError(t, cfg.LogLevel.Set("info"))
-	return cfg
-}
-
-func getHostnameAndRandomPort(t *testing.T) (string, int) {
-	listen, err := net.Listen("tcp", "localhost:0")
-	require.NoError(t, err)
-
-	host, port, err := net.SplitHostPort(listen.Addr().String())
-	require.NoError(t, err)
-	require.NoError(t, listen.Close())
-
-	portNum, err := strconv.Atoi(port)
-	require.NoError(t, err)
-	return host, portNum
 }

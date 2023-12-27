@@ -23,7 +23,7 @@ type Library struct {
 }
 
 // NewLibrary is a factory function to generate a new repository
-func NewLibrary(cfg Config) (*Library, error) {
+func NewLibrary(cfg Config) (librarypb.LibraryServiceServer, error) {
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
 	param := "parseTime=true"

@@ -30,7 +30,7 @@ type Library struct {
 }
 
 // NewLibrary is a factory function to generate a new repository
-func NewLibrary() (*Library, error) {
+func NewLibrary() (librarypb.LibraryServiceServer, error) {
 	m := &Library{
 		Shelves: map[int64]*librarypb.Shelf{},
 		Books:   map[int64]map[int64]*librarypb.Book{},

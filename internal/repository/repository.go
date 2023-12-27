@@ -16,27 +16,7 @@ import (
 	"github.com/qclaogui/gaip/internal/repository/postgres"
 )
 
-type Bookstore interface {
-	bookstorepb.BookstoreServiceServer
-}
-
-type Library interface {
-	librarypb.LibraryServiceServer
-}
-
-type Project interface {
-	projectpb.ProjectServiceServer
-}
-
-type RouteGuide interface {
-	routeguidepb.RouteGuideServiceServer
-}
-
-type Todo interface {
-	todopb.ToDoServiceServer
-}
-
-func NewBookstore(cfg Config) (Bookstore, error) {
+func NewBookstore(cfg Config) (bookstorepb.BookstoreServiceServer, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database drivers %s", cfg.Driver)
@@ -49,7 +29,7 @@ func NewBookstore(cfg Config) (Bookstore, error) {
 	}
 }
 
-func NewLibrary(cfg Config) (Library, error) {
+func NewLibrary(cfg Config) (librarypb.LibraryServiceServer, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
@@ -64,7 +44,7 @@ func NewLibrary(cfg Config) (Library, error) {
 	}
 }
 
-func NewProject(cfg Config) (Project, error) {
+func NewProject(cfg Config) (projectpb.ProjectServiceServer, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
@@ -75,7 +55,18 @@ func NewProject(cfg Config) (Project, error) {
 	}
 }
 
-func NewRouteGuide(cfg Config) (RouteGuide, error) {
+func NewIdentity(cfg Config) (projectpb.IdentityServiceServer, error) {
+	switch cfg.Driver {
+	case "":
+		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
+	case DriverMemory:
+		return memory.NewIdentity()
+	default:
+		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
+	}
+}
+
+func NewRouteGuide(cfg Config) (routeguidepb.RouteGuideServiceServer, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
@@ -86,7 +77,7 @@ func NewRouteGuide(cfg Config) (RouteGuide, error) {
 	}
 }
 
-func NewTodo(cfg Config) (Todo, error) {
+func NewTodo(cfg Config) (todopb.ToDoServiceServer, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)

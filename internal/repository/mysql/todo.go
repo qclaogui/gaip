@@ -30,7 +30,7 @@ type Todo struct {
 }
 
 // NewTodo is a factory function to generate a new repository
-func NewTodo(cfg Config) (*Todo, error) {
+func NewTodo(cfg Config) (todopb.ToDoServiceServer, error) {
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
 	param := "parseTime=true"

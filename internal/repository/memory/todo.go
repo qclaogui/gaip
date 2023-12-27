@@ -34,7 +34,7 @@ type Todo struct {
 }
 
 // NewTodo is a factory function to generate a new repository
-func NewTodo() (*Todo, error) {
+func NewTodo() (todopb.ToDoServiceServer, error) {
 	m := &Todo{
 		mem: make(map[uuid.UUID]*todopb.ToDo),
 	}

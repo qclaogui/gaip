@@ -44,8 +44,8 @@ func (g *Gaip) RegisterAPI() {
 	g.RegisterRoute("/debug/fgprof", fgprof.Handler(), false, true, "GET")
 }
 
-// New makes a new Gaip.
-func New(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
+// Bootstrap makes a new Gaip.
+func Bootstrap(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 	if cfg.PrintConfig {
 		if err := yaml.NewEncoder(os.Stdout).Encode(&cfg); err != nil {
 			fmt.Println("Error encoding config:", err)

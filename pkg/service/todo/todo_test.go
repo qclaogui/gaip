@@ -17,21 +17,27 @@ import (
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/repository/mysql"
 	lg "github.com/qclaogui/gaip/tools/log"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
 
 var ID = "e75b6f03-e5fc-488c-8f75-ad1747be3d3a"
 
-func serverSetupWithSQLDB(db *sql.DB) *ServiceServer {
-	var cfg = Config{}
-	repo, _ := mysql.NewTodoWithSQLDB(db)
-	return &ServiceServer{
-		Cfg:        cfg,
-		logger:     lg.Logger,
+func serverSetupWithSQLDB(t *testing.T, db *sql.DB) *Server {
+	repo, err := mysql.NewTodoWithSQLDB(db)
+	require.NoError(t, err)
+
+	cfg := Config{
+		Repo:       repo,
+		Log:        lg.Logger,
 		Registerer: prometheus.DefaultRegisterer,
-		repo:       repo,
 	}
+
+	srv, err := NewServer(cfg)
+	require.NoError(t, err)
+
+	return srv
 }
 
 func Test_toDoServiceServer_Create(t *testing.T) {
@@ -42,7 +48,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	ssv := serverSetupWithSQLDB(db)
+	ssv := serverSetupWithSQLDB(t, db)
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -184,7 +190,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	ssv := serverSetupWithSQLDB(db)
+	ssv := serverSetupWithSQLDB(t, db)
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -297,7 +303,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	ssv := serverSetupWithSQLDB(db)
+	ssv := serverSetupWithSQLDB(t, db)
 
 	tm := time.Now().UTC().Add(time.Minute)
 	reminder := timestamppb.New(tm)
@@ -464,7 +470,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	ssv := serverSetupWithSQLDB(db)
+	ssv := serverSetupWithSQLDB(t, db)
 
 	type args struct {
 		ctx context.Context
@@ -582,7 +588,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 	}
 	defer func() { _ = db.Close() }()
 
-	ssv := serverSetupWithSQLDB(db)
+	ssv := serverSetupWithSQLDB(t, db)
 
 	tm1 := time.Now().UTC().Add(time.Minute)
 	reminder1 := timestamppb.New(tm1)

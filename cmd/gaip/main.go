@@ -123,7 +123,7 @@ func main() {
 	})
 	_ = level.Info(lg.Logger).Log("msg", "Starting application", "version", version.GetVersion())
 
-	g, err := gaip.New(cfg, reg)
+	g, err := gaip.Bootstrap(cfg, reg)
 	lg.CheckFatal("initializing application", err)
 
 	err = g.Run()

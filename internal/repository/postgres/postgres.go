@@ -27,7 +27,7 @@ type Library struct {
 	entClient *ent.Client
 }
 
-func NewLibrary(cfg Config) (*Library, error) {
+func NewLibrary(cfg Config) (librarypb.LibraryServiceServer, error) {
 	//"postgres://pgx_md5:secret@localhost:5432/pgx_test?sslmode=disable"
 	dsn := fmt.Sprintf("postgres://%s:%s@tcp(%s)/%s?sslmode=disable", cfg.User, cfg.Password, cfg.Host, cfg.Schema)
 	db, err := sql.Open("pgx", dsn)

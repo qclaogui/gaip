@@ -28,14 +28,14 @@ type Project struct {
 }
 
 // NewProject is a factory function to generate a new repository
-func NewProject() (*Project, error) {
+func NewProject() (projectpb.ProjectServiceServer, error) {
 	mr := &Project{
 		projects: map[string]*projectpb.Project{},
 	}
 	return mr, nil
 }
 
-func (mr *Project) CreateProject(_ context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
+func (p *Project) CreateProject(_ context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
 	proj := req.Project
 	if proj == nil {
 		log.Print("ProjectSrv must not be empty.")
@@ -53,20 +53,20 @@ func (mr *Project) CreateProject(_ context.Context, req *projectpb.CreateProject
 		return nil, status.Errorf(codes.InvalidArgument, "Invalid project name")
 	}
 
-	mr.mu.Lock()
-	defer mr.mu.Unlock()
+	p.mu.Lock()
+	defer p.mu.Unlock()
 
-	if _, ok := mr.projects[pID]; ok {
+	if _, ok := p.projects[pID]; ok {
 		return nil, status.Errorf(codes.AlreadyExists, "ProjectSrv with name %q already exists", pID)
 	}
 
-	mr.projects[pID] = proj
-	return mr.projects[pID], nil
+	p.projects[pID] = proj
+	return p.projects[pID], nil
 }
 
-func (mr *Project) GetProject(_ context.Context, req *projectpb.GetProjectRequest) (*projectpb.Project, error) {
-	mr.mu.Lock()
-	defer mr.mu.Unlock()
+func (p *Project) GetProject(_ context.Context, req *projectpb.GetProjectRequest) (*projectpb.Project, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 
 	pID, err := name.ParseProject(req.Name)
 	if err != nil {
@@ -74,27 +74,27 @@ func (mr *Project) GetProject(_ context.Context, req *projectpb.GetProjectReques
 		return nil, status.Errorf(codes.InvalidArgument, "Invalid project name")
 	}
 
-	p, ok := mr.projects[pID]
+	proj, ok := p.projects[pID]
 	if !ok {
 		return nil, status.Errorf(codes.AlreadyExists, "ProjectSrv with name %q already exists", pID)
 	}
 
-	return p, nil
+	return proj, nil
 }
 
 // ListProjects returns up to pageSize number of projects beginning at pageToken, or from
 // start if pageToken is the empty string.
-func (mr *Project) ListProjects(_ context.Context, req *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
-	mr.mu.Lock()
-	defer mr.mu.Unlock()
+func (p *Project) ListProjects(_ context.Context, req *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 
 	_ = maxBatchSize
 	size, _ := validatePageSize(req.PageSize)
 
-	projects := make([]*projectpb.Project, len(mr.projects))
+	projects := make([]*projectpb.Project, len(p.projects))
 	i := 0
-	for k := range mr.projects {
-		projects[i] = mr.projects[k]
+	for k := range p.projects {
+		projects[i] = p.projects[k]
 		i++
 	}
 
@@ -115,20 +115,20 @@ func (mr *Project) ListProjects(_ context.Context, req *projectpb.ListProjectsRe
 
 }
 
-func (mr *Project) DeleteProject(_ context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
-	mr.mu.Lock()
-	defer mr.mu.Unlock()
+func (p *Project) DeleteProject(_ context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 
 	pID, err := name.ParseProject(req.Name)
 	if err != nil {
 		log.Printf("Invalid project name: %v", req.Name)
 		return nil, status.Errorf(codes.InvalidArgument, "Invalid project name")
 	}
-	_, ok := mr.projects[pID]
+	_, ok := p.projects[pID]
 	if !ok {
 		return nil, status.Errorf(codes.AlreadyExists, "ProjectSrv with name %q already exists", pID)
 	}
 
-	delete(mr.projects, pID)
+	delete(p.projects, pID)
 	return &emptypb.Empty{}, nil
 }

@@ -16,6 +16,7 @@ import (
 
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/stretchr/testify/require"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -105,6 +106,16 @@ func (m *mockExpandStream) verify(expectHeadersAndTrailers bool) {
 	}
 }
 
+func serverSetup(t *testing.T) pb.EchoServiceServer {
+	//s, err := NewEchoService()
+	//require.NoError(t, err)
+
+	cfg := Config{}
+	s, err := NewServer(cfg)
+	require.NoError(t, err)
+	return s
+}
+
 func TestExpand(t *testing.T) {
 	contentTable := []string{"Hello World", "Hola", ""}
 	errTable := []*rpcstatus.Status{
@@ -113,7 +124,7 @@ func TestExpand(t *testing.T) {
 		nil,
 	}
 
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 	for _, c := range contentTable {
 		for _, e := range errTable {
 			stream := &mockExpandStream{exp: strings.Fields(c), t: t}
@@ -129,7 +140,7 @@ func TestExpand(t *testing.T) {
 }
 
 func TestExpandWithWaitTime(t *testing.T) {
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 	//This stream should take at least 300ms to complete because there are 7 messages, and we wait 50ms between sending each message.
 	content := "This stream should take 300ms to complete"
 	stream := &mockExpandStream{exp: strings.Fields(content), t: t}
@@ -161,7 +172,7 @@ func TestExpand_streamErr(t *testing.T) {
 
 	stream := &errorExpandStream{err: e}
 
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 	err := s.Expand(&pb.ExpandRequest{Content: "Hello World"}, stream)
 	if !errors.Is(err, e) {
 		t.Error("Expand expected to pass through stream errors.")
@@ -227,7 +238,7 @@ func TestCollect(t *testing.T) {
 		{[]string{"Hello", "", "World"}, strPtr("Hello World"), nil},
 	}
 
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 	for _, test := range tests {
 		var requests []*pb.EchoRequest
 		for _, content := range test.contents {
@@ -264,7 +275,7 @@ func TestCollect_streamErr(t *testing.T) {
 	e := errors.New("test Error")
 	stream := &errorCollectStream{err: e}
 
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 	err := s.Collect(stream)
 	if !errors.Is(err, e) {
 		t.Error("Collect expected to pass through stream errors.")
@@ -331,7 +342,7 @@ func TestChat(t *testing.T) {
 		{[]string{}, &rpcstatus.Status{Code: int32(codes.InvalidArgument)}},
 	}
 
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 
 	for _, test := range tests {
 		var requests []*pb.EchoRequest
@@ -370,7 +381,7 @@ func TestChat_streamErr(t *testing.T) {
 	e := errors.New("test Error")
 	stream := &errorChatStream{err: e}
 
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 	err := s.Chat(stream)
 	if !errors.Is(err, e) {
 		t.Error("Chat expected to pass through stream errors.")
@@ -392,7 +403,7 @@ func TestPagedExpand_invalidArgs(t *testing.T) {
 		{Content: "one", PageToken: "2"},
 	}
 
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 	for _, test := range tests {
 		_, err := s.PagedExpand(context.Background(), test)
 		sts, _ := status.FromError(err)
@@ -452,7 +463,7 @@ func TestPagedExpand(t *testing.T) {
 		},
 	}
 
-	s, _ := NewEchoService()
+	s := serverSetup(t)
 	for _, test := range tests {
 		stream := &mockUnaryStream{t: t}
 		ctx := appendTestOutgoingMetadata(context.Background(), &mockSTS{t: t, stream: stream})
@@ -483,7 +494,7 @@ func TestBlockSuccess(t *testing.T) {
 	nowF := func() time.Time { return time.Unix(1, 0) }
 
 	for _, test := range tests {
-		waiter := &echoServiceImpl{nowF: nowF}
+		waiter := &Server{nowF: nowF}
 
 		request := &pb.BlockRequest{
 			ResponseDelay: &durationpb.Duration{
@@ -532,7 +543,7 @@ func TestWait_pending(t *testing.T) {
 	}
 
 	for _, req := range tests {
-		waiter := &echoServiceImpl{nowF: nowF}
+		waiter := &Server{nowF: nowF}
 
 		op, _ := waiter.Wait(context.Background(), req)
 		if op.Done {
@@ -593,7 +604,7 @@ func TestWait_success(t *testing.T) {
 		Response: &pb.WaitRequest_Success{Success: success},
 	}
 
-	waiter := &echoServiceImpl{nowF: nowF}
+	waiter := &Server{nowF: nowF}
 	op, _ := waiter.Wait(context.Background(), req)
 
 	checkName(t, req, op)
@@ -632,7 +643,7 @@ func TestWait_error(t *testing.T) {
 		Response: &pb.WaitRequest_Error{Error: expErr},
 	}
 
-	waiter := &echoServiceImpl{nowF: nowF}
+	waiter := &Server{nowF: nowF}
 	op, _ := waiter.Wait(context.Background(), req)
 
 	checkName(t, req, op)

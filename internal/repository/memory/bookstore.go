@@ -30,7 +30,7 @@ type Bookstore struct {
 }
 
 // NewBookstore is a factory function to generate a new repository
-func NewBookstore() (*Bookstore, error) {
+func NewBookstore() (bookstorepb.BookstoreServiceServer, error) {
 	m := &Bookstore{
 		Shelves: map[int64]*bookstorepb.Shelf{},
 		Books:   map[int64]map[int64]*bookstorepb.Book{},

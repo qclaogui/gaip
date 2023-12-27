@@ -28,7 +28,7 @@ type Bookstore struct {
 }
 
 // NewBookstore is a factory function to generate a new repository
-func NewBookstore(cfg Config) (*Bookstore, error) {
+func NewBookstore(cfg Config) (bookstorepb.BookstoreServiceServer, error) {
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
 	param := "parseTime=true"
