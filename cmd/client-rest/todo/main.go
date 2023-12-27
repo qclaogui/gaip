@@ -64,10 +64,8 @@ func CallHTTP(method string, endpoint string, body io.Reader) []byte {
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		log.Fatalf("failed to call Create method: %v", resp)
+		log.Fatalf("failed to call endpoint: %s resp: %v", endpoint, resp)
 	}
-
-	log.Printf("HTTP Response: Code=%d, Body=%s\n\n", resp.StatusCode, body)
 
 	respData, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -78,7 +76,8 @@ func CallHTTP(method string, endpoint string, body io.Reader) []byte {
 
 func createTodo() string {
 	reqMethod := http.MethodPost
-	reqURL := *serverAddr + "/v1/todo"
+
+	reqURL := *serverAddr + "/v1/todos"
 	reqBody := strings.NewReader(fmt.Sprintf(`{
 		"api":"v1",
 		"item": {
@@ -89,6 +88,7 @@ func createTodo() string {
 	}`, time.Now().In(time.UTC).Format(time.RFC3339Nano)))
 
 	respBytes := CallHTTP(reqMethod, reqURL, reqBody)
+	log.Printf("Create respBody=%s\n\n", respBytes)
 
 	var createResp struct {
 		API string `json:"api"`
@@ -103,7 +103,7 @@ func createTodo() string {
 
 func deleteTodo(id string) {
 	reqMethod := http.MethodDelete
-	reqURL := *serverAddr + "/v1/todo/" + id
+	reqURL := *serverAddr + "/v1/todos/" + id
 
 	respBytes := CallHTTP(reqMethod, reqURL, nil)
 	log.Printf("Delete respBody=%s\n\n", respBytes)
@@ -111,7 +111,7 @@ func deleteTodo(id string) {
 
 func listTodo() {
 	reqMethod := http.MethodGet
-	reqURL := *serverAddr + "/v1/todo/all"
+	reqURL := *serverAddr + "/v1/todos"
 
 	respBytes := CallHTTP(reqMethod, reqURL, nil)
 	log.Printf("List respBody=%s\n\n", respBytes)
@@ -119,9 +119,11 @@ func listTodo() {
 
 func getTodo(id string) *Todo {
 	reqMethod := http.MethodGet
-	reqURL := *serverAddr + "/v1/todo/" + id
+	reqURL := *serverAddr + "/v1/todos/" + id
 
 	respBytes := CallHTTP(reqMethod, reqURL, nil)
+
+	log.Printf("Get respBody=%s\n\n", respBytes)
 
 	var GetResp struct {
 		API  string `json:"api"`
@@ -130,13 +132,12 @@ func getTodo(id string) *Todo {
 	if err := json.Unmarshal(respBytes, &GetResp); err != nil {
 		log.Fatalf("failed to unmarshal JSON response of Create method: %v", err)
 	}
-
 	return GetResp.Item
 }
 
 func updateTodo(todo *Todo) {
-	reqMethod := http.MethodPut
-	reqURL := *serverAddr + "/v1/todo/" + todo.ID
+	reqMethod := http.MethodPost
+	reqURL := *serverAddr + "/v1/todos/" + todo.ID
 
 	reqBody := strings.NewReader(fmt.Sprintf(`
 	{

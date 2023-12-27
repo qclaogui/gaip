@@ -6,6 +6,18 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb";
 
+service ToDoService {
+  rpc Create(CreateRequest) returns (CreateResponse);
+
+  rpc Get(GetRequest) returns (GetResponse);
+
+  rpc Update(UpdateRequest) returns (UpdateResponse);
+
+  rpc List(ListRequest) returns (ListResponse);
+
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+}
+
 // Tasks wo have to do
 message ToDo {
   // Unique integer identifier of the todo task
@@ -93,16 +105,4 @@ message ListResponse {
 
   // List of all
   repeated ToDo items = 2;
-}
-
-service ToDoService {
-  rpc Create(CreateRequest) returns (CreateResponse);
-
-  rpc Get(GetRequest) returns (GetResponse);
-
-  rpc Update(UpdateRequest) returns (UpdateResponse);
-
-  rpc List(ListRequest) returns (ListResponse);
-
-  rpc Delete(DeleteRequest) returns (DeleteResponse);
 }

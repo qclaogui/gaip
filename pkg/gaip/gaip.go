@@ -5,9 +5,7 @@
 package gaip
 
 import (
-	"context"
 	"fmt"
-	"log/slog"
 	"net/http"
 	"os"
 	"regexp"
@@ -16,21 +14,14 @@ import (
 	"github.com/felixge/fgprof"
 	"github.com/go-kit/log/level"
 	"github.com/gorilla/mux"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
-	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/vault"
 	lg "github.com/qclaogui/gaip/tools/log"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 	"gopkg.in/yaml.v3"
-
-	// mysql driver
-	_ "github.com/go-sql-driver/mysql"
 )
 
 type Gaip struct {
@@ -40,8 +31,8 @@ type Gaip struct {
 	Registerer prometheus.Registerer
 }
 
-func (g *Gaip) RegisterAPI() {
-	g.RegisterRoute("/debug/fgprof", fgprof.Handler(), false, true, "GET")
+func (g *Gaip) RegisterFgprof() {
+	g.RegisterRoute("/debug/fgprof", fgprof.Handler(), false, "GET")
 }
 
 // Bootstrap makes a new Gaip.
@@ -58,24 +49,30 @@ func Bootstrap(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 	// Inject the registerer in the Server config too.
 	cfg.ServerCfg.Registerer = reg
 
-	app := &Gaip{
+	g := &Gaip{
 		Cfg:        cfg,
 		Registerer: reg,
 	}
 
-	app.Cfg.ServerCfg.Router = mux.NewRouter()
+	g.Cfg.ServerCfg.Router = mux.NewRouter()
 
 	// TODO(qc) config gRPC and REST
-	//app.Cfg.ServerCfg.HTTPMiddleware = nil
+	//g.Cfg.ServerCfg.HTTPMiddleware = nil
 
-	//app.Cfg.ServerCfg.GRPCMiddleware=nil
-	//app.Cfg.ServerCfg.GRPCStreamMiddleware=nil
+	//g.Cfg.ServerCfg.GRPCMiddleware=nil
+	//g.Cfg.ServerCfg.GRPCStreamMiddleware=nil
 
-	if err := app.initServices(); err != nil {
+	g.Cfg.ServerCfg.GRPCOptions = interceptors.RegisterGRPCServerOption()
+
+	if err := g.initServices(); err != nil {
 		return nil, err
 	}
 
-	return app, nil
+	// Register reflection service on gRPC server.
+	// Enable reflection to allow clients to query the server's services
+	reflection.Register(g.Server.GRPCServer)
+
+	return g, nil
 }
 
 func (g *Gaip) initServices() error {
@@ -113,40 +110,18 @@ func (g *Gaip) initServices() error {
 
 // Run gRPC server and HTTP gateway
 func (g *Gaip) Run() error {
-	ctx := context.Background()
 
 	// before starting servers, register /healthz handler.
-	g.Server.Router.Path("/healthz").Handler(g.healthzHandler())
+	//g.Server.Router.Path("/healthz").HandlerFunc(g.healthzHandler())
+	g.RegisterRoute("/healthz", g.healthzHandler(), false, http.MethodGet)
 
-	g.RegisterAPI()
+	g.RegisterFgprof()
 
 	//g.API.RegisterServiceMapHandler(http.HandlerFunc(g.servicesHandler))
 
 	// Initialize tracing and handle the tracer provider shutdown
 	stopTracing := interceptors.InitTracing()
 	defer stopTracing()
-
-	// Start the REST server in goroutine
-	//err = rest.RunRESTServer(ctx, g.Server)
-	//lg.CheckFatal("running REST server", err)
-
-	// Runs HTTP/REST gateway
-	var opts []grpc.DialOption
-	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	gwmux := runtime.NewServeMux()
-	// Register the gRPC server's handler with the Router gwmux
-	err := todopb.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, g.Server.GRPCListenAddr().String(), opts)
-	if err != nil {
-		slog.Error("failed to start Router gateway", "error", err)
-		return err
-	}
-
-	// Set up the REST server and handle requests by proxying them to the gRPC server
-	g.Server.Router.PathPrefix("/v1").Handler(gwmux)
-
-	// Register reflection service on gRPC server.
-	// Enable reflection to allow clients to query the server's services
-	reflection.Register(g.Server.GRPCServer)
 
 	return g.Server.Run()
 }
@@ -174,35 +149,32 @@ func setUpGoRuntimeMetrics(cfg Config, reg prometheus.Registerer) {
 // healthzHandler for a liveness probe.
 func (g *Gaip) healthzHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		_ = level.Info(lg.Logger).Log("msg", "[healthz] received request")
 		w.WriteHeader(http.StatusOK)
 	}
 }
 
 // RegisterRoute registers a single route enforcing HTTP methods. A single
 // route is expected to be specific about which HTTP methods are supported.
-func (g *Gaip) RegisterRoute(path string, handler http.Handler, auth, gzipEnabled bool, method string, methods ...string) {
+func (g *Gaip) RegisterRoute(path string, handler http.Handler, auth bool, method string, methods ...string) {
 	methods = append([]string{method}, methods...)
-	_ = level.Debug(lg.Logger).Log("msg", "gaip: registering route", "methods", strings.Join(methods, ","), "path", path, "auth", auth, "gzip", gzipEnabled)
-	g.newRoute(path, handler, false, auth, gzipEnabled, methods...)
+	_ = level.Debug(lg.Logger).Log("msg", "gaip: registering route", "methods", strings.Join(methods, ","), "path", path, "auth", auth)
+	g.newRoute(path, handler, false, auth, methods...)
 }
 
-func (g *Gaip) RegisterRoutesWithPrefix(path string, handler http.Handler, auth, gzipEnabled bool, method string, methods ...string) {
+func (g *Gaip) RegisterRoutesWithPrefix(path string, handler http.Handler, auth bool, method string, methods ...string) {
 	methods = append([]string{method}, methods...)
-	_ = level.Debug(lg.Logger).Log("msg", "api: registering route", "methods", strings.Join(methods, ","), "path", path, "auth", auth, "gzip", gzipEnabled)
-	g.newRoute(path, handler, true, auth, gzipEnabled, methods...)
+	_ = level.Debug(lg.Logger).Log("msg", "gaip: registering route", "methods", strings.Join(methods, ","), "path", path, "auth", auth)
+	g.newRoute(path, handler, true, auth, methods...)
 }
 
-func (g *Gaip) newRoute(path string, handler http.Handler, isPrefix, auth, gzip bool, methods ...string) {
+func (g *Gaip) newRoute(path string, handler http.Handler, isPrefix, auth bool, methods ...string) {
 	var route *mux.Route
 	//if auth {
 	//	//handler = g.AuthMiddleware.Wrap(handler)
 	//}
-	//if gzip {
-	//	//handler = gziphandler.GzipHandler(handler)
-	//}
 
 	_ = auth
-	_ = gzip
 
 	if isPrefix {
 		route = g.Server.Router.PathPrefix(path)

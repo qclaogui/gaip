@@ -7,7 +7,6 @@ package memory
 import (
 	"context"
 	"errors"
-	"log/slog"
 	"sync"
 
 	"github.com/google/uuid"
@@ -42,7 +41,6 @@ func NewTodo() (todopb.ToDoServiceServer, error) {
 }
 
 func (m *Todo) Create(_ context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
-	// request todo
 	todo := req.GetItem()
 	if todo.GetTitle() == "" && todo.GetDescription() == "" {
 		return nil, status.Error(codes.Unknown, ErrFailedToCreate.Error())
@@ -64,7 +62,7 @@ func (m *Todo) Get(_ context.Context, req *todopb.GetRequest) (*todopb.GetRespon
 
 	id, _ := uuid.Parse(req.GetId())
 
-	slog.Warn("Get todo from Todo", "req_id", req.GetId(), "id", id, "mem", m.mem)
+	//slog.Warn("Get todo from Todo", "req_id", req.GetId(), "id", id, "mem", m.mem)
 	todo, ok := m.mem[id]
 	if !ok {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())

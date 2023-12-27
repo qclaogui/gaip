@@ -224,7 +224,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--grpc-gateway_out=genproto \
 		--grpc-gateway_opt='logtostderr=true' \
 		--grpc-gateway_opt='module=github.com/qclaogui/gaip/genproto' \
-		--grpc-gateway_opt='generate_unbound_methods=true' \
+		--grpc-gateway_opt='grpc_api_configuration=proto/qclaogui/todo/v1/api_config_http.yaml' \
  		proto/qclaogui/todo/v1/*.proto
 
     # plugin protoc-gen-openapiv2
@@ -232,10 +232,11 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--plugin=protoc-gen-openapiv2=$(PROTOC_GEN_OPENAPIV2) \
  		--openapiv2_out=third_party/gen/openapiv2 \
  		--openapiv2_opt='logtostderr=true' \
- 		--openapiv2_opt='generate_unbound_methods=true' \
+ 		--openapiv2_opt='grpc_api_configuration=proto/qclaogui/todo/v1/api_config_http.yaml' \
  		proto/qclaogui/todo/v1/*.proto
 
 	@make swagger-ui
+	@make fmt
 	@make lint
 
 

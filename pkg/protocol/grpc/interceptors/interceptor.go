@@ -9,6 +9,7 @@ import "google.golang.org/grpc"
 // RegisterGRPCServerOption returns grpc.Server config option that turn on.
 func RegisterGRPCServerOption(serverOpts ...grpc.ServerOption) []grpc.ServerOption {
 	serverOpts = ServerOptionLogging(serverOpts)
+	serverOpts = ServerOptionTracing(serverOpts)
 	serverOpts = ServerOptionRecovery(serverOpts)
 
 	return serverOpts

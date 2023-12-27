@@ -1,0 +1,63 @@
+# The configuration schema is defined by service.proto file
+# https://github.com/googleapis/googleapis/blob/master/google/api/service.proto
+type: google.api.Service
+config_version: 3
+
+http:
+  rules:
+  #
+  # 'Create' can be called using the POST HTTP verb and the '/todos' URL
+  # path. The posted HTTP body is the JSON representation of the 'item' field
+  # of 'CreateRequest' protobuf message.
+  #
+  # Client example:
+  #   curl -d '{"api":"v1","item":{"title":"title","description":"desc","created_at":"2023-12-28"}}' http://DOMAIN_NAME/v1/todos
+  #
+  - selector: qclaogui.todo.v1.ToDoService.Create
+    post: /v1/todos
+    body: "*"
+
+  #
+  # 'Get' is available via the GET HTTP verb and '/todos/{item}' URL
+  # path, where {item} is the value of the 'item' field of 'GetRequest'
+  # protobuf message.
+  #
+  # Client example - returns the first item:
+  #   curl http://DOMAIN_NAME/v1/todos/1
+  #
+  - selector: qclaogui.todo.v1.ToDoService.Get
+    get: /v1/todos/{id}
+
+  #
+  # 'Update' can be called using the POST HTTP verb and the '/todos/{item}' URL
+  # path. The posted HTTP body is the JSON representation of the 'item' field
+  # of 'UpdateRequest' protobuf message.
+  #
+  # Client example:
+  #   curl -d '{"api":"v1","item":{"title":"updated title","description":"updated desc","created_at":"2023-12-28"}}' http://DOMAIN_NAME/v1/todos
+  #
+  - selector: qclaogui.todo.v1.ToDoService.Update
+    post: /v1/todos/{item.id}
+    body: "*"
+
+  #
+  # HTTP/REST/JSON clients can call the 'List' method of the ToDoService
+  # service using the GET HTTP verb and the '/todos' URL path. The response
+  # will the JSON representation of the 'ListResponse' message.
+  #
+  # Client example (Assuming your service is hosted at the given 'DOMAIN_NAME'):
+  #   curl http://DOMAIN_NAME/v1/todos
+  #
+  - selector: qclaogui.todo.v1.ToDoService.List
+    get: /v1/todos
+
+  #
+  # 'Delete' can be called using the DELETE HTTP verb and
+  # '/todos/{item}' URL path, where {item} is the value of the 'item' field
+  # of 'DeleteRequest' protobuf message.
+  #
+  # Client example - deletes the second item:
+  #   curl -X DELETE http://DOMAIN_NAME/v1/todos/2
+  #
+  - selector: qclaogui.todo.v1.ToDoService.Delete
+    delete: /v1/todos/{id}

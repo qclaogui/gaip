@@ -16,7 +16,49 @@
     "application/json"
   ],
   "paths": {
-    "/qclaogui.todo.v1.ToDoService/Create": {
+    "/v1/todos": {
+      "get": {
+        "operationId": "ToDoService_List",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "api",
+            "description": "API version",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "completed",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "ToDoService"
+        ]
+      },
       "post": {
         "operationId": "ToDoService_Create",
         "responses": {
@@ -48,40 +90,8 @@
         ]
       }
     },
-    "/qclaogui.todo.v1.ToDoService/Delete": {
-      "post": {
-        "operationId": "ToDoService_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1DeleteRequest"
-            }
-          }
-        ],
-        "tags": [
-          "ToDoService"
-        ]
-      }
-    },
-    "/qclaogui.todo.v1.ToDoService/Get": {
-      "post": {
+    "/v1/todos/{id}": {
+      "get": {
         "operationId": "ToDoService_Get",
         "responses": {
           "200": {
@@ -99,27 +109,30 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "id",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetRequest"
-            }
+            "type": "string"
+          },
+          {
+            "name": "api",
+            "description": "API version",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
           "ToDoService"
         ]
-      }
-    },
-    "/qclaogui.todo.v1.ToDoService/List": {
-      "post": {
-        "operationId": "ToDoService_List",
+      },
+      "delete": {
+        "operationId": "ToDoService_Delete",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListResponse"
+              "$ref": "#/definitions/v1DeleteResponse"
             }
           },
           "default": {
@@ -131,12 +144,17 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "id",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ListRequest"
-            }
+            "type": "string"
+          },
+          {
+            "name": "api",
+            "description": "API version",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -144,7 +162,7 @@
         ]
       }
     },
-    "/qclaogui.todo.v1.ToDoService/Update": {
+    "/v1/todos/{item.id}": {
       "post": {
         "operationId": "ToDoService_Update",
         "responses": {
@@ -163,11 +181,47 @@
         },
         "parameters": [
           {
+            "name": "item.id",
+            "description": "Unique integer identifier of the todo task",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
+              "type": "object",
+              "properties": {
+                "api": {
+                  "type": "string",
+                  "title": "API version"
+                },
+                "item": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "completed": {
+                      "type": "boolean"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "title": "Tasks wo have to do"
+                }
+              }
             }
           }
         ],
@@ -230,18 +284,6 @@
         }
       }
     },
-    "v1DeleteRequest": {
-      "type": "object",
-      "properties": {
-        "api": {
-          "type": "string",
-          "title": "API version"
-        },
-        "id": {
-          "type": "string"
-        }
-      }
-    },
     "v1DeleteResponse": {
       "type": "object",
       "properties": {
@@ -255,18 +297,6 @@
         }
       }
     },
-    "v1GetRequest": {
-      "type": "object",
-      "properties": {
-        "api": {
-          "type": "string",
-          "title": "API version"
-        },
-        "id": {
-          "type": "string"
-        }
-      }
-    },
     "v1GetResponse": {
       "type": "object",
       "properties": {
@@ -276,22 +306,6 @@
         },
         "item": {
           "$ref": "#/definitions/v1ToDo"
-        }
-      }
-    },
-    "v1ListRequest": {
-      "type": "object",
-      "properties": {
-        "api": {
-          "type": "string",
-          "title": "API version"
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "completed": {
-          "type": "boolean"
         }
       }
     },
@@ -338,18 +352,6 @@
         }
       },
       "title": "Tasks wo have to do"
-    },
-    "v1UpdateRequest": {
-      "type": "object",
-      "properties": {
-        "api": {
-          "type": "string",
-          "title": "API version"
-        },
-        "item": {
-          "$ref": "#/definitions/v1ToDo"
-        }
-      }
     },
     "v1UpdateResponse": {
       "type": "object",

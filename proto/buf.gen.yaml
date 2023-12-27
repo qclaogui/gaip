@@ -44,7 +44,7 @@ plugins:
     out: ../genproto
     opt:
     - module=github.com/qclaogui/gaip/genproto
-    - generate_unbound_methods=true
+    - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
     path: /Users/Shared/code/golang/bin/protoc-gen-grpc-gateway-v2.18.1
     protoc_path: /Users/Shared/code/golang/bin/protoc-25.1.0
 
@@ -52,6 +52,6 @@ plugins:
     out: ../third_party/gen/openapiv2
     opt:
     - logtostderr=true
-    - generate_unbound_methods=true
+    - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
     path: /Users/Shared/code/golang/bin/protoc-gen-openapiv2-v2.18.1
     protoc_path: /Users/Shared/code/golang/bin/protoc-25.1.0
