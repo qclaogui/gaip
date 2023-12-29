@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/gorilla/mux"
+	lg "github.com/qclaogui/gaip/tools/log"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,6 +21,11 @@ func TestName(t *testing.T) {
 
 	go func() { _ = srv.Run() }()
 	t.Cleanup(srv.Stop)
+
+	router := mux.NewRouter()
+	metrics := NewServerMetrics(serverCfg)
+	_, _, _ = newEndpointREST(serverCfg, router, metrics, lg.Logger)
+	_, _, _ = newEndpointGRPC(serverCfg, router, metrics, lg.Logger)
 
 }
 

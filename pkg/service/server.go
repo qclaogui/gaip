@@ -26,6 +26,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/qclaogui/gaip/third_party"
+	"github.com/soheilhy/cmux"
 	"golang.org/x/net/netutil"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -36,8 +37,6 @@ const (
 	// DefaultNetwork  the host resolves to multiple IP addresses,
 	// Dial will try each IP address in order until one succeeds
 	DefaultNetwork = "tcp"
-	// NetworkTCPV4 for IPV4 only
-	NetworkTCPV4 = "tcp4"
 )
 
 // SignalHandler used by Server.
@@ -59,6 +58,13 @@ type Server struct {
 
 	grpcListener net.Listener
 	GRPCServer   *grpc.Server
+
+	// These fields are used to support grpc over the http server
+	//  if RouteHTTPToGRPC is set. the fields are kept here
+	//  so they can be initialized in NewServer() and started in Run()
+	cmu                cmux.CMux
+	grpcOnHTTPListener net.Listener
+	GRPCOnHTTPServer   *grpc.Server
 
 	Router     *mux.Router
 	Log        log.Logger
@@ -84,48 +90,7 @@ func newServer(cfg Config, metrics *Metrics) (*Server, error) {
 		gatherer = prometheus.DefaultGatherer
 	}
 
-	network := cfg.HTTPListenNetwork
-	if network == "" {
-		network = DefaultNetwork
-	}
-
-	// Setup listeners first, so we can fail early if the port is in use.
-	httpListener, err := net.Listen(network, net.JoinHostPort(cfg.HTTPListenAddress, strconv.Itoa(cfg.HTTPListenPort)))
-	if err != nil {
-		return nil, err
-	}
-
-	httpListener = middleware.CountingListener(httpListener, metrics.TCPConnections.WithLabelValues("http"))
-
-	if cfg.HTTPLogClosedConnectionsWithoutResponse {
-		httpListener = middleware.NewZeroResponseListener(httpListener, level.Warn(logger))
-	}
-
-	metrics.TCPConnectionsLimit.WithLabelValues("http").Set(float64(cfg.HTTPConnLimit))
-	if cfg.HTTPConnLimit > 0 {
-		httpListener = netutil.LimitListener(httpListener, cfg.HTTPConnLimit)
-	}
-
-	network = cfg.GRPCListenNetwork
-	if network == "" {
-		network = DefaultNetwork
-	}
-
-	grpcListener, err := net.Listen(network, net.JoinHostPort(cfg.GRPCListenAddress, strconv.Itoa(cfg.GRPCListenPort)))
-	if err != nil {
-		return nil, err
-	}
-
-	grpcListener = middleware.CountingListener(grpcListener, metrics.TCPConnections.WithLabelValues("grpc"))
-
-	metrics.TCPConnectionsLimit.WithLabelValues("grpc").Set(float64(cfg.GRPCConnLimit))
-	if cfg.GRPCConnLimit > 0 {
-		grpcListener = netutil.LimitListener(grpcListener, cfg.GRPCConnLimit)
-	}
-
-	_ = level.Info(logger).Log("msg", "server listening on addresses", "http", httpListener.Addr(), "grpc", grpcListener.Addr())
-
-	// Setup HTTP server
+	// Setup Router
 	var router *mux.Router
 	if cfg.Router != nil {
 		router = cfg.Router
@@ -141,9 +106,86 @@ func newServer(cfg Config, metrics *Metrics) (*Server, error) {
 		RegisterOpenAPI(router)
 	}
 
+	// Setup HTTP Server
+	httpListener, httpServer, err := newEndpointREST(cfg, router, metrics, logger)
+	if err != nil {
+		return nil, err
+	}
+
+	// Setup gRPC Server
+	grpcListener, grpcOptions, err := newEndpointGRPC(cfg, router, metrics, logger)
+	if err != nil {
+		return nil, err
+	}
+
+	grpcServer := grpc.NewServer(grpcOptions...)
+	grpcOnHTTPServer := grpc.NewServer(grpcOptions...)
+
+	var grpcOnHTTPListener net.Listener
+	var cmu cmux.CMux
+	if cfg.RouteHTTPToGRPC {
+		cmu = cmux.New(httpListener)
+
+		httpListener = cmu.Match(cmux.HTTP1Fast("PATCH"))
+		//grpcOnHTTPListener = cmu.Match(cmux.HTTP2())
+		grpcOnHTTPListener = cmu.Match(cmux.Any())
+	}
+
+	_ = level.Info(logger).Log("msg", "server listening on addresses", "http", httpListener.Addr(), "grpc", grpcListener.Addr())
+
+	handler := cfg.SignalHandler
+	if handler == nil {
+		handler = signals.NewHandler(logger)
+	}
+
+	return &Server{
+		cfg:     cfg,
+		handler: handler,
+
+		httpListener: httpListener,
+		HTTPServer:   httpServer,
+
+		grpcListener: grpcListener,
+		GRPCServer:   grpcServer,
+
+		cmu:                cmu,
+		grpcOnHTTPListener: grpcOnHTTPListener,
+		GRPCOnHTTPServer:   grpcOnHTTPServer,
+
+		Router:     router,
+		Log:        logger,
+		Registerer: cfg.registererOrDefault(),
+		Gatherer:   gatherer,
+	}, nil
+}
+
+// newEndpointREST HTTP REST
+func newEndpointREST(cfg Config, router *mux.Router, metrics *Metrics, logger log.Logger) (net.Listener, *http.Server, error) {
+	network := cfg.HTTPListenNetwork
+	if network == "" {
+		network = DefaultNetwork
+	}
+
+	// Setup listeners first, so we can fail early if the port is in use.
+	httpListener, err := net.Listen(network, net.JoinHostPort(cfg.HTTPListenAddress, strconv.Itoa(cfg.HTTPListenPort)))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	httpListener = middleware.CountingListener(httpListener, metrics.TCPConnections.WithLabelValues("http"))
+
+	if cfg.HTTPLogClosedConnectionsWithoutResponse {
+		httpListener = middleware.NewZeroResponseListener(httpListener, level.Warn(logger))
+	}
+
+	metrics.TCPConnectionsLimit.WithLabelValues("http").Set(float64(cfg.HTTPConnLimit))
+	if cfg.HTTPConnLimit > 0 {
+		httpListener = netutil.LimitListener(httpListener, cfg.HTTPConnLimit)
+	}
+
 	sourceIPs, err := middleware.NewSourceIPs(cfg.LogSourceIPsHeader, cfg.LogSourceIPsRegex)
 	if err != nil {
-		return nil, fmt.Errorf("error setting up source IP extraction: %v", err)
+		return nil, nil, fmt.Errorf("error setting up source IP extraction: %v", err)
 	}
 
 	logSourceIPs := sourceIPs
@@ -186,7 +228,27 @@ func newServer(cfg Config, metrics *Metrics) (*Server, error) {
 		Handler:           middleware.Merge(httpMiddleware...).Wrap(router),
 	}
 
-	// Setup gRPC server
+	return httpListener, httpServer, nil
+}
+
+// newEndpointGRPC grpc
+func newEndpointGRPC(cfg Config, router *mux.Router, metrics *Metrics, logger log.Logger) (net.Listener, []grpc.ServerOption, error) {
+	network := cfg.GRPCListenNetwork
+	if network == "" {
+		network = DefaultNetwork
+	}
+
+	grpcListener, err := net.Listen(network, net.JoinHostPort(cfg.GRPCListenAddress, strconv.Itoa(cfg.GRPCListenPort)))
+	if err != nil {
+		return nil, nil, err
+	}
+	grpcListener = middleware.CountingListener(grpcListener, metrics.TCPConnections.WithLabelValues("grpc"))
+
+	metrics.TCPConnectionsLimit.WithLabelValues("grpc").Set(float64(cfg.GRPCConnLimit))
+	if cfg.GRPCConnLimit > 0 {
+		grpcListener = netutil.LimitListener(grpcListener, cfg.GRPCConnLimit)
+	}
+
 	grpcServerLog := middleware.GRPCServerLog{
 		Log:                      logger,
 		WithRequest:              !cfg.ExcludeRequestInLog,
@@ -246,26 +308,8 @@ func newServer(cfg Config, metrics *Metrics) (*Server, error) {
 	)
 
 	grpcOptions = append(grpcOptions, cfg.GRPCOptions...)
-
-	grpcServer := grpc.NewServer(grpcOptions...)
-
-	handler := cfg.SignalHandler
-	if handler == nil {
-		handler = signals.NewHandler(logger)
-	}
-
-	return &Server{
-		cfg:          cfg,
-		handler:      handler,
-		httpListener: httpListener,
-		HTTPServer:   httpServer,
-		grpcListener: grpcListener,
-		GRPCServer:   grpcServer,
-		Router:       router,
-		Log:          logger,
-		Registerer:   cfg.registererOrDefault(),
-		Gatherer:     gatherer,
-	}, nil
+	//grpcServer := grpc.NewServer(grpcOptions...)
+	return grpcListener, grpcOptions, nil
 }
 
 // RegisterInstrumentationWithGatherer on the given router.
@@ -320,13 +364,28 @@ func (s *Server) Run() error {
 
 	// Setup HTTP server
 	go func() {
-		handleHTTPError(s.HTTPServer.Serve(s.httpListener), errChan)
+		err := s.HTTPServer.Serve(s.httpListener)
+		handleHTTPError(err, errChan)
 	}()
 
 	// Setup gRPC server
 	go func() {
-		handleGRPCError(s.GRPCServer.Serve(s.grpcListener), errChan)
+		err := s.GRPCServer.Serve(s.grpcListener)
+		handleGRPCError(err, errChan)
 	}()
+
+	// cmu will only be set if cmu RouteHTTPToGRPC is set
+	if s.cmu != nil {
+		go func() {
+			err := s.cmu.Serve()
+			handleGRPCError(err, errChan)
+		}()
+
+		go func() {
+			err := s.GRPCOnHTTPServer.Serve(s.grpcOnHTTPListener)
+			handleGRPCError(err, errChan)
+		}()
+	}
 
 	return <-errChan
 }

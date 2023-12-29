@@ -61,6 +61,7 @@ type Config struct {
 	GRPCMiddleware       []grpc.UnaryServerInterceptor  `yaml:"-"`
 	GRPCStreamMiddleware []grpc.StreamServerInterceptor `yaml:"-"`
 
+	RouteHTTPToGRPC         bool        `yaml:"-"`
 	Router                  *mux.Router `yaml:"-"`
 	RegisterInstrumentation bool        `yaml:"register_instrumentation"`
 	RegisterOpenAPI         bool        `yaml:"register_open_api"`
@@ -120,6 +121,7 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	fs.IntVar(&cfg.GRPCServerNumWorkers, "server.grpc.num-workers", 0, "If non-zero, configures the amount of GRPC server workers used to serve the requests.")
 	fs.BoolVar(&cfg.ReportGRPCCodesInInstrumentationLabel, "server.report-grpc-codes-in-instrumentation-label-enabled", false, "If set to true, gRPC statuses will be reported in instrumentation labels with their string representations. Otherwise, they will be reported as \"error\".")
 
+	//fs.BoolVar(&cfg.RouteHTTPToGRPC, "server.route-http-to-grpc", true, "Support grpc over the http server")
 	fs.BoolVar(&cfg.RegisterInstrumentation, "server.register-instrumentation", true, "Register the intrumentation handlers (/metrics etc).")
 	fs.BoolVar(&cfg.RegisterOpenAPI, "server.register-open-api", true, "Register and handlers OpenAPI UI (/openapi).")
 

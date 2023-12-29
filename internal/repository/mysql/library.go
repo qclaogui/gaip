@@ -12,6 +12,9 @@ import (
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"github.com/qclaogui/gaip/internal/ent"
 	"google.golang.org/protobuf/types/known/emptypb"
+
+	// mysql driver for Repository
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Library fulfills the Library Repository interface

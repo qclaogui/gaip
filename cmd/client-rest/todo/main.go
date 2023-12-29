@@ -11,6 +11,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/http/httputil"
 	"strings"
 	"time"
 )
@@ -64,7 +65,8 @@ func CallHTTP(method string, endpoint string, body io.Reader) []byte {
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		log.Fatalf("failed to call endpoint: %s resp: %v", endpoint, resp)
+		dump, _ := httputil.DumpResponse(resp, true)
+		log.Fatalf("failed to call endpoint: %s resp dump: %q", endpoint, dump)
 	}
 
 	respData, err := io.ReadAll(resp.Body)

@@ -18,7 +18,8 @@ import (
 )
 
 var restClientOpts = []option.ClientOption{
-	option.WithEndpoint("http://localhost:9095"),
+	//option.WithEndpoint("http://localhost:9095"),
+	option.WithEndpoint("http://localhost:8080"),
 	option.WithoutAuthentication(),
 }
 
@@ -30,8 +31,7 @@ func TestMain(m *testing.M) {
 		log.Fatal(err)
 	}
 	defer func() { _ = conn.Close() }()
-	//defer conn.Close()
-	//
+
 	opt := option.WithGRPCConn(conn)
 	ctx := context.Background()
 

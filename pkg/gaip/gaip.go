@@ -16,7 +16,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
-	"github.com/qclaogui/gaip/pkg/protocol/grpc/interceptors"
 	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/vault"
 	lg "github.com/qclaogui/gaip/tools/log"
@@ -62,7 +61,7 @@ func Bootstrap(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 	//g.Cfg.ServerCfg.GRPCMiddleware=nil
 	//g.Cfg.ServerCfg.GRPCStreamMiddleware=nil
 
-	g.Cfg.ServerCfg.GRPCOptions = interceptors.RegisterGRPCServerOption()
+	//g.Cfg.ServerCfg.GRPCOptions = interceptors.RegisterGRPCServerOption()
 
 	if err := g.initServices(); err != nil {
 		return nil, err
@@ -119,9 +118,9 @@ func (g *Gaip) Run() error {
 
 	//g.API.RegisterServiceMapHandler(http.HandlerFunc(g.servicesHandler))
 
-	// Initialize tracing and handle the tracer provider shutdown
-	stopTracing := interceptors.InitTracing()
-	defer stopTracing()
+	//// Initialize tracing and handle the tracer provider shutdown
+	//stopTracing := interceptors.InitTracing()
+	//defer stopTracing()
 
 	return g.Server.Run()
 }
