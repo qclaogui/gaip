@@ -192,36 +192,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "api": {
-                  "type": "string",
-                  "title": "API version"
-                },
-                "item": {
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "completed": {
-                      "type": "boolean"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  },
-                  "title": "Tasks wo have to do"
-                }
-              }
+              "$ref": "#/definitions/ToDoServiceUpdateBody"
             }
           }
         ],
@@ -232,6 +203,38 @@
     }
   },
   "definitions": {
+    "ToDoServiceUpdateBody": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API version"
+        },
+        "item": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "completed": {
+              "type": "boolean"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "title": "Tasks wo have to do"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {

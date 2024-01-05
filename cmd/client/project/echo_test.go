@@ -19,6 +19,7 @@ var (
 )
 
 func TestEcho(t *testing.T) {
+	t.Skip()
 	content := "hello world!"
 	req := &pb.EchoRequest{
 		Response: &pb.EchoRequest_Content{

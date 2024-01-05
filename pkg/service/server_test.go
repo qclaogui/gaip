@@ -9,24 +9,20 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/gorilla/mux"
-	lg "github.com/qclaogui/gaip/tools/log"
 	"github.com/stretchr/testify/require"
 )
 
 func TestName(t *testing.T) {
 	serverCfg := getServerConfig(t)
-	srv, err := NewServer(serverCfg)
+	metrics := NewServerMetrics(serverCfg)
+	srv, err := newServer(serverCfg, metrics)
 	require.NoError(t, err)
 
 	go func() { _ = srv.Run() }()
 	t.Cleanup(srv.Stop)
 
-	router := mux.NewRouter()
-	metrics := NewServerMetrics(serverCfg)
-	_, _, _ = newEndpointREST(serverCfg, router, metrics, lg.Logger)
-	_, _, _ = newEndpointGRPC(serverCfg, router, metrics, lg.Logger)
-
+	_, _, _ = newEndpointREST(serverCfg, srv.Router, metrics, srv.Log)
+	_, _, _ = newEndpointGRPC(serverCfg, srv.Router, metrics, srv.Log)
 }
 
 // Generates server config, with gRPC listening on random port.
