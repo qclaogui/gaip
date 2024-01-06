@@ -61,7 +61,6 @@ type Config struct {
 	GRPCMiddleware       []grpc.UnaryServerInterceptor  `yaml:"-"`
 	GRPCStreamMiddleware []grpc.StreamServerInterceptor `yaml:"-"`
 
-	RouteHTTPToGRPC         bool        `yaml:"-"`
 	Router                  *mux.Router `yaml:"-"`
 	RegisterInstrumentation bool        `yaml:"register_instrumentation"`
 	RegisterOpenAPI         bool        `yaml:"register_open_api"`

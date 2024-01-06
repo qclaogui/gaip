@@ -26,7 +26,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/qclaogui/gaip/third_party"
-	"github.com/soheilhy/cmux"
 	"golang.org/x/net/netutil"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -58,13 +57,6 @@ type Server struct {
 
 	grpcListener net.Listener
 	GRPCServer   *grpc.Server
-
-	// These fields are used to support grpc over the http server
-	//  if RouteHTTPToGRPC is set. the fields are kept here
-	//  so they can be initialized in NewServer() and started in Run()
-	cmu                cmux.CMux
-	grpcOnHTTPListener net.Listener
-	GRPCOnHTTPServer   *grpc.Server
 
 	Router     *mux.Router
 	Log        log.Logger
@@ -113,22 +105,9 @@ func newServer(cfg Config, metrics *Metrics) (*Server, error) {
 	}
 
 	// Setup gRPC Server
-	grpcListener, grpcOptions, err := newEndpointGRPC(cfg, router, metrics, logger)
+	grpcListener, grpcServer, err := newEndpointGRPC(cfg, router, metrics, logger)
 	if err != nil {
 		return nil, err
-	}
-
-	grpcServer := grpc.NewServer(grpcOptions...)
-	grpcOnHTTPServer := grpc.NewServer(grpcOptions...)
-
-	var grpcOnHTTPListener net.Listener
-	var cmu cmux.CMux
-	if cfg.RouteHTTPToGRPC {
-		cmu = cmux.New(httpListener)
-
-		httpListener = cmu.Match(cmux.HTTP1Fast("PATCH"))
-		//grpcOnHTTPListener = cmu.Match(cmux.HTTP2())
-		grpcOnHTTPListener = cmu.Match(cmux.Any())
 	}
 
 	_ = level.Info(logger).Log("msg", "server listening on addresses", "http", httpListener.Addr(), "grpc", grpcListener.Addr())
@@ -147,10 +126,6 @@ func newServer(cfg Config, metrics *Metrics) (*Server, error) {
 
 		grpcListener: grpcListener,
 		GRPCServer:   grpcServer,
-
-		cmu:                cmu,
-		grpcOnHTTPListener: grpcOnHTTPListener,
-		GRPCOnHTTPServer:   grpcOnHTTPServer,
 
 		Router:     router,
 		Log:        logger,
@@ -232,7 +207,7 @@ func newEndpointREST(cfg Config, router *mux.Router, metrics *Metrics, logger lo
 }
 
 // newEndpointGRPC grpc
-func newEndpointGRPC(cfg Config, router *mux.Router, metrics *Metrics, logger log.Logger) (net.Listener, []grpc.ServerOption, error) {
+func newEndpointGRPC(cfg Config, router *mux.Router, metrics *Metrics, logger log.Logger) (net.Listener, *grpc.Server, error) {
 	network := cfg.GRPCListenNetwork
 	if network == "" {
 		network = DefaultNetwork
@@ -308,8 +283,9 @@ func newEndpointGRPC(cfg Config, router *mux.Router, metrics *Metrics, logger lo
 	)
 
 	grpcOptions = append(grpcOptions, cfg.GRPCOptions...)
-	//grpcServer := grpc.NewServer(grpcOptions...)
-	return grpcListener, grpcOptions, nil
+	grpcServer := grpc.NewServer(grpcOptions...)
+
+	return grpcListener, grpcServer, nil
 }
 
 // RegisterInstrumentationWithGatherer on the given router.
@@ -362,30 +338,17 @@ func (s *Server) Run() error {
 		}
 	}()
 
-	// Setup HTTP server
-	go func() {
-		err := s.HTTPServer.Serve(s.httpListener)
-		handleHTTPError(err, errChan)
-	}()
-
 	// Setup gRPC server
 	go func() {
 		err := s.GRPCServer.Serve(s.grpcListener)
 		handleGRPCError(err, errChan)
 	}()
 
-	// cmu will only be set if cmu RouteHTTPToGRPC is set
-	if s.cmu != nil {
-		go func() {
-			err := s.cmu.Serve()
-			handleGRPCError(err, errChan)
-		}()
-
-		go func() {
-			err := s.GRPCOnHTTPServer.Serve(s.grpcOnHTTPListener)
-			handleGRPCError(err, errChan)
-		}()
-	}
+	// Setup HTTP server
+	go func() {
+		err := s.HTTPServer.Serve(s.httpListener)
+		handleHTTPError(err, errChan)
+	}()
 
 	return <-errChan
 }

@@ -5,16 +5,9 @@
 package gaip
 
 import (
-	"bytes"
 	"context"
-	"errors"
-	"fmt"
-	"io"
 	"net/http"
 
-	"github.com/go-kit/log/level"
-	"github.com/googleapis/gapic-showcase/util/genrest/resttools"
-	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
@@ -43,6 +36,7 @@ func (g *Gaip) initBookstore() error {
 	if err != nil {
 		return err
 	}
+
 	g.Cfg.BookstoreCfg.Repo = repo
 
 	srv, err := bookstore.NewServer(g.Cfg.BookstoreCfg)
@@ -111,81 +105,8 @@ func (g *Gaip) initProject() error {
 	projectpb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
 
 	// Register routes
-	g.RegisterRoute("/v1/echo:echo", g.HandleEcho(srv), false, http.MethodPost)
+	g.RegisterRoute("/v1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
 	return nil
-}
-
-// HandleEcho translates REST requests/responses on the wire to internal proto messages for Echo
-//
-//	HTTP binding pattern: POST "/v1/echo:echo"
-func (g *Gaip) HandleEcho(srv *project.Server) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		_ = level.Info(g.Server.Log).Log("msg", "[HandleEcho] received request")
-
-		urlPathParams := mux.Vars(r)
-		numURLPathParams := len(urlPathParams)
-		_ = level.Info(g.Server.Log).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
-
-		if numURLPathParams != 0 {
-			return
-		}
-
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
-		if err != nil {
-			return
-		}
-
-		request := &projectpb.EchoRequest{}
-		// Intentional: Field values in the URL path override those set in the body.
-		var jsonReader bytes.Buffer
-		bodyReader := io.TeeReader(r.Body, &jsonReader)
-		rBytes := make([]byte, r.ContentLength)
-		_, err = bodyReader.Read(rBytes)
-		if err != nil && !errors.Is(err, io.EOF) {
-			_ = level.Error(g.Server.Log).Log("msg", "error reading body content", "error", err)
-			return
-		}
-
-		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
-			_ = level.Error(g.Server.Log).Log("msg", "error reading body params", "error", err)
-			return
-		}
-
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
-			_ = level.Error(g.Server.Log).Log("msg", "REST request failed format check", "error", err)
-			return
-		}
-
-		if len(queryParams) > 0 {
-			_ = level.Error(g.Server.Log).Log("msg", "encountered unexpected query params", "params", queryParams)
-			return
-		}
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
-			_ = level.Error(g.Server.Log).Log("msg", "error reading URL path params", "error", err)
-			return
-		}
-
-		marshaler := resttools.ToJSON()
-		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
-		requestJSON, _ := marshaler.Marshal(request)
-		_ = level.Info(g.Server.Log).Log("msg", fmt.Sprintf("request: %s", requestJSON))
-
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1/echo:echo")
-
-		response, err := srv.Echo(ctx, request)
-		if err != nil {
-			//backend.ReportGRPCError(w, err)
-			return
-		}
-
-		json, err := marshaler.Marshal(response)
-		if err != nil {
-			_ = level.Info(g.Server.Log).Log("msg", "error json-encoding response", "error", err)
-			return
-		}
-
-		_, _ = w.Write(json)
-	}
 }
 
 func (g *Gaip) initRouteGuide() error {
@@ -217,14 +138,14 @@ func (g *Gaip) initTodo() error {
 		return nil
 	}
 
+	g.Cfg.TodoCfg.Registerer = g.Registerer
+
 	repo, err := repository.NewTodo(g.Cfg.RepoCfg)
 	if err != nil {
 		return err
 	}
 
-	// Update the config.
 	g.Cfg.TodoCfg.Repo = repo
-	g.Cfg.TodoCfg.Registerer = g.Registerer
 
 	srv, err := todo.NewServer(g.Cfg.TodoCfg)
 	if err != nil {
@@ -239,12 +160,15 @@ func (g *Gaip) initTodo() error {
 	//opts = interceptors.RegisterGRPCDailOption()
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
-	gwmux := runtime.NewServeMux()
+	ctx := context.Background()
 
 	// Register the gRPC server's handler with the Router gwmux
-	ctx := context.Background()
-	//err = todopb.RegisterToDoServiceHandlerServer(ctx, gwmux, srv)
-	err = todopb.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, g.Server.GRPCListenAddr().String(), opts)
+	gwmux := runtime.NewServeMux()
+	err = todopb.RegisterToDoServiceHandlerServer(ctx, gwmux, srv)
+
+	_ = opts
+	// Note: Make sure the gRPC server is running properly and accessible
+	//err = todopb.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, g.Server.GRPCListenAddr().String(), opts)
 	if err != nil {
 		return err
 	}
