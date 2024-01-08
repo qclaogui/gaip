@@ -16,6 +16,7 @@ import (
 	"github.com/googleapis/gapic-showcase/util/genrest/resttools"
 	"github.com/gorilla/mux"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/pkg/protocol/rest"
 )
 
 // HandleEcho translates REST requests/responses on the wire to internal proto messages for Echo
@@ -28,11 +29,13 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
 
 		if numURLPathParams != 0 {
+			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
 			return
 		}
 
 		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
 		if err != nil {
+			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
 		}
 
@@ -41,28 +44,27 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
 		rBytes := make([]byte, r.ContentLength)
-		_, err = bodyReader.Read(rBytes)
-		if err != nil && !errors.Is(err, io.EOF) {
-			_ = level.Error(srv.logger).Log("msg", "error reading body content", "error", err)
+		if _, err = bodyReader.Read(rBytes); err != nil && !errors.Is(err, io.EOF) {
+			rest.Error(w, http.StatusBadRequest, "error reading body content: %s", err)
 			return
 		}
 
 		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
-			_ = level.Error(srv.logger).Log("msg", "error reading body params", "error", err)
+			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
 		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
-			_ = level.Error(srv.logger).Log("msg", "REST request failed format check", "error", err)
+			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
 
 		if len(queryParams) > 0 {
-			_ = level.Error(srv.logger).Log("msg", "encountered unexpected query params", "params", queryParams)
+			rest.Error(w, http.StatusBadRequest, "encountered unexpected query params: %v", queryParams)
 			return
 		}
 		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
-			_ = level.Error(srv.logger).Log("msg", "error reading URL path params", "error", err)
+			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
@@ -72,20 +74,18 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
 		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1/echo:echo")
-
 		response, err := srv.Echo(ctx, request)
 		if err != nil {
-			//backend.ReportGRPCError(w, err)
+			rest.ReportGRPCError(w, err)
 			return
 		}
 
 		json, err := marshaler.Marshal(response)
 		if err != nil {
-			_ = level.Info(srv.logger).Log("msg", "error json-encoding response", "error", err)
+			rest.Error(w, http.StatusInternalServerError, "error json-encoding response: %s", err.Error())
 			return
 		}
 
 		_, _ = w.Write(json)
-
 	}
 }
