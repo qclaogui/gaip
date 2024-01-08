@@ -16,6 +16,7 @@ import (
 
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	errdetails "google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -38,6 +39,59 @@ func (srv *Server) Echo(ctx context.Context, req *pb.EchoRequest) (*pb.EchoRespo
 	echoTrailers(ctx)
 
 	return &pb.EchoResponse{Content: req.GetContent(), Severity: req.GetSeverity()}, nil
+}
+
+// EchoErrorDetails This method returns error details in a repeated "google.protobuf.Any"
+// field. This method showcases handling errors thus encoded, particularly
+// over REST transport. Note that GAPICs only allow the type
+// "google.protobuf.Any" for field paths ending in "error.details", and, at
+// run-time, the actual types for these fields must be one of the types in
+// google/rpc/error_details.proto.
+func (srv *Server) EchoErrorDetails(ctx context.Context, req *pb.EchoErrorDetailsRequest) (*pb.EchoErrorDetailsResponse, error) {
+	var singleDetailError *pb.EchoErrorDetailsResponse_SingleDetail
+	singleDetailText := req.GetSingleDetailText()
+	if len(singleDetailText) > 0 {
+		singleErrorInfo := &errdetails.ErrorInfo{Reason: singleDetailText}
+		singleMarshalledError, err := anypb.New(singleErrorInfo)
+		if err != nil {
+			return nil, fmt.Errorf("failure with single error detail in EchoErrorDetails: %w", err)
+		}
+
+		singleDetailError = &pb.EchoErrorDetailsResponse_SingleDetail{
+			Error: &pb.ErrorWithSingleDetail{Details: singleMarshalledError}}
+	}
+
+	var multipleDetailsError *pb.EchoErrorDetailsResponse_MultipleDetails
+	multipleDetailText := req.GetMultiDetailText()
+
+	if len(multipleDetailText) > 0 {
+		var details []*anypb.Any
+		for idx, text := range multipleDetailText {
+			errorInfo := &errdetails.ErrorInfo{
+				Reason: text,
+			}
+
+			marshalledError, err := anypb.New(errorInfo)
+			if err != nil {
+				return nil, fmt.Errorf("failure in EchoErrorDetails[%d]: %w", idx, err)
+			}
+
+			details = append(details, marshalledError)
+		}
+
+		multipleDetailsError = &pb.EchoErrorDetailsResponse_MultipleDetails{
+			Error: &pb.ErrorWithMultipleDetails{Details: details},
+		}
+
+	}
+
+	echoHeaders(ctx)
+	echoTrailers(ctx)
+	response := &pb.EchoErrorDetailsResponse{
+		SingleDetail:    singleDetailError,
+		MultipleDetails: multipleDetailsError,
+	}
+	return response, nil
 }
 
 // Expand This method splits the given content into words and will pass each word back

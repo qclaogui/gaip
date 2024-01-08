@@ -19,7 +19,7 @@ import (
 var contentType = "application/json"
 
 var (
-	serverAddr = flag.String("addr", "http://localhost:8080", "HTTP gateway url, e.g. http://localhost:8080")
+	serverAddr = flag.String("addr", "http://localhost:7469", "HTTP gateway url, e.g. http://localhost:8080")
 )
 
 type Todo struct {

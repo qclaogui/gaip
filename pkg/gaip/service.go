@@ -106,6 +106,7 @@ func (g *Gaip) initProject() error {
 
 	// Register routes
 	g.RegisterRoute("/v1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
+	g.RegisterRoute("/v1/echo:error-details", srv.HandleEchoErrorDetails(), false, http.MethodPost)
 	return nil
 }
 

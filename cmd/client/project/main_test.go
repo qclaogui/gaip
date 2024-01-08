@@ -19,7 +19,7 @@ import (
 
 var restClientOpts = []option.ClientOption{
 	//option.WithEndpoint("http://localhost:9095"),
-	option.WithEndpoint("http://localhost:8080"),
+	option.WithEndpoint("http://localhost:7469"),
 	option.WithoutAuthentication(),
 }
 

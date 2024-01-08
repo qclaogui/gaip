@@ -3,6 +3,7 @@ syntax = "proto3";
 package qclaogui.project.v1;
 
 import "google/api/field_behavior.proto";
+import "google/api/field_info.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
@@ -40,6 +41,8 @@ message EchoRequest {
 
   // Optional. This field can be set to test the routing annotation on the Echo method.
   string other_header = 5;
+
+  string request_id = 7 [(google.api.field_info).format = UUID4];
 }
 
 // The response message for the Echo methods.
