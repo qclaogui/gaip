@@ -8,6 +8,7 @@ import (
 	"flag"
 	"time"
 
+	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
@@ -40,6 +41,7 @@ type Server struct {
 	projectpb.UnimplementedProjectServiceServer
 	projectpb.UnimplementedIdentityServiceServer
 	projectpb.UnimplementedEchoServiceServer
+	longrunningpb.UnimplementedOperationsServer
 
 	Cfg        Config
 	logger     log.Logger

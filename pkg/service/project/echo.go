@@ -260,6 +260,26 @@ func (srv *Server) Wait(ctx context.Context, req *pb.WaitRequest) (*longrunningp
 
 }
 
+func (srv *Server) handleWaitOperation(ctx context.Context, req *longrunningpb.GetOperationRequest) (*longrunningpb.Operation, error) {
+	prefix := "operations/qclaogui.project.v1.EchoService/Wait/"
+	if !strings.HasPrefix(req.Name, prefix) {
+		return nil, nil
+	}
+
+	waitReq := &pb.WaitRequest{}
+	encodedBytes := strings.TrimPrefix(req.Name, prefix)
+	waitReqBytes, err := base64.StdEncoding.DecodeString(encodedBytes)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "Operation %q not found.", req.Name)
+	}
+
+	if err = proto.Unmarshal(waitReqBytes, waitReq); err != nil {
+		return nil, status.Errorf(codes.NotFound, "Operation %q not found.", req.Name)
+	}
+
+	return srv.Wait(ctx, waitReq)
+}
+
 // echo any provided headers in the metadata
 func echoHeaders(ctx context.Context) {
 	md, ok := metadata.FromIncomingContext(ctx)

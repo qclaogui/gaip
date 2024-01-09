@@ -8,6 +8,7 @@ import (
 	"context"
 	"net/http"
 
+	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
@@ -103,6 +104,7 @@ func (g *Gaip) initProject() error {
 	projectpb.RegisterProjectServiceServer(g.Server.GRPCServer, srv)
 	projectpb.RegisterIdentityServiceServer(g.Server.GRPCServer, srv)
 	projectpb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
+	longrunningpb.RegisterOperationsServer(g.Server.GRPCServer, srv)
 
 	// Register EchoService routes
 	g.RegisterRoute("/v1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
@@ -112,6 +114,12 @@ func (g *Gaip) initProject() error {
 	g.RegisterRoute("/v1/echo:pagedExpand", srv.HandlePagedExpand(), false, http.MethodPost)
 	g.RegisterRoute("/v1/echo:wait", srv.HandleWait(), false, http.MethodPost)
 	g.RegisterRoute("/v1/echo:block", srv.HandleBlock(), false, http.MethodPost)
+
+	// Register OperationsServer routes
+	g.RegisterRoute("/v1/operations", srv.HandleListOperations(), false, http.MethodGet)
+	g.RegisterRoute("/v1/{name:operations/[^:]+}", srv.HandleGetOperation(), false, http.MethodGet)
+	g.RegisterRoute("/v1/{name:operations/[^:]+}", srv.HandleDeleteOperation(), false, http.MethodDelete)
+	g.RegisterRoute("/v1/{name:operations/[^:]+}:cancel", srv.HandleCancelOperation(), false, http.MethodPost)
 
 	return nil
 }

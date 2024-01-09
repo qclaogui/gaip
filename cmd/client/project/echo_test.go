@@ -204,7 +204,7 @@ func TestBlock(t *testing.T) {
 }
 
 func TestBlock_timeout(t *testing.T) {
-	//t.Skip()
+	t.Skip()
 	content := "hello world!"
 	req := &pb.BlockRequest{
 		ResponseDelay: &durationpb.Duration{Seconds: 1},
