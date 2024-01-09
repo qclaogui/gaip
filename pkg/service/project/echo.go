@@ -214,7 +214,10 @@ func (srv *Server) Block(ctx context.Context, req *pb.BlockRequest) (*pb.BlockRe
 // Wait This method will wait for the requested amount of time and then return.
 //
 // This method showcases how a client handles a request timeout.
-func (srv *Server) Wait(_ context.Context, req *pb.WaitRequest) (*longrunningpb.Operation, error) {
+func (srv *Server) Wait(ctx context.Context, req *pb.WaitRequest) (*longrunningpb.Operation, error) {
+	echoHeaders(ctx)
+	echoTrailers(ctx)
+
 	endTime := time.Unix(0, 0).UTC()
 	if ttl := req.GetTtl(); ttl != nil {
 		endTime = srv.nowF().Add(ttl.AsDuration())
