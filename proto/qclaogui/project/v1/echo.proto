@@ -111,41 +111,10 @@ message PagedExpandRequest {
   string page_token = 3;
 }
 
-// The request for the PagedExpandLegacy method.  This is a pattern used by some legacy APIs. New
-// APIs should NOT use this pattern, but rather something like PagedExpandRequest which conforms to
-// aip.dev/158.
-message PagedExpandLegacyRequest {
-  // The string to expand.
-  string content = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // The number of words to returned in each page.
-  // (-- aip.dev/not-precedent: This is a legacy, non-standard pattern that
-  //     violates aip.dev/158. Ordinarily, this should be page_size. --)
-  int32 max_results = 2;
-
-  // The position of the page to be returned.
-  string page_token = 3;
-}
-
 // The response for the PagedExpand method.
 message PagedExpandResponse {
   // The words that were expanded.
   repeated EchoResponse responses = 1;
-
-  // The next page token.
-  string next_page_token = 2;
-}
-
-// A list of words.
-message PagedExpandResponseList {
-  repeated string words = 1;
-}
-
-message PagedExpandLegacyMappedResponse {
-  // The words that were expanded, indexed by their initial character.
-  // (-- aip.dev/not-precedent: This is a legacy, non-standard pattern that violates
-  //     aip.dev/158. Ordinarily, this should be a `repeated` field, as in PagedExpandResponse. --)
-  map<string, PagedExpandResponseList> alphabetized = 1;
 
   // The next page token.
   string next_page_token = 2;

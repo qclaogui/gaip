@@ -58,6 +58,8 @@ func NewServer(cfg Config) (*Server, error) {
 		Registerer:   cfg.Registerer,
 		repoProject:  cfg.RepoProject,
 		repoIdentity: cfg.RepoIdentity,
+
+		nowF: time.Now,
 	}
 
 	return srv, nil

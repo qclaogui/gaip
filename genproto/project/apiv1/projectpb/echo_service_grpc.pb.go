@@ -26,16 +26,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	EchoService_Echo_FullMethodName                    = "/qclaogui.project.v1.EchoService/Echo"
-	EchoService_EchoErrorDetails_FullMethodName        = "/qclaogui.project.v1.EchoService/EchoErrorDetails"
-	EchoService_Expand_FullMethodName                  = "/qclaogui.project.v1.EchoService/Expand"
-	EchoService_Collect_FullMethodName                 = "/qclaogui.project.v1.EchoService/Collect"
-	EchoService_Chat_FullMethodName                    = "/qclaogui.project.v1.EchoService/Chat"
-	EchoService_PagedExpand_FullMethodName             = "/qclaogui.project.v1.EchoService/PagedExpand"
-	EchoService_PagedExpandLegacy_FullMethodName       = "/qclaogui.project.v1.EchoService/PagedExpandLegacy"
-	EchoService_PagedExpandLegacyMapped_FullMethodName = "/qclaogui.project.v1.EchoService/PagedExpandLegacyMapped"
-	EchoService_Wait_FullMethodName                    = "/qclaogui.project.v1.EchoService/Wait"
-	EchoService_Block_FullMethodName                   = "/qclaogui.project.v1.EchoService/Block"
+	EchoService_Echo_FullMethodName             = "/qclaogui.project.v1.EchoService/Echo"
+	EchoService_EchoErrorDetails_FullMethodName = "/qclaogui.project.v1.EchoService/EchoErrorDetails"
+	EchoService_Expand_FullMethodName           = "/qclaogui.project.v1.EchoService/Expand"
+	EchoService_Collect_FullMethodName          = "/qclaogui.project.v1.EchoService/Collect"
+	EchoService_Chat_FullMethodName             = "/qclaogui.project.v1.EchoService/Chat"
+	EchoService_PagedExpand_FullMethodName      = "/qclaogui.project.v1.EchoService/PagedExpand"
+	EchoService_Wait_FullMethodName             = "/qclaogui.project.v1.EchoService/Wait"
+	EchoService_Block_FullMethodName            = "/qclaogui.project.v1.EchoService/Block"
 )
 
 // EchoServiceClient is the client API for EchoService service.
@@ -65,16 +63,6 @@ type EchoServiceClient interface {
 	// This is similar to the Expand method but instead of returning a stream of
 	// expanded words, this method returns a paged list of expanded words.
 	PagedExpand(ctx context.Context, in *PagedExpandRequest, opts ...grpc.CallOption) (*PagedExpandResponse, error)
-	// This is similar to the PagedExpand except that it uses
-	// max_results instead of page_size, as some legacy APIs still
-	// do. New APIs should NOT use this pattern.
-	PagedExpandLegacy(ctx context.Context, in *PagedExpandLegacyRequest, opts ...grpc.CallOption) (*PagedExpandResponse, error)
-	// This method returns a map containing lists of words that appear in the input, keyed by their
-	// initial character. The only words returned are the ones included in the current page,
-	// as determined by page_token and page_size, which both refer to the word indices in the
-	// input. This paging result consisting of a map of lists is a pattern used by some legacy
-	// APIs. New APIs should NOT use this pattern.
-	PagedExpandLegacyMapped(ctx context.Context, in *PagedExpandRequest, opts ...grpc.CallOption) (*PagedExpandLegacyMappedResponse, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
@@ -216,24 +204,6 @@ func (c *echoServiceClient) PagedExpand(ctx context.Context, in *PagedExpandRequ
 	return out, nil
 }
 
-func (c *echoServiceClient) PagedExpandLegacy(ctx context.Context, in *PagedExpandLegacyRequest, opts ...grpc.CallOption) (*PagedExpandResponse, error) {
-	out := new(PagedExpandResponse)
-	err := c.cc.Invoke(ctx, EchoService_PagedExpandLegacy_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *echoServiceClient) PagedExpandLegacyMapped(ctx context.Context, in *PagedExpandRequest, opts ...grpc.CallOption) (*PagedExpandLegacyMappedResponse, error) {
-	out := new(PagedExpandLegacyMappedResponse)
-	err := c.cc.Invoke(ctx, EchoService_PagedExpandLegacyMapped_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *echoServiceClient) Wait(ctx context.Context, in *WaitRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
 	out := new(longrunningpb.Operation)
 	err := c.cc.Invoke(ctx, EchoService_Wait_FullMethodName, in, out, opts...)
@@ -279,16 +249,6 @@ type EchoServiceServer interface {
 	// This is similar to the Expand method but instead of returning a stream of
 	// expanded words, this method returns a paged list of expanded words.
 	PagedExpand(context.Context, *PagedExpandRequest) (*PagedExpandResponse, error)
-	// This is similar to the PagedExpand except that it uses
-	// max_results instead of page_size, as some legacy APIs still
-	// do. New APIs should NOT use this pattern.
-	PagedExpandLegacy(context.Context, *PagedExpandLegacyRequest) (*PagedExpandResponse, error)
-	// This method returns a map containing lists of words that appear in the input, keyed by their
-	// initial character. The only words returned are the ones included in the current page,
-	// as determined by page_token and page_size, which both refer to the word indices in the
-	// input. This paging result consisting of a map of lists is a pattern used by some legacy
-	// APIs. New APIs should NOT use this pattern.
-	PagedExpandLegacyMapped(context.Context, *PagedExpandRequest) (*PagedExpandLegacyMappedResponse, error)
 	// This method will wait for the requested amount of time and then return.
 	// This method showcases how a client handles a request timeout.
 	Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error)
@@ -319,12 +279,6 @@ func (UnimplementedEchoServiceServer) Chat(EchoService_ChatServer) error {
 }
 func (UnimplementedEchoServiceServer) PagedExpand(context.Context, *PagedExpandRequest) (*PagedExpandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PagedExpand not implemented")
-}
-func (UnimplementedEchoServiceServer) PagedExpandLegacy(context.Context, *PagedExpandLegacyRequest) (*PagedExpandResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PagedExpandLegacy not implemented")
-}
-func (UnimplementedEchoServiceServer) PagedExpandLegacyMapped(context.Context, *PagedExpandRequest) (*PagedExpandLegacyMappedResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PagedExpandLegacyMapped not implemented")
 }
 func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
@@ -471,42 +425,6 @@ func _EchoService_PagedExpand_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EchoService_PagedExpandLegacy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PagedExpandLegacyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(EchoServiceServer).PagedExpandLegacy(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: EchoService_PagedExpandLegacy_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EchoServiceServer).PagedExpandLegacy(ctx, req.(*PagedExpandLegacyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _EchoService_PagedExpandLegacyMapped_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PagedExpandRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(EchoServiceServer).PagedExpandLegacyMapped(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: EchoService_PagedExpandLegacyMapped_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EchoServiceServer).PagedExpandLegacyMapped(ctx, req.(*PagedExpandRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _EchoService_Wait_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WaitRequest)
 	if err := dec(in); err != nil {
@@ -561,14 +479,6 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PagedExpand",
 			Handler:    _EchoService_PagedExpand_Handler,
-		},
-		{
-			MethodName: "PagedExpandLegacy",
-			Handler:    _EchoService_PagedExpandLegacy_Handler,
-		},
-		{
-			MethodName: "PagedExpandLegacyMapped",
-			Handler:    _EchoService_PagedExpandLegacyMapped_Handler,
 		},
 		{
 			MethodName: "Wait",

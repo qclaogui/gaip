@@ -24,6 +24,7 @@ import (
 	"math"
 	"net/http"
 	"net/url"
+	"time"
 
 	gax "github.com/googleapis/gax-go/v2"
 	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
@@ -34,6 +35,7 @@ import (
 	gtransport "google.golang.org/api/transport/grpc"
 	httptransport "google.golang.org/api/transport/http"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
@@ -64,8 +66,32 @@ func defaultIdentityGRPCClientOptions() []option.ClientOption {
 func defaultIdentityCallOptions() *IdentityCallOptions {
 	return &IdentityCallOptions{
 		CreateUser: []gax.CallOption{},
-		GetUser:    []gax.CallOption{},
-		ListUsers:  []gax.CallOption{},
+		GetUser: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
+					codes.Unavailable,
+					codes.Unknown,
+				}, gax.Backoff{
+					Initial:    200 * time.Millisecond,
+					Max:        3000 * time.Millisecond,
+					Multiplier: 2.00,
+				})
+			}),
+		},
+		ListUsers: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
+					codes.Unavailable,
+					codes.Unknown,
+				}, gax.Backoff{
+					Initial:    200 * time.Millisecond,
+					Max:        3000 * time.Millisecond,
+					Multiplier: 2.00,
+				})
+			}),
+		},
 		UpdateUser: []gax.CallOption{},
 		DeleteUser: []gax.CallOption{},
 	}
@@ -74,8 +100,30 @@ func defaultIdentityCallOptions() *IdentityCallOptions {
 func defaultIdentityRESTCallOptions() *IdentityCallOptions {
 	return &IdentityCallOptions{
 		CreateUser: []gax.CallOption{},
-		GetUser:    []gax.CallOption{},
-		ListUsers:  []gax.CallOption{},
+		GetUser: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnHTTPCodes(gax.Backoff{
+					Initial:    200 * time.Millisecond,
+					Max:        3000 * time.Millisecond,
+					Multiplier: 2.00,
+				},
+					http.StatusServiceUnavailable,
+					http.StatusInternalServerError)
+			}),
+		},
+		ListUsers: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnHTTPCodes(gax.Backoff{
+					Initial:    200 * time.Millisecond,
+					Max:        3000 * time.Millisecond,
+					Multiplier: 2.00,
+				},
+					http.StatusServiceUnavailable,
+					http.StatusInternalServerError)
+			}),
+		},
 		UpdateUser: []gax.CallOption{},
 		DeleteUser: []gax.CallOption{},
 	}

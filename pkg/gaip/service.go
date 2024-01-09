@@ -104,7 +104,7 @@ func (g *Gaip) initProject() error {
 	projectpb.RegisterIdentityServiceServer(g.Server.GRPCServer, srv)
 	projectpb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
 
-	// Register routes
+	// Register EchoService routes
 	g.RegisterRoute("/v1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
 	g.RegisterRoute("/v1/echo:error-details", srv.HandleEchoErrorDetails(), false, http.MethodPost)
 	g.RegisterRoute("/v1/echo:expand", srv.HandleExpand(), false, http.MethodPost)
