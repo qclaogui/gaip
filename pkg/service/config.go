@@ -9,7 +9,7 @@ import (
 	"math"
 	"time"
 
-	log2 "github.com/go-kit/log"
+	gokitlog "github.com/go-kit/log"
 	"github.com/gorilla/mux"
 	"github.com/grafana/dskit/log"
 	"github.com/grafana/dskit/middleware"
@@ -67,17 +67,17 @@ type Config struct {
 
 	HTTPLogClosedConnectionsWithoutResponse bool `yaml:"http_log_closed_connections_without_response_enabled"`
 
-	LogFormat                    string      `yaml:"log_format"`
-	LogLevel                     log.Level   `yaml:"log_level"`
-	Log                          log2.Logger `yaml:"-"`
-	ExcludeRequestInLog          bool        `yaml:"-"`
-	DisableRequestSuccessLog     bool        `yaml:"-"`
-	LogSourceIPs                 bool        `yaml:"log_source_ips_enabled"`
-	LogSourceIPsHeader           string      `yaml:"log_source_ips_header"`
-	LogSourceIPsRegex            string      `yaml:"log_source_ips_regex"`
-	LogRequestHeaders            bool        `yaml:"log_request_headers"`
-	LogRequestAtInfoLevel        bool        `yaml:"log_request_at_info_level_enabled"`
-	LogRequestExcludeHeadersList string      `yaml:"log_request_exclude_headers_list"`
+	LogFormat                    string          `yaml:"log_format"`
+	LogLevel                     log.Level       `yaml:"log_level"`
+	Log                          gokitlog.Logger `yaml:"-"`
+	ExcludeRequestInLog          bool            `yaml:"-"`
+	DisableRequestSuccessLog     bool            `yaml:"-"`
+	LogSourceIPs                 bool            `yaml:"log_source_ips_enabled"`
+	LogSourceIPsHeader           string          `yaml:"log_source_ips_header"`
+	LogSourceIPsRegex            string          `yaml:"log_source_ips_regex"`
+	LogRequestHeaders            bool            `yaml:"log_request_headers"`
+	LogRequestAtInfoLevel        bool            `yaml:"log_request_at_info_level_enabled"`
+	LogRequestExcludeHeadersList string          `yaml:"log_request_exclude_headers_list"`
 
 	ServerGracefulShutdownTimeout time.Duration `yaml:"graceful_shutdown_timeout"`
 
@@ -120,7 +120,6 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	fs.IntVar(&cfg.GRPCServerNumWorkers, "server.grpc.num-workers", 0, "If non-zero, configures the amount of GRPC server workers used to serve the requests.")
 	fs.BoolVar(&cfg.ReportGRPCCodesInInstrumentationLabel, "server.report-grpc-codes-in-instrumentation-label-enabled", false, "If set to true, gRPC statuses will be reported in instrumentation labels with their string representations. Otherwise, they will be reported as \"error\".")
 
-	//fs.BoolVar(&cfg.RouteHTTPToGRPC, "server.route-http-to-grpc", true, "Support grpc over the http server")
 	fs.BoolVar(&cfg.RegisterInstrumentation, "server.register-instrumentation", true, "Register the intrumentation handlers (/metrics etc).")
 	fs.BoolVar(&cfg.RegisterOpenAPI, "server.register-open-api", true, "Register and handlers OpenAPI UI (/openapi).")
 

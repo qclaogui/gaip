@@ -17,7 +17,7 @@ import (
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/stretchr/testify/require"
-	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
+	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -118,7 +118,7 @@ func serverSetup(t *testing.T) pb.EchoServiceServer {
 
 func TestExpand(t *testing.T) {
 	contentTable := []string{"Hello World", "Hola", ""}
-	errTable := []*rpcstatus.Status{
+	errTable := []*spb.Status{
 		{Code: int32(codes.OK)},
 		{Code: int32(codes.InvalidArgument)},
 		nil,
@@ -233,7 +233,7 @@ func TestCollect(t *testing.T) {
 	tests := []struct {
 		contents []string
 		exp      *string
-		err      *rpcstatus.Status
+		err      *spb.Status
 	}{
 		{[]string{"Hello", "", "World"}, strPtr("Hello World"), nil},
 	}
@@ -335,11 +335,11 @@ func (m *mockChatStream) verify(expectHeadersAndTrailers bool) {
 func TestChat(t *testing.T) {
 	tests := []struct {
 		contents []string
-		err      *rpcstatus.Status
+		err      *spb.Status
 	}{
 		{[]string{"Hello", "World"}, nil},
-		{[]string{"Hello", "World"}, &rpcstatus.Status{Code: int32(codes.InvalidArgument)}},
-		{[]string{}, &rpcstatus.Status{Code: int32(codes.InvalidArgument)}},
+		{[]string{"Hello", "World"}, &spb.Status{Code: int32(codes.InvalidArgument)}},
+		{[]string{}, &spb.Status{Code: int32(codes.InvalidArgument)}},
 	}
 
 	s := serverSetup(t)
@@ -635,7 +635,7 @@ func TestWait_success(t *testing.T) {
 func TestWait_error(t *testing.T) {
 	nowF := func() time.Time { return time.Unix(3, 0) }
 	endTime := timestamppb.New(time.Unix(2, 0))
-	expErr := &rpcstatus.Status{Code: int32(1), Message: "Error!"}
+	expErr := &spb.Status{Code: int32(1), Message: "Error!"}
 	req := &pb.WaitRequest{
 		End: &pb.WaitRequest_EndTime{
 			EndTime: endTime,

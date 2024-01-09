@@ -10,7 +10,6 @@ import (
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
-	lg "github.com/qclaogui/gaip/tools/log"
 )
 
 type Config struct {
@@ -27,8 +26,6 @@ type Config struct {
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	fs.BoolVar(&cfg.Enabled, "library.enabled", true, "Enables Library Service Server")
-
-	cfg.Log = lg.Logger
 }
 
 func (cfg *Config) Validate() error {

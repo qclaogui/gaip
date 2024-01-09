@@ -31,6 +31,7 @@ func (g *Gaip) initBookstore() error {
 		return nil
 	}
 
+	g.Cfg.BookstoreCfg.Log = g.Server.Log
 	g.Cfg.BookstoreCfg.Registerer = g.Registerer
 
 	repo, err := repository.NewBookstore(g.Cfg.RepoCfg)
@@ -56,6 +57,7 @@ func (g *Gaip) initLibrary() error {
 		return nil
 	}
 
+	g.Cfg.LibraryCfg.Log = g.Server.Log
 	g.Cfg.LibraryCfg.Registerer = g.Registerer
 
 	repo, err := repository.NewLibrary(g.Cfg.RepoCfg)
@@ -81,6 +83,7 @@ func (g *Gaip) initProject() error {
 		return nil
 	}
 
+	g.Cfg.ProjectCfg.Log = g.Server.Log
 	g.Cfg.ProjectCfg.Registerer = g.Registerer
 
 	repoProject, err := repository.NewProject(g.Cfg.RepoCfg)
@@ -129,6 +132,7 @@ func (g *Gaip) initRouteGuide() error {
 		return nil
 	}
 
+	g.Cfg.RouteGuideCfg.Log = g.Server.Log
 	g.Cfg.RouteGuideCfg.Registerer = g.Registerer
 
 	repo, err := repository.NewRouteGuide(g.Cfg.RepoCfg)
@@ -153,6 +157,7 @@ func (g *Gaip) initTodo() error {
 		return nil
 	}
 
+	g.Cfg.TodoCfg.Log = g.Server.Log
 	g.Cfg.TodoCfg.Registerer = g.Registerer
 
 	repo, err := repository.NewTodo(g.Cfg.RepoCfg)

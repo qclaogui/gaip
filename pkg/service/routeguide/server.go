@@ -10,7 +10,6 @@ import (
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
-	lg "github.com/qclaogui/gaip/tools/log"
 )
 
 type Config struct {
@@ -24,8 +23,6 @@ type Config struct {
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	fs.BoolVar(&cfg.Enabled, "routeguide.enabled", true, "Enables RouteGuide Service Server")
-
-	cfg.Log = lg.Logger
 }
 
 func (cfg *Config) Validate() error {

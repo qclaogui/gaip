@@ -12,7 +12,6 @@ import (
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
-	lg "github.com/qclaogui/gaip/tools/log"
 )
 
 type Config struct {
@@ -27,12 +26,9 @@ type Config struct {
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	fs.BoolVar(&cfg.Enabled, "project.enabled", true, "Enables Server Service Server")
-
-	cfg.Log = lg.Logger
 }
 
 func (cfg *Config) Validate() error {
-
 	return nil
 }
 

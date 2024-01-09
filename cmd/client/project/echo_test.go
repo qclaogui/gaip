@@ -8,13 +8,23 @@ import (
 	"context"
 	"errors"
 	"io"
+	"net/http"
+	"reflect"
+	"sort"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/googleapis/gax-go/v2"
 	project "github.com/qclaogui/gaip/genproto/project/apiv1"
 	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"google.golang.org/api/googleapi"
+	"google.golang.org/api/option"
+	spb "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
@@ -45,6 +55,197 @@ func TestEcho(t *testing.T) {
 		}
 	}
 
+}
+
+func TestEcho_error(t *testing.T) {
+	t.Skip()
+	val := codes.Canceled
+	req := &pb.EchoRequest{
+		Response: &pb.EchoRequest_Error{
+			Error: &spb.Status{Code: int32(val)},
+		},
+	}
+
+	for typ, client := range map[string]*project.EchoClient{"grpc": echoGRPC, "rest": echoREST} {
+		resp, err := client.Echo(context.Background(), req)
+		if resp != nil || err == nil {
+			t.Errorf("%s Echo() = %v, wanted error %d", typ, resp, val)
+		}
+
+		if typ == "grpc" {
+			s, _ := status.FromError(err)
+			if s.Code() != val {
+				t.Errorf("%s Echo() errors with %d, want %d", typ, s.Code(), val)
+			}
+		} else {
+			want := 499
+			gerr := &googleapi.Error{}
+			if !errors.As(err, &gerr) {
+				t.Errorf("%s Echo() returned unexpected error type: %v", typ, err)
+			} else if gerr.Code != want {
+				t.Errorf("%s Echo() errors with %d, want %d", typ, gerr.Code, want)
+			}
+		}
+	}
+
+}
+
+// Test dynamic routing header generation. We cannot guarantee the order that headers are sent, so we check that the header sent contains the correct elements as opposed to checking
+// the header itself.
+func TestEchoHeader(t *testing.T) {
+	t.Skip()
+	var tests = []struct {
+		req  *pb.EchoRequest
+		want []string
+	}{
+		{
+			req:  &pb.EchoRequest{OtherHeader: "projects/123/instances/456"},
+			want: []string{"baz=projects%2F123%2Finstances%2F456", "qux=projects%2F123"},
+		},
+		{
+			req:  &pb.EchoRequest{OtherHeader: "instances/456"},
+			want: []string{"baz=instances%2F456"},
+		},
+		{
+			req:  &pb.EchoRequest{Header: "potato"},
+			want: []string{"header=potato", "routing_id=potato"},
+		},
+		{
+			req:  &pb.EchoRequest{Header: "projects/123/instances/456"},
+			want: []string{"header=projects%2F123%2Finstances%2F456", "routing_id=projects%2F123%2Finstances%2F456", "super_id=projects%2F123", "table_name=projects%2F123%2Finstances%2F456", "instance_id=instances%2F456"},
+		},
+		{
+			req: &pb.EchoRequest{
+				Header:      "regions/123/zones/456",
+				OtherHeader: "projects/123/instances/456",
+			},
+			want: []string{"baz=projects%2F123%2Finstances%2F456", "qux=projects%2F123", "table_name=regions%2F123%2Fzones%2F456", "header=regions%2F123%2Fzones%2F456", "routing_id=regions%2F123%2Fzones%2F456"},
+		},
+	}
+
+	for _, test := range tests {
+		mdForHeaders := metadata.New(map[string]string{})
+		_, _ = echoGRPC.Echo(context.Background(), test.req, gax.WithGRPCOptions(grpc.Header(&mdForHeaders)))
+		got := mdForHeaders.Get("x-goog-request-params")
+		got = strings.Split(got[0], "&")
+		sort.Strings(got)
+		sort.Strings(test.want)
+
+		if diff := cmp.Diff(got, test.want); diff != "" {
+			t.Errorf("got(-),want(+):\n%s", diff)
+		}
+	}
+}
+
+func TestEchoHeaderREST(t *testing.T) {
+	t.Skip()
+	var tests = []struct {
+		req  *pb.EchoRequest
+		want []string
+	}{
+		{
+			req:  &pb.EchoRequest{OtherHeader: "projects/123/instances/456"},
+			want: []string{"baz=projects%2F123%2Finstances%2F456", "qux=projects%2F123"},
+		},
+		{
+			req:  &pb.EchoRequest{OtherHeader: "instances/456"},
+			want: []string{"baz=instances%2F456"},
+		},
+		{
+			req:  &pb.EchoRequest{Header: "potato"},
+			want: []string{"header=potato", "routing_id=potato"},
+		},
+		{
+			req:  &pb.EchoRequest{Header: "projects/123/instances/456"},
+			want: []string{"header=projects%2F123%2Finstances%2F456", "routing_id=projects%2F123%2Finstances%2F456", "super_id=projects%2F123", "table_name=projects%2F123%2Finstances%2F456", "instance_id=instances%2F456"},
+		},
+		{
+			req: &pb.EchoRequest{
+				Header:      "regions/123/zones/456",
+				OtherHeader: "projects/123/instances/456",
+			},
+			want: []string{"baz=projects%2F123%2Finstances%2F456", "qux=projects%2F123", "table_name=regions%2F123%2Fzones%2F456", "header=regions%2F123%2Fzones%2F456", "routing_id=regions%2F123%2Fzones%2F456"},
+		},
+	}
+
+	for _, test := range tests {
+		// Wrap the default RoundTripper with our own that asserts on the response
+		// headers expected by the test.
+		wrapped := &http.Client{}
+		wrapped.Transport = headerChecker{rt: wrapped.Transport, want: test.want, t: t}
+		echoWrapped, err := project.NewEchoRESTClient(
+			context.Background(),
+			option.WithEndpoint("http://localhost:7469"),
+			option.WithoutAuthentication(),
+		)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		_, _ = echoWrapped.Echo(context.Background(), test.req)
+		_ = echoWrapped.Close()
+	}
+}
+
+func TestXGoogHeaders(t *testing.T) {
+	t.Skip()
+	// Inspect the private property `xGoogHeaders` of the transport-specific
+	// client implementation that is populated on creation of the client.
+	w := reflect.ValueOf(*echoGRPC)
+	x := w.FieldByName("internalClient")
+	y := x.Elem().Elem()
+	info := y.FieldByName("xGoogHeaders")
+
+	var goVersion string
+	vals := make([]string, 0)
+	for i := 0; i < info.Len(); i++ {
+		key := info.Index(i)
+		// Only check for the client info set by the generated setGoogleClientInfo()
+		if key.String() != "x-goog-api-client" {
+			continue
+		}
+
+		vals = append(vals, info.Index(i+1).String())
+	}
+
+	for i := 0; goVersion == "" || i < len(vals); i++ {
+		v := vals[i]
+		split := strings.Split(v, " ")
+		for _, s := range split {
+			// For now, we only want to check that the Go version is being
+			// properly populated.
+			if strings.HasPrefix(s, "gl-go/") {
+				goVersion = s
+				break
+			}
+		}
+	}
+
+	if goVersion == "" {
+		t.Errorf("expected Go version pair to be populated, but wasn't: %v", info)
+	} else if strings.Contains(goVersion, "UNKNOWN") {
+		t.Errorf("expected Go version pair to not be UNKNOWN: %q", goVersion)
+	}
+}
+
+type headerChecker struct {
+	rt   http.RoundTripper
+	want []string
+	t    *testing.T
+}
+
+func (hc headerChecker) RoundTrip(r *http.Request) (*http.Response, error) {
+	resp, err := hc.rt.RoundTrip(r)
+
+	header := resp.Header
+	got := header[http.CanonicalHeaderKey("x-goog-request-params")]
+	got = strings.Split(got[0], "&")
+	sort.Strings(got)
+	sort.Strings(hc.want)
+	if diff := cmp.Diff(got, hc.want); diff != "" {
+		hc.t.Errorf("got(-),want(+):\n%s", diff)
+	}
+	return resp, err
 }
 
 // Chat, Collect, and Expand are streaming methods and don't have interesting REST semantics
