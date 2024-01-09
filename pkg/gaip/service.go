@@ -107,6 +107,14 @@ func (g *Gaip) initProject() error {
 	// Register routes
 	g.RegisterRoute("/v1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
 	g.RegisterRoute("/v1/echo:error-details", srv.HandleEchoErrorDetails(), false, http.MethodPost)
+	//g.RegisterRoute("/v1/echo:expand", srv.HandleExpand, false, http.MethodPost)
+	//g.RegisterRoute("/v1/echo:collect", srv.HandleEcho(), false, http.MethodPost)
+	//g.RegisterRoute("/v1/echo:pagedExpand", srv.HandleEcho(), false, http.MethodPost)
+	//g.RegisterRoute("/v1/echo:pagedExpandLegacy", srv.HandleEcho(), false, http.MethodPost)
+	//g.RegisterRoute("/v1/echo:pagedExpandLegacyMapped", srv.HandleEcho(), false, http.MethodPost)
+	//g.RegisterRoute("/v1/echo:wait", srv.HandleEcho(), false, http.MethodPost)
+	//g.RegisterRoute("/v1/echo:block", srv.HandleEcho(), false, http.MethodPost)
+
 	return nil
 }
 
