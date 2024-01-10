@@ -1,6 +1,7 @@
 // Copyright © Weifeng Wang <qclaogui@gmail.com>
 //
 // Licensed under the Apache License 2.0.
+//go:build requires_docker
 
 package project_test
 
@@ -36,7 +37,6 @@ var (
 )
 
 func TestEcho(t *testing.T) {
-	t.Skip()
 	content := "hello world!"
 	req := &pb.EchoRequest{
 		Response: &pb.EchoRequest_Content{
@@ -58,7 +58,6 @@ func TestEcho(t *testing.T) {
 }
 
 func TestEcho_error(t *testing.T) {
-	t.Skip()
 	val := codes.Canceled
 	req := &pb.EchoRequest{
 		Response: &pb.EchoRequest_Error{
@@ -93,7 +92,6 @@ func TestEcho_error(t *testing.T) {
 // Test dynamic routing header generation. We cannot guarantee the order that headers are sent, so we check that the header sent contains the correct elements as opposed to checking
 // the header itself.
 func TestEchoHeader(t *testing.T) {
-	t.Skip()
 	var tests = []struct {
 		req  *pb.EchoRequest
 		want []string
@@ -138,7 +136,6 @@ func TestEchoHeader(t *testing.T) {
 }
 
 func TestEchoHeaderREST(t *testing.T) {
-	t.Skip()
 	var tests = []struct {
 		req  *pb.EchoRequest
 		want []string
@@ -188,7 +185,6 @@ func TestEchoHeaderREST(t *testing.T) {
 }
 
 func TestXGoogHeaders(t *testing.T) {
-	t.Skip()
 	// Inspect the private property `xGoogHeaders` of the transport-specific
 	// client implementation that is populated on creation of the client.
 	w := reflect.ValueOf(*echoGRPC)
@@ -250,7 +246,6 @@ func (hc headerChecker) RoundTrip(r *http.Request) (*http.Response, error) {
 
 // Chat, Collect, and Expand are streaming methods and don't have interesting REST semantics
 func TestExpand(t *testing.T) {
-	t.Skip()
 	content := "The rain in Spain stays mainly on the plain!"
 	req := &pb.ExpandRequest{
 		Content: content,
@@ -283,7 +278,6 @@ func TestExpand(t *testing.T) {
 
 // Chat, Collect, and Expand are streaming methods and don't have interesting REST semantics
 func TestCollect(t *testing.T) {
-	t.Skip()
 	content := "The rain in Spain stays mainly on the plain!"
 	s, err := echoGRPC.Collect(context.Background())
 	if err != nil {
@@ -313,7 +307,6 @@ func TestCollect(t *testing.T) {
 
 // Chat, Collect, and Expand are streaming methods and don't have interesting REST semantics
 func TestChat(t *testing.T) {
-	t.Skip()
 	content := "The rain in Spain stays mainly on the plain!"
 	s, err := echoGRPC.Chat(context.Background())
 	if err != nil {
@@ -354,7 +347,6 @@ func TestChat(t *testing.T) {
 }
 
 func TestWait(t *testing.T) {
-	t.Skip()
 	content := "hello world!"
 	req := &pb.WaitRequest{
 		End: &pb.WaitRequest_Ttl{
@@ -385,7 +377,6 @@ func TestWait(t *testing.T) {
 }
 
 func TestBlock(t *testing.T) {
-	t.Skip()
 	content := "hello world!"
 	req := &pb.BlockRequest{
 		ResponseDelay: &durationpb.Duration{Nanos: 1000},

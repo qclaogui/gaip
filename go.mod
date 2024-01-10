@@ -13,6 +13,7 @@ require (
 	github.com/go-kit/log v0.2.1
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/golang/protobuf v1.5.3
+	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.5.0
 	github.com/googleapis/gapic-showcase v0.29.0
 	github.com/googleapis/gax-go/v2 v2.12.0
@@ -29,6 +30,7 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.18.0
+	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.46.1
 	go.opentelemetry.io/otel v1.21.0
@@ -73,7 +75,6 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/gogo/status v1.1.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20231229205709-960ae82b1e42 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
@@ -88,6 +89,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.19.1 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20231201235250-de7065d80cb9 // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
@@ -106,6 +108,7 @@ require (
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sosodev/duration v1.2.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/uber/jaeger-client-go v2.30.0+incompatible // indirect
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	github.com/vektah/gqlparser/v2 v2.5.10 // indirect

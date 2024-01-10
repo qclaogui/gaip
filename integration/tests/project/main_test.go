@@ -1,6 +1,7 @@
 // Copyright © Weifeng Wang <qclaogui@gmail.com>
 //
 // Licensed under the Apache License 2.0.
+//go:build requires_docker
 
 package project_test
 
@@ -18,7 +19,6 @@ import (
 )
 
 var restClientOpts = []option.ClientOption{
-	//option.WithEndpoint("http://localhost:9095"),
 	option.WithEndpoint("http://localhost:7469"),
 	option.WithoutAuthentication(),
 }

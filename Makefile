@@ -243,7 +243,11 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 ##@ Testing Lint & Fmt
 
 test: ## Run tests.
-	@$(GO_ENV) go test $(GO_FLAGS) -timeout 10m -count 1 ./...
+	@$(GO_ENV) go test $(GO_FLAGS) -timeout 20m -count 1 ./...
+
+integration-tests: ## Run all integration tests.
+integration-tests:
+	go test -tags=requires_docker -timeout 20m ./integration/tests/...
 
 
 lint: ## Runs various static analysis against our code.
