@@ -47,5 +47,17 @@ func TestMain(m *testing.M) {
 	}
 	defer func() { _ = echoREST.Close() }()
 
+	identityGRPC, err = project.NewIdentityClient(ctx, opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() { _ = identityGRPC.Close() }()
+
+	identityREST, err = project.NewIdentityRESTClient(ctx, restClientOpts...)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() { _ = identityREST.Close() }()
+
 	os.Exit(m.Run())
 }

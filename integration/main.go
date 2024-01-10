@@ -30,9 +30,7 @@ func main() {
 	}
 }
 
-func runIntegrationTests(cmd *cobra.Command, args []string) {
-	_, _ = cmd, args
-
+func runIntegrationTests(*cobra.Command, []string) {
 	defer reportResults()
 
 	buildBinary()
@@ -45,7 +43,6 @@ func runIntegrationTests(cmd *cobra.Command, args []string) {
 		logChan = make(chan TestLog, 1)
 		runSingleTest(specificTest)
 	} else {
-
 		testDirs, err := filepath.Glob("./tests/*")
 		if err != nil {
 			panic(err)

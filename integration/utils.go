@@ -51,7 +51,7 @@ func runSingleTest(testDir string) {
 
 	dirName := filepath.Base(testDir)
 	var logBuffer bytes.Buffer
-	cmd := exec.Command(binaryPath, "-log.level=debug")
+	cmd := exec.Command(binaryPath, "-log.level=info")
 	cmd.Dir = testDir
 	cmd.Stdout = &logBuffer
 	cmd.Stderr = &logBuffer

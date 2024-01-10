@@ -26,8 +26,8 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numURLPathParams := len(urlPathParams)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:echo': %q", r.Method, r.URL))
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:echo': %q", r.Method, r.URL))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
 
 		if numURLPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
@@ -98,8 +98,8 @@ func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numURLPathParams := len(urlPathParams)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:error-details': %q", r.Method, r.URL))
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:error-details': %q", r.Method, r.URL))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
 
 		if numURLPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
@@ -171,8 +171,8 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numURLPathParams := len(urlPathParams)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:expand': %q", r.Method, r.URL))
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:expand': %q", r.Method, r.URL))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
 
 		if numURLPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
@@ -252,8 +252,8 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numURLPathParams := len(urlPathParams)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:pagedExpand': %q", r.Method, r.URL))
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:pagedExpand': %q", r.Method, r.URL))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
 
 		if numURLPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
@@ -324,8 +324,8 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numURLPathParams := len(urlPathParams)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:wait': %q", r.Method, r.URL))
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:wait': %q", r.Method, r.URL))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
 
 		if numURLPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
@@ -398,8 +398,8 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numURLPathParams := len(urlPathParams)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:block': %q", r.Method, r.URL))
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/echo:block': %q", r.Method, r.URL))
+		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
 
 		if numURLPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)

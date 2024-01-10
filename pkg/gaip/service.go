@@ -103,13 +103,11 @@ func (g *Gaip) initProject() error {
 		return err
 	}
 
-	// Register Services to the GRPCServer.
+	// Register ProjectServiceServer
 	projectpb.RegisterProjectServiceServer(g.Server.GRPCServer, srv)
-	projectpb.RegisterIdentityServiceServer(g.Server.GRPCServer, srv)
-	projectpb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
-	longrunningpb.RegisterOperationsServer(g.Server.GRPCServer, srv)
 
-	// Register EchoService routes
+	// Register EchoServiceServer
+	projectpb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
 	g.RegisterRoute("/v1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
 	g.RegisterRoute("/v1/echo:error-details", srv.HandleEchoErrorDetails(), false, http.MethodPost)
 	g.RegisterRoute("/v1/echo:expand", srv.HandleExpand(), false, http.MethodPost)
@@ -118,7 +116,17 @@ func (g *Gaip) initProject() error {
 	g.RegisterRoute("/v1/echo:wait", srv.HandleWait(), false, http.MethodPost)
 	g.RegisterRoute("/v1/echo:block", srv.HandleBlock(), false, http.MethodPost)
 
-	// Register OperationsServer routes
+	// Register IdentityServiceServer
+	projectpb.RegisterIdentityServiceServer(g.Server.GRPCServer, srv)
+	g.RegisterRoute("/v1/users", srv.HandleCreateUser(), false, http.MethodPost)
+	g.RegisterRoute("/v1/{name:users/[^:]+}", srv.HandleGetUser(), false, http.MethodGet)
+	g.RegisterRoute("/v1/{user.name:users/[^:]+}", srv.HandleUpdateUser(), false, http.MethodPatch)
+	g.Server.Router.Path("/v1/{user.name:users/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateUser())
+	g.RegisterRoute("/v1/{name:users/[^:]+}", srv.HandleDeleteUser(), false, http.MethodDelete)
+	g.RegisterRoute("/v1/users", srv.HandleListUsers(), false, http.MethodGet)
+
+	// Register OperationsServer
+	longrunningpb.RegisterOperationsServer(g.Server.GRPCServer, srv)
 	g.RegisterRoute("/v1/operations", srv.HandleListOperations(), false, http.MethodGet)
 	g.RegisterRoute("/v1/{name:operations/[^:]+}", srv.HandleGetOperation(), false, http.MethodGet)
 	g.RegisterRoute("/v1/{name:operations/[^:]+}", srv.HandleDeleteOperation(), false, http.MethodDelete)
