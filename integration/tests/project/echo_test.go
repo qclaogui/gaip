@@ -21,6 +21,7 @@ import (
 	project "github.com/qclaogui/gaip/genproto/project/apiv1"
 	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"google.golang.org/api/googleapi"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
@@ -376,6 +377,71 @@ func TestWait(t *testing.T) {
 
 }
 
+func TestPagination(t *testing.T) {
+	content := "foo bar biz baz"
+	expected := strings.Split(content, " ")
+	req := &pb.PagedExpandRequest{
+		Content:  content,
+		PageSize: 2,
+	}
+
+	for typ, client := range map[string]*project.EchoClient{"grpc": echoGRPC, "rest": echoREST} {
+		it := client.PagedExpand(context.Background(), req)
+
+		ndx := 0
+		for {
+			resp, err := it.Next()
+			if errors.Is(err, iterator.Done) {
+				break
+			}
+
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if resp.GetContent() != expected[ndx] {
+				t.Errorf("%s Chat() = %s, want %s", typ, resp.GetContent(), expected[ndx])
+			}
+			ndx++
+		}
+	}
+}
+
+func TestPaginationWithToken(t *testing.T) {
+	content := "ab cd ef gh ij kl"
+	expected := strings.Split(content, " ")[1:]
+	req := &pb.PagedExpandRequest{
+		Content:   content,
+		PageSize:  2,
+		PageToken: "1",
+	}
+
+	for typ, client := range map[string]*project.EchoClient{"grpc": echoGRPC, "rest": echoREST} {
+		it := client.PagedExpand(context.Background(), req)
+
+		ndx := 0
+		for {
+			resp, err := it.Next()
+			if errors.Is(err, iterator.Done) {
+				break
+			}
+
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if ndx >= len(expected) {
+				t.Errorf("%s PagedExpand() received more items than expected", typ)
+			} else if resp.GetContent() != expected[ndx] {
+				t.Errorf("%s PagedExpand() = %s, want %s", typ, resp.GetContent(), expected[ndx])
+			}
+			ndx++
+		}
+
+	}
+
+}
+
 func TestBlock(t *testing.T) {
 	content := "hello world!"
 	req := &pb.BlockRequest{
@@ -396,7 +462,6 @@ func TestBlock(t *testing.T) {
 }
 
 func TestBlock_timeout(t *testing.T) {
-	t.Skip()
 	content := "hello world!"
 	req := &pb.BlockRequest{
 		ResponseDelay: &durationpb.Duration{Seconds: 1},
@@ -411,9 +476,50 @@ func TestBlock_timeout(t *testing.T) {
 
 	want := status.New(codes.DeadlineExceeded, "context deadline exceeded")
 	resp, err := echoGRPC.Block(ctx, req)
-	if err != nil {
+	if err == nil {
 		t.Errorf("Block() got %+v, want %+v", resp, want)
 	} else if got, ok := status.FromError(err); !ok || got.Code() != want.Code() {
 		t.Errorf("Block() got %+v, want %+v", err, want)
 	}
+}
+
+func TestBlock_default_timeout(t *testing.T) {
+	content := "hello world!"
+	req := &pb.BlockRequest{
+		ResponseDelay: &durationpb.Duration{Seconds: 6},
+		Response: &pb.BlockRequest_Success{
+			Success: &pb.BlockResponse{
+				Content: content,
+			},
+		},
+	}
+
+	want := status.New(codes.DeadlineExceeded, "context deadline exceeded")
+	resp, err := echoGRPC.Block(context.Background(), req)
+	if err == nil {
+		t.Errorf("Block() got %+v, want %+v", resp, want)
+	} else if got, ok := status.FromError(err); !ok || got.Code() != want.Code() {
+		t.Errorf("Block() got %+v, want %+v", err, want)
+	}
+}
+
+func TestBlock_override_default_timeout(t *testing.T) {
+	content := "hello world!"
+	req := &pb.BlockRequest{
+		ResponseDelay: &durationpb.Duration{Seconds: 6},
+		Response: &pb.BlockRequest_Success{
+			Success: &pb.BlockResponse{
+				Content: content,
+			},
+		},
+	}
+
+	resp, err := echoGRPC.Block(context.Background(), req, gax.WithTimeout(10*time.Second))
+	if err != nil {
+		t.Error(err)
+	}
+	if resp.GetContent() != content {
+		t.Errorf("Block() = %q, want %q", resp.GetContent(), content)
+	}
+
 }
