@@ -452,8 +452,7 @@ func (c *identityGRPCClient) DeleteUser(ctx context.Context, req *projectpb.Dele
 // CreateUser creates a user.
 func (c *identityRESTClient) CreateUser(ctx context.Context, req *projectpb.CreateUserRequest, opts ...gax.CallOption) (*projectpb.User, error) {
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
-	body := req.GetUser()
-	jsonReq, err := m.Marshal(body)
+	jsonReq, err := m.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
