@@ -15,7 +15,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.5.0
-	github.com/googleapis/gapic-showcase v0.29.0
+	github.com/googleapis/gapic-showcase v0.30.0
 	github.com/googleapis/gax-go/v2 v2.12.0
 	github.com/gorilla/mux v1.8.1
 	github.com/grafana/dskit v0.0.0-20240108174153-a150e79e4581
@@ -30,7 +30,7 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.18.0
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.46.1
 	go.opentelemetry.io/otel v1.21.0
