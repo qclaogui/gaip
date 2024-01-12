@@ -175,6 +175,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_gapic_out=genproto \
 		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1;bookstore' \
 		--go_gapic_opt='metadata=false' \
+		--go_gapic_opt='omit-snippets' \
 		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
 		--go_gapic_opt='grpc-service-config=proto/qclaogui/bookstore/v1alpha1/bookstore_grpc_service_config.json' \
 		--go_gapic_opt='release-level=alpha' \
@@ -187,6 +188,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_gapic_out=genproto \
 		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/todo/apiv1;todo' \
 		--go_gapic_opt='metadata=false' \
+		--go_gapic_opt='omit-snippets' \
 		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
 		--go_gapic_opt='grpc-service-config=proto/qclaogui/todo/v1/todo_grpc_service_config.json' \
 		--go_gapic_opt='release-level=alpha' \
@@ -199,6 +201,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_gapic_out=genproto \
 		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/project/apiv1;project' \
 		--go_gapic_opt='metadata=false' \
+		--go_gapic_opt='omit-snippets' \
 		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
 		--go_gapic_opt='grpc-service-config=proto/qclaogui/project/v1/project_grpc_service_config.json' \
 		--go_gapic_opt='release-level=alpha' \
