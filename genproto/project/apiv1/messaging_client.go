@@ -24,16 +24,20 @@ import (
 	"math"
 	"net/http"
 	"net/url"
+	"time"
 
 	gax "github.com/googleapis/gax-go/v2"
 	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"google.golang.org/api/googleapi"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
 	gtransport "google.golang.org/api/transport/grpc"
 	httptransport "google.golang.org/api/transport/http"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 var newMessagingClientHook clientHook
@@ -42,6 +46,9 @@ var newMessagingClientHook clientHook
 type MessagingCallOptions struct {
 	CreateRoom []gax.CallOption
 	GetRoom    []gax.CallOption
+	UpdateRoom []gax.CallOption
+	DeleteRoom []gax.CallOption
+	ListRooms  []gax.CallOption
 }
 
 func defaultMessagingGRPCClientOptions() []option.ClientOption {
@@ -58,15 +65,79 @@ func defaultMessagingGRPCClientOptions() []option.ClientOption {
 
 func defaultMessagingCallOptions() *MessagingCallOptions {
 	return &MessagingCallOptions{
-		CreateRoom: []gax.CallOption{},
-		GetRoom:    []gax.CallOption{},
+		CreateRoom: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		GetRoom: []gax.CallOption{
+			gax.WithTimeout(10000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
+					codes.Unavailable,
+					codes.Unknown,
+				}, gax.Backoff{
+					Initial:    100 * time.Millisecond,
+					Max:        3000 * time.Millisecond,
+					Multiplier: 2.00,
+				})
+			}),
+		},
+		UpdateRoom: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		DeleteRoom: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		ListRooms: []gax.CallOption{
+			gax.WithTimeout(10000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
+					codes.Unavailable,
+					codes.Unknown,
+				}, gax.Backoff{
+					Initial:    100 * time.Millisecond,
+					Max:        3000 * time.Millisecond,
+					Multiplier: 2.00,
+				})
+			}),
+		},
 	}
 }
 
 func defaultMessagingRESTCallOptions() *MessagingCallOptions {
 	return &MessagingCallOptions{
-		CreateRoom: []gax.CallOption{},
-		GetRoom:    []gax.CallOption{},
+		CreateRoom: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		GetRoom: []gax.CallOption{
+			gax.WithTimeout(10000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnHTTPCodes(gax.Backoff{
+					Initial:    100 * time.Millisecond,
+					Max:        3000 * time.Millisecond,
+					Multiplier: 2.00,
+				},
+					http.StatusServiceUnavailable,
+					http.StatusInternalServerError)
+			}),
+		},
+		UpdateRoom: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		DeleteRoom: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		ListRooms: []gax.CallOption{
+			gax.WithTimeout(10000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnHTTPCodes(gax.Backoff{
+					Initial:    100 * time.Millisecond,
+					Max:        3000 * time.Millisecond,
+					Multiplier: 2.00,
+				},
+					http.StatusServiceUnavailable,
+					http.StatusInternalServerError)
+			}),
+		},
 	}
 }
 
@@ -77,6 +148,9 @@ type internalMessagingClient interface {
 	Connection() *grpc.ClientConn
 	CreateRoom(context.Context, *projectpb.CreateRoomRequest, ...gax.CallOption) (*projectpb.Room, error)
 	GetRoom(context.Context, *projectpb.GetRoomRequest, ...gax.CallOption) (*projectpb.Room, error)
+	UpdateRoom(context.Context, *projectpb.UpdateRoomRequest, ...gax.CallOption) (*projectpb.Room, error)
+	DeleteRoom(context.Context, *projectpb.DeleteRoomRequest, ...gax.CallOption) error
+	ListRooms(context.Context, *projectpb.ListRoomsRequest, ...gax.CallOption) *RoomIterator
 }
 
 // MessagingClient is a client for interacting with .
@@ -125,6 +199,21 @@ func (c *MessagingClient) CreateRoom(ctx context.Context, req *projectpb.CreateR
 // GetRoom retrieves the Room with the given resource name.
 func (c *MessagingClient) GetRoom(ctx context.Context, req *projectpb.GetRoomRequest, opts ...gax.CallOption) (*projectpb.Room, error) {
 	return c.internalClient.GetRoom(ctx, req, opts...)
+}
+
+// UpdateRoom updates a room.
+func (c *MessagingClient) UpdateRoom(ctx context.Context, req *projectpb.UpdateRoomRequest, opts ...gax.CallOption) (*projectpb.Room, error) {
+	return c.internalClient.UpdateRoom(ctx, req, opts...)
+}
+
+// DeleteRoom deletes a room and all of its blurbs.
+func (c *MessagingClient) DeleteRoom(ctx context.Context, req *projectpb.DeleteRoomRequest, opts ...gax.CallOption) error {
+	return c.internalClient.DeleteRoom(ctx, req, opts...)
+}
+
+// ListRooms lists all chat rooms.
+func (c *MessagingClient) ListRooms(ctx context.Context, req *projectpb.ListRoomsRequest, opts ...gax.CallOption) *RoomIterator {
+	return c.internalClient.ListRooms(ctx, req, opts...)
 }
 
 // messagingGRPCClient is a client for interacting with  over gRPC transport.
@@ -306,6 +395,81 @@ func (c *messagingGRPCClient) GetRoom(ctx context.Context, req *projectpb.GetRoo
 	return resp, nil
 }
 
+func (c *messagingGRPCClient) UpdateRoom(ctx context.Context, req *projectpb.UpdateRoomRequest, opts ...gax.CallOption) (*projectpb.Room, error) {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "room.name", url.QueryEscape(req.GetRoom().GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).UpdateRoom[0:len((*c.CallOptions).UpdateRoom):len((*c.CallOptions).UpdateRoom)], opts...)
+	var resp *projectpb.Room
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.messagingClient.UpdateRoom(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *messagingGRPCClient) DeleteRoom(ctx context.Context, req *projectpb.DeleteRoomRequest, opts ...gax.CallOption) error {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).DeleteRoom[0:len((*c.CallOptions).DeleteRoom):len((*c.CallOptions).DeleteRoom)], opts...)
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		_, err = c.messagingClient.DeleteRoom(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	return err
+}
+
+func (c *messagingGRPCClient) ListRooms(ctx context.Context, req *projectpb.ListRoomsRequest, opts ...gax.CallOption) *RoomIterator {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).ListRooms[0:len((*c.CallOptions).ListRooms):len((*c.CallOptions).ListRooms)], opts...)
+	it := &RoomIterator{}
+	req = proto.Clone(req).(*projectpb.ListRoomsRequest)
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*projectpb.Room, string, error) {
+		resp := &projectpb.ListRoomsResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			var err error
+			resp, err = c.messagingClient.ListRooms(ctx, req, settings.GRPC...)
+			return err
+		}, opts...)
+		if err != nil {
+			return nil, "", err
+		}
+
+		it.Response = resp
+		return resp.GetRooms(), resp.GetNextPageToken(), nil
+	}
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
 // CreateRoom creates a room.
 func (c *messagingRESTClient) CreateRoom(ctx context.Context, req *projectpb.CreateRoomRequest, opts ...gax.CallOption) (*projectpb.Room, error) {
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
@@ -417,4 +581,202 @@ func (c *messagingRESTClient) GetRoom(ctx context.Context, req *projectpb.GetRoo
 		return nil, e
 	}
 	return resp, nil
+}
+
+// UpdateRoom updates a room.
+func (c *messagingRESTClient) UpdateRoom(ctx context.Context, req *projectpb.UpdateRoomRequest, opts ...gax.CallOption) (*projectpb.Room, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	body := req.GetRoom()
+	jsonReq, err := m.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1/%v", req.GetRoom().GetName())
+
+	params := url.Values{}
+	if req.GetUpdateMask() != nil {
+		updateMask, err := protojson.Marshal(req.GetUpdateMask())
+		if err != nil {
+			return nil, err
+		}
+		params.Add("updateMask", string(updateMask[1:len(updateMask)-1]))
+	}
+
+	baseUrl.RawQuery = params.Encode()
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "room.name", url.QueryEscape(req.GetRoom().GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).UpdateRoom[0:len((*c.CallOptions).UpdateRoom):len((*c.CallOptions).UpdateRoom)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &projectpb.Room{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("PATCH", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
+}
+
+// DeleteRoom deletes a room and all of its blurbs.
+func (c *messagingRESTClient) DeleteRoom(ctx context.Context, req *projectpb.DeleteRoomRequest, opts ...gax.CallOption) error {
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1/%v", req.GetName())
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	return gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("DELETE", baseUrl.String(), nil)
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		// Returns nil if there is no error, otherwise wraps
+		// the response code and body into a non-nil error
+		return googleapi.CheckResponse(httpRsp)
+	}, opts...)
+}
+
+// ListRooms lists all chat rooms.
+func (c *messagingRESTClient) ListRooms(ctx context.Context, req *projectpb.ListRoomsRequest, opts ...gax.CallOption) *RoomIterator {
+	it := &RoomIterator{}
+	req = proto.Clone(req).(*projectpb.ListRoomsRequest)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*projectpb.Room, string, error) {
+		resp := &projectpb.ListRoomsResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		baseUrl, err := url.Parse(c.endpoint)
+		if err != nil {
+			return nil, "", err
+		}
+		baseUrl.Path += fmt.Sprintf("/v1/rooms")
+
+		params := url.Values{}
+		if req.GetPageSize() != 0 {
+			params.Add("pageSize", fmt.Sprintf("%v", req.GetPageSize()))
+		}
+		if req.GetPageToken() != "" {
+			params.Add("pageToken", fmt.Sprintf("%v", req.GetPageToken()))
+		}
+
+		baseUrl.RawQuery = params.Encode()
+
+		// Build HTTP headers from client and context metadata.
+		hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+		headers := gax.BuildHeaders(ctx, hds...)
+		e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			if settings.Path != "" {
+				baseUrl.Path = settings.Path
+			}
+			httpReq, err := http.NewRequest("GET", baseUrl.String(), nil)
+			if err != nil {
+				return err
+			}
+			httpReq.Header = headers
+
+			httpRsp, err := c.httpClient.Do(httpReq)
+			if err != nil {
+				return err
+			}
+			defer httpRsp.Body.Close()
+
+			if err = googleapi.CheckResponse(httpRsp); err != nil {
+				return err
+			}
+
+			buf, err := io.ReadAll(httpRsp.Body)
+			if err != nil {
+				return err
+			}
+
+			if err := unm.Unmarshal(buf, resp); err != nil {
+				return err
+			}
+
+			return nil
+		}, opts...)
+		if e != nil {
+			return nil, "", e
+		}
+		it.Response = resp
+		return resp.GetRooms(), resp.GetNextPageToken(), nil
+	}
+
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
 }

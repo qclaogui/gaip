@@ -13,11 +13,21 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// Library fulfills the Repository Library interface
+// NewLibrary is a factory function to generate a new repository
+func NewLibrary() (librarypb.LibraryServiceServer, error) {
+	m := &libraryMemImpl{
+		Shelves: map[int64]*librarypb.Shelf{},
+		Books:   map[int64]map[int64]*librarypb.Book{},
+	}
+	return m, nil
+
+}
+
+// libraryMemImpl fulfills the Repository libraryMemImpl interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// Library is used to implement librarypb.LibraryServiceServer.
-type Library struct {
+// libraryMemImpl is used to implement librarypb.LibraryServiceServer.
+type libraryMemImpl struct {
 	librarypb.UnimplementedLibraryServiceServer
 
 	// shelves are stored in a map keyed by shelf id
@@ -29,17 +39,7 @@ type Library struct {
 	mu          sync.Mutex // global mutex to synchronize service access
 }
 
-// NewLibrary is a factory function to generate a new repository
-func NewLibrary() (librarypb.LibraryServiceServer, error) {
-	m := &Library{
-		Shelves: map[int64]*librarypb.Shelf{},
-		Books:   map[int64]map[int64]*librarypb.Book{},
-	}
-	return m, nil
-
-}
-
-func (m *Library) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
+func (m *libraryMemImpl) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
 
 	m.mu.Lock()
 	defer m.mu.Unlock()

@@ -19,14 +19,6 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// Library fulfills the Library Repository interface
-// All data are managed by Postgres.
-//
-// Library is used to implement LibraryServiceServer.
-type Library struct {
-	entClient *ent.Client
-}
-
 func NewLibrary(cfg Config) (librarypb.LibraryServiceServer, error) {
 	//"postgres://pgx_md5:secret@localhost:5432/pgx_test?sslmode=disable"
 	dsn := fmt.Sprintf("postgres://%s:%s@tcp(%s)/%s?sslmode=disable", cfg.User, cfg.Password, cfg.Host, cfg.Schema)
@@ -39,6 +31,14 @@ func NewLibrary(cfg Config) (librarypb.LibraryServiceServer, error) {
 	drv := entsql.OpenDB(dialect.Postgres, db)
 	repo := &Library{entClient: ent.NewClient(ent.Driver(drv))}
 	return repo, nil
+}
+
+// Library fulfills the Library Repository interface
+// All data are managed by Postgres.
+//
+// Library is used to implement LibraryServiceServer.
+type Library struct {
+	entClient *ent.Client
 }
 
 func (r *Library) CreateShelf(_ context.Context, _ *librarypb.CreateShelfRequest) (*librarypb.Shelf, error) {

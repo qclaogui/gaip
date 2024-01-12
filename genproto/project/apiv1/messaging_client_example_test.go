@@ -21,6 +21,7 @@ import (
 
 	project "github.com/qclaogui/gaip/genproto/project/apiv1"
 	projectpb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"google.golang.org/api/iterator"
 )
 
 func ExampleNewMessagingClient() {
@@ -82,6 +83,29 @@ func ExampleMessagingClient_CreateRoom() {
 	_ = resp
 }
 
+func ExampleMessagingClient_DeleteRoom() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewMessagingClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.DeleteRoomRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#DeleteRoomRequest.
+	}
+	err = c.DeleteRoom(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+}
+
 func ExampleMessagingClient_GetRoom() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
@@ -100,6 +124,62 @@ func ExampleMessagingClient_GetRoom() {
 		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#GetRoomRequest.
 	}
 	resp, err := c.GetRoom(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleMessagingClient_ListRooms() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewMessagingClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.ListRoomsRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#ListRoomsRequest.
+	}
+	it := c.ListRooms(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
+		}
+		// TODO: Use resp.
+		_ = resp
+	}
+}
+
+func ExampleMessagingClient_UpdateRoom() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := project.NewMessagingClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &projectpb.UpdateRoomRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#UpdateRoomRequest.
+	}
+	resp, err := c.UpdateRoom(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}

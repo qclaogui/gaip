@@ -55,5 +55,8 @@ func TestRoomCRUD(t *testing.T) {
 		if room.GetUpdateTime() == nil {
 			t.Errorf("CreateRoom().UpdateTime was unexpectedly empty")
 		}
+
+		// List UsersRequest
+
 	}
 }

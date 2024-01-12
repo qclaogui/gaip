@@ -35,6 +35,8 @@ func NewIdentity() (projectpb.IdentityServiceServer, error) {
 
 // The identityMemImpl type implements a projectpb.IdentityServiceServer.
 type identityMemImpl struct {
+	projectpb.UnimplementedIdentityServiceServer
+
 	uid   service.UniqID
 	token service.TokenGenerator
 

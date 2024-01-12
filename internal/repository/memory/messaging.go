@@ -33,6 +33,8 @@ func NewMessaging() (projectpb.MessagingServiceServer, error) {
 
 // The messagingMemImpl type implements a projectpb.MessagingServiceServer.
 type messagingMemImpl struct {
+	projectpb.UnimplementedMessagingServiceServer
+
 	nowF  func() time.Time
 	token service.TokenGenerator
 

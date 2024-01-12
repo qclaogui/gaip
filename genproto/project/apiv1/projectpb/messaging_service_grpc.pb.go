@@ -17,6 +17,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -27,6 +28,9 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	MessagingService_CreateRoom_FullMethodName = "/qclaogui.project.v1.MessagingService/CreateRoom"
 	MessagingService_GetRoom_FullMethodName    = "/qclaogui.project.v1.MessagingService/GetRoom"
+	MessagingService_UpdateRoom_FullMethodName = "/qclaogui.project.v1.MessagingService/UpdateRoom"
+	MessagingService_DeleteRoom_FullMethodName = "/qclaogui.project.v1.MessagingService/DeleteRoom"
+	MessagingService_ListRooms_FullMethodName  = "/qclaogui.project.v1.MessagingService/ListRooms"
 )
 
 // MessagingServiceClient is the client API for MessagingService service.
@@ -37,6 +41,12 @@ type MessagingServiceClient interface {
 	CreateRoom(ctx context.Context, in *CreateRoomRequest, opts ...grpc.CallOption) (*Room, error)
 	// Retrieves the Room with the given resource name.
 	GetRoom(ctx context.Context, in *GetRoomRequest, opts ...grpc.CallOption) (*Room, error)
+	// Updates a room.
+	UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*Room, error)
+	// Deletes a room and all of its blurbs.
+	DeleteRoom(ctx context.Context, in *DeleteRoomRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Lists all chat rooms.
+	ListRooms(ctx context.Context, in *ListRoomsRequest, opts ...grpc.CallOption) (*ListRoomsResponse, error)
 }
 
 type messagingServiceClient struct {
@@ -65,6 +75,33 @@ func (c *messagingServiceClient) GetRoom(ctx context.Context, in *GetRoomRequest
 	return out, nil
 }
 
+func (c *messagingServiceClient) UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*Room, error) {
+	out := new(Room)
+	err := c.cc.Invoke(ctx, MessagingService_UpdateRoom_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagingServiceClient) DeleteRoom(ctx context.Context, in *DeleteRoomRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, MessagingService_DeleteRoom_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagingServiceClient) ListRooms(ctx context.Context, in *ListRoomsRequest, opts ...grpc.CallOption) (*ListRoomsResponse, error) {
+	out := new(ListRoomsResponse)
+	err := c.cc.Invoke(ctx, MessagingService_ListRooms_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MessagingServiceServer is the server API for MessagingService service.
 // All implementations should embed UnimplementedMessagingServiceServer
 // for forward compatibility
@@ -73,6 +110,12 @@ type MessagingServiceServer interface {
 	CreateRoom(context.Context, *CreateRoomRequest) (*Room, error)
 	// Retrieves the Room with the given resource name.
 	GetRoom(context.Context, *GetRoomRequest) (*Room, error)
+	// Updates a room.
+	UpdateRoom(context.Context, *UpdateRoomRequest) (*Room, error)
+	// Deletes a room and all of its blurbs.
+	DeleteRoom(context.Context, *DeleteRoomRequest) (*emptypb.Empty, error)
+	// Lists all chat rooms.
+	ListRooms(context.Context, *ListRoomsRequest) (*ListRoomsResponse, error)
 }
 
 // UnimplementedMessagingServiceServer should be embedded to have forward compatible implementations.
@@ -84,6 +127,15 @@ func (UnimplementedMessagingServiceServer) CreateRoom(context.Context, *CreateRo
 }
 func (UnimplementedMessagingServiceServer) GetRoom(context.Context, *GetRoomRequest) (*Room, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRoom not implemented")
+}
+func (UnimplementedMessagingServiceServer) UpdateRoom(context.Context, *UpdateRoomRequest) (*Room, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRoom not implemented")
+}
+func (UnimplementedMessagingServiceServer) DeleteRoom(context.Context, *DeleteRoomRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRoom not implemented")
+}
+func (UnimplementedMessagingServiceServer) ListRooms(context.Context, *ListRoomsRequest) (*ListRoomsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListRooms not implemented")
 }
 
 // UnsafeMessagingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -133,6 +185,60 @@ func _MessagingService_GetRoom_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MessagingService_UpdateRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRoomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).UpdateRoom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_UpdateRoom_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).UpdateRoom(ctx, req.(*UpdateRoomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessagingService_DeleteRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRoomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).DeleteRoom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_DeleteRoom_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).DeleteRoom(ctx, req.(*DeleteRoomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessagingService_ListRooms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRoomsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).ListRooms(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_ListRooms_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).ListRooms(ctx, req.(*ListRoomsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MessagingService_ServiceDesc is the grpc.ServiceDesc for MessagingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -147,6 +253,18 @@ var MessagingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRoom",
 			Handler:    _MessagingService_GetRoom_Handler,
+		},
+		{
+			MethodName: "UpdateRoom",
+			Handler:    _MessagingService_UpdateRoom_Handler,
+		},
+		{
+			MethodName: "DeleteRoom",
+			Handler:    _MessagingService_DeleteRoom_Handler,
+		},
+		{
+			MethodName: "ListRooms",
+			Handler:    _MessagingService_ListRooms_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

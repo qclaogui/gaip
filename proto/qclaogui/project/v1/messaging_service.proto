@@ -8,6 +8,7 @@ package qclaogui.project.v1;
 
 import "google/api/annotations.proto";
 import "google/api/client.proto";
+import "google/protobuf/empty.proto";
 import "qclaogui/project/v1/room.proto";
 
 option go_package = "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb";
@@ -33,5 +34,24 @@ service MessagingService {
   rpc GetRoom(GetRoomRequest) returns (Room) {
     option (google.api.http) = {get: "/v1/{name=rooms/*}"};
     option (google.api.method_signature) = "name";
+  }
+
+  // Updates a room.
+  rpc UpdateRoom(UpdateRoomRequest) returns (Room) {
+    option (google.api.http) = {
+      patch: "/v1/{room.name=rooms/*}"
+      body: "room"
+    };
+  }
+
+  // Deletes a room and all of its blurbs.
+  rpc DeleteRoom(DeleteRoomRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/v1/{name=rooms/*}"};
+    option (google.api.method_signature) = "name";
+  }
+
+  // Lists all chat rooms.
+  rpc ListRooms(ListRoomsRequest) returns (ListRoomsResponse) {
+    option (google.api.http) = {get: "/v1/rooms"};
   }
 }
