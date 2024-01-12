@@ -23,7 +23,7 @@ type roomEntry struct {
 }
 
 func NewMessaging() (projectpb.MessagingServiceServer, error) {
-	s := &messagingMemImpl{
+	s := &messagingImpl{
 		nowF:     time.Now,
 		token:    service.NewTokenGenerator(),
 		roomKeys: map[string]int{},
@@ -31,8 +31,8 @@ func NewMessaging() (projectpb.MessagingServiceServer, error) {
 	return s, nil
 }
 
-// The messagingMemImpl type implements a projectpb.MessagingServiceServer.
-type messagingMemImpl struct {
+// The messagingImpl type implements a projectpb.MessagingServiceServer.
+type messagingImpl struct {
 	projectpb.UnimplementedMessagingServiceServer
 
 	nowF  func() time.Time
@@ -45,7 +45,7 @@ type messagingMemImpl struct {
 }
 
 // CreateRoom Creates a room.
-func (m *messagingMemImpl) CreateRoom(_ context.Context, req *projectpb.CreateRoomRequest) (*projectpb.Room, error) {
+func (m *messagingImpl) CreateRoom(_ context.Context, req *projectpb.CreateRoomRequest) (*projectpb.Room, error) {
 	m.roomMu.Lock()
 	defer m.roomMu.Unlock()
 
@@ -81,11 +81,11 @@ func (m *messagingMemImpl) CreateRoom(_ context.Context, req *projectpb.CreateRo
 }
 
 // GetRoom Retrieves the Room with the given resource name.
-func (m *messagingMemImpl) GetRoom(context.Context, *projectpb.GetRoomRequest) (*projectpb.Room, error) {
+func (m *messagingImpl) GetRoom(context.Context, *projectpb.GetRoomRequest) (*projectpb.Room, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRoom not implemented")
 }
 
-func (m *messagingMemImpl) anyRoom(f func(*projectpb.Room) bool) bool {
+func (m *messagingImpl) anyRoom(f func(*projectpb.Room) bool) bool {
 	for _, entry := range m.rooms {
 		if !entry.deleted && f(entry.room) {
 			return true

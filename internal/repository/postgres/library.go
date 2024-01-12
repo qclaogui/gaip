@@ -29,69 +29,71 @@ func NewLibrary(cfg Config) (librarypb.LibraryServiceServer, error) {
 
 	// Create an ent.Driver from `entClient`.
 	drv := entsql.OpenDB(dialect.Postgres, db)
-	repo := &Library{entClient: ent.NewClient(ent.Driver(drv))}
+	repo := &libraryImpl{entClient: ent.NewClient(ent.Driver(drv))}
 	return repo, nil
 }
 
-// Library fulfills the Library Repository interface
+// libraryImpl fulfills the libraryImpl Repository interface
 // All data are managed by Postgres.
 //
-// Library is used to implement LibraryServiceServer.
-type Library struct {
+// libraryImpl is used to implement LibraryServiceServer.
+type libraryImpl struct {
+	librarypb.UnimplementedLibraryServiceServer
+
 	entClient *ent.Client
 }
 
-func (r *Library) CreateShelf(_ context.Context, _ *librarypb.CreateShelfRequest) (*librarypb.Shelf, error) {
+func (r *libraryImpl) CreateShelf(_ context.Context, _ *librarypb.CreateShelfRequest) (*librarypb.Shelf, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) GetShelf(_ context.Context, _ *librarypb.GetShelfRequest) (*librarypb.Shelf, error) {
+func (r *libraryImpl) GetShelf(_ context.Context, _ *librarypb.GetShelfRequest) (*librarypb.Shelf, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) ListShelves(_ context.Context, _ *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
+func (r *libraryImpl) ListShelves(_ context.Context, _ *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) DeleteShelf(_ context.Context, _ *librarypb.DeleteShelfRequest) (*emptypb.Empty, error) {
+func (r *libraryImpl) DeleteShelf(_ context.Context, _ *librarypb.DeleteShelfRequest) (*emptypb.Empty, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) MergeShelves(_ context.Context, _ *librarypb.MergeShelvesRequest) (*librarypb.Shelf, error) {
+func (r *libraryImpl) MergeShelves(_ context.Context, _ *librarypb.MergeShelvesRequest) (*librarypb.Shelf, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) CreateBook(_ context.Context, _ *librarypb.CreateBookRequest) (*librarypb.Book, error) {
+func (r *libraryImpl) CreateBook(_ context.Context, _ *librarypb.CreateBookRequest) (*librarypb.Book, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) GetBook(_ context.Context, _ *librarypb.GetBookRequest) (*librarypb.Book, error) {
+func (r *libraryImpl) GetBook(_ context.Context, _ *librarypb.GetBookRequest) (*librarypb.Book, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) ListBooks(_ context.Context, _ *librarypb.ListBooksRequest) (*librarypb.ListBooksResponse, error) {
+func (r *libraryImpl) ListBooks(_ context.Context, _ *librarypb.ListBooksRequest) (*librarypb.ListBooksResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) DeleteBook(_ context.Context, _ *librarypb.DeleteBookRequest) (*emptypb.Empty, error) {
+func (r *libraryImpl) DeleteBook(_ context.Context, _ *librarypb.DeleteBookRequest) (*emptypb.Empty, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) UpdateBook(_ context.Context, _ *librarypb.UpdateBookRequest) (*librarypb.Book, error) {
+func (r *libraryImpl) UpdateBook(_ context.Context, _ *librarypb.UpdateBookRequest) (*librarypb.Book, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r *Library) MoveBook(_ context.Context, _ *librarypb.MoveBookRequest) (*librarypb.Book, error) {
+func (r *libraryImpl) MoveBook(_ context.Context, _ *librarypb.MoveBookRequest) (*librarypb.Book, error) {
 	//TODO implement me
 	panic("implement me")
 }

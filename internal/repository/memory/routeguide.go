@@ -21,7 +21,7 @@ import (
 
 // NewRouteNote is a factory function to generate a new repository
 func NewRouteNote(cfg Config) (routeguidepb.RouteGuideServiceServer, error) {
-	mr := &routeNoteMemImpl{
+	mr := &routeNoteImpl{
 		routeNotes: make(map[string][]*routeguidepb.RouteNote),
 	}
 	// load Features
@@ -31,11 +31,11 @@ func NewRouteNote(cfg Config) (routeguidepb.RouteGuideServiceServer, error) {
 	return mr, nil
 }
 
-// routeNoteMemImpl fulfills the Repository routeNoteMemImpl interface
+// routeNoteImpl fulfills the Repository routeNoteImpl interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// routeNoteMemImpl is used to implement routeguidepb.RouteGuideServiceServer.
-type routeNoteMemImpl struct {
+// routeNoteImpl is used to implement routeguidepb.RouteGuideServiceServer.
+type routeNoteImpl struct {
 	routeguidepb.UnimplementedRouteGuideServiceServer
 
 	mem        []*routeguidepb.Feature // read-only after initialized
@@ -44,7 +44,7 @@ type routeNoteMemImpl struct {
 }
 
 // loadFeatures loads features from a JSON file.
-func (mr *routeNoteMemImpl) loadFeatures(filePath string) error {
+func (mr *routeNoteImpl) loadFeatures(filePath string) error {
 	var data []byte
 	var err error
 	if filePath != "" {
@@ -61,7 +61,7 @@ func (mr *routeNoteMemImpl) loadFeatures(filePath string) error {
 }
 
 // GetFeature returns the feature at the given point.
-func (mr *routeNoteMemImpl) GetFeature(_ context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
+func (mr *routeNoteImpl) GetFeature(_ context.Context, req *routeguidepb.GetFeatureRequest) (*routeguidepb.GetFeatureResponse, error) {
 	for _, feature := range mr.mem {
 		if proto.Equal(feature.Location, req.Point) {
 			return &routeguidepb.GetFeatureResponse{Feature: feature}, nil
@@ -71,7 +71,7 @@ func (mr *routeNoteMemImpl) GetFeature(_ context.Context, req *routeguidepb.GetF
 	return &routeguidepb.GetFeatureResponse{Feature: &routeguidepb.Feature{Location: req.Point}}, nil
 }
 
-func (mr *routeNoteMemImpl) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
+func (mr *routeNoteImpl) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream routeguidepb.RouteGuideService_ListFeaturesServer) error {
 	for _, feature := range mr.mem {
 		if inRange(feature.Location, req.GetRectangle()) {
 			if err := stream.Send(&routeguidepb.ListFeaturesResponse{Feature: feature}); err != nil {
@@ -82,7 +82,7 @@ func (mr *routeNoteMemImpl) ListFeatures(req *routeguidepb.ListFeaturesRequest, 
 	return nil
 }
 
-func (mr *routeNoteMemImpl) RecordRoute(stream routeguidepb.RouteGuideService_RecordRouteServer) error {
+func (mr *routeNoteImpl) RecordRoute(stream routeguidepb.RouteGuideService_RecordRouteServer) error {
 	var pointCount, featureCount, distance int32
 	var lastPoint *routeguidepb.Point
 	startTime := time.Now()
@@ -150,7 +150,7 @@ func serialize(point *routeguidepb.Point) string {
 	return fmt.Sprintf("%d %d", point.Latitude, point.Longitude)
 }
 
-func (mr *routeNoteMemImpl) RouteChat(stream routeguidepb.RouteGuideService_RouteChatServer) error {
+func (mr *routeNoteImpl) RouteChat(stream routeguidepb.RouteGuideService_RouteChatServer) error {
 	for {
 		req, err := stream.Recv()
 		if errors.Is(err, io.EOF) {

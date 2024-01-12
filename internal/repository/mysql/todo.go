@@ -18,17 +18,6 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// Todo fulfills the Todo interface
-// All data are managed by MysqlCfg.
-//
-// Todo is used to implement ToDoServiceServer.
-type Todo struct {
-	todopb.UnimplementedToDoServiceServer
-
-	sqlDB     *sql.DB
-	entClient *ent.Client
-}
-
 // NewTodo is a factory function to generate a new repository
 func NewTodo(cfg Config) (todopb.ToDoServiceServer, error) {
 	// add MySQL driver specific parameter to parse date/time
@@ -40,17 +29,28 @@ func NewTodo(cfg Config) (todopb.ToDoServiceServer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed opening connection to mysql: %v", err)
 	}
-	repo := &Todo{entClient: client}
+	repo := &todoImpl{entClient: client}
 	return repo, nil
+}
+
+// todoImpl fulfills the todoImpl interface
+// All data are managed by MysqlCfg.
+//
+// todoImpl is used to implement ToDoServiceServer.
+type todoImpl struct {
+	todopb.UnimplementedToDoServiceServer
+
+	sqlDB     *sql.DB
+	entClient *ent.Client
 }
 
 // NewTodoWithSQLDB is a factory function to generate a new repository
-func NewTodoWithSQLDB(db *sql.DB) (*Todo, error) {
-	repo := &Todo{sqlDB: db}
+func NewTodoWithSQLDB(db *sql.DB) (todopb.ToDoServiceServer, error) {
+	repo := &todoImpl{sqlDB: db}
 	return repo, nil
 }
 
-func (m *Todo) connect(ctx context.Context) (*sql.Conn, error) {
+func (m *todoImpl) connect(ctx context.Context) (*sql.Conn, error) {
 	c, err := m.sqlDB.Conn(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database-> " + err.Error())
@@ -58,7 +58,7 @@ func (m *Todo) connect(ctx context.Context) (*sql.Conn, error) {
 	return c, nil
 }
 
-func (m *Todo) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
+func (m *todoImpl) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -93,7 +93,7 @@ func (m *Todo) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResp
 	return &todopb.GetResponse{Api: "v1", Item: todo}, nil
 }
 
-func (m *Todo) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+func (m *todoImpl) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -110,7 +110,7 @@ func (m *Todo) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.C
 	return &todopb.CreateResponse{Api: "v1", Id: todo.GetId()}, nil
 }
 
-func (m *Todo) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
+func (m *todoImpl) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -137,7 +137,7 @@ func (m *Todo) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.U
 	return &todopb.UpdateResponse{Api: "v1", Updated: rows}, nil
 }
 
-func (m *Todo) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
+func (m *todoImpl) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -161,7 +161,7 @@ func (m *Todo) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.D
 	return &todopb.DeleteResponse{Api: "v1", Deleted: rows}, nil
 }
 
-func (m *Todo) List(ctx context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
+func (m *todoImpl) List(ctx context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {

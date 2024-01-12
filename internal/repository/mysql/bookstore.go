@@ -16,11 +16,11 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// Bookstore fulfills the Bookstore Repository interface
+// bookstoreImpl fulfills the bookstoreImpl Repository interface
 // All data are managed by MysqlCfg.
 //
-// Bookstore is used to implement BookstoreServiceServer.
-type Bookstore struct {
+// bookstoreImpl is used to implement BookstoreServiceServer.
+type bookstoreImpl struct {
 	bookstorepb.UnimplementedBookstoreServiceServer
 
 	sqlDB     *sql.DB
@@ -38,17 +38,17 @@ func NewBookstore(cfg Config) (bookstorepb.BookstoreServiceServer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed opening connection to mysql: %v", err)
 	}
-	repo := &Bookstore{entClient: client}
+	repo := &bookstoreImpl{entClient: client}
 	return repo, nil
 }
 
 // NewBookstoreWithSQLDB is a factory function to generate a new repository
-func NewBookstoreWithSQLDB(db *sql.DB) (*Bookstore, error) {
-	repo := &Bookstore{sqlDB: db}
+func NewBookstoreWithSQLDB(db *sql.DB) (bookstorepb.BookstoreServiceServer, error) {
+	repo := &bookstoreImpl{sqlDB: db}
 	return repo, nil
 }
 
-func (r *Bookstore) connect(ctx context.Context) (*sql.Conn, error) {
+func (r *bookstoreImpl) connect(ctx context.Context) (*sql.Conn, error) {
 	c, err := r.sqlDB.Conn(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database-> " + err.Error())
@@ -56,7 +56,7 @@ func (r *Bookstore) connect(ctx context.Context) (*sql.Conn, error) {
 	return c, nil
 }
 
-func (r *Bookstore) GetShelf(ctx context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
+func (r *bookstoreImpl) GetShelf(ctx context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
 	// get SQL connection from pool
 	c, err := r.connect(ctx)
 	if err != nil {

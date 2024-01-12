@@ -15,18 +15,18 @@ import (
 
 // NewBookstore is a factory function to generate a new repository
 func NewBookstore() (bookstorepb.BookstoreServiceServer, error) {
-	m := &bookstoreMemImpl{
+	m := &bookstoreImpl{
 		Shelves: map[int64]*bookstorepb.Shelf{},
 		Books:   map[int64]map[int64]*bookstorepb.Book{},
 	}
 	return m, nil
 }
 
-// bookstoreMemImpl fulfills the bookstoreMemImpl Repository interface
+// bookstoreImpl fulfills the bookstoreImpl Repository interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// bookstoreMemImpl is used to implement bookstorepb.BookstoreServiceServer.
-type bookstoreMemImpl struct {
+// bookstoreImpl is used to implement bookstorepb.BookstoreServiceServer.
+type bookstoreImpl struct {
 	bookstorepb.UnimplementedBookstoreServiceServer
 
 	// shelves are stored in a map keyed by shelf id
@@ -38,7 +38,7 @@ type bookstoreMemImpl struct {
 	Mutex       sync.Mutex // global mutex to synchronize service access
 }
 
-func (m *bookstoreMemImpl) getShelf(sid int64) (shelf *bookstorepb.Shelf, err error) {
+func (m *bookstoreImpl) getShelf(sid int64) (shelf *bookstorepb.Shelf, err error) {
 	shelf, ok := m.Shelves[sid]
 	if !ok {
 		return nil, fmt.Errorf("couldn't find shelf %d", sid)
@@ -46,7 +46,7 @@ func (m *bookstoreMemImpl) getShelf(sid int64) (shelf *bookstorepb.Shelf, err er
 	return shelf, nil
 }
 
-func (m *bookstoreMemImpl) getBook(sid int64, bid int64) (book *bookstorepb.Book, err error) {
+func (m *bookstoreImpl) getBook(sid int64, bid int64) (book *bookstorepb.Book, err error) {
 	_, err = m.getShelf(sid)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (m *bookstoreMemImpl) getBook(sid int64, bid int64) (book *bookstorepb.Book
 	return book, nil
 }
 
-func (m *bookstoreMemImpl) ListShelves(context.Context, *emptypb.Empty) (*bookstorepb.ListShelvesResponse, error) {
+func (m *bookstoreImpl) ListShelves(context.Context, *emptypb.Empty) (*bookstorepb.ListShelvesResponse, error) {
 	m.Mutex.Lock()
 	defer m.Mutex.Unlock()
 
@@ -76,7 +76,7 @@ func (m *bookstoreMemImpl) ListShelves(context.Context, *emptypb.Empty) (*bookst
 	return response, nil
 }
 
-func (m *bookstoreMemImpl) CreateShelf(_ context.Context, req *bookstorepb.CreateShelfRequest) (*bookstorepb.Shelf, error) {
+func (m *bookstoreImpl) CreateShelf(_ context.Context, req *bookstorepb.CreateShelfRequest) (*bookstorepb.Shelf, error) {
 	m.Mutex.Lock()
 	defer m.Mutex.Unlock()
 
@@ -90,7 +90,7 @@ func (m *bookstoreMemImpl) CreateShelf(_ context.Context, req *bookstorepb.Creat
 
 	return shelf, nil
 }
-func (m *bookstoreMemImpl) GetShelf(_ context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
+func (m *bookstoreImpl) GetShelf(_ context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
 	sid := req.Shelf
 
 	m.Mutex.Lock()
@@ -104,7 +104,7 @@ func (m *bookstoreMemImpl) GetShelf(_ context.Context, req *bookstorepb.GetShelf
 
 	return shelf, nil
 }
-func (m *bookstoreMemImpl) DeleteShelf(_ context.Context, req *bookstorepb.DeleteShelfRequest) (*emptypb.Empty, error) {
+func (m *bookstoreImpl) DeleteShelf(_ context.Context, req *bookstorepb.DeleteShelfRequest) (*emptypb.Empty, error) {
 	sid := req.Shelf
 
 	m.Mutex.Lock()
@@ -116,7 +116,7 @@ func (m *bookstoreMemImpl) DeleteShelf(_ context.Context, req *bookstorepb.Delet
 
 	return nil, nil
 }
-func (m *bookstoreMemImpl) ListBooks(_ context.Context, req *bookstorepb.ListBooksRequest) (*bookstorepb.ListBooksResponse, error) {
+func (m *bookstoreImpl) ListBooks(_ context.Context, req *bookstorepb.ListBooksRequest) (*bookstorepb.ListBooksResponse, error) {
 	sid := req.Shelf
 
 	m.Mutex.Lock()
@@ -141,7 +141,7 @@ func (m *bookstoreMemImpl) ListBooks(_ context.Context, req *bookstorepb.ListBoo
 
 	return response, nil
 }
-func (m *bookstoreMemImpl) CreateBook(_ context.Context, req *bookstorepb.CreateBookRequest) (*bookstorepb.Book, error) {
+func (m *bookstoreImpl) CreateBook(_ context.Context, req *bookstorepb.CreateBookRequest) (*bookstorepb.Book, error) {
 	sid := req.Shelf
 
 	m.Mutex.Lock()
@@ -165,7 +165,7 @@ func (m *bookstoreMemImpl) CreateBook(_ context.Context, req *bookstorepb.Create
 
 	return book, nil
 }
-func (m *bookstoreMemImpl) GetBook(_ context.Context, req *bookstorepb.GetBookRequest) (*bookstorepb.Book, error) {
+func (m *bookstoreImpl) GetBook(_ context.Context, req *bookstorepb.GetBookRequest) (*bookstorepb.Book, error) {
 	sid, bid := req.Shelf, req.Book
 
 	m.Mutex.Lock()
@@ -179,7 +179,7 @@ func (m *bookstoreMemImpl) GetBook(_ context.Context, req *bookstorepb.GetBookRe
 
 	return book, nil
 }
-func (m *bookstoreMemImpl) DeleteBook(_ context.Context, req *bookstorepb.DeleteBookRequest) (*emptypb.Empty, error) {
+func (m *bookstoreImpl) DeleteBook(_ context.Context, req *bookstorepb.DeleteBookRequest) (*emptypb.Empty, error) {
 	sid, bid := req.Shelf, req.Book
 
 	m.Mutex.Lock()

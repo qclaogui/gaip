@@ -15,7 +15,7 @@ import (
 
 // NewLibrary is a factory function to generate a new repository
 func NewLibrary() (librarypb.LibraryServiceServer, error) {
-	m := &libraryMemImpl{
+	m := &libraryImpl{
 		Shelves: map[int64]*librarypb.Shelf{},
 		Books:   map[int64]map[int64]*librarypb.Book{},
 	}
@@ -23,11 +23,11 @@ func NewLibrary() (librarypb.LibraryServiceServer, error) {
 
 }
 
-// libraryMemImpl fulfills the Repository libraryMemImpl interface
+// libraryImpl fulfills the Repository libraryImpl interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// libraryMemImpl is used to implement librarypb.LibraryServiceServer.
-type libraryMemImpl struct {
+// libraryImpl is used to implement librarypb.LibraryServiceServer.
+type libraryImpl struct {
 	librarypb.UnimplementedLibraryServiceServer
 
 	// shelves are stored in a map keyed by shelf id
@@ -39,7 +39,7 @@ type libraryMemImpl struct {
 	mu          sync.Mutex // global mutex to synchronize service access
 }
 
-func (m *libraryMemImpl) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
+func (m *libraryImpl) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
 
 	m.mu.Lock()
 	defer m.mu.Unlock()

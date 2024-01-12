@@ -19,17 +19,17 @@ import (
 
 // NewProject is a factory function to generate a new repository
 func NewProject() (projectpb.ProjectServiceServer, error) {
-	mr := &projectMemImpl{
+	mr := &projectImpl{
 		projects: map[string]*projectpb.Project{},
 	}
 	return mr, nil
 }
 
-// projectMemImpl fulfills the Repository projectMemImpl interface
+// projectImpl fulfills the Repository projectImpl interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// projectMemImpl is used to implement projectpb.ProjectServiceServer.
-type projectMemImpl struct {
+// projectImpl is used to implement projectpb.ProjectServiceServer.
+type projectImpl struct {
 	projectpb.UnimplementedProjectServiceServer
 
 	mu sync.Mutex // global mutex to synchronize service access
@@ -37,7 +37,7 @@ type projectMemImpl struct {
 	projects map[string]*projectpb.Project
 }
 
-func (p *projectMemImpl) CreateProject(_ context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
+func (p *projectImpl) CreateProject(_ context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {
 	proj := req.Project
 	if proj == nil {
 		log.Print("ProjectSrv must not be empty.")
@@ -66,7 +66,7 @@ func (p *projectMemImpl) CreateProject(_ context.Context, req *projectpb.CreateP
 	return p.projects[pID], nil
 }
 
-func (p *projectMemImpl) GetProject(_ context.Context, req *projectpb.GetProjectRequest) (*projectpb.Project, error) {
+func (p *projectImpl) GetProject(_ context.Context, req *projectpb.GetProjectRequest) (*projectpb.Project, error) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
@@ -86,7 +86,7 @@ func (p *projectMemImpl) GetProject(_ context.Context, req *projectpb.GetProject
 
 // ListProjects returns up to pageSize number of projects beginning at pageToken, or from
 // start if pageToken is the empty string.
-func (p *projectMemImpl) ListProjects(_ context.Context, req *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
+func (p *projectImpl) ListProjects(_ context.Context, req *projectpb.ListProjectsRequest) (*projectpb.ListProjectsResponse, error) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
@@ -117,7 +117,7 @@ func (p *projectMemImpl) ListProjects(_ context.Context, req *projectpb.ListProj
 
 }
 
-func (p *projectMemImpl) DeleteProject(_ context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
+func (p *projectImpl) DeleteProject(_ context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 

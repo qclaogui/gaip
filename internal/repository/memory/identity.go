@@ -26,15 +26,15 @@ type userEntry struct {
 }
 
 func NewIdentity() (projectpb.IdentityServiceServer, error) {
-	s := &identityMemImpl{
+	s := &identityImpl{
 		token: service.NewTokenGenerator(),
 		keys:  map[string]int{},
 	}
 	return s, nil
 }
 
-// The identityMemImpl type implements a projectpb.IdentityServiceServer.
-type identityMemImpl struct {
+// The identityImpl type implements a projectpb.IdentityServiceServer.
+type identityImpl struct {
 	projectpb.UnimplementedIdentityServiceServer
 
 	uid   service.UniqID
@@ -46,7 +46,7 @@ type identityMemImpl struct {
 }
 
 // validate validate
-func (s *identityMemImpl) validate(u *projectpb.User) error {
+func (s *identityImpl) validate(u *projectpb.User) error {
 	// Validate Required Fields.
 	if u.GetDisplayName() == "" {
 		return status.Errorf(codes.InvalidArgument, "The field `display_name` is required.")
@@ -70,7 +70,7 @@ func (s *identityMemImpl) validate(u *projectpb.User) error {
 }
 
 // CreateUser Create User
-func (s *identityMemImpl) CreateUser(_ context.Context, req *projectpb.CreateUserRequest) (*projectpb.User, error) {
+func (s *identityImpl) CreateUser(_ context.Context, req *projectpb.CreateUserRequest) (*projectpb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -102,7 +102,7 @@ func (s *identityMemImpl) CreateUser(_ context.Context, req *projectpb.CreateUse
 }
 
 // GetUser Get User
-func (s *identityMemImpl) GetUser(_ context.Context, req *projectpb.GetUserRequest) (*projectpb.User, error) {
+func (s *identityImpl) GetUser(_ context.Context, req *projectpb.GetUserRequest) (*projectpb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -118,7 +118,7 @@ func (s *identityMemImpl) GetUser(_ context.Context, req *projectpb.GetUserReque
 }
 
 // ListUsers List Users
-func (s *identityMemImpl) ListUsers(_ context.Context, req *projectpb.ListUsersRequest) (*projectpb.ListUsersResponse, error) {
+func (s *identityImpl) ListUsers(_ context.Context, req *projectpb.ListUsersRequest) (*projectpb.ListUsersResponse, error) {
 
 	pageToken, err := pagination.ParsePageToken(req)
 	if err != nil {
@@ -155,7 +155,7 @@ func (s *identityMemImpl) ListUsers(_ context.Context, req *projectpb.ListUsersR
 }
 
 // UpdateUser Update User
-func (s *identityMemImpl) UpdateUser(_ context.Context, req *projectpb.UpdateUserRequest) (*projectpb.User, error) {
+func (s *identityImpl) UpdateUser(_ context.Context, req *projectpb.UpdateUserRequest) (*projectpb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -184,7 +184,7 @@ func (s *identityMemImpl) UpdateUser(_ context.Context, req *projectpb.UpdateUse
 }
 
 // DeleteUser Delete User
-func (s *identityMemImpl) DeleteUser(_ context.Context, req *projectpb.DeleteUserRequest) (*emptypb.Empty, error) {
+func (s *identityImpl) DeleteUser(_ context.Context, req *projectpb.DeleteUserRequest) (*emptypb.Empty, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
