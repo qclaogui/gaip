@@ -18,7 +18,7 @@ require (
 	github.com/googleapis/gapic-showcase v0.30.0
 	github.com/googleapis/gax-go/v2 v2.12.0
 	github.com/gorilla/mux v1.8.1
-	github.com/grafana/dskit v0.0.0-20240110151404-6a40f2c0c17c
+	github.com/grafana/dskit v0.0.0-20240112005349-f30e65d9dee2
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0
 	github.com/hashicorp/vault/api v1.10.0
@@ -47,8 +47,8 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.17.0 // indirect
-	cloud.google.com/go v0.111.0 // indirect
+	ariga.io/atlas v0.18.0 // indirect
+	cloud.google.com/go v0.112.0 // indirect
 	cloud.google.com/go/compute v1.23.3 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	github.com/99designs/gqlgen v0.17.42 // indirect
