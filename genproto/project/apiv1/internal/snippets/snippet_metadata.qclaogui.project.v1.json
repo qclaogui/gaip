@@ -513,6 +513,98 @@
       ]
     },
     {
+      "regionTag": "localhost: 9095_v1_generated_MessagingService_CreateRoom_sync",
+      "title": "localhost: 9095 CreateRoom Sample",
+      "description": "CreateRoom creates a room.",
+      "file": "MessagingClient/CreateRoom/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "CreateRoom",
+        "fullName": "qclaogui.project.v1.MessagingClient.CreateRoom",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.CreateRoomRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.Room",
+        "client": {
+          "shortName": "MessagingClient",
+          "fullName": "qclaogui.project.v1.MessagingClient"
+        },
+        "method": {
+          "shortName": "CreateRoom",
+          "fullName": "qclaogui.project.v1.MessagingService.CreateRoom",
+          "service": {
+            "shortName": "MessagingService",
+            "fullName": "qclaogui.project.v1.MessagingService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
+      "regionTag": "localhost: 9095_v1_generated_MessagingService_GetRoom_sync",
+      "title": "localhost: 9095 GetRoom Sample",
+      "description": "GetRoom retrieves the Room with the given resource name.",
+      "file": "MessagingClient/GetRoom/main.go",
+      "language": "GO",
+      "clientMethod": {
+        "shortName": "GetRoom",
+        "fullName": "qclaogui.project.v1.MessagingClient.GetRoom",
+        "parameters": [
+          {
+            "type": "context.Context",
+            "name": "ctx"
+          },
+          {
+            "type": "projectpb.GetRoomRequest",
+            "name": "req"
+          },
+          {
+            "type": "...gax.CallOption",
+            "name": "opts"
+          }
+        ],
+        "resultType": "*projectpb.Room",
+        "client": {
+          "shortName": "MessagingClient",
+          "fullName": "qclaogui.project.v1.MessagingClient"
+        },
+        "method": {
+          "shortName": "GetRoom",
+          "fullName": "qclaogui.project.v1.MessagingService.GetRoom",
+          "service": {
+            "shortName": "MessagingService",
+            "fullName": "qclaogui.project.v1.MessagingService"
+          }
+        }
+      },
+      "origin": "API_DEFINITION",
+      "segments": [
+        {
+          "start": 18,
+          "end": 53,
+          "type": "FULL"
+        }
+      ]
+    },
+    {
       "regionTag": "localhost: 9095_v1_generated_ProjectService_CreateProject_sync",
       "title": "localhost: 9095 CreateProject Sample",
       "description": "CreateProject creates a new project.",
