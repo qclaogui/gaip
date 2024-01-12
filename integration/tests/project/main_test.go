@@ -59,5 +59,17 @@ func TestMain(m *testing.M) {
 	}
 	defer func() { _ = identityREST.Close() }()
 
+	messagingGRPC, err = project.NewMessagingClient(ctx, opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() { _ = messagingGRPC.Close() }()
+
+	messagingREST, err = project.NewMessagingRESTClient(ctx, restClientOpts...)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() { _ = messagingREST.Close() }()
+
 	os.Exit(m.Run())
 }

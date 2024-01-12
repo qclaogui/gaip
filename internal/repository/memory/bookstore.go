@@ -13,10 +13,19 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
+// NewBookstore is a factory function to generate a new repository
+func NewBookstore() (bookstorepb.BookstoreServiceServer, error) {
+	m := &Bookstore{
+		Shelves: map[int64]*bookstorepb.Shelf{},
+		Books:   map[int64]map[int64]*bookstorepb.Book{},
+	}
+	return m, nil
+}
+
 // Bookstore fulfills the Bookstore Repository interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// Bookstore is used to implement BookstoreServiceServer.
+// Bookstore is used to implement bookstorepb.BookstoreServiceServer.
 type Bookstore struct {
 	bookstorepb.UnimplementedBookstoreServiceServer
 
@@ -27,15 +36,6 @@ type Bookstore struct {
 	LastShelfID int64      // the id of the last shelf that was added
 	LastBookID  int64      // the id of the last book that was added
 	Mutex       sync.Mutex // global mutex to synchronize service access
-}
-
-// NewBookstore is a factory function to generate a new repository
-func NewBookstore() (bookstorepb.BookstoreServiceServer, error) {
-	m := &Bookstore{
-		Shelves: map[int64]*bookstorepb.Shelf{},
-		Books:   map[int64]map[int64]*bookstorepb.Book{},
-	}
-	return m, nil
 }
 
 func (m *Bookstore) getShelf(sid int64) (shelf *bookstorepb.Shelf, err error) {

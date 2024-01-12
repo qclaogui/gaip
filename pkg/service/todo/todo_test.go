@@ -14,7 +14,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
+	pb "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/repository/mysql"
 	lg "github.com/qclaogui/gaip/tools/log"
 	"github.com/stretchr/testify/require"
@@ -55,14 +55,14 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *todopb.CreateRequest
+		req *pb.CreateRequest
 	}
 	cases := []struct {
 		desc    string
-		ssv     todopb.ToDoServiceServer
+		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *todopb.CreateResponse
+		want    *pb.CreateResponse
 		wantErr bool
 	}{
 		{
@@ -70,9 +70,9 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.CreateRequest{
+				req: &pb.CreateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Id:          ID,
 						Title:       "title",
 						Description: "description",
@@ -84,7 +84,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 				mock.ExpectExec("INSERT INTO ToDo").WithArgs(ID, "title", "description", tm).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &todopb.CreateResponse{
+			want: &pb.CreateResponse{
 				Api: "v1",
 				Id:  ID,
 			},
@@ -94,9 +94,9 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.CreateRequest{
+				req: &pb.CreateRequest{
 					Api: "v1000",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Title:       "title",
 						Description: "description",
 						CreatedAt:   reminder,
@@ -111,9 +111,9 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.CreateRequest{
+				req: &pb.CreateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Title:       "title",
 						Description: "description",
 						CreatedAt: &timestamp.Timestamp{
@@ -131,9 +131,9 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.CreateRequest{
+				req: &pb.CreateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Title:       "title",
 						Description: "description",
 						CreatedAt:   reminder,
@@ -151,9 +151,9 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.CreateRequest{
+				req: &pb.CreateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Title:       "title",
 						Description: "description",
 						CreatedAt:   reminder,
@@ -197,15 +197,15 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *todopb.GetRequest
+		req *pb.GetRequest
 	}
 
 	cases := []struct {
 		desc    string
-		ssv     todopb.ToDoServiceServer
+		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *todopb.GetResponse
+		want    *pb.GetResponse
 		wantErr bool
 	}{
 		{
@@ -213,7 +213,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.GetRequest{
+				req: &pb.GetRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -223,9 +223,9 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 					AddRow(ID, "title", "description", tm)
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WithArgs(ID).WillReturnRows(rows)
 			},
-			want: &todopb.GetResponse{
+			want: &pb.GetResponse{
 				Api: "v1",
-				Item: &todopb.ToDo{
+				Item: &pb.ToDo{
 					Id:          ID,
 					Title:       "title",
 					Description: "description",
@@ -238,7 +238,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.GetRequest{
+				req: &pb.GetRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -251,7 +251,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.GetRequest{
+				req: &pb.GetRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -267,7 +267,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.GetRequest{
+				req: &pb.GetRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -310,14 +310,14 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *todopb.UpdateRequest
+		req *pb.UpdateRequest
 	}
 	cases := []struct {
 		desc    string
-		ssv     todopb.ToDoServiceServer
+		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *todopb.UpdateResponse
+		want    *pb.UpdateResponse
 		wantErr bool
 	}{
 		{
@@ -325,9 +325,9 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.UpdateRequest{
+				req: &pb.UpdateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Id:          ID,
 						Title:       "new title",
 						Description: "new description",
@@ -339,7 +339,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				mock.ExpectExec("UPDATE ToDo").WithArgs("new title", "new description", tm, ID).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &todopb.UpdateResponse{
+			want: &pb.UpdateResponse{
 				Api:     "v1",
 				Updated: 1,
 			},
@@ -349,9 +349,9 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.UpdateRequest{
+				req: &pb.UpdateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -367,9 +367,9 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.UpdateRequest{
+				req: &pb.UpdateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -388,9 +388,9 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.UpdateRequest{
+				req: &pb.UpdateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -409,9 +409,9 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.UpdateRequest{
+				req: &pb.UpdateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -430,9 +430,9 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.UpdateRequest{
+				req: &pb.UpdateRequest{
 					Api: "v1",
-					Item: &todopb.ToDo{
+					Item: &pb.ToDo{
 						Id:          "1",
 						Title:       "new title",
 						Description: "new description",
@@ -474,14 +474,14 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *todopb.DeleteRequest
+		req *pb.DeleteRequest
 	}
 	cases := []struct {
 		desc    string
-		ssv     todopb.ToDoServiceServer
+		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *todopb.DeleteResponse
+		want    *pb.DeleteResponse
 		wantErr bool
 	}{
 		{
@@ -489,7 +489,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.DeleteRequest{
+				req: &pb.DeleteRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -498,7 +498,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 				mock.ExpectExec("DELETE FROM ToDo").WithArgs(ID).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &todopb.DeleteResponse{
+			want: &pb.DeleteResponse{
 				Api:     "v1",
 				Deleted: 1,
 			},
@@ -508,7 +508,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.DeleteRequest{
+				req: &pb.DeleteRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -521,7 +521,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.DeleteRequest{
+				req: &pb.DeleteRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -537,7 +537,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.DeleteRequest{
+				req: &pb.DeleteRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -553,7 +553,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.DeleteRequest{
+				req: &pb.DeleteRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -600,14 +600,14 @@ func Test_toDoServiceServer_List(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *todopb.ListRequest
+		req *pb.ListRequest
 	}
 	cases := []struct {
 		desc    string
-		ssv     todopb.ToDoServiceServer
+		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *todopb.ListResponse
+		want    *pb.ListResponse
 		wantErr bool
 	}{
 		{
@@ -615,7 +615,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.ListRequest{
+				req: &pb.ListRequest{
 					Api: "v1",
 				},
 			},
@@ -625,9 +625,9 @@ func Test_toDoServiceServer_List(t *testing.T) {
 					AddRow(ID2, "title 2", "description 2", tm2)
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WillReturnRows(rows)
 			},
-			want: &todopb.ListResponse{
+			want: &pb.ListResponse{
 				Api: "v1",
-				Items: []*todopb.ToDo{
+				Items: []*pb.ToDo{
 					{
 						Id:          ID,
 						Title:       "title 1",
@@ -648,7 +648,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.ListRequest{
+				req: &pb.ListRequest{
 					Api: "v1",
 				},
 			},
@@ -656,9 +656,9 @@ func Test_toDoServiceServer_List(t *testing.T) {
 				rows := sqlmock.NewRows([]string{"ID", "Title", "Description", "Reminder"})
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WillReturnRows(rows)
 			},
-			want: &todopb.ListResponse{
+			want: &pb.ListResponse{
 				Api:   "v1",
-				Items: []*todopb.ToDo(nil),
+				Items: []*pb.ToDo(nil),
 			},
 		},
 		{
@@ -666,7 +666,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &todopb.ListRequest{
+				req: &pb.ListRequest{
 					Api: "v1",
 				},
 			},

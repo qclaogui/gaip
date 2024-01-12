@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
+	pb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 )
 
 type Config struct {
@@ -18,7 +18,7 @@ type Config struct {
 	Log        log.Logger            `yaml:"-"`
 	Registerer prometheus.Registerer `yaml:"-"`
 
-	Repo librarypb.LibraryServiceServer `yaml:"-"`
+	Repo pb.LibraryServiceServer `yaml:"-"`
 
 	// CacheCfg holds the configuration used for the cache.
 	//CacheCfg cache.BackendConfig `yaml:"cache"`
@@ -36,15 +36,15 @@ func (cfg *Config) Validate() error {
 	return nil
 }
 
-// The Server type implements a librarypb server.
+// The Server type implements a pb server.
 type Server struct {
-	librarypb.UnimplementedLibraryServiceServer
+	pb.UnimplementedLibraryServiceServer
 
 	Cfg        Config
 	logger     log.Logger
 	Registerer prometheus.Registerer
 
-	repo librarypb.LibraryServiceServer
+	repo pb.LibraryServiceServer
 }
 
 func NewServer(cfg Config) (*Server, error) {

@@ -21,23 +21,23 @@ var (
 	ErrFailedToCreate = errors.New("failed to add the todo to the repository")
 )
 
-// Todo fulfills the Repository Todo interface
-// All objects are managed in an in-memory non-persistent store.
-//
-// Todo is used to implement ToDoServiceServer.
-type Todo struct {
-	todopb.UnimplementedToDoServiceServer
-
-	mem map[uuid.UUID]*todopb.ToDo
-	mu  sync.Mutex
-}
-
 // NewTodo is a factory function to generate a new repository
 func NewTodo() (todopb.ToDoServiceServer, error) {
 	m := &Todo{
 		mem: make(map[uuid.UUID]*todopb.ToDo),
 	}
 	return m, nil
+}
+
+// Todo fulfills the Repository Todo interface
+// All objects are managed in an in-memory non-persistent store.
+//
+// Todo is used to implement todopb.ToDoServiceServer.
+type Todo struct {
+	todopb.UnimplementedToDoServiceServer
+
+	mem map[uuid.UUID]*todopb.ToDo
+	mu  sync.Mutex
 }
 
 func (m *Todo) Create(_ context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {

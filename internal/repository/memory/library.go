@@ -16,7 +16,7 @@ import (
 // Library fulfills the Repository Library interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// Library is used to implement LibraryServiceServer.
+// Library is used to implement librarypb.LibraryServiceServer.
 type Library struct {
 	librarypb.UnimplementedLibraryServiceServer
 

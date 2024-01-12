@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
+	pb "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 )
 
 type Config struct {
@@ -18,7 +18,7 @@ type Config struct {
 	Log        log.Logger            `yaml:"-"`
 	Registerer prometheus.Registerer `yaml:"-"`
 
-	Repo bookstorepb.BookstoreServiceServer `yaml:"-"`
+	Repo pb.BookstoreServiceServer `yaml:"-"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
@@ -29,15 +29,15 @@ func (cfg *Config) Validate() error {
 	return nil
 }
 
-// The Server type implements a bookstorepb server.
+// The Server type implements a pb server.
 type Server struct {
-	bookstorepb.UnimplementedBookstoreServiceServer
+	pb.UnimplementedBookstoreServiceServer
 
 	Cfg        Config
 	logger     log.Logger
 	Registerer prometheus.Registerer
 
-	repo bookstorepb.BookstoreServiceServer
+	repo pb.BookstoreServiceServer
 }
 
 func NewServer(cfg Config) (*Server, error) {

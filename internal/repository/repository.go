@@ -66,6 +66,17 @@ func NewIdentity(cfg Config) (projectpb.IdentityServiceServer, error) {
 	}
 }
 
+func NewMessaging(cfg Config) (projectpb.MessagingServiceServer, error) {
+	switch cfg.Driver {
+	case "":
+		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
+	case DriverMemory:
+		return memory.NewMessaging()
+	default:
+		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
+	}
+}
+
 func NewRouteGuide(cfg Config) (routeguidepb.RouteGuideServiceServer, error) {
 	switch cfg.Driver {
 	case "":

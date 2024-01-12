@@ -9,7 +9,7 @@ import (
 	"fmt"
 
 	"github.com/go-kit/log/level"
-	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
+	pb "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -28,7 +28,7 @@ func (s *Server) checkAPI(api string) error {
 	return nil
 }
 
-func (s *Server) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+func (s *Server) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
 	_ = level.Info(s.logger).Log("msg", "[Create] received request")
 	defer func() { _ = level.Info(s.logger).Log("msg", "[Create] completed request") }()
 
@@ -44,7 +44,7 @@ func (s *Server) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb
 	return s.repo.Create(ctx, req)
 }
 
-func (s *Server) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
+func (s *Server) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -53,7 +53,7 @@ func (s *Server) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb
 	return s.repo.Update(ctx, req)
 }
 
-func (s *Server) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
+func (s *Server) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -62,7 +62,7 @@ func (s *Server) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetRe
 	return s.repo.Get(ctx, req)
 }
 
-func (s *Server) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
+func (s *Server) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
@@ -71,7 +71,7 @@ func (s *Server) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb
 	return s.repo.Delete(ctx, req)
 }
 
-func (s *Server) List(ctx context.Context, req *todopb.ListRequest) (*todopb.ListResponse, error) {
+func (s *Server) List(ctx context.Context, req *pb.ListRequest) (*pb.ListResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())

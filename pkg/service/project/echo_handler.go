@@ -15,7 +15,7 @@ import (
 	"github.com/go-kit/log/level"
 	"github.com/googleapis/gapic-showcase/util/genrest/resttools"
 	"github.com/gorilla/mux"
-	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/pkg/protocol/rest"
 )
 
@@ -40,7 +40,7 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 			return
 		}
 
-		request := &projectpb.EchoRequest{}
+		request := &pb.EchoRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -112,7 +112,7 @@ func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
 			return
 		}
 
-		request := &projectpb.EchoErrorDetailsRequest{}
+		request := &pb.EchoErrorDetailsRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -185,7 +185,7 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 			return
 		}
 
-		request := &projectpb.ExpandRequest{}
+		request := &pb.ExpandRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -266,7 +266,7 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 			return
 		}
 
-		request := &projectpb.PagedExpandRequest{}
+		request := &pb.PagedExpandRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -338,7 +338,7 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 			return
 		}
 
-		request := &projectpb.WaitRequest{}
+		request := &pb.WaitRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -412,7 +412,7 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 			return
 		}
 
-		request := &projectpb.BlockRequest{}
+		request := &pb.BlockRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -464,13 +464,13 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 	}
 }
 
-// EchoServiceExpandServer implements projectpb.EchoServiceExpandServer to provide server-side streaming over REST, returning all the
+// EchoServiceExpandServer implements pb.EchoServiceExpandServer to provide server-side streaming over REST, returning all the
 // individual responses as part of a long JSON list.
 type EchoServiceExpandServer struct {
 	*resttools.ServerStreamer
 }
 
 // Send accumulates a response to be fetched later as part of response list returned over REST.
-func (streamer *EchoServiceExpandServer) Send(response *projectpb.EchoResponse) error {
+func (streamer *EchoServiceExpandServer) Send(response *pb.EchoResponse) error {
 	return streamer.ServerStreamer.Send(response)
 }

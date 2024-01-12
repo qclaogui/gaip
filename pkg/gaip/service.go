@@ -98,6 +98,12 @@ func (g *Gaip) initProject() error {
 	}
 	g.Cfg.ProjectCfg.RepoIdentity = repoIdentity
 
+	repoMessaging, err := repository.NewMessaging(g.Cfg.RepoCfg)
+	if err != nil {
+		return err
+	}
+	g.Cfg.ProjectCfg.RepoMessaging = repoMessaging
+
 	srv, err := project.NewServer(g.Cfg.ProjectCfg)
 	if err != nil {
 		return err
@@ -124,6 +130,10 @@ func (g *Gaip) initProject() error {
 	g.Server.Router.Path("/v1/{user.name:users/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateUser())
 	g.RegisterRoute("/v1/{name:users/[^:]+}", srv.HandleDeleteUser(), false, http.MethodDelete)
 	g.RegisterRoute("/v1/users", srv.HandleListUsers(), false, http.MethodGet)
+
+	// Register MessagingServiceServer
+	projectpb.RegisterMessagingServiceServer(g.Server.GRPCServer, srv)
+	g.RegisterRoute("/v1/rooms", srv.HandleCreateRoom(), false, http.MethodPost)
 
 	// Register OperationsServer
 	longrunningpb.RegisterOperationsServer(g.Server.GRPCServer, srv)

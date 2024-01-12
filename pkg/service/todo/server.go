@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
+	pb "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 )
 
 type Config struct {
@@ -18,7 +18,7 @@ type Config struct {
 	Log        log.Logger            `yaml:"-"`
 	Registerer prometheus.Registerer `yaml:"-"`
 
-	Repo todopb.ToDoServiceServer `yaml:"-"`
+	Repo pb.ToDoServiceServer `yaml:"-"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
@@ -29,15 +29,15 @@ func (cfg *Config) Validate() error {
 	return nil
 }
 
-// The Server type implements a todopb service server.
+// The Server type implements a pb service server.
 type Server struct {
-	todopb.UnimplementedToDoServiceServer
+	pb.UnimplementedToDoServiceServer
 
 	Cfg        Config
 	logger     log.Logger
 	Registerer prometheus.Registerer
 
-	repo todopb.ToDoServiceServer
+	repo pb.ToDoServiceServer
 }
 
 func NewServer(cfg Config) (*Server, error) {

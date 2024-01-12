@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
+	pb "github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 )
 
 type Config struct {
@@ -18,7 +18,7 @@ type Config struct {
 	Log        log.Logger            `yaml:"-"`
 	Registerer prometheus.Registerer `yaml:"-"`
 
-	Repo routeguidepb.RouteGuideServiceServer `yaml:"-"`
+	Repo pb.RouteGuideServiceServer `yaml:"-"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
@@ -29,15 +29,15 @@ func (cfg *Config) Validate() error {
 	return nil
 }
 
-// The Server type implements a routeguidepb server.
+// The Server type implements a pb server.
 type Server struct {
-	routeguidepb.UnimplementedRouteGuideServiceServer
+	pb.UnimplementedRouteGuideServiceServer
 
 	Cfg        Config
 	logger     log.Logger
 	Registerer prometheus.Registerer
 
-	repo routeguidepb.RouteGuideServiceServer
+	repo pb.RouteGuideServiceServer
 }
 
 func NewServer(cfg Config) (*Server, error) {

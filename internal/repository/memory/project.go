@@ -17,22 +17,22 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// Project fulfills the Repository Project interface
-// All objects are managed in an in-memory non-persistent store.
-//
-// Project is used to implement ProjectServiceServer.
-type Project struct {
-	mu sync.Mutex // global mutex to synchronize service access
-
-	projects map[string]*projectpb.Project
-}
-
 // NewProject is a factory function to generate a new repository
 func NewProject() (projectpb.ProjectServiceServer, error) {
 	mr := &Project{
 		projects: map[string]*projectpb.Project{},
 	}
 	return mr, nil
+}
+
+// Project fulfills the Repository Project interface
+// All objects are managed in an in-memory non-persistent store.
+//
+// Project is used to implement projectpb.ProjectServiceServer.
+type Project struct {
+	mu sync.Mutex // global mutex to synchronize service access
+
+	projects map[string]*projectpb.Project
 }
 
 func (p *Project) CreateProject(_ context.Context, req *projectpb.CreateProjectRequest) (*projectpb.Project, error) {

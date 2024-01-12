@@ -19,18 +19,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// RouteNote fulfills the Repository RouteNote interface
-// All objects are managed in an in-memory non-persistent store.
-//
-// RouteNote is used to implement RouteGuideServiceServer.
-type RouteNote struct {
-	routeguidepb.UnimplementedRouteGuideServiceServer
-
-	mem        []*routeguidepb.Feature // read-only after initialized
-	routeNotes map[string][]*routeguidepb.RouteNote
-	mu         sync.Mutex // protects routeNotes
-}
-
 // NewRouteNote is a factory function to generate a new repository
 func NewRouteNote(cfg Config) (routeguidepb.RouteGuideServiceServer, error) {
 	mr := &RouteNote{
@@ -41,6 +29,18 @@ func NewRouteNote(cfg Config) (routeguidepb.RouteGuideServiceServer, error) {
 		return nil, err
 	}
 	return mr, nil
+}
+
+// RouteNote fulfills the Repository RouteNote interface
+// All objects are managed in an in-memory non-persistent store.
+//
+// RouteNote is used to implement routeguidepb.RouteGuideServiceServer.
+type RouteNote struct {
+	routeguidepb.UnimplementedRouteGuideServiceServer
+
+	mem        []*routeguidepb.Feature // read-only after initialized
+	routeNotes map[string][]*routeguidepb.RouteNote
+	mu         sync.Mutex // protects routeNotes
 }
 
 // loadFeatures loads features from a JSON file.
