@@ -113,3 +113,9 @@ $(PROTOC_GEN_OPENAPIV2): $(BINGO_DIR)/protoc-gen-openapiv2.mod
 	@echo "(re)installing $(GOBIN)/protoc-gen-openapiv2-v2.19.0"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-openapiv2.mod -o=$(GOBIN)/protoc-gen-openapiv2-v2.19.0 "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2"
 
+PROTOVENEER := $(GOBIN)/protoveneer-v0.0.0-20240103183307-be819d1f06fc
+$(PROTOVENEER): $(BINGO_DIR)/protoveneer.mod
+	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
+	@echo "(re)installing $(GOBIN)/protoveneer-v0.0.0-20240103183307-be819d1f06fc"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoveneer.mod -o=$(GOBIN)/protoveneer-v0.0.0-20240103183307-be819d1f06fc "golang.org/x/exp/protoveneer/cmd/protoveneer"
+

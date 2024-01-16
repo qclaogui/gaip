@@ -2,32 +2,32 @@
   <h1>golang AIP server demo</h1>
 </div>
 <p align="center">
-
 <a href="https://github.com/qclaogui/gaip/actions/workflows/ci.yml">
   <img src="https://github.com/qclaogui/gaip/actions/workflows/ci.yml/badge.svg">
 </a>
-
 <a href="https://goreportcard.com/report/github.com/qclaogui/gaip">
   <img src="https://goreportcard.com/badge/github.com/qclaogui/gaip?v=1" />
 </a>
-
 <a href="https://hub.docker.com/r/qclaogui/gaip">
   <img src="https://img.shields.io/docker/pulls/qclaogui/gaip.svg">
 </a>
-
 <a href="https://github.com/qclaogui/gaip/blob/master/LICENSE">
-  <img src="https://img.shields.io/github/license/qclaogui/gaip.svg" alt="License">
+  <img src="https://img.shields.io/github/license/qclaogui/gaip.svg">
 </a>
-
 <a href="https://github.com/qclaogui/gaip/tags">
-  <img src="https://img.shields.io/github/last-commit/qclaogui/gaip" alt="GitHub Last Commit">
+  <img src="https://img.shields.io/github/last-commit/qclaogui/gaip">
 </a>
-
 </p>
 
 Practices for implementing [Google API Improvement Proposals](https://aip.dev/) (AIP) in Go.
 
 Apply knowledge and experience to improve open source
+
+## Dependencies
+
+This project uses [bingo](https://github.com/bwplotka/bingo) (located in [.bingo/](.bingo/)), a tool to automate the versioning of Go packages.
+
+Run `make install-build-deps` to install dependencies tools.
 
 ```shell
 ❯ make help

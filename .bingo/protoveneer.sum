@@ -1,0 +1,5 @@
+golang.org/x/exp/protoveneer v0.0.0-20240103183307-be819d1f06fc h1:9koaBmwDe+X6PIQ+dpJxRzXEiB8R45R4lXusCRRTQPc=
+golang.org/x/exp/protoveneer v0.0.0-20240103183307-be819d1f06fc/go.mod h1:zZ6Ab25SqxsVR16jmOU4Sll92K+zysJPbqS+zvDLzXs=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
