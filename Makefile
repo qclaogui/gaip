@@ -193,6 +193,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_gapic_opt='omit-snippets' \
 		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
 		--go_gapic_opt='grpc-service-config=proto/qclaogui/generativelanguage/v1/grpc_service_config.json' \
+		--go_gapic_opt='api-service-config=proto/qclaogui/generativelanguage/v1/generativelanguage_v1.yaml' \
 		--go_gapic_opt='release-level=alpha' \
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
