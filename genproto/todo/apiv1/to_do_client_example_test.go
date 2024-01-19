@@ -40,7 +40,7 @@ func ExampleNewClient() {
 	_ = c
 }
 
-func ExampleClient_Create() {
+func ExampleClient_CreateTodo() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -53,11 +53,11 @@ func ExampleClient_Create() {
 	}
 	defer c.Close()
 
-	req := &todopb.CreateRequest{
+	req := &todopb.CreateTodoRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#CreateRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#CreateTodoRequest.
 	}
-	resp, err := c.Create(ctx, req)
+	resp, err := c.CreateTodo(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -65,7 +65,7 @@ func ExampleClient_Create() {
 	_ = resp
 }
 
-func ExampleClient_Delete() {
+func ExampleClient_DeleteTodo() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -78,11 +78,11 @@ func ExampleClient_Delete() {
 	}
 	defer c.Close()
 
-	req := &todopb.DeleteRequest{
+	req := &todopb.DeleteTodoRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#DeleteRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#DeleteTodoRequest.
 	}
-	resp, err := c.Delete(ctx, req)
+	resp, err := c.DeleteTodo(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -90,7 +90,7 @@ func ExampleClient_Delete() {
 	_ = resp
 }
 
-func ExampleClient_Get() {
+func ExampleClient_GetTodo() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -103,11 +103,11 @@ func ExampleClient_Get() {
 	}
 	defer c.Close()
 
-	req := &todopb.GetRequest{
+	req := &todopb.GetTodoRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#GetRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#GetTodoRequest.
 	}
-	resp, err := c.Get(ctx, req)
+	resp, err := c.GetTodo(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -115,7 +115,7 @@ func ExampleClient_Get() {
 	_ = resp
 }
 
-func ExampleClient_List() {
+func ExampleClient_ListTodo() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -128,11 +128,11 @@ func ExampleClient_List() {
 	}
 	defer c.Close()
 
-	req := &todopb.ListRequest{
+	req := &todopb.ListTodoRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#ListRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#ListTodoRequest.
 	}
-	resp, err := c.List(ctx, req)
+	resp, err := c.ListTodo(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -140,7 +140,7 @@ func ExampleClient_List() {
 	_ = resp
 }
 
-func ExampleClient_Update() {
+func ExampleClient_UpdateTodo() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -153,11 +153,11 @@ func ExampleClient_Update() {
 	}
 	defer c.Close()
 
-	req := &todopb.UpdateRequest{
+	req := &todopb.UpdateTodoRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#UpdateRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#UpdateTodoRequest.
 	}
-	resp, err := c.Update(ctx, req)
+	resp, err := c.UpdateTodo(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}

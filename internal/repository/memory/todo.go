@@ -40,7 +40,7 @@ type todoImpl struct {
 	mu  sync.Mutex
 }
 
-func (m *todoImpl) Create(_ context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+func (m *todoImpl) CreateTodo(_ context.Context, req *todopb.CreateTodoRequest) (*todopb.CreateTodoResponse, error) {
 	todo := req.GetItem()
 	if todo.GetTitle() == "" && todo.GetDescription() == "" {
 		return nil, status.Error(codes.Unknown, ErrFailedToCreate.Error())
@@ -53,10 +53,10 @@ func (m *todoImpl) Create(_ context.Context, req *todopb.CreateRequest) (*todopb
 	todo.Id = id.String()
 
 	m.mem[id] = todo
-	return &todopb.CreateResponse{Api: "v1", Id: todo.Id}, nil
+	return &todopb.CreateTodoResponse{Api: "v1", Id: todo.Id}, nil
 }
 
-func (m *todoImpl) Get(_ context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
+func (m *todoImpl) GetTodo(_ context.Context, req *todopb.GetTodoRequest) (*todopb.GetTodoResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -68,10 +68,10 @@ func (m *todoImpl) Get(_ context.Context, req *todopb.GetRequest) (*todopb.GetRe
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
 
-	return &todopb.GetResponse{Api: "v1", Item: todo}, nil
+	return &todopb.GetTodoResponse{Api: "v1", Item: todo}, nil
 }
 
-func (m *todoImpl) Update(_ context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
+func (m *todoImpl) UpdateTodo(_ context.Context, req *todopb.UpdateTodoRequest) (*todopb.UpdateTodoResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -83,10 +83,10 @@ func (m *todoImpl) Update(_ context.Context, req *todopb.UpdateRequest) (*todopb
 	}
 
 	m.mem[id] = todo
-	return &todopb.UpdateResponse{Api: "v1", Updated: 1}, nil
+	return &todopb.UpdateTodoResponse{Api: "v1", Updated: 1}, nil
 }
 
-func (m *todoImpl) Delete(_ context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
+func (m *todoImpl) DeleteTodo(_ context.Context, req *todopb.DeleteTodoRequest) (*todopb.DeleteTodoResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -96,10 +96,10 @@ func (m *todoImpl) Delete(_ context.Context, req *todopb.DeleteRequest) (*todopb
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
 	delete(m.mem, id)
-	return &todopb.DeleteResponse{Api: "v1", Deleted: 1}, nil
+	return &todopb.DeleteTodoResponse{Api: "v1", Deleted: 1}, nil
 }
 
-func (m *todoImpl) List(_ context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
+func (m *todoImpl) ListTodo(_ context.Context, _ *todopb.ListTodoRequest) (*todopb.ListTodoResponse, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -111,5 +111,5 @@ func (m *todoImpl) List(_ context.Context, _ *todopb.ListRequest) (*todopb.ListR
 	if len(todos) < 1 {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())
 	}
-	return &todopb.ListResponse{Api: "v1", Items: todos}, nil
+	return &todopb.ListTodoResponse{Api: "v1", Items: todos}, nil
 }

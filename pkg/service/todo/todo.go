@@ -28,7 +28,7 @@ func (s *Server) checkAPI(api string) error {
 	return nil
 }
 
-func (s *Server) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
+func (s *Server) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
 	_ = level.Info(s.logger).Log("msg", "[Create] received request")
 	defer func() { _ = level.Info(s.logger).Log("msg", "[Create] completed request") }()
 
@@ -41,41 +41,41 @@ func (s *Server) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateR
 		return nil, status.Error(codes.InvalidArgument, "reminder field has invalid format-> "+err.Error())
 	}
 
-	return s.repo.Create(ctx, req)
+	return s.repo.CreateTodo(ctx, req)
 }
 
-func (s *Server) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
+func (s *Server) UpdateTodo(ctx context.Context, req *pb.UpdateTodoRequest) (*pb.UpdateTodoResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.Update(ctx, req)
+	return s.repo.UpdateTodo(ctx, req)
 }
 
-func (s *Server) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+func (s *Server) GetTodo(ctx context.Context, req *pb.GetTodoRequest) (*pb.GetTodoResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.Get(ctx, req)
+	return s.repo.GetTodo(ctx, req)
 }
 
-func (s *Server) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+func (s *Server) DeleteTodo(ctx context.Context, req *pb.DeleteTodoRequest) (*pb.DeleteTodoResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.Delete(ctx, req)
+	return s.repo.DeleteTodo(ctx, req)
 }
 
-func (s *Server) List(ctx context.Context, req *pb.ListRequest) (*pb.ListResponse, error) {
+func (s *Server) ListTodo(ctx context.Context, req *pb.ListTodoRequest) (*pb.ListTodoResponse, error) {
 	// check if the API version requested by client is supported by server
 	if err := s.checkAPI(req.GetApi()); err != nil {
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	return s.repo.List(ctx, req)
+	return s.repo.ListTodo(ctx, req)
 }

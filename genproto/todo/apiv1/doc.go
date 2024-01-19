@@ -64,11 +64,11 @@
 //	}
 //	defer c.Close()
 //
-//	req := &todopb.CreateRequest{
+//	req := &todopb.CreateTodoRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#CreateRequest.
+//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/todo/apiv1/todopb#CreateTodoRequest.
 //	}
-//	resp, err := c.Create(ctx, req)
+//	resp, err := c.CreateTodo(ctx, req)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}

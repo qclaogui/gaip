@@ -58,7 +58,7 @@ func (m *todoImpl) connect(ctx context.Context) (*sql.Conn, error) {
 	return c, nil
 }
 
-func (m *todoImpl) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.GetResponse, error) {
+func (m *todoImpl) GetTodo(ctx context.Context, req *todopb.GetTodoRequest) (*todopb.GetTodoResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -90,10 +90,10 @@ func (m *todoImpl) Get(ctx context.Context, req *todopb.GetRequest) (*todopb.Get
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("found multiple ToDo rows with ID='%s'", id))
 	}
 
-	return &todopb.GetResponse{Api: "v1", Item: todo}, nil
+	return &todopb.GetTodoResponse{Api: "v1", Item: todo}, nil
 }
 
-func (m *todoImpl) Create(ctx context.Context, req *todopb.CreateRequest) (*todopb.CreateResponse, error) {
+func (m *todoImpl) CreateTodo(ctx context.Context, req *todopb.CreateTodoRequest) (*todopb.CreateTodoResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -107,10 +107,10 @@ func (m *todoImpl) Create(ctx context.Context, req *todopb.CreateRequest) (*todo
 	if err != nil {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to insert into ToDo-> "+err.Error()))
 	}
-	return &todopb.CreateResponse{Api: "v1", Id: todo.GetId()}, nil
+	return &todopb.CreateTodoResponse{Api: "v1", Id: todo.GetId()}, nil
 }
 
-func (m *todoImpl) Update(ctx context.Context, req *todopb.UpdateRequest) (*todopb.UpdateResponse, error) {
+func (m *todoImpl) UpdateTodo(ctx context.Context, req *todopb.UpdateTodoRequest) (*todopb.UpdateTodoResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -134,10 +134,10 @@ func (m *todoImpl) Update(ctx context.Context, req *todopb.UpdateRequest) (*todo
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("ToDo with ID='%s' is not found", todo.Id))
 	}
 
-	return &todopb.UpdateResponse{Api: "v1", Updated: rows}, nil
+	return &todopb.UpdateTodoResponse{Api: "v1", Updated: rows}, nil
 }
 
-func (m *todoImpl) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todopb.DeleteResponse, error) {
+func (m *todoImpl) DeleteTodo(ctx context.Context, req *todopb.DeleteTodoRequest) (*todopb.DeleteTodoResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -158,10 +158,10 @@ func (m *todoImpl) Delete(ctx context.Context, req *todopb.DeleteRequest) (*todo
 	if rows == 0 {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("ToDo with ID='%s' is not found", id))
 	}
-	return &todopb.DeleteResponse{Api: "v1", Deleted: rows}, nil
+	return &todopb.DeleteTodoResponse{Api: "v1", Deleted: rows}, nil
 }
 
-func (m *todoImpl) List(ctx context.Context, _ *todopb.ListRequest) (*todopb.ListResponse, error) {
+func (m *todoImpl) ListTodo(ctx context.Context, _ *todopb.ListTodoRequest) (*todopb.ListTodoResponse, error) {
 	// get SQL connection from pool
 	c, err := m.connect(ctx)
 	if err != nil {
@@ -190,5 +190,5 @@ func (m *todoImpl) List(ctx context.Context, _ *todopb.ListRequest) (*todopb.Lis
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve data from ToDo-> "+err.Error()))
 	}
 
-	return &todopb.ListResponse{Api: "v1", Items: todos}, nil
+	return &todopb.ListTodoResponse{Api: "v1", Items: todos}, nil
 }

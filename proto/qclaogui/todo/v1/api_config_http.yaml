@@ -13,7 +13,7 @@ http:
   # Client example:
   #   curl -d '{"api":"v1","item":{"title":"title","description":"desc","created_at":"2023-12-28"}}' http://DOMAIN_NAME/v1/todos
   #
-  - selector: qclaogui.todo.v1.ToDoService.Create
+  - selector: qclaogui.todo.v1.ToDoService.CreateTodo
     post: /v1/todos
     body: "*"
 
@@ -25,7 +25,7 @@ http:
   # Client example - returns the first item:
   #   curl http://DOMAIN_NAME/v1/todos/1
   #
-  - selector: qclaogui.todo.v1.ToDoService.Get
+  - selector: qclaogui.todo.v1.ToDoService.GetTodo
     get: /v1/todos/{id}
 
   #
@@ -36,7 +36,7 @@ http:
   # Client example:
   #   curl -d '{"api":"v1","item":{"title":"updated title","description":"updated desc","created_at":"2023-12-28"}}' http://DOMAIN_NAME/v1/todos
   #
-  - selector: qclaogui.todo.v1.ToDoService.Update
+  - selector: qclaogui.todo.v1.ToDoService.UpdateTodo
     post: /v1/todos/{item.id}
     body: "*"
 
@@ -48,7 +48,7 @@ http:
   # Client example (Assuming your service is hosted at the given 'DOMAIN_NAME'):
   #   curl http://DOMAIN_NAME/v1/todos
   #
-  - selector: qclaogui.todo.v1.ToDoService.List
+  - selector: qclaogui.todo.v1.ToDoService.ListTodo
     get: /v1/todos
 
   #
@@ -59,5 +59,5 @@ http:
   # Client example - deletes the second item:
   #   curl -X DELETE http://DOMAIN_NAME/v1/todos/2
   #
-  - selector: qclaogui.todo.v1.ToDoService.Delete
+  - selector: qclaogui.todo.v1.ToDoService.DeleteTodo
     delete: /v1/todos/{id}

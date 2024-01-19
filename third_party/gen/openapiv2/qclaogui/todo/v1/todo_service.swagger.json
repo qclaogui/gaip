@@ -18,12 +18,12 @@
   "paths": {
     "/v1/todos": {
       "get": {
-        "operationId": "ToDoService_List",
+        "operationId": "ToDoService_ListTodo",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListResponse"
+              "$ref": "#/definitions/v1ListTodoResponse"
             }
           },
           "default": {
@@ -60,12 +60,12 @@
         ]
       },
       "post": {
-        "operationId": "ToDoService_Create",
+        "operationId": "ToDoService_CreateTodo",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateResponse"
+              "$ref": "#/definitions/v1CreateTodoResponse"
             }
           },
           "default": {
@@ -81,7 +81,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateRequest"
+              "$ref": "#/definitions/v1CreateTodoRequest"
             }
           }
         ],
@@ -92,12 +92,12 @@
     },
     "/v1/todos/{id}": {
       "get": {
-        "operationId": "ToDoService_Get",
+        "operationId": "ToDoService_GetTodo",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetResponse"
+              "$ref": "#/definitions/v1GetTodoResponse"
             }
           },
           "default": {
@@ -127,12 +127,12 @@
         ]
       },
       "delete": {
-        "operationId": "ToDoService_Delete",
+        "operationId": "ToDoService_DeleteTodo",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DeleteResponse"
+              "$ref": "#/definitions/v1DeleteTodoResponse"
             }
           },
           "default": {
@@ -164,12 +164,12 @@
     },
     "/v1/todos/{item.id}": {
       "post": {
-        "operationId": "ToDoService_Update",
+        "operationId": "ToDoService_UpdateTodo",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
+              "$ref": "#/definitions/v1UpdateTodoResponse"
             }
           },
           "default": {
@@ -192,7 +192,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ToDoServiceUpdateBody"
+              "$ref": "#/definitions/ToDoServiceUpdateTodoBody"
             }
           }
         ],
@@ -203,7 +203,7 @@
     }
   },
   "definitions": {
-    "ToDoServiceUpdateBody": {
+    "ToDoServiceUpdateTodoBody": {
       "type": "object",
       "properties": {
         "api": {
@@ -263,7 +263,7 @@
         }
       }
     },
-    "v1CreateRequest": {
+    "v1CreateTodoRequest": {
       "type": "object",
       "properties": {
         "api": {
@@ -275,7 +275,7 @@
         }
       }
     },
-    "v1CreateResponse": {
+    "v1CreateTodoResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -287,7 +287,7 @@
         }
       }
     },
-    "v1DeleteResponse": {
+    "v1DeleteTodoResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -300,7 +300,7 @@
         }
       }
     },
-    "v1GetResponse": {
+    "v1GetTodoResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -312,7 +312,7 @@
         }
       }
     },
-    "v1ListResponse": {
+    "v1ListTodoResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -356,7 +356,7 @@
       },
       "title": "Tasks wo have to do"
     },
-    "v1UpdateResponse": {
+    "v1UpdateTodoResponse": {
       "type": "object",
       "properties": {
         "api": {

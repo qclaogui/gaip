@@ -34,18 +34,18 @@ var newClientHook clientHook
 
 // CallOptions contains the retry settings for each method of Client.
 type CallOptions struct {
-	Create []gax.CallOption
-	Get    []gax.CallOption
-	Update []gax.CallOption
-	List   []gax.CallOption
-	Delete []gax.CallOption
+	CreateTodo []gax.CallOption
+	GetTodo    []gax.CallOption
+	UpdateTodo []gax.CallOption
+	ListTodo   []gax.CallOption
+	DeleteTodo []gax.CallOption
 }
 
 func defaultGRPCClientOptions() []option.ClientOption {
 	return []option.ClientOption{
-		internaloption.WithDefaultEndpoint(":443"),
-		internaloption.WithDefaultMTLSEndpoint(":443"),
-		internaloption.WithDefaultAudience("https://"),
+		internaloption.WithDefaultEndpoint("localhost:9095"),
+		internaloption.WithDefaultMTLSEndpoint("localhost:9095"),
+		internaloption.WithDefaultAudience("https://localhost/"),
 		internaloption.WithDefaultScopes(DefaultAuthScopes()...),
 		internaloption.EnableJwtWithScope(),
 		option.WithGRPCDialOption(grpc.WithDefaultCallOptions(
@@ -55,22 +55,10 @@ func defaultGRPCClientOptions() []option.ClientOption {
 
 func defaultCallOptions() *CallOptions {
 	return &CallOptions{
-		Create: []gax.CallOption{
+		CreateTodo: []gax.CallOption{
 			gax.WithTimeout(60000 * time.Millisecond),
 		},
-		Get: []gax.CallOption{
-			gax.WithTimeout(60000 * time.Millisecond),
-			gax.WithRetry(func() gax.Retryer {
-				return gax.OnCodes([]codes.Code{
-					codes.Unavailable,
-				}, gax.Backoff{
-					Initial:    10 * time.Millisecond,
-					Max:        60000 * time.Millisecond,
-					Multiplier: 1.30,
-				})
-			}),
-		},
-		Update: []gax.CallOption{
+		GetTodo: []gax.CallOption{
 			gax.WithTimeout(60000 * time.Millisecond),
 			gax.WithRetry(func() gax.Retryer {
 				return gax.OnCodes([]codes.Code{
@@ -82,7 +70,7 @@ func defaultCallOptions() *CallOptions {
 				})
 			}),
 		},
-		List: []gax.CallOption{
+		UpdateTodo: []gax.CallOption{
 			gax.WithTimeout(60000 * time.Millisecond),
 			gax.WithRetry(func() gax.Retryer {
 				return gax.OnCodes([]codes.Code{
@@ -94,7 +82,19 @@ func defaultCallOptions() *CallOptions {
 				})
 			}),
 		},
-		Delete: []gax.CallOption{
+		ListTodo: []gax.CallOption{
+			gax.WithTimeout(60000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
+					codes.Unavailable,
+				}, gax.Backoff{
+					Initial:    10 * time.Millisecond,
+					Max:        60000 * time.Millisecond,
+					Multiplier: 1.30,
+				})
+			}),
+		},
+		DeleteTodo: []gax.CallOption{
 			gax.WithTimeout(60000 * time.Millisecond),
 			gax.WithRetry(func() gax.Retryer {
 				return gax.OnCodes([]codes.Code{
@@ -114,11 +114,11 @@ type internalClient interface {
 	Close() error
 	setGoogleClientInfo(...string)
 	Connection() *grpc.ClientConn
-	Create(context.Context, *todopb.CreateRequest, ...gax.CallOption) (*todopb.CreateResponse, error)
-	Get(context.Context, *todopb.GetRequest, ...gax.CallOption) (*todopb.GetResponse, error)
-	Update(context.Context, *todopb.UpdateRequest, ...gax.CallOption) (*todopb.UpdateResponse, error)
-	List(context.Context, *todopb.ListRequest, ...gax.CallOption) (*todopb.ListResponse, error)
-	Delete(context.Context, *todopb.DeleteRequest, ...gax.CallOption) (*todopb.DeleteResponse, error)
+	CreateTodo(context.Context, *todopb.CreateTodoRequest, ...gax.CallOption) (*todopb.CreateTodoResponse, error)
+	GetTodo(context.Context, *todopb.GetTodoRequest, ...gax.CallOption) (*todopb.GetTodoResponse, error)
+	UpdateTodo(context.Context, *todopb.UpdateTodoRequest, ...gax.CallOption) (*todopb.UpdateTodoResponse, error)
+	ListTodo(context.Context, *todopb.ListTodoRequest, ...gax.CallOption) (*todopb.ListTodoResponse, error)
+	DeleteTodo(context.Context, *todopb.DeleteTodoRequest, ...gax.CallOption) (*todopb.DeleteTodoResponse, error)
 }
 
 // Client is a client for interacting with .
@@ -154,24 +154,24 @@ func (c *Client) Connection() *grpc.ClientConn {
 	return c.internalClient.Connection()
 }
 
-func (c *Client) Create(ctx context.Context, req *todopb.CreateRequest, opts ...gax.CallOption) (*todopb.CreateResponse, error) {
-	return c.internalClient.Create(ctx, req, opts...)
+func (c *Client) CreateTodo(ctx context.Context, req *todopb.CreateTodoRequest, opts ...gax.CallOption) (*todopb.CreateTodoResponse, error) {
+	return c.internalClient.CreateTodo(ctx, req, opts...)
 }
 
-func (c *Client) Get(ctx context.Context, req *todopb.GetRequest, opts ...gax.CallOption) (*todopb.GetResponse, error) {
-	return c.internalClient.Get(ctx, req, opts...)
+func (c *Client) GetTodo(ctx context.Context, req *todopb.GetTodoRequest, opts ...gax.CallOption) (*todopb.GetTodoResponse, error) {
+	return c.internalClient.GetTodo(ctx, req, opts...)
 }
 
-func (c *Client) Update(ctx context.Context, req *todopb.UpdateRequest, opts ...gax.CallOption) (*todopb.UpdateResponse, error) {
-	return c.internalClient.Update(ctx, req, opts...)
+func (c *Client) UpdateTodo(ctx context.Context, req *todopb.UpdateTodoRequest, opts ...gax.CallOption) (*todopb.UpdateTodoResponse, error) {
+	return c.internalClient.UpdateTodo(ctx, req, opts...)
 }
 
-func (c *Client) List(ctx context.Context, req *todopb.ListRequest, opts ...gax.CallOption) (*todopb.ListResponse, error) {
-	return c.internalClient.List(ctx, req, opts...)
+func (c *Client) ListTodo(ctx context.Context, req *todopb.ListTodoRequest, opts ...gax.CallOption) (*todopb.ListTodoResponse, error) {
+	return c.internalClient.ListTodo(ctx, req, opts...)
 }
 
-func (c *Client) Delete(ctx context.Context, req *todopb.DeleteRequest, opts ...gax.CallOption) (*todopb.DeleteResponse, error) {
-	return c.internalClient.Delete(ctx, req, opts...)
+func (c *Client) DeleteTodo(ctx context.Context, req *todopb.DeleteTodoRequest, opts ...gax.CallOption) (*todopb.DeleteTodoResponse, error) {
+	return c.internalClient.DeleteTodo(ctx, req, opts...)
 }
 
 // gRPCClient is a client for interacting with  over gRPC transport.
@@ -244,13 +244,13 @@ func (c *gRPCClient) Close() error {
 	return c.connPool.Close()
 }
 
-func (c *gRPCClient) Create(ctx context.Context, req *todopb.CreateRequest, opts ...gax.CallOption) (*todopb.CreateResponse, error) {
+func (c *gRPCClient) CreateTodo(ctx context.Context, req *todopb.CreateTodoRequest, opts ...gax.CallOption) (*todopb.CreateTodoResponse, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
-	opts = append((*c.CallOptions).Create[0:len((*c.CallOptions).Create):len((*c.CallOptions).Create)], opts...)
-	var resp *todopb.CreateResponse
+	opts = append((*c.CallOptions).CreateTodo[0:len((*c.CallOptions).CreateTodo):len((*c.CallOptions).CreateTodo)], opts...)
+	var resp *todopb.CreateTodoResponse
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.Create(ctx, req, settings.GRPC...)
+		resp, err = c.client.CreateTodo(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -259,13 +259,13 @@ func (c *gRPCClient) Create(ctx context.Context, req *todopb.CreateRequest, opts
 	return resp, nil
 }
 
-func (c *gRPCClient) Get(ctx context.Context, req *todopb.GetRequest, opts ...gax.CallOption) (*todopb.GetResponse, error) {
+func (c *gRPCClient) GetTodo(ctx context.Context, req *todopb.GetTodoRequest, opts ...gax.CallOption) (*todopb.GetTodoResponse, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
-	opts = append((*c.CallOptions).Get[0:len((*c.CallOptions).Get):len((*c.CallOptions).Get)], opts...)
-	var resp *todopb.GetResponse
+	opts = append((*c.CallOptions).GetTodo[0:len((*c.CallOptions).GetTodo):len((*c.CallOptions).GetTodo)], opts...)
+	var resp *todopb.GetTodoResponse
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.Get(ctx, req, settings.GRPC...)
+		resp, err = c.client.GetTodo(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -274,13 +274,13 @@ func (c *gRPCClient) Get(ctx context.Context, req *todopb.GetRequest, opts ...ga
 	return resp, nil
 }
 
-func (c *gRPCClient) Update(ctx context.Context, req *todopb.UpdateRequest, opts ...gax.CallOption) (*todopb.UpdateResponse, error) {
+func (c *gRPCClient) UpdateTodo(ctx context.Context, req *todopb.UpdateTodoRequest, opts ...gax.CallOption) (*todopb.UpdateTodoResponse, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
-	opts = append((*c.CallOptions).Update[0:len((*c.CallOptions).Update):len((*c.CallOptions).Update)], opts...)
-	var resp *todopb.UpdateResponse
+	opts = append((*c.CallOptions).UpdateTodo[0:len((*c.CallOptions).UpdateTodo):len((*c.CallOptions).UpdateTodo)], opts...)
+	var resp *todopb.UpdateTodoResponse
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.Update(ctx, req, settings.GRPC...)
+		resp, err = c.client.UpdateTodo(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -289,13 +289,13 @@ func (c *gRPCClient) Update(ctx context.Context, req *todopb.UpdateRequest, opts
 	return resp, nil
 }
 
-func (c *gRPCClient) List(ctx context.Context, req *todopb.ListRequest, opts ...gax.CallOption) (*todopb.ListResponse, error) {
+func (c *gRPCClient) ListTodo(ctx context.Context, req *todopb.ListTodoRequest, opts ...gax.CallOption) (*todopb.ListTodoResponse, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
-	opts = append((*c.CallOptions).List[0:len((*c.CallOptions).List):len((*c.CallOptions).List)], opts...)
-	var resp *todopb.ListResponse
+	opts = append((*c.CallOptions).ListTodo[0:len((*c.CallOptions).ListTodo):len((*c.CallOptions).ListTodo)], opts...)
+	var resp *todopb.ListTodoResponse
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.List(ctx, req, settings.GRPC...)
+		resp, err = c.client.ListTodo(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -304,13 +304,13 @@ func (c *gRPCClient) List(ctx context.Context, req *todopb.ListRequest, opts ...
 	return resp, nil
 }
 
-func (c *gRPCClient) Delete(ctx context.Context, req *todopb.DeleteRequest, opts ...gax.CallOption) (*todopb.DeleteResponse, error) {
+func (c *gRPCClient) DeleteTodo(ctx context.Context, req *todopb.DeleteTodoRequest, opts ...gax.CallOption) (*todopb.DeleteTodoResponse, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
-	opts = append((*c.CallOptions).Delete[0:len((*c.CallOptions).Delete):len((*c.CallOptions).Delete)], opts...)
-	var resp *todopb.DeleteResponse
+	opts = append((*c.CallOptions).DeleteTodo[0:len((*c.CallOptions).DeleteTodo):len((*c.CallOptions).DeleteTodo)], opts...)
+	var resp *todopb.DeleteTodoResponse
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.Delete(ctx, req, settings.GRPC...)
+		resp, err = c.client.DeleteTodo(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {

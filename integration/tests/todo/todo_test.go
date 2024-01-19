@@ -35,12 +35,12 @@ func TestTodoCRUD(t *testing.T) {
 			Description: "description",
 			CreatedAt:   reminder,
 		}
-		create := &pb.CreateRequest{
+		create := &pb.CreateTodoRequest{
 			Api:  "v1",
 			Item: item,
 		}
 
-		td, err := client.Create(ctx, create)
+		td, err := client.CreateTodo(ctx, create)
 		if err != nil {
 			t.Fatalf("client.Create() failed: %v", err)
 		}

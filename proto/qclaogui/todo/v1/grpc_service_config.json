@@ -15,7 +15,7 @@
   },
     {
       "name": [
-        { "service": "qclaogui.todo.v1.ToDoService", "method": "Create" }
+        { "service": "qclaogui.todo.v1.ToDoService", "method": "CreateTodo" }
       ],
       "waitForReady": true,
       "timeout": "60s"

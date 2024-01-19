@@ -40,7 +40,7 @@ func serverSetupWithSQLDB(t *testing.T, db *sql.DB) *Server {
 	return srv
 }
 
-func Test_toDoServiceServer_Create(t *testing.T) {
+func Test_toDoServiceServer_CreateTodo(t *testing.T) {
 	ctx := context.Background()
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -55,14 +55,14 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.CreateRequest
+		req *pb.CreateTodoRequest
 	}
 	cases := []struct {
 		desc    string
 		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.CreateResponse
+		want    *pb.CreateTodoResponse
 		wantErr bool
 	}{
 		{
@@ -70,7 +70,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &pb.CreateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Id:          ID,
@@ -84,7 +84,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 				mock.ExpectExec("INSERT INTO ToDo").WithArgs(ID, "title", "description", tm).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &pb.CreateResponse{
+			want: &pb.CreateTodoResponse{
 				Api: "v1",
 				Id:  ID,
 			},
@@ -94,7 +94,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &pb.CreateTodoRequest{
 					Api: "v1000",
 					Item: &pb.ToDo{
 						Title:       "title",
@@ -111,7 +111,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &pb.CreateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Title:       "title",
@@ -131,7 +131,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &pb.CreateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Title:       "title",
@@ -151,7 +151,7 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.CreateRequest{
+				req: &pb.CreateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Title:       "title",
@@ -170,19 +170,19 @@ func Test_toDoServiceServer_Create(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.desc, func(t *testing.T) {
 			c.mock()
-			got, err := c.ssv.Create(c.args.ctx, c.args.req)
+			got, err := c.ssv.CreateTodo(c.args.ctx, c.args.req)
 			if (err != nil) != c.wantErr {
-				t.Errorf("ToDoService.Create() error = %v, wantErr %v", err, c.wantErr)
+				t.Errorf("ToDoService.CreateTodo() error = %v, wantErr %v", err, c.wantErr)
 				return
 			}
 			if err == nil && !reflect.DeepEqual(got, c.want) {
-				t.Errorf("ToDoService.Create() = %v, want %v", got, c.want)
+				t.Errorf("ToDoService.CreateTodo() = %v, want %v", got, c.want)
 			}
 		})
 	}
 }
 
-func Test_toDoServiceServer_Get(t *testing.T) {
+func Test_toDoServiceServer_GetTodo(t *testing.T) {
 	ctx := context.Background()
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -197,7 +197,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.GetRequest
+		req *pb.GetTodoRequest
 	}
 
 	cases := []struct {
@@ -205,7 +205,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.GetResponse
+		want    *pb.GetTodoResponse
 		wantErr bool
 	}{
 		{
@@ -213,7 +213,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetRequest{
+				req: &pb.GetTodoRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -223,7 +223,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 					AddRow(ID, "title", "description", tm)
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WithArgs(ID).WillReturnRows(rows)
 			},
-			want: &pb.GetResponse{
+			want: &pb.GetTodoResponse{
 				Api: "v1",
 				Item: &pb.ToDo{
 					Id:          ID,
@@ -238,7 +238,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetRequest{
+				req: &pb.GetTodoRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -251,7 +251,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetRequest{
+				req: &pb.GetTodoRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -267,7 +267,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.GetRequest{
+				req: &pb.GetTodoRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -282,7 +282,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.desc, func(t *testing.T) {
 			c.mock()
-			got, err := c.ssv.Get(c.args.ctx, c.args.req)
+			got, err := c.ssv.GetTodo(c.args.ctx, c.args.req)
 			if (err != nil) != c.wantErr {
 				t.Errorf("ToDoService.Get() error = %v, wantErr %v", err, c.wantErr)
 				return
@@ -295,7 +295,7 @@ func Test_toDoServiceServer_Get(t *testing.T) {
 	}
 }
 
-func Test_toDoServiceServer_Update(t *testing.T) {
+func Test_toDoServiceServer_UpdateTodo(t *testing.T) {
 	ctx := context.Background()
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -310,14 +310,14 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.UpdateRequest
+		req *pb.UpdateTodoRequest
 	}
 	cases := []struct {
 		desc    string
 		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.UpdateResponse
+		want    *pb.UpdateTodoResponse
 		wantErr bool
 	}{
 		{
@@ -325,7 +325,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &pb.UpdateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Id:          ID,
@@ -339,7 +339,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 				mock.ExpectExec("UPDATE ToDo").WithArgs("new title", "new description", tm, ID).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &pb.UpdateResponse{
+			want: &pb.UpdateTodoResponse{
 				Api:     "v1",
 				Updated: 1,
 			},
@@ -349,7 +349,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &pb.UpdateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Id:          "1",
@@ -367,7 +367,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &pb.UpdateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Id:          "1",
@@ -388,7 +388,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &pb.UpdateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Id:          "1",
@@ -409,7 +409,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &pb.UpdateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Id:          "1",
@@ -430,7 +430,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.UpdateRequest{
+				req: &pb.UpdateTodoRequest{
 					Api: "v1",
 					Item: &pb.ToDo{
 						Id:          "1",
@@ -450,7 +450,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.desc, func(t *testing.T) {
 			c.mock()
-			got, err := c.ssv.Update(c.args.ctx, c.args.req)
+			got, err := c.ssv.UpdateTodo(c.args.ctx, c.args.req)
 			if (err != nil) != c.wantErr {
 				t.Errorf("ToDoService.Update() error = %v, wantErr %v", err, c.wantErr)
 				return
@@ -462,7 +462,7 @@ func Test_toDoServiceServer_Update(t *testing.T) {
 	}
 }
 
-func Test_toDoServiceServer_Delete(t *testing.T) {
+func Test_toDoServiceServer_DeleteTodo(t *testing.T) {
 	ctx := context.Background()
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -474,14 +474,14 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.DeleteRequest
+		req *pb.DeleteTodoRequest
 	}
 	cases := []struct {
 		desc    string
 		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.DeleteResponse
+		want    *pb.DeleteTodoResponse
 		wantErr bool
 	}{
 		{
@@ -489,7 +489,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &pb.DeleteTodoRequest{
 					Api: "v1",
 					Id:  ID,
 				},
@@ -498,7 +498,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 				mock.ExpectExec("DELETE FROM ToDo").WithArgs(ID).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
-			want: &pb.DeleteResponse{
+			want: &pb.DeleteTodoResponse{
 				Api:     "v1",
 				Deleted: 1,
 			},
@@ -508,7 +508,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &pb.DeleteTodoRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -521,7 +521,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &pb.DeleteTodoRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -537,7 +537,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &pb.DeleteTodoRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -553,7 +553,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.DeleteRequest{
+				req: &pb.DeleteTodoRequest{
 					Api: "v1",
 					Id:  "1",
 				},
@@ -568,7 +568,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.desc, func(t *testing.T) {
 			c.mock()
-			got, err := c.ssv.Delete(c.args.ctx, c.args.req)
+			got, err := c.ssv.DeleteTodo(c.args.ctx, c.args.req)
 			if (err != nil) != c.wantErr {
 				t.Errorf("ToDoService.Delete() error = %v, wantErr %v", err, c.wantErr)
 				return
@@ -580,7 +580,7 @@ func Test_toDoServiceServer_Delete(t *testing.T) {
 	}
 }
 
-func Test_toDoServiceServer_List(t *testing.T) {
+func Test_toDoServiceServer_ListTodo(t *testing.T) {
 	ctx := context.Background()
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -600,14 +600,14 @@ func Test_toDoServiceServer_List(t *testing.T) {
 
 	type args struct {
 		ctx context.Context
-		req *pb.ListRequest
+		req *pb.ListTodoRequest
 	}
 	cases := []struct {
 		desc    string
 		ssv     pb.ToDoServiceServer
 		args    args
 		mock    func()
-		want    *pb.ListResponse
+		want    *pb.ListTodoResponse
 		wantErr bool
 	}{
 		{
@@ -615,7 +615,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ListRequest{
+				req: &pb.ListTodoRequest{
 					Api: "v1",
 				},
 			},
@@ -625,7 +625,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 					AddRow(ID2, "title 2", "description 2", tm2)
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WillReturnRows(rows)
 			},
-			want: &pb.ListResponse{
+			want: &pb.ListTodoResponse{
 				Api: "v1",
 				Items: []*pb.ToDo{
 					{
@@ -648,7 +648,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ListRequest{
+				req: &pb.ListTodoRequest{
 					Api: "v1",
 				},
 			},
@@ -656,7 +656,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 				rows := sqlmock.NewRows([]string{"ID", "Title", "Description", "Reminder"})
 				mock.ExpectQuery("SELECT (.+) FROM ToDo").WillReturnRows(rows)
 			},
-			want: &pb.ListResponse{
+			want: &pb.ListTodoResponse{
 				Api:   "v1",
 				Items: []*pb.ToDo(nil),
 			},
@@ -666,7 +666,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 			ssv:  ssv,
 			args: args{
 				ctx: ctx,
-				req: &pb.ListRequest{
+				req: &pb.ListTodoRequest{
 					Api: "v1",
 				},
 			},
@@ -677,7 +677,7 @@ func Test_toDoServiceServer_List(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.desc, func(t *testing.T) {
 			c.mock()
-			got, err := c.ssv.List(c.args.ctx, c.args.req)
+			got, err := c.ssv.ListTodo(c.args.ctx, c.args.req)
 			if (err != nil) != c.wantErr {
 				t.Errorf("ToDoService.List() error = %v, wantErr %v", err, c.wantErr)
 				return

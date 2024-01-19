@@ -2,20 +2,23 @@ syntax = "proto3";
 
 package qclaogui.todo.v1;
 
+import "google/api/client.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb";
 
 service ToDoService {
-  rpc Create(CreateRequest) returns (CreateResponse);
+  option (google.api.default_host) = "localhost:9095";
 
-  rpc Get(GetRequest) returns (GetResponse);
+  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse);
 
-  rpc Update(UpdateRequest) returns (UpdateResponse);
+  rpc GetTodo(GetTodoRequest) returns (GetTodoResponse);
 
-  rpc List(ListRequest) returns (ListResponse);
+  rpc UpdateTodo(UpdateTodoRequest) returns (UpdateTodoResponse);
 
-  rpc Delete(DeleteRequest) returns (DeleteResponse);
+  rpc ListTodo(ListTodoRequest) returns (ListTodoResponse);
+
+  rpc DeleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse);
 }
 
 // Tasks wo have to do
@@ -34,63 +37,63 @@ message ToDo {
   google.protobuf.Timestamp updated_at = 6;
 }
 
-message CreateRequest {
+message CreateTodoRequest {
   // API version
   string api = 1;
 
   ToDo item = 2;
 }
 
-message CreateResponse {
+message CreateTodoResponse {
   // API version
   string api = 1;
 
   string id = 2;
 }
 
-message GetRequest {
+message GetTodoRequest {
   // API version
   string api = 1;
 
   string id = 2;
 }
 
-message GetResponse {
+message GetTodoResponse {
   // API version
   string api = 1;
 
   ToDo item = 2;
 }
 
-message UpdateRequest {
+message UpdateTodoRequest {
   // API version
   string api = 1;
 
   ToDo item = 2;
 }
 
-message UpdateResponse {
+message UpdateTodoResponse {
   // API version
   string api = 1;
 
   int64 updated = 2;
 }
 
-message DeleteRequest {
+message DeleteTodoRequest {
   // API version
   string api = 1;
 
   string id = 2;
 }
 
-message DeleteResponse {
+message DeleteTodoResponse {
   // API version
   string api = 1;
 
   int64 deleted = 2;
 }
 
-message ListRequest {
+message ListTodoRequest {
   // API version
   string api = 1;
 
@@ -99,7 +102,7 @@ message ListRequest {
   bool completed = 3;
 }
 
-message ListResponse {
+message ListTodoResponse {
   // API version
   string api = 1;
 
