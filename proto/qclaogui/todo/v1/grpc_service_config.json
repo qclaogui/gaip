@@ -1,6 +1,8 @@
 {
   "methodConfig": [{
-    "name": [{ "service": "qclaogui.todo.v1.ToDoService" }],
+    "name": [
+      { "service": "qclaogui.todo.v1.ToDoService" }
+    ],
     "waitForReady": true,
     "timeout": "60s",
     "retryPolicy": {

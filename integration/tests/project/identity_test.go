@@ -42,39 +42,39 @@ func TestUserCRUD(t *testing.T) {
 		}
 		usr, err := client.CreateUser(ctx, create)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatalf("client.CreateUser() failed: %v", err)
 		}
 
 		want := create.GetUser()
 		if usr.GetName() == "" {
-			t.Errorf("CreateUser().Name was unexpectedly empty")
+			t.Errorf("client.CreateUser().Name was unexpectedly empty")
 		}
 
 		if usr.GetDisplayName() != want.GetDisplayName() {
-			t.Errorf("CreateUser().DisplayName = %q, want = %q", usr.GetDisplayName(), want.GetDisplayName())
+			t.Errorf("client.CreateUser().DisplayName = %q, want = %q", usr.GetDisplayName(), want.GetDisplayName())
 		}
 		if usr.GetEmail() != want.GetEmail() {
-			t.Errorf("CreateUser().Email = %q, want = %q", usr.GetEmail(), want.GetEmail())
+			t.Errorf("client.CreateUser().Email = %q, want = %q", usr.GetEmail(), want.GetEmail())
 		}
 
 		if usr.GetCreateTime() == nil {
-			t.Errorf("CreateUser().CreateTime was unexpectedly empty")
+			t.Errorf("client.CreateUser().CreateTime was unexpectedly empty")
 		}
 		if usr.GetUpdateTime() == nil {
-			t.Errorf("CreateUser().UpdateTime was unexpectedly empty")
+			t.Errorf("client.CreateUser().UpdateTime was unexpectedly empty")
 		}
 		if usr.GetNickname() != want.GetNickname() {
-			t.Errorf("CreateUser().Nickname = %q, want = %q", usr.GetNickname(), want.GetNickname())
+			t.Errorf("client.CreateUser().Nickname = %q, want = %q", usr.GetNickname(), want.GetNickname())
 		}
 		if usr.GetHeightFeet() != want.GetHeightFeet() {
-			t.Errorf("CreateUser().HeightFeet = %f, want = %f", usr.GetHeightFeet(), want.GetHeightFeet())
+			t.Errorf("client.CreateUser().HeightFeet = %f, want = %f", usr.GetHeightFeet(), want.GetHeightFeet())
 		}
 
 		if usr.Age != nil {
-			t.Errorf("CreateUser().Age was unexpectedly set to: %d", usr.GetAge())
+			t.Errorf("client.CreateUser().Age was unexpectedly set to: %d", usr.GetAge())
 		}
 		if usr.EnableNotifications != nil {
-			t.Errorf("CreateUser().EnableNotifications was unexpectedly set to: %v", usr.GetEnableNotifications())
+			t.Errorf("client.CreateUser().EnableNotifications was unexpectedly set to: %v", usr.GetEnableNotifications())
 		}
 
 		// List UsersRequest
@@ -83,7 +83,7 @@ func TestUserCRUD(t *testing.T) {
 		}
 		it := client.ListUsers(context.Background(), list)
 		if mSize := it.PageInfo().MaxSize; mSize != int(list.PageSize) {
-			t.Errorf("PageInfo().MaxSize = %d, want %d", mSize, list.PageSize)
+			t.Errorf("client.ListUsers(): it.PageInfo().MaxSize = %d, want %d", mSize, list.PageSize)
 		}
 
 		listed, err := it.Next()
@@ -92,7 +92,7 @@ func TestUserCRUD(t *testing.T) {
 		}
 
 		if diff := cmp.Diff(listed, usr, cmp.Comparer(proto.Equal)); diff != "" {
-			t.Errorf("ListUsers() got=-, want=+:%s", diff)
+			t.Errorf("client.ListUsers() got=-, want=+:%s", diff)
 		}
 
 		//	Get UserRequest
@@ -106,7 +106,7 @@ func TestUserCRUD(t *testing.T) {
 		}
 
 		if diff := cmp.Diff(got, usr, cmp.Comparer(proto.Equal)); diff != "" {
-			t.Errorf("GetUser() got=-, want=+:%s", diff)
+			t.Errorf("client.GetUser() got=-, want=+:%s", diff)
 		}
 
 		//	Update UserRequest
@@ -133,24 +133,24 @@ func TestUserCRUD(t *testing.T) {
 		}
 
 		if diff := cmp.Diff(updated, usr, cmp.Comparer(proto.Equal)); diff == "" {
-			t.Errorf("UpdateUser() users were the same, update failed")
+			t.Errorf("client.UpdateUser() users were the same, update failed")
 		}
 
 		if updated.GetEmail() == usr.GetEmail() {
-			t.Errorf("UpdateUser().Email was not updated as expected")
+			t.Errorf("client.UpdateUser().Email was not updated as expected")
 		}
 		if updated.GetNickname() != usr.GetNickname() {
-			t.Errorf("UpdateUser().Nickname = %q, want = %q", updated.GetNickname(), usr.GetNickname())
+			t.Errorf("client.UpdateUser().Nickname = %q, want = %q", updated.GetNickname(), usr.GetNickname())
 		}
 
 		if updated.GetHeightFeet() == usr.GetHeightFeet() {
-			t.Errorf("UpdateUser().HeightFeet was not updated as expected")
+			t.Errorf("client.UpdateUser().HeightFeet was not updated as expected")
 		}
 		if updated.EnableNotifications == nil || !updated.GetEnableNotifications() {
-			t.Errorf("UpdateUser().EnableNotifications was not updated as expected")
+			t.Errorf("client.UpdateUser().EnableNotifications was not updated as expected")
 		}
 		if updated.Age != nil {
-			t.Errorf("UpdateUser().Age was unexpectedly updated")
+			t.Errorf("client.UpdateUser().Age was unexpectedly updated")
 		}
 
 		//	Delete UserRequest
@@ -164,7 +164,7 @@ func TestUserCRUD(t *testing.T) {
 		it = client.ListUsers(context.Background(), &pb.ListUsersRequest{})
 		_, err = it.Next()
 		if !errors.Is(err, iterator.Done) {
-			t.Errorf("ListUsers() = %q, want %q", err, iterator.Done)
+			t.Errorf("client.ListUsers() = %q, want %q", err, iterator.Done)
 		}
 	}
 

@@ -36,7 +36,7 @@ func main() {
 		Run:   runIntegrationTests,
 	}
 
-	rootCmd.PersistentFlags().StringVar(&specificTest, "test", "", "Specific test directory to run")
+	rootCmd.PersistentFlags().StringVarP(&specificTest, "test", "t", "", "Specific test directory to run")
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -57,6 +57,7 @@ func runIntegrationTests(*cobra.Command, []string) {
 		}
 		logChan = make(chan TestLog, 1)
 		runSingleTest(specificTest)
+		close(logChan)
 	} else {
 		testDirs, err := filepath.Glob("./tests/*")
 		if err != nil {

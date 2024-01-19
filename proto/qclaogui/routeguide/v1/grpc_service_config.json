@@ -1,0 +1,16 @@
+{
+  "methodConfig": [{
+    "name": [
+      { "service": "qclaogui.routeguide.v1.RouteGuideService" }
+    ],
+    "waitForReady": true,
+    "timeout": "60s",
+    "retryPolicy": {
+      "maxAttempts": 3,
+      "initialBackoff": "0.01s",
+      "maxBackoff": "60s",
+      "backoffMultiplier": 1.3,
+      "retryableStatusCodes": ["UNAVAILABLE"]
+    }
+  }]
+}
