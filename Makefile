@@ -150,11 +150,12 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--plugin=protoc-gen-go=$(PROTOC_GEN_GO) \
 		--go_out=genproto \
 		--go_opt='module=github.com/qclaogui/gaip/genproto' \
- 		proto/qclaogui/routeguide/v1/*.proto \
- 		proto/qclaogui/todo/v1/*.proto \
- 		proto/qclaogui/project/v1/*.proto \
+ 		proto/qclaogui/bookstore/v1alpha1/*.proto \
+ 		proto/qclaogui/generativelanguage/v1/*.proto \
  		proto/qclaogui/library/v1/*.proto \
- 		proto/qclaogui/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/project/v1/*.proto \
+ 		proto/qclaogui/routeguide/v1/*.proto \
+ 		proto/qclaogui/todo/v1/*.proto
 
     # plugin protoc-gen-go-grpc
 	@$(PROTOC) --proto_path=proto \
@@ -162,11 +163,12 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go-grpc_out=genproto \
 		--go-grpc_opt='module=github.com/qclaogui/gaip/genproto' \
 		--go-grpc_opt='require_unimplemented_servers=false' \
- 		proto/qclaogui/routeguide/v1/*.proto \
- 		proto/qclaogui/todo/v1/*.proto \
- 		proto/qclaogui/project/v1/*.proto \
+ 		proto/qclaogui/bookstore/v1alpha1/*.proto \
+ 		proto/qclaogui/generativelanguage/v1/*.proto \
  		proto/qclaogui/library/v1/*.proto \
- 		proto/qclaogui/bookstore/v1alpha1/*.proto
+ 		proto/qclaogui/project/v1/*.proto \
+ 		proto/qclaogui/routeguide/v1/*.proto \
+ 		proto/qclaogui/todo/v1/*.proto
 
     # plugin protoc-gen-go_gapic
     # https://github.com/googleapis/gapic-generator-go?tab=readme-ov-file#invocation
@@ -182,6 +184,19 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
  		proto/qclaogui/bookstore/v1alpha1/*.proto
+
+	@$(PROTOC) --proto_path=proto \
+		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
+		--go_gapic_out=genproto \
+		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/generativelanguage/apiv1;generativelanguage' \
+		--go_gapic_opt='metadata=false' \
+		--go_gapic_opt='omit-snippets' \
+		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
+		--go_gapic_opt='grpc-service-config=proto/qclaogui/generativelanguage/v1/grpc_service_config.json' \
+		--go_gapic_opt='release-level=alpha' \
+		--go_gapic_opt='transport=grpc+rest' \
+		--go_gapic_opt='rest-numeric-enums=true' \
+ 		proto/qclaogui/generativelanguage/v1/*.proto
 
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \

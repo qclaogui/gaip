@@ -23,6 +23,7 @@ lint:
       - qclaogui/project/v1/identity_service.proto
       - qclaogui/project/v1/project_service.proto
       - qclaogui/project/v1/echo_service.proto
+      - qclaogui/generativelanguage/v1/generative_service.proto
   allow_comment_ignores: false
   enum_zero_value_suffix: _UNSPECIFIED
   rpc_allow_google_protobuf_empty_requests: true

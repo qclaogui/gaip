@@ -1,0 +1,19 @@
+{
+  "methodConfig": [{
+    "name": [
+      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "GenerateContent" },
+      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "StreamGenerateContent" },
+      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "EmbedContent" },
+      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "BatchEmbedContents" },
+      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "CountTokens" }
+    ],
+    "timeout": "60s",
+    "retryPolicy": {
+      "maxAttempts": 5,
+      "initialBackoff": "1s",
+      "maxBackoff": "10s",
+      "backoffMultiplier": 1.3,
+      "retryableStatusCodes": ["UNAVAILABLE"]
+    }
+  }]
+}
