@@ -12,6 +12,7 @@ import (
 	"github.com/qclaogui/gaip/internal/repository"
 	"github.com/qclaogui/gaip/pkg/service"
 	"github.com/qclaogui/gaip/pkg/service/bookstore"
+	"github.com/qclaogui/gaip/pkg/service/generativeai"
 	"github.com/qclaogui/gaip/pkg/service/library"
 	"github.com/qclaogui/gaip/pkg/service/project"
 	"github.com/qclaogui/gaip/pkg/service/routeguide"
@@ -27,11 +28,12 @@ type Config struct {
 	ServerCfg service.Config    `yaml:"server"`
 	RepoCfg   repository.Config `yaml:"database"`
 
-	BookstoreCfg  bookstore.Config  `yaml:"bookstore"`
-	LibraryCfg    library.Config    `yaml:"library"`
-	ProjectCfg    project.Config    `yaml:"project"`
-	RouteGuideCfg routeguide.Config `yaml:"routeguide"`
-	TodoCfg       todo.Config       `yaml:"todo"`
+	BookstoreCfg  bookstore.Config    `yaml:"bookstore"`
+	GenaiCfg      generativeai.Config `yaml:"genai"`
+	LibraryCfg    library.Config      `yaml:"library"`
+	ProjectCfg    project.Config      `yaml:"project"`
+	RouteGuideCfg routeguide.Config   `yaml:"routeguide"`
+	TodoCfg       todo.Config         `yaml:"todo"`
 
 	VaultCfg vault.Config `yaml:"vault"`
 }
@@ -54,6 +56,7 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet) {
 
 	// Register services server Config
 	c.BookstoreCfg.RegisterFlags(fs)
+	c.GenaiCfg.RegisterFlags(fs)
 	c.LibraryCfg.RegisterFlags(fs)
 	c.ProjectCfg.RegisterFlags(fs)
 	c.RouteGuideCfg.RegisterFlags(fs)

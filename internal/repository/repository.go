@@ -7,13 +7,16 @@ package repository
 import (
 	"github.com/pkg/errors"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/gaip/genproto/generativelanguage/apiv1/generativelanguagepb"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
+	"github.com/qclaogui/gaip/internal/repository/external"
 	"github.com/qclaogui/gaip/internal/repository/memory"
 	"github.com/qclaogui/gaip/internal/repository/mysql"
 	"github.com/qclaogui/gaip/internal/repository/postgres"
+	"github.com/qclaogui/gaip/pkg/service/generativeai"
 )
 
 func NewBookstore(cfg Config) (bookstorepb.BookstoreServiceServer, error) {
@@ -27,6 +30,10 @@ func NewBookstore(cfg Config) (bookstorepb.BookstoreServiceServer, error) {
 	default:
 		return nil, errors.Errorf("unsupported drivers for database %s", cfg.Driver)
 	}
+}
+
+func NewGenerativeai(cfg generativeai.Config) (generativelanguagepb.GenerativeServiceServer, error) {
+	return external.NewGenerativeai(cfg.APIKey)
 }
 
 func NewLibrary(cfg Config) (librarypb.LibraryServiceServer, error) {

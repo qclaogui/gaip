@@ -84,6 +84,10 @@ func (g *Gaip) initServices() error {
 		return err
 	}
 
+	if err = g.initGenerativeai(); err != nil {
+		return err
+	}
+
 	if err = g.initLibrary(); err != nil {
 		return err
 	}

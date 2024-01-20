@@ -48,7 +48,9 @@ type CallOptions struct {
 func defaultGRPCClientOptions() []option.ClientOption {
 	return []option.ClientOption{
 		internaloption.WithDefaultEndpoint("bookstore.qclaogui.com:443"),
+		internaloption.WithDefaultEndpointTemplate("bookstore.qclaogui.com:443"),
 		internaloption.WithDefaultMTLSEndpoint("bookstore.qclaogui.com:443"),
+		internaloption.WithDefaultUniverseDomain("googleapis.com"),
 		internaloption.WithDefaultAudience("https://bookstore.qclaogui.com/"),
 		internaloption.WithDefaultScopes(DefaultAuthScopes()...),
 		internaloption.EnableJwtWithScope(),

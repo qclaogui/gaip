@@ -11,12 +11,14 @@ import (
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
+	"github.com/qclaogui/gaip/genproto/generativelanguage/apiv1/generativelanguagepb"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/repository"
 	"github.com/qclaogui/gaip/pkg/service/bookstore"
+	"github.com/qclaogui/gaip/pkg/service/generativeai"
 	"github.com/qclaogui/gaip/pkg/service/library"
 	"github.com/qclaogui/gaip/pkg/service/project"
 	"github.com/qclaogui/gaip/pkg/service/routeguide"
@@ -48,6 +50,31 @@ func (g *Gaip) initBookstore() error {
 
 	// Register Service Server
 	bookstorepb.RegisterBookstoreServiceServer(g.Server.GRPCServer, srv)
+
+	return nil
+}
+
+func (g *Gaip) initGenerativeai() error {
+	if !g.Cfg.GenaiCfg.Enabled {
+		return nil
+	}
+
+	g.Cfg.GenaiCfg.Log = g.Server.Log
+	g.Cfg.GenaiCfg.Registerer = g.Registerer
+
+	repo, err := repository.NewGenerativeai(g.Cfg.GenaiCfg)
+	if err != nil {
+		return err
+	}
+	g.Cfg.GenaiCfg.RepoGenerative = repo
+
+	srv, err := generativeai.NewServer(g.Cfg.GenaiCfg)
+	if err != nil {
+		return err
+	}
+
+	// Register Service Server
+	generativelanguagepb.RegisterGenerativeServiceServer(g.Server.GRPCServer, srv)
 
 	return nil
 }

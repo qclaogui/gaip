@@ -81,7 +81,8 @@ func executeCommand(command string, args []string, taskDescription string) {
 func runSingleTest(testDir string) {
 	info, err := os.Stat(testDir)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	if !info.IsDir() {
 		return
@@ -107,7 +108,8 @@ func runSingleTest(testDir string) {
 	testOutput, errTest := testCmd.CombinedOutput()
 
 	if err = cmd.Process.Kill(); err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	if errTest != nil {

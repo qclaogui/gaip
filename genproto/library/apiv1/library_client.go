@@ -60,7 +60,9 @@ type CallOptions struct {
 func defaultGRPCClientOptions() []option.ClientOption {
 	return []option.ClientOption{
 		internaloption.WithDefaultEndpoint("library.qclaogui.com:443"),
+		internaloption.WithDefaultEndpointTemplate("library.qclaogui.com:443"),
 		internaloption.WithDefaultMTLSEndpoint("library.qclaogui.com:443"),
+		internaloption.WithDefaultUniverseDomain("googleapis.com"),
 		internaloption.WithDefaultAudience("https://library.qclaogui.com/"),
 		internaloption.WithDefaultScopes(DefaultAuthScopes()...),
 		internaloption.EnableJwtWithScope(),
@@ -560,7 +562,9 @@ func NewRESTClient(ctx context.Context, opts ...option.ClientOption) (*Client, e
 func defaultRESTClientOptions() []option.ClientOption {
 	return []option.ClientOption{
 		internaloption.WithDefaultEndpoint("https://library.qclaogui.com"),
+		internaloption.WithDefaultEndpointTemplate("https://library.qclaogui.com"),
 		internaloption.WithDefaultMTLSEndpoint("https://library.qclaogui.com"),
+		internaloption.WithDefaultUniverseDomain("googleapis.com"),
 		internaloption.WithDefaultAudience("https://library.qclaogui.com/"),
 		internaloption.WithDefaultScopes(DefaultAuthScopes()...),
 	}
