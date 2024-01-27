@@ -16,6 +16,8 @@ github.com/bufbuild/protocompile v0.6.0 h1:Uu7WiSQ6Yj9DbkdnOe7U4mNKp58y9WDMKDn28
 github.com/bufbuild/protocompile v0.6.0/go.mod h1:YNP35qEYoYGme7QMtz5SBCoN4kL4g12jTtjuzRNdjpE=
 github.com/bufbuild/protocompile v0.7.1 h1:Kd8fb6EshOHXNNRtYAmLAwy/PotlyFoN0iMbuwGNh0M=
 github.com/bufbuild/protocompile v0.7.1/go.mod h1:+Etjg4guZoAqzVk2czwEQP12yaxLJ8DxuqCJ9qHdH94=
+github.com/bufbuild/protocompile v0.8.0 h1:9Kp1q6OkS9L4nM3FYbr8vlJnEwtbpDPQlQOVXfR+78s=
+github.com/bufbuild/protocompile v0.8.0/go.mod h1:+Etjg4guZoAqzVk2czwEQP12yaxLJ8DxuqCJ9qHdH94=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gertd/go-pluralize v0.2.1 h1:M3uASbVjMnTsPb0PNqg+E/24Vwigyo/tvyMTtAlLgiA=
@@ -40,12 +42,16 @@ github.com/googleapis/api-linter v1.63.1 h1:20ujfno3FwHM6qs5GOBuhEymMLnSFcCz5pJH
 github.com/googleapis/api-linter v1.63.1/go.mod h1:aiC2QVnMwhhtNAntJO6D0mTq94kJ9T2oyIMKJNhlfhU=
 github.com/googleapis/api-linter v1.63.2 h1:2pKDXoZbTDml5F+uoBRkfxVRuz/Fc2ZEWDuYrf7lTK0=
 github.com/googleapis/api-linter v1.63.2/go.mod h1:dVIj5zG0biWLJJGT3OIcBwLzepzOLCEVr4TLGsS2EyU=
+github.com/googleapis/api-linter v1.63.3 h1:YxHcq+EqvelAKvUme4uCz6uZUygsXcTQPmcl6cOPKMQ=
+github.com/googleapis/api-linter v1.63.3/go.mod h1:DeEFSsKuT8ZDWJNtNcLPZ7TynpIOcBI36+obl9JyA4Y=
 github.com/jhump/protoreflect v1.15.2 h1:7YppbATX94jEt9KLAc5hICx4h6Yt3SaavhQRsIUEHP0=
 github.com/jhump/protoreflect v1.15.2/go.mod h1:4ORHmSBmlCW8fh3xHmJMGyul1zNqZK4Elxc8qKP+p1k=
 github.com/jhump/protoreflect v1.15.3 h1:6SFRuqU45u9hIZPJAoZ8c28T3nK64BNdp9w6jFonzls=
 github.com/jhump/protoreflect v1.15.3/go.mod h1:4ORHmSBmlCW8fh3xHmJMGyul1zNqZK4Elxc8qKP+p1k=
 github.com/jhump/protoreflect v1.15.4 h1:mrwJhfQGGljwvR/jPEocli8KA6G9afbQpH8NY2wORcI=
 github.com/jhump/protoreflect v1.15.4/go.mod h1:2B+zwrnMY3TTIqEK01OG/d3pyUycQBfDf+bx8fE2DNg=
+github.com/jhump/protoreflect v1.15.5 h1:Y9eEjV3vwdX57VV3uuxtknBRxA2vQ3LOifKOOC2n5ec=
+github.com/jhump/protoreflect v1.15.5/go.mod h1:jCHoyYQIJnaabEYnbGwyo9hUqfyUMTbJw/tAut5t97E=
 github.com/mattn/go-runewidth v0.0.9 h1:Lm995f3rfxdpd6TSmuVCHVb/QhupuXlYr8sCI/QdE+0=
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=

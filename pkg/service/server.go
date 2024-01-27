@@ -158,7 +158,7 @@ func newEndpointREST(cfg Config, router *mux.Router, metrics *Metrics, logger lo
 		httpListener = netutil.LimitListener(httpListener, cfg.HTTPConnLimit)
 	}
 
-	sourceIPs, err := middleware.NewSourceIPs(cfg.LogSourceIPsHeader, cfg.LogSourceIPsRegex)
+	sourceIPs, err := middleware.NewSourceIPs(cfg.LogSourceIPsHeader, cfg.LogSourceIPsRegex, true)
 	if err != nil {
 		return nil, nil, fmt.Errorf("error setting up source IP extraction: %v", err)
 	}
