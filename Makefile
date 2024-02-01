@@ -23,6 +23,7 @@ GOOS             ?= $(shell go env GOOS)
 GOARCH           ?= $(shell go env GOARCH)
 GOARM            ?= $(shell go env GOARM)
 CGO_ENABLED      ?= 1
+RELEASE_BUILD    ?= 0
 
 GO_FILES_TO_FMT  ?= $(shell find . -path ./vendor -prune -o -name '*.go' -print)
 
@@ -44,7 +45,13 @@ GO_LDFLAGS   := -X $(VPREFIX).Version=$(VERSION)                         \
                 -X $(VPREFIX).GitCommit=$(GIT_COMMIT)                    \
                 -X $(VPREFIX).BuildDate=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-GO_FLAGS := -ldflags "-s -w $(GO_LDFLAGS)"
+DEFAULT_FLAGS	:= $(GO_FLAGS)
+
+ifeq ($(RELEASE_BUILD),1)
+GO_FLAGS	:= $(DEFAULT_FLAGS) -ldflags "-s -w $(GO_LDFLAGS)"
+else
+GO_FLAGS	:= $(DEFAULT_FLAGS) -ldflags "$(GO_LDFLAGS)"
+endif
 
 .PHONY: build
 build: ## Build binary for current OS and place it at ./bin/gaip_$(GOOS)_$(GOARCH)
@@ -53,7 +60,7 @@ build: ## Build binary for current OS and place it at ./bin/gaip_$(GOOS)_$(GOARC
 .PHONY: build-all
 build-all: ## Build binaries for Linux and Mac and place them in dist/
 	@cat ./.goreleaser.yml ./.goreleaser.docker.yml > .goreleaser.combined.yml
-	PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.combined.yml --snapshot --skip=publish --clean
+	RELEASE_BUILD=$(RELEASE_BUILD) PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.combined.yml --snapshot --skip=publish --clean
 	@rm .goreleaser.combined.yml
 
 .PHONY: clean
