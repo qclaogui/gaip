@@ -14,7 +14,8 @@ kos:
   flags:
     - -trimpath
   ldflags:
-    - -s -w
+    - >-
+      {{- if eq .Env.RELEASE_BUILD "1" }}-s -w{{- end }}
     - -extldflags "-static"
     - -X github.com/qclaogui/gaip/pkg/version.Version={{.Version}}
     - -X github.com/qclaogui/gaip/pkg/version.GitCommit={{.ShortCommit}}
