@@ -23,7 +23,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/hashicorp/vault/api v1.11.0
-	github.com/jackc/pgx/v5 v5.5.2
+	github.com/jackc/pgx/v5 v5.5.3
 	github.com/mattn/go-sqlite3 v1.14.19
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.31.1
