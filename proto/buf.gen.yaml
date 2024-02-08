@@ -37,7 +37,7 @@ plugins:
     - release-level=alpha
     - transport=grpc+rest
     - rest-numeric-enums=true
-    path: /Users/Shared/code/golang/bin/protoc-gen-go_gapic-v0.39.4
+    path: /Users/Shared/code/golang/bin/protoc-gen-go_gapic-v0.40.0
     protoc_path: /Users/Shared/code/golang/bin/protoc-25.2
 
   - plugin: grpc-gateway
@@ -45,7 +45,7 @@ plugins:
     opt:
     - module=github.com/qclaogui/gaip/genproto
     - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
-    path: /Users/Shared/code/golang/bin/protoc-gen-grpc-gateway-v2.18.1
+    path: /Users/Shared/code/golang/bin/protoc-gen-grpc-gateway-v2.19.1
     protoc_path: /Users/Shared/code/golang/bin/protoc-25.2
 
   - plugin: openapiv2
@@ -53,5 +53,5 @@ plugins:
     opt:
     - logtostderr=true
     - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
-    path: /Users/Shared/code/golang/bin/protoc-gen-openapiv2-v2.18.1
+    path: /Users/Shared/code/golang/bin/protoc-gen-openapiv2-v2.19.1
     protoc_path: /Users/Shared/code/golang/bin/protoc-25.2

@@ -4,4 +4,4 @@ go 1.21
 
 toolchain go1.21.3
 
-require github.com/goreleaser/goreleaser v1.23.0
+require github.com/goreleaser/goreleaser v1.24.0

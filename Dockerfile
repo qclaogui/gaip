@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.21.5-bullseye AS builder
+FROM golang:1.22 AS builder
 
 # Set destination for COPY
 WORKDIR /workspace

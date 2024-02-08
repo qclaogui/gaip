@@ -5,6 +5,7 @@ on:
       - "deploy/helm/**"
 env:
   CT_CONFIGFILE: deploy/helm/ct.yaml
+  HELM_DOCS_VERSION: '1.12.0'
 
 jobs:
   regenerate-docs:
@@ -18,7 +19,7 @@ jobs:
           docker run --rm \
             -v "$(pwd)/deploy/helm/charts/gaip:/helm-docs" \
             -u "$(id -u)" \
-            jnorwood/helm-docs:v1.12.0
+            jnorwood/helm-docs:v${HELM_DOCS_VERSION}
           if ! git diff --exit-code; then
             echo "Helm chart documentation is not up to date. Please run 'make generate-helm-docs' and commit changes!" >&2
             exit 1
