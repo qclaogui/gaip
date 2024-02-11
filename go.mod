@@ -4,8 +4,8 @@ go 1.21
 
 require (
 	cloud.google.com/go/longrunning v0.5.5
-	dagger.io/dagger v0.9.8
-	entgo.io/ent v0.12.5
+	dagger.io/dagger v0.9.9
+	entgo.io/ent v0.13.0
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/containerd/containerd v1.7.13
 	github.com/dave/jennifer v1.7.0
@@ -16,10 +16,10 @@ require (
 	github.com/google/generative-ai-go v0.7.0
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
-	github.com/googleapis/gapic-showcase v0.30.0
+	github.com/googleapis/gapic-showcase v0.31.0
 	github.com/googleapis/gax-go/v2 v2.12.0
 	github.com/gorilla/mux v1.8.1
-	github.com/grafana/dskit v0.0.0-20240207132437-5d716e13ec96
+	github.com/grafana/dskit v0.0.0-20240208074945-f245b483eb15
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/hashicorp/vault/api v1.12.0
@@ -48,7 +48,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.19.0 // indirect
+	ariga.io/atlas v0.19.1-0.20240203083654-5948b60a8e43 // indirect
 	cloud.google.com/go v0.112.0 // indirect
 	cloud.google.com/go/ai v0.3.2 // indirect
 	cloud.google.com/go/compute v1.23.4 // indirect
@@ -122,7 +122,7 @@ require (
 	golang.org/x/crypto v0.19.0 // indirect
 	golang.org/x/exp v0.0.0-20240205201215-2c58cdc269a3 // indirect
 	golang.org/x/mod v0.15.0 // indirect
-	golang.org/x/oauth2 v0.16.0 // indirect
+	golang.org/x/oauth2 v0.17.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
