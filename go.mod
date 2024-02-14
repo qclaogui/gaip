@@ -17,7 +17,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/googleapis/gapic-showcase v0.31.0
-	github.com/googleapis/gax-go/v2 v2.12.0
+	github.com/googleapis/gax-go/v2 v2.12.1
 	github.com/gorilla/mux v1.8.1
 	github.com/grafana/dskit v0.0.0-20240208074945-f245b483eb15
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
