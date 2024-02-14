@@ -17,7 +17,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/googleapis/gapic-showcase v0.31.0
-	github.com/googleapis/gax-go/v2 v2.12.0
+	github.com/googleapis/gax-go/v2 v2.12.1
 	github.com/gorilla/mux v1.8.1
 	github.com/grafana/dskit v0.0.0-20240208074945-f245b483eb15
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
@@ -38,7 +38,7 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.23.1
 	go.opentelemetry.io/otel/sdk v1.23.1
 	golang.org/x/net v0.21.0
-	google.golang.org/api v0.163.0
+	google.golang.org/api v0.164.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240205150955-31a09d347014
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240205150955-31a09d347014
 	google.golang.org/grpc v1.61.0
