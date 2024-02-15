@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/internal/pagination"
 	"github.com/qclaogui/gaip/pkg/service"
 	"google.golang.org/grpc/codes"
@@ -21,11 +21,11 @@ import (
 )
 
 type userEntry struct {
-	user    *projectpb.User
+	user    *showcasepb.User
 	deleted bool
 }
 
-func NewIdentity() (projectpb.IdentityServiceServer, error) {
+func NewIdentity() (showcasepb.IdentityServiceServer, error) {
 	s := &identityImpl{
 		token: service.NewTokenGenerator(),
 		keys:  map[string]int{},
@@ -35,7 +35,7 @@ func NewIdentity() (projectpb.IdentityServiceServer, error) {
 
 // The identityImpl type implements a projectpb.IdentityServiceServer.
 type identityImpl struct {
-	projectpb.UnimplementedIdentityServiceServer
+	showcasepb.UnimplementedIdentityServiceServer
 
 	uid   service.UniqID
 	token service.TokenGenerator
@@ -46,7 +46,7 @@ type identityImpl struct {
 }
 
 // validate validate
-func (s *identityImpl) validate(u *projectpb.User) error {
+func (s *identityImpl) validate(u *showcasepb.User) error {
 	// Validate Required Fields.
 	if u.GetDisplayName() == "" {
 		return status.Errorf(codes.InvalidArgument, "The field `display_name` is required.")
@@ -70,7 +70,7 @@ func (s *identityImpl) validate(u *projectpb.User) error {
 }
 
 // CreateUser Create User
-func (s *identityImpl) CreateUser(_ context.Context, req *projectpb.CreateUserRequest) (*projectpb.User, error) {
+func (s *identityImpl) CreateUser(_ context.Context, req *showcasepb.CreateUserRequest) (*showcasepb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -102,7 +102,7 @@ func (s *identityImpl) CreateUser(_ context.Context, req *projectpb.CreateUserRe
 }
 
 // GetUser Get User
-func (s *identityImpl) GetUser(_ context.Context, req *projectpb.GetUserRequest) (*projectpb.User, error) {
+func (s *identityImpl) GetUser(_ context.Context, req *showcasepb.GetUserRequest) (*showcasepb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -118,7 +118,7 @@ func (s *identityImpl) GetUser(_ context.Context, req *projectpb.GetUserRequest)
 }
 
 // ListUsers List Users
-func (s *identityImpl) ListUsers(_ context.Context, req *projectpb.ListUsersRequest) (*projectpb.ListUsersResponse, error) {
+func (s *identityImpl) ListUsers(_ context.Context, req *showcasepb.ListUsersRequest) (*showcasepb.ListUsersResponse, error) {
 
 	pageToken, err := pagination.ParsePageToken(req)
 	if err != nil {
@@ -132,7 +132,7 @@ func (s *identityImpl) ListUsers(_ context.Context, req *projectpb.ListUsersRequ
 	if err != nil {
 		return nil, err
 	}
-	var users []*projectpb.User
+	var users []*showcasepb.User
 	offset := 0
 	for _, entry := range s.users[startPos:] {
 		offset++
@@ -151,11 +151,11 @@ func (s *identityImpl) ListUsers(_ context.Context, req *projectpb.ListUsersRequ
 		nextToken = s.token.ForIndex(start + offset)
 	}
 
-	return &projectpb.ListUsersResponse{Users: users, NextPageToken: nextToken}, nil
+	return &showcasepb.ListUsersResponse{Users: users, NextPageToken: nextToken}, nil
 }
 
 // UpdateUser Update User
-func (s *identityImpl) UpdateUser(_ context.Context, req *projectpb.UpdateUserRequest) (*projectpb.User, error) {
+func (s *identityImpl) UpdateUser(_ context.Context, req *showcasepb.UpdateUserRequest) (*showcasepb.User, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -174,7 +174,7 @@ func (s *identityImpl) UpdateUser(_ context.Context, req *projectpb.UpdateUserRe
 
 	// Update store.
 	existing := s.users[i].user
-	updated := proto.Clone(existing).(*projectpb.User)
+	updated := proto.Clone(existing).(*showcasepb.User)
 	applyFieldMask(u.ProtoReflect(), updated.ProtoReflect(), mask.GetPaths())
 	updated.CreateTime = existing.GetCreateTime()
 	updated.UpdateTime = timestamppb.Now()
@@ -184,7 +184,7 @@ func (s *identityImpl) UpdateUser(_ context.Context, req *projectpb.UpdateUserRe
 }
 
 // DeleteUser Delete User
-func (s *identityImpl) DeleteUser(_ context.Context, req *projectpb.DeleteUserRequest) (*emptypb.Empty, error) {
+func (s *identityImpl) DeleteUser(_ context.Context, req *showcasepb.DeleteUserRequest) (*emptypb.Empty, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 

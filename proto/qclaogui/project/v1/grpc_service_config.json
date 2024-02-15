@@ -2,7 +2,6 @@
   "methodConfig": [
     {
       "name": [
-        {"service": "qclaogui.project.v1.EchoService"},
         {"service": "qclaogui.project.v1.MessagingService"}
       ],
       "timeout": "5s"
@@ -10,9 +9,6 @@
 
     {
       "name": [
-        {"service": "qclaogui.project.v1.EchoService", "method": "Echo"},
-        {"service": "qclaogui.project.v1.EchoService", "method": "Expand"},
-        {"service": "qclaogui.project.v1.EchoService", "method": "PagedExpand"},
         {"service": "qclaogui.project.v1.MessagingService", "method": "GetRoom"},
         {"service": "qclaogui.project.v1.MessagingService", "method": "ListRooms"}
       ],
@@ -27,23 +23,6 @@
         ]
       },
       "timeout": "10s"
-    },
-    {
-      "name": [
-        {"service": "qclaogui.project.v1.IdentityService", "method": "GetUser"},
-        {"service": "qclaogui.project.v1.IdentityService", "method": "ListUsers"}
-      ],
-      "retryPolicy": {
-        "maxAttempts": 5,
-        "maxBackoff": "3s",
-        "initialBackoff": "0.2s",
-        "backoffMultiplier": 2,
-        "retryableStatusCodes": [
-          "UNAVAILABLE",
-          "UNKNOWN"
-        ]
-      },
-      "timeout": "5s"
     }
   ]
 }
