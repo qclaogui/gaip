@@ -19,7 +19,7 @@ require (
 	github.com/googleapis/gapic-showcase v0.31.0
 	github.com/googleapis/gax-go/v2 v2.12.1
 	github.com/gorilla/mux v1.8.1
-	github.com/grafana/dskit v0.0.0-20240213103939-80881aa4a62f
+	github.com/grafana/dskit v0.0.0-20240215093740-1ff57c889843
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/hashicorp/vault/api v1.12.0
@@ -38,7 +38,7 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.23.1
 	go.opentelemetry.io/otel/sdk v1.23.1
 	golang.org/x/net v0.21.0
-	google.golang.org/api v0.164.0
+	google.golang.org/api v0.165.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240213162025-012b6fc9bca9
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240213162025-012b6fc9bca9
 	google.golang.org/grpc v1.61.1
