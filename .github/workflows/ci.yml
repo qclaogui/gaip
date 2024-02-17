@@ -3,7 +3,7 @@
 name: ci
 
 env:
-  GOLANGCI_LINT_VERSION: '1.56.0'
+  GOLANGCI_LINT_VERSION: '1.56.2'
   GORELEASER_VERSION: '1.24.0'
 
 on:

@@ -6,9 +6,9 @@ package showcase
 
 import (
 	"context"
-	"google.golang.org/protobuf/types/known/emptypb"
 
 	pb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func (srv *Server) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) (*pb.Room, error) {

@@ -17,11 +17,11 @@ GO     ?= $(shell which go)
 #	@echo "Running api-linter"
 #	@$(API_LINTER) <flags/args..>
 #
-API_LINTER := $(GOBIN)/api-linter-v1.63.3
+API_LINTER := $(GOBIN)/api-linter-v1.63.5
 $(API_LINTER): $(BINGO_DIR)/api-linter.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/api-linter-v1.63.3"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=api-linter.mod -o=$(GOBIN)/api-linter-v1.63.3 "github.com/googleapis/api-linter/cmd/api-linter"
+	@echo "(re)installing $(GOBIN)/api-linter-v1.63.5"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=api-linter.mod -o=$(GOBIN)/api-linter-v1.63.5 "github.com/googleapis/api-linter/cmd/api-linter"
 
 ATLAS := $(GOBIN)/atlas-v0.13.1
 $(ATLAS): $(BINGO_DIR)/atlas.mod
@@ -47,23 +47,23 @@ $(COPYRIGHT): $(BINGO_DIR)/copyright.mod
 	@echo "(re)installing $(GOBIN)/copyright-v0.0.0-20230505153745-6b7392939a60"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=copyright.mod -o=$(GOBIN)/copyright-v0.0.0-20230505153745-6b7392939a60 "github.com/efficientgo/tools/copyright"
 
-ENT := $(GOBIN)/ent-v0.12.5
+ENT := $(GOBIN)/ent-v0.13.0
 $(ENT): $(BINGO_DIR)/ent.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/ent-v0.12.5"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=ent.mod -o=$(GOBIN)/ent-v0.12.5 "entgo.io/ent/cmd/ent"
+	@echo "(re)installing $(GOBIN)/ent-v0.13.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=ent.mod -o=$(GOBIN)/ent-v0.13.0 "entgo.io/ent/cmd/ent"
 
-GOIMPORTS := $(GOBIN)/goimports-v0.17.0
+GOIMPORTS := $(GOBIN)/goimports-v0.18.0
 $(GOIMPORTS): $(BINGO_DIR)/goimports.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/goimports-v0.17.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=goimports.mod -o=$(GOBIN)/goimports-v0.17.0 "golang.org/x/tools/cmd/goimports"
+	@echo "(re)installing $(GOBIN)/goimports-v0.18.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=goimports.mod -o=$(GOBIN)/goimports-v0.18.0 "golang.org/x/tools/cmd/goimports"
 
-GOLANGCI_LINT := $(GOBIN)/golangci-lint-v1.56.0
+GOLANGCI_LINT := $(GOBIN)/golangci-lint-v1.56.2
 $(GOLANGCI_LINT): $(BINGO_DIR)/golangci-lint.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/golangci-lint-v1.56.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=golangci-lint.mod -o=$(GOBIN)/golangci-lint-v1.56.0 "github.com/golangci/golangci-lint/cmd/golangci-lint"
+	@echo "(re)installing $(GOBIN)/golangci-lint-v1.56.2"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=golangci-lint.mod -o=$(GOBIN)/golangci-lint-v1.56.2 "github.com/golangci/golangci-lint/cmd/golangci-lint"
 
 GORELEASER := $(GOBIN)/goreleaser-v1.24.0
 $(GORELEASER): $(BINGO_DIR)/goreleaser.mod
