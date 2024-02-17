@@ -11,6 +11,7 @@ import (
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/repository/external"
 	"github.com/qclaogui/gaip/internal/repository/memory"
@@ -62,7 +63,7 @@ func NewProject(cfg Config) (projectpb.ProjectServiceServer, error) {
 	}
 }
 
-func NewIdentity(cfg Config) (projectpb.IdentityServiceServer, error) {
+func NewIdentity(cfg Config) (showcasepb.IdentityServiceServer, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
@@ -73,7 +74,7 @@ func NewIdentity(cfg Config) (projectpb.IdentityServiceServer, error) {
 	}
 }
 
-func NewMessaging(cfg Config) (projectpb.MessagingServiceServer, error) {
+func NewMessaging(cfg Config) (showcasepb.MessagingServiceServer, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)

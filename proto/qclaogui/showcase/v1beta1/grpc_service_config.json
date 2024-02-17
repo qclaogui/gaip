@@ -1,0 +1,48 @@
+{
+  "methodConfig": [
+    {
+      "name": [
+        {"service": "qclaogui.showcase.v1beta1.EchoService"},
+        {"service": "qclaogui.showcase.v1beta1.MessagingService"}
+      ],
+      "timeout": "5s"
+    },
+    {
+      "name": [
+        {"service": "qclaogui.showcase.v1beta1.EchoService", "method": "Echo"},
+        {"service": "qclaogui.showcase.v1beta1.EchoService", "method": "Expand"},
+        {"service": "qclaogui.showcase.v1beta1.EchoService", "method": "PagedExpand"},
+        {"service": "qclaogui.showcase.v1beta1.MessagingService", "method": "GetRoom"},
+        {"service": "qclaogui.showcase.v1beta1.MessagingService", "method": "ListRooms"}
+      ],
+      "retryPolicy": {
+        "maxAttempts": 3,
+        "maxBackoff": "3s",
+        "initialBackoff": "0.1s",
+        "backoffMultiplier": 2,
+        "retryableStatusCodes": [
+          "UNAVAILABLE",
+          "UNKNOWN"
+        ]
+      },
+      "timeout": "10s"
+    },
+    {
+      "name": [
+        {"service": "qclaogui.showcase.v1beta1.IdentityService", "method": "GetUser"},
+        {"service": "qclaogui.showcase.v1beta1.IdentityService", "method": "ListUsers"}
+      ],
+      "retryPolicy": {
+        "maxAttempts": 5,
+        "maxBackoff": "3s",
+        "initialBackoff": "0.2s",
+        "backoffMultiplier": 2,
+        "retryableStatusCodes": [
+          "UNAVAILABLE",
+          "UNKNOWN"
+        ]
+      },
+      "timeout": "5s"
+    }
+  ]
+}

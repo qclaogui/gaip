@@ -18,10 +18,13 @@ name: showcase.googleapis.com
 title: Client Libraries Showcase API
 
 apis:
-- name: qclaogui.project.v1.MessagingService
-- name: qclaogui.project.v1.ProjectService
+# - name: qclaogui.showcase.v1beta1.ComplianceService
+- name: qclaogui.showcase.v1beta1.EchoService
+# - name: qclaogui.showcase.v1beta1.IdentityService
+# - name: qclaogui.showcase.v1beta1.MessagingService
+# - name: qclaogui.showcase.v1beta1.SequenceService
+# - name: qclaogui.showcase.v1beta1.TestingService
 
-# Mix-in services
 - name: 'google.longrunning.Operations'
 
 documentation:
@@ -33,14 +36,20 @@ backend:
   rules:
   - selector: 'google.longrunning.Operations.*'
     deadline: 60.0
-
+    
 http:
   rules:
   - selector: google.longrunning.Operations.ListOperations
-    get: '/v1/operations'
+    get: '/v1beta1/operations'
   - selector: google.longrunning.Operations.GetOperation
-    get: '/v1/{name=operations/**}'
+    get: '/v1beta1/{name=operations/**}'
   - selector: google.longrunning.Operations.DeleteOperation
-    delete: '/v1/{name=operations/**}'
+    delete: '/v1beta1/{name=operations/**}'
   - selector: google.longrunning.Operations.CancelOperation
-    post: '/v1/{name=operations/**}:cancel'
+    post: '/v1beta1/{name=operations/**}:cancel'
+
+publishing:
+  method_settings:
+  - selector: qclaogui.showcase.v1beta1.EchoService.Echo
+    auto_populated_fields:
+    - request_id

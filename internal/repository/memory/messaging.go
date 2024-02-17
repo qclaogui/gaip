@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/pkg/service"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,11 +18,11 @@ import (
 )
 
 type roomEntry struct {
-	room    *projectpb.Room
+	room    *showcasepb.Room
 	deleted bool
 }
 
-func NewMessaging() (projectpb.MessagingServiceServer, error) {
+func NewMessaging() (showcasepb.MessagingServiceServer, error) {
 	s := &messagingImpl{
 		nowF:     time.Now,
 		token:    service.NewTokenGenerator(),
@@ -33,7 +33,7 @@ func NewMessaging() (projectpb.MessagingServiceServer, error) {
 
 // The messagingImpl type implements a projectpb.MessagingServiceServer.
 type messagingImpl struct {
-	projectpb.UnimplementedMessagingServiceServer
+	showcasepb.UnimplementedMessagingServiceServer
 
 	nowF  func() time.Time
 	token service.TokenGenerator
@@ -45,7 +45,7 @@ type messagingImpl struct {
 }
 
 // CreateRoom Creates a room.
-func (m *messagingImpl) CreateRoom(_ context.Context, req *projectpb.CreateRoomRequest) (*projectpb.Room, error) {
+func (m *messagingImpl) CreateRoom(_ context.Context, req *showcasepb.CreateRoomRequest) (*showcasepb.Room, error) {
 	m.roomMu.Lock()
 	defer m.roomMu.Unlock()
 
@@ -56,7 +56,7 @@ func (m *messagingImpl) CreateRoom(_ context.Context, req *projectpb.CreateRoomR
 	}
 
 	// Validate Unique Fields.
-	uniqName := func(x *projectpb.Room) bool {
+	uniqName := func(x *showcasepb.Room) bool {
 		return r.GetDisplayName() == x.GetDisplayName()
 	}
 	if m.anyRoom(uniqName) {
@@ -81,11 +81,11 @@ func (m *messagingImpl) CreateRoom(_ context.Context, req *projectpb.CreateRoomR
 }
 
 // GetRoom Retrieves the Room with the given resource name.
-func (m *messagingImpl) GetRoom(context.Context, *projectpb.GetRoomRequest) (*projectpb.Room, error) {
+func (m *messagingImpl) GetRoom(context.Context, *showcasepb.GetRoomRequest) (*showcasepb.Room, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRoom not implemented")
 }
 
-func (m *messagingImpl) anyRoom(f func(*projectpb.Room) bool) bool {
+func (m *messagingImpl) anyRoom(f func(*showcasepb.Room) bool) bool {
 	for _, entry := range m.rooms {
 		if !entry.deleted && f(entry.room) {
 			return true
@@ -94,7 +94,7 @@ func (m *messagingImpl) anyRoom(f func(*projectpb.Room) bool) bool {
 	return false
 }
 
-func validateRoom(r *projectpb.Room) error {
+func validateRoom(r *showcasepb.Room) error {
 	// Validate Required Fields.
 	if r.GetDisplayName() == "" {
 		return status.Errorf(

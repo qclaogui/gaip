@@ -2,7 +2,7 @@
 //
 // Licensed under the Apache License 2.0.
 
-package project
+package showcase
 
 import (
 	"flag"
@@ -11,7 +11,7 @@ import (
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
-	pb "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
+	pb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 )
 
 type Config struct {
@@ -20,11 +20,12 @@ type Config struct {
 	Log        log.Logger            `yaml:"-"`
 	Registerer prometheus.Registerer `yaml:"-"`
 
-	RepoProject pb.ProjectServiceServer `yaml:"-"`
+	RepoIdentity  pb.IdentityServiceServer  `yaml:"-"`
+	RepoMessaging pb.MessagingServiceServer `yaml:"-"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, "project.enabled", true, "Enables Server Service Server")
+	fs.BoolVar(&cfg.Enabled, "showcase.enabled", true, "Enables Showcase Service Server")
 }
 
 func (cfg *Config) Validate() error {
@@ -33,7 +34,9 @@ func (cfg *Config) Validate() error {
 
 // The Server type implements a pb server.
 type Server struct {
-	pb.UnimplementedProjectServiceServer
+	pb.UnimplementedEchoServiceServer
+	pb.UnimplementedIdentityServiceServer
+	pb.UnimplementedMessagingServiceServer
 
 	longrunningpb.UnimplementedOperationsServer
 
@@ -41,7 +44,8 @@ type Server struct {
 	logger     log.Logger
 	Registerer prometheus.Registerer
 
-	repoProject pb.ProjectServiceServer
+	repoIdentity  pb.IdentityServiceServer
+	repoMessaging pb.MessagingServiceServer
 
 	nowF func() time.Time
 }
@@ -52,10 +56,10 @@ func NewServer(cfg Config) (*Server, error) {
 		logger:     cfg.Log,
 		Registerer: cfg.Registerer,
 
-		repoProject: cfg.RepoProject,
+		repoIdentity:  cfg.RepoIdentity,
+		repoMessaging: cfg.RepoMessaging,
 
 		nowF: time.Now,
 	}
-
 	return srv, nil
 }

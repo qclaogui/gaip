@@ -16,6 +16,7 @@ import (
 	"github.com/qclaogui/gaip/pkg/service/library"
 	"github.com/qclaogui/gaip/pkg/service/project"
 	"github.com/qclaogui/gaip/pkg/service/routeguide"
+	"github.com/qclaogui/gaip/pkg/service/showcase"
 	"github.com/qclaogui/gaip/pkg/service/todo"
 	"github.com/qclaogui/gaip/pkg/vault"
 )
@@ -33,6 +34,7 @@ type Config struct {
 	LibraryCfg    library.Config      `yaml:"library"`
 	ProjectCfg    project.Config      `yaml:"project"`
 	RouteGuideCfg routeguide.Config   `yaml:"routeguide"`
+	ShowcaseCfg   showcase.Config     `yaml:"showcase"`
 	TodoCfg       todo.Config         `yaml:"todo"`
 
 	VaultCfg vault.Config `yaml:"vault"`
@@ -60,6 +62,7 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet) {
 	c.LibraryCfg.RegisterFlags(fs)
 	c.ProjectCfg.RegisterFlags(fs)
 	c.RouteGuideCfg.RegisterFlags(fs)
+	c.ShowcaseCfg.RegisterFlags(fs)
 	c.TodoCfg.RegisterFlags(fs)
 
 	// Register Vault Config
@@ -82,6 +85,10 @@ func (c *Config) Validate() error {
 
 	if err := c.RouteGuideCfg.Validate(); err != nil {
 		return errors.Wrap(err, "invalid RouteGuide config")
+	}
+
+	if err := c.ShowcaseCfg.Validate(); err != nil {
+		return errors.Wrap(err, "invalid Showcase config")
 	}
 
 	if err := c.TodoCfg.Validate(); err != nil {

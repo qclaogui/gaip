@@ -100,6 +100,10 @@ func (g *Gaip) initServices() error {
 		return err
 	}
 
+	if err = g.initShowcase(); err != nil {
+		return err
+	}
+
 	if err = g.initTodo(); err != nil {
 		return err
 	}

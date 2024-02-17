@@ -9,12 +9,14 @@ import (
 	"net/http"
 
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
+	"github.com/go-kit/log/level"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"github.com/qclaogui/gaip/genproto/generativelanguage/apiv1/generativelanguagepb"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
+	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/repository"
 	"github.com/qclaogui/gaip/pkg/service/bookstore"
@@ -22,6 +24,7 @@ import (
 	"github.com/qclaogui/gaip/pkg/service/library"
 	"github.com/qclaogui/gaip/pkg/service/project"
 	"github.com/qclaogui/gaip/pkg/service/routeguide"
+	"github.com/qclaogui/gaip/pkg/service/showcase"
 	"github.com/qclaogui/gaip/pkg/service/todo"
 	"github.com/qclaogui/gaip/pkg/vault"
 	"google.golang.org/grpc"
@@ -30,6 +33,7 @@ import (
 
 func (g *Gaip) initBookstore() error {
 	if !g.Cfg.BookstoreCfg.Enabled {
+		_ = level.Warn(g.Server.Log).Log("msg", "bookstore.enabled=false")
 		return nil
 	}
 
@@ -56,6 +60,7 @@ func (g *Gaip) initBookstore() error {
 
 func (g *Gaip) initGenerativeai() error {
 	if !g.Cfg.GenaiCfg.Enabled {
+		_ = level.Warn(g.Server.Log).Log("msg", "genai.enabled=false")
 		return nil
 	}
 
@@ -81,6 +86,7 @@ func (g *Gaip) initGenerativeai() error {
 
 func (g *Gaip) initLibrary() error {
 	if !g.Cfg.LibraryCfg.Enabled {
+		_ = level.Warn(g.Server.Log).Log("msg", "library.enabled=false")
 		return nil
 	}
 
@@ -105,8 +111,68 @@ func (g *Gaip) initLibrary() error {
 	return nil
 }
 
+func (g *Gaip) initShowcase() error {
+	if !g.Cfg.ShowcaseCfg.Enabled {
+		_ = level.Warn(g.Server.Log).Log("msg", "showcase.enabled=false")
+		return nil
+	}
+
+	g.Cfg.ShowcaseCfg.Log = g.Server.Log
+	g.Cfg.ShowcaseCfg.Registerer = g.Registerer
+
+	repoIdentity, err := repository.NewIdentity(g.Cfg.RepoCfg)
+	if err != nil {
+		return err
+	}
+	g.Cfg.ShowcaseCfg.RepoIdentity = repoIdentity
+
+	repoMessaging, err := repository.NewMessaging(g.Cfg.RepoCfg)
+	if err != nil {
+		return err
+	}
+	g.Cfg.ShowcaseCfg.RepoMessaging = repoMessaging
+
+	srv, err := showcase.NewServer(g.Cfg.ShowcaseCfg)
+	if err != nil {
+		return err
+	}
+
+	showcasepb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
+	g.RegisterRoute("/v1beta1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
+	g.RegisterRoute("/v1beta1/echo:error-details", srv.HandleEchoErrorDetails(), false, http.MethodPost)
+	g.RegisterRoute("/v1beta1/echo:expand", srv.HandleExpand(), false, http.MethodPost)
+	g.RegisterRoute("/v1beta1/echo:collect", srv.HandleCollect(), false, http.MethodPost)
+	g.RegisterRoute("/v1beta1/echo:pagedExpand", srv.HandlePagedExpand(), false, http.MethodPost)
+	g.RegisterRoute("/v1beta1/echo:wait", srv.HandleWait(), false, http.MethodPost)
+	g.RegisterRoute("/v1beta1/echo:block", srv.HandleBlock(), false, http.MethodPost)
+
+	// Register IdentityServiceServer
+	showcasepb.RegisterIdentityServiceServer(g.Server.GRPCServer, srv)
+	g.RegisterRoute("/v1beta1/users", srv.HandleCreateUser(), false, http.MethodPost)
+	g.RegisterRoute("/v1beta1/{name:users/[^:]+}", srv.HandleGetUser(), false, http.MethodGet)
+	g.RegisterRoute("/v1beta1/{user.name:users/[^:]+}", srv.HandleUpdateUser(), false, http.MethodPatch)
+	g.Server.Router.Path("/v1beta1/{user.name:users/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateUser())
+	g.RegisterRoute("/v1beta1/{name:users/[^:]+}", srv.HandleDeleteUser(), false, http.MethodDelete)
+	g.RegisterRoute("/v1beta1/users", srv.HandleListUsers(), false, http.MethodGet)
+
+	// Register MessagingServiceServer
+	showcasepb.RegisterMessagingServiceServer(g.Server.GRPCServer, srv)
+	g.RegisterRoute("/v1beta1/rooms", srv.HandleCreateRoom(), false, http.MethodPost)
+
+	// FATAL: [core] grpc: Server.RegisterService found duplicate service registration for "google.longrunning.Operations"
+	// Register OperationsServer
+	longrunningpb.RegisterOperationsServer(g.Server.GRPCServer, srv)
+	g.RegisterRoute("/v1beta1/operations", srv.HandleListOperations(), false, http.MethodGet)
+	g.RegisterRoute("/v1beta1/{name:operations/[^:]+}", srv.HandleGetOperation(), false, http.MethodGet)
+	g.RegisterRoute("/v1beta1/{name:operations/[^:]+}", srv.HandleDeleteOperation(), false, http.MethodDelete)
+	g.RegisterRoute("/v1beta1/{name:operations/[^:]+}:cancel", srv.HandleCancelOperation(), false, http.MethodPost)
+
+	return nil
+}
+
 func (g *Gaip) initProject() error {
 	if !g.Cfg.ProjectCfg.Enabled {
+		_ = level.Warn(g.Server.Log).Log("msg", "project.enabled=false")
 		return nil
 	}
 
@@ -119,18 +185,6 @@ func (g *Gaip) initProject() error {
 	}
 	g.Cfg.ProjectCfg.RepoProject = repoProject
 
-	repoIdentity, err := repository.NewIdentity(g.Cfg.RepoCfg)
-	if err != nil {
-		return err
-	}
-	g.Cfg.ProjectCfg.RepoIdentity = repoIdentity
-
-	repoMessaging, err := repository.NewMessaging(g.Cfg.RepoCfg)
-	if err != nil {
-		return err
-	}
-	g.Cfg.ProjectCfg.RepoMessaging = repoMessaging
-
 	srv, err := project.NewServer(g.Cfg.ProjectCfg)
 	if err != nil {
 		return err
@@ -139,41 +193,12 @@ func (g *Gaip) initProject() error {
 	// Register ProjectServiceServer
 	projectpb.RegisterProjectServiceServer(g.Server.GRPCServer, srv)
 
-	// Register EchoServiceServer
-	projectpb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
-	g.RegisterRoute("/v1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
-	g.RegisterRoute("/v1/echo:error-details", srv.HandleEchoErrorDetails(), false, http.MethodPost)
-	g.RegisterRoute("/v1/echo:expand", srv.HandleExpand(), false, http.MethodPost)
-	g.RegisterRoute("/v1/echo:collect", srv.HandleCollect(), false, http.MethodPost)
-	g.RegisterRoute("/v1/echo:pagedExpand", srv.HandlePagedExpand(), false, http.MethodPost)
-	g.RegisterRoute("/v1/echo:wait", srv.HandleWait(), false, http.MethodPost)
-	g.RegisterRoute("/v1/echo:block", srv.HandleBlock(), false, http.MethodPost)
-
-	// Register IdentityServiceServer
-	projectpb.RegisterIdentityServiceServer(g.Server.GRPCServer, srv)
-	g.RegisterRoute("/v1/users", srv.HandleCreateUser(), false, http.MethodPost)
-	g.RegisterRoute("/v1/{name:users/[^:]+}", srv.HandleGetUser(), false, http.MethodGet)
-	g.RegisterRoute("/v1/{user.name:users/[^:]+}", srv.HandleUpdateUser(), false, http.MethodPatch)
-	g.Server.Router.Path("/v1/{user.name:users/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateUser())
-	g.RegisterRoute("/v1/{name:users/[^:]+}", srv.HandleDeleteUser(), false, http.MethodDelete)
-	g.RegisterRoute("/v1/users", srv.HandleListUsers(), false, http.MethodGet)
-
-	// Register MessagingServiceServer
-	projectpb.RegisterMessagingServiceServer(g.Server.GRPCServer, srv)
-	g.RegisterRoute("/v1/rooms", srv.HandleCreateRoom(), false, http.MethodPost)
-
-	// Register OperationsServer
-	longrunningpb.RegisterOperationsServer(g.Server.GRPCServer, srv)
-	g.RegisterRoute("/v1/operations", srv.HandleListOperations(), false, http.MethodGet)
-	g.RegisterRoute("/v1/{name:operations/[^:]+}", srv.HandleGetOperation(), false, http.MethodGet)
-	g.RegisterRoute("/v1/{name:operations/[^:]+}", srv.HandleDeleteOperation(), false, http.MethodDelete)
-	g.RegisterRoute("/v1/{name:operations/[^:]+}:cancel", srv.HandleCancelOperation(), false, http.MethodPost)
-
 	return nil
 }
 
 func (g *Gaip) initRouteGuide() error {
 	if !g.Cfg.RouteGuideCfg.Enabled {
+		_ = level.Warn(g.Server.Log).Log("msg", "routeguide.enabled=false")
 		return nil
 	}
 
@@ -199,6 +224,7 @@ func (g *Gaip) initRouteGuide() error {
 
 func (g *Gaip) initTodo() error {
 	if !g.Cfg.TodoCfg.Enabled {
+		_ = level.Warn(g.Server.Log).Log("msg", "todo.enabled=false")
 		return nil
 	}
 
@@ -257,6 +283,7 @@ func (g *Gaip) initTodo() error {
 // initVault init Vault
 func (g *Gaip) initVault() error {
 	if !g.Cfg.VaultCfg.Enabled {
+		_ = level.Warn(g.Server.Log).Log("msg", "vault.enabled=false")
 		return nil
 	}
 
