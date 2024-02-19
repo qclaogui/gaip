@@ -13,7 +13,6 @@ import (
 	"net/http"
 
 	"github.com/go-kit/log/level"
-	"github.com/googleapis/gapic-showcase/util/genrest/resttools"
 	"github.com/gorilla/mux"
 	pb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/pkg/protocol/rest"
@@ -35,7 +34,7 @@ func (srv *Server) HandleCreateUser() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
@@ -51,12 +50,12 @@ func (srv *Server) HandleCreateUser() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
+		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
@@ -66,18 +65,18 @@ func (srv *Server) HandleCreateUser() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/users")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/users")
 		response, err := srv.CreateUser(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -109,41 +108,41 @@ func (srv *Server) HandleGetUser() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
 		}
 
 		request := &pb.GetUserRequest{}
-		if err = resttools.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
 		excludedQueryParams := []string{"name"}
-		if duplicates := resttools.KeysMatchPath(queryParams, excludedQueryParams); len(duplicates) > 0 {
+		if duplicates := rest.KeysMatchPath(queryParams, excludedQueryParams); len(duplicates) > 0 {
 			rest.Error(w, http.StatusBadRequest, "(QueryParamsInvalidFieldError) found keys that should not appear in query params: %v", duplicates)
 			return
 		}
 
-		if err = resttools.PopulateFields(request, queryParams); err != nil {
+		if err = rest.PopulateFields(request, queryParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading query params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/{name=users/*}")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/{name=users/*}")
 		response, err := srv.GetUser(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -175,7 +174,7 @@ func (srv *Server) HandleUpdateUser() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
@@ -192,41 +191,41 @@ func (srv *Server) HandleUpdateUser() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.FromJSON().Unmarshal(rBytes, &bodyField); err != nil {
+		if err = rest.FromJSON().Unmarshal(rBytes, &bodyField); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
 
 		request.User = &bodyField
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
 		excludedQueryParams := []string{"user", "user.name"}
-		if duplicates := resttools.KeysMatchPath(queryParams, excludedQueryParams); len(duplicates) > 0 {
+		if duplicates := rest.KeysMatchPath(queryParams, excludedQueryParams); len(duplicates) > 0 {
 			rest.Error(w, http.StatusBadRequest, "(QueryParamsInvalidFieldError) found keys that should not appear in query params: %v", duplicates)
 			return
 		}
 
-		if err = resttools.PopulateFields(request, queryParams); err != nil {
+		if err = rest.PopulateFields(request, queryParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading query params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/{user.name=users/*}")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/{user.name=users/*}")
 		response, err := srv.UpdateUser(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -258,41 +257,41 @@ func (srv *Server) HandleDeleteUser() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
 		}
 
 		request := &pb.DeleteUserRequest{}
-		if err = resttools.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
 		excludedQueryParams := []string{"name"}
-		if duplicates := resttools.KeysMatchPath(queryParams, excludedQueryParams); len(duplicates) > 0 {
+		if duplicates := rest.KeysMatchPath(queryParams, excludedQueryParams); len(duplicates) > 0 {
 			rest.Error(w, http.StatusBadRequest, "(QueryParamsInvalidFieldError) found keys that should not appear in query params: %v", duplicates)
 			return
 		}
 
-		if err = resttools.PopulateFields(request, queryParams); err != nil {
+		if err = rest.PopulateFields(request, queryParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading query params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/{name=users/*}")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/{name=users/*}")
 		response, err := srv.DeleteUser(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -324,35 +323,35 @@ func (srv *Server) HandleListUsers() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
 		}
 
 		request := &pb.ListUsersRequest{}
-		if err = resttools.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
-		if err = resttools.PopulateFields(request, queryParams); err != nil {
+		if err = rest.PopulateFields(request, queryParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading query params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/users")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/users")
 		response, err := srv.ListUsers(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)

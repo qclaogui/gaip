@@ -26,6 +26,8 @@ import (
 	"net/url"
 	"time"
 
+	"cloud.google.com/go/longrunning"
+	lroauto "cloud.google.com/go/longrunning/autogen"
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	gax "github.com/googleapis/gax-go/v2"
 	showcasepb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
@@ -37,6 +39,7 @@ import (
 	httptransport "google.golang.org/api/transport/http"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
@@ -50,6 +53,15 @@ type MessagingCallOptions struct {
 	UpdateRoom      []gax.CallOption
 	DeleteRoom      []gax.CallOption
 	ListRooms       []gax.CallOption
+	CreateBlurb     []gax.CallOption
+	GetBlurb        []gax.CallOption
+	UpdateBlurb     []gax.CallOption
+	DeleteBlurb     []gax.CallOption
+	ListBlurbs      []gax.CallOption
+	SearchBlurbs    []gax.CallOption
+	StreamBlurbs    []gax.CallOption
+	SendBlurbs      []gax.CallOption
+	Connect         []gax.CallOption
 	ListOperations  []gax.CallOption
 	GetOperation    []gax.CallOption
 	DeleteOperation []gax.CallOption
@@ -107,6 +119,27 @@ func defaultMessagingCallOptions() *MessagingCallOptions {
 				})
 			}),
 		},
+		CreateBlurb: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		GetBlurb: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		UpdateBlurb: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		DeleteBlurb: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		ListBlurbs: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		SearchBlurbs: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		StreamBlurbs:    []gax.CallOption{},
+		SendBlurbs:      []gax.CallOption{},
+		Connect:         []gax.CallOption{},
 		ListOperations:  []gax.CallOption{},
 		GetOperation:    []gax.CallOption{},
 		DeleteOperation: []gax.CallOption{},
@@ -149,6 +182,33 @@ func defaultMessagingRESTCallOptions() *MessagingCallOptions {
 					http.StatusInternalServerError)
 			}),
 		},
+		CreateBlurb: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		GetBlurb: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		UpdateBlurb: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		DeleteBlurb: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		ListBlurbs: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		SearchBlurbs: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		StreamBlurbs: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		SendBlurbs: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		Connect: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
 		ListOperations:  []gax.CallOption{},
 		GetOperation:    []gax.CallOption{},
 		DeleteOperation: []gax.CallOption{},
@@ -166,6 +226,16 @@ type internalMessagingClient interface {
 	UpdateRoom(context.Context, *showcasepb.UpdateRoomRequest, ...gax.CallOption) (*showcasepb.Room, error)
 	DeleteRoom(context.Context, *showcasepb.DeleteRoomRequest, ...gax.CallOption) error
 	ListRooms(context.Context, *showcasepb.ListRoomsRequest, ...gax.CallOption) *RoomIterator
+	CreateBlurb(context.Context, *showcasepb.CreateBlurbRequest, ...gax.CallOption) (*showcasepb.Blurb, error)
+	GetBlurb(context.Context, *showcasepb.GetBlurbRequest, ...gax.CallOption) (*showcasepb.Blurb, error)
+	UpdateBlurb(context.Context, *showcasepb.UpdateBlurbRequest, ...gax.CallOption) (*showcasepb.Blurb, error)
+	DeleteBlurb(context.Context, *showcasepb.DeleteBlurbRequest, ...gax.CallOption) error
+	ListBlurbs(context.Context, *showcasepb.ListBlurbsRequest, ...gax.CallOption) *BlurbIterator
+	SearchBlurbs(context.Context, *showcasepb.SearchBlurbsRequest, ...gax.CallOption) (*SearchBlurbsOperation, error)
+	SearchBlurbsOperation(name string) *SearchBlurbsOperation
+	StreamBlurbs(context.Context, *showcasepb.StreamBlurbsRequest, ...gax.CallOption) (showcasepb.MessagingService_StreamBlurbsClient, error)
+	SendBlurbs(context.Context, ...gax.CallOption) (showcasepb.MessagingService_SendBlurbsClient, error)
+	Connect(context.Context, ...gax.CallOption) (showcasepb.MessagingService_ConnectClient, error)
 	ListOperations(context.Context, *longrunningpb.ListOperationsRequest, ...gax.CallOption) *OperationIterator
 	GetOperation(context.Context, *longrunningpb.GetOperationRequest, ...gax.CallOption) (*longrunningpb.Operation, error)
 	DeleteOperation(context.Context, *longrunningpb.DeleteOperationRequest, ...gax.CallOption) error
@@ -185,6 +255,11 @@ type MessagingClient struct {
 
 	// The call options for this service.
 	CallOptions *MessagingCallOptions
+
+	// LROClient is used internally to handle long-running operations.
+	// It is exposed so that its CallOptions can be modified if required.
+	// Users should not Close this client.
+	LROClient *lroauto.OperationsClient
 }
 
 // Wrapper methods routed to the internal client.
@@ -235,6 +310,71 @@ func (c *MessagingClient) ListRooms(ctx context.Context, req *showcasepb.ListRoo
 	return c.internalClient.ListRooms(ctx, req, opts...)
 }
 
+// CreateBlurb creates a blurb. If the parent is a room, the blurb is understood to be a
+// message in that room. If the parent is a profile, the blurb is understood
+// to be a post on the profile.
+func (c *MessagingClient) CreateBlurb(ctx context.Context, req *showcasepb.CreateBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	return c.internalClient.CreateBlurb(ctx, req, opts...)
+}
+
+// GetBlurb retrieves the Blurb with the given resource name.
+func (c *MessagingClient) GetBlurb(ctx context.Context, req *showcasepb.GetBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	return c.internalClient.GetBlurb(ctx, req, opts...)
+}
+
+// UpdateBlurb updates a blurb.
+func (c *MessagingClient) UpdateBlurb(ctx context.Context, req *showcasepb.UpdateBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	return c.internalClient.UpdateBlurb(ctx, req, opts...)
+}
+
+// DeleteBlurb deletes a blurb.
+func (c *MessagingClient) DeleteBlurb(ctx context.Context, req *showcasepb.DeleteBlurbRequest, opts ...gax.CallOption) error {
+	return c.internalClient.DeleteBlurb(ctx, req, opts...)
+}
+
+// ListBlurbs lists blurbs for a specific chat room or user profile depending on the
+// parent resource name.
+func (c *MessagingClient) ListBlurbs(ctx context.Context, req *showcasepb.ListBlurbsRequest, opts ...gax.CallOption) *BlurbIterator {
+	return c.internalClient.ListBlurbs(ctx, req, opts...)
+}
+
+// SearchBlurbs this method searches through all blurbs across all rooms and profiles
+// for blurbs containing to words found in the query. Only posts that
+// contain an exact match of a queried word will be returned.
+func (c *MessagingClient) SearchBlurbs(ctx context.Context, req *showcasepb.SearchBlurbsRequest, opts ...gax.CallOption) (*SearchBlurbsOperation, error) {
+	return c.internalClient.SearchBlurbs(ctx, req, opts...)
+}
+
+// SearchBlurbsOperation returns a new SearchBlurbsOperation from a given name.
+// The name must be that of a previously created SearchBlurbsOperation, possibly from a different process.
+func (c *MessagingClient) SearchBlurbsOperation(name string) *SearchBlurbsOperation {
+	return c.internalClient.SearchBlurbsOperation(name)
+}
+
+// StreamBlurbs this returns a stream that emits the blurbs that are created for a
+// particular chat room or user profile.
+func (c *MessagingClient) StreamBlurbs(ctx context.Context, req *showcasepb.StreamBlurbsRequest, opts ...gax.CallOption) (showcasepb.MessagingService_StreamBlurbsClient, error) {
+	return c.internalClient.StreamBlurbs(ctx, req, opts...)
+}
+
+// SendBlurbs this is a stream to create multiple blurbs. If an invalid blurb is
+// requested to be created, the stream will close with an error.
+//
+// This method is not supported for the REST transport.
+func (c *MessagingClient) SendBlurbs(ctx context.Context, opts ...gax.CallOption) (showcasepb.MessagingService_SendBlurbsClient, error) {
+	return c.internalClient.SendBlurbs(ctx, opts...)
+}
+
+// Connect this method starts a bidirectional stream that receives all blurbs that
+// are being created after the stream has started and sends requests to create
+// blurbs. If an invalid blurb is requested to be created, the stream will
+// close with an error.
+//
+// This method is not supported for the REST transport.
+func (c *MessagingClient) Connect(ctx context.Context, opts ...gax.CallOption) (showcasepb.MessagingService_ConnectClient, error) {
+	return c.internalClient.Connect(ctx, opts...)
+}
+
 // ListOperations is a utility method from google.longrunning.Operations.
 func (c *MessagingClient) ListOperations(ctx context.Context, req *longrunningpb.ListOperationsRequest, opts ...gax.CallOption) *OperationIterator {
 	return c.internalClient.ListOperations(ctx, req, opts...)
@@ -267,6 +407,11 @@ type messagingGRPCClient struct {
 
 	// The gRPC API client.
 	messagingClient showcasepb.MessagingServiceClient
+
+	// LROClient is used internally to handle long-running operations.
+	// It is exposed so that its CallOptions can be modified if required.
+	// Users should not Close this client.
+	LROClient **lroauto.OperationsClient
 
 	operationsClient longrunningpb.OperationsClient
 
@@ -307,6 +452,17 @@ func NewMessagingClient(ctx context.Context, opts ...option.ClientOption) (*Mess
 
 	client.internalClient = c
 
+	client.LROClient, err = lroauto.NewOperationsClient(ctx, gtransport.WithConnPool(connPool))
+	if err != nil {
+		// This error "should not happen", since we are just reusing old connection pool
+		// and never actually need to dial.
+		// If this does happen, we could leak connp. However, we cannot close conn:
+		// If the user invoked the constructor with option.WithGRPCConn,
+		// we would close a connection that's still in use.
+		// TODO: investigate error conditions.
+		return nil, err
+	}
+	c.LROClient = &client.LROClient
 	return &client, nil
 }
 
@@ -341,6 +497,11 @@ type messagingRESTClient struct {
 	// The http client.
 	httpClient *http.Client
 
+	// LROClient is used internally to handle long-running operations.
+	// It is exposed so that its CallOptions can be modified if required.
+	// Users should not Close this client.
+	LROClient **lroauto.OperationsClient
+
 	// The x-goog-* headers to be sent with each request.
 	xGoogHeaders []string
 
@@ -368,6 +529,16 @@ func NewMessagingRESTClient(ctx context.Context, opts ...option.ClientOption) (*
 		CallOptions: &callOpts,
 	}
 	c.setGoogleClientInfo()
+
+	lroOpts := []option.ClientOption{
+		option.WithHTTPClient(httpClient),
+		option.WithEndpoint(endpoint),
+	}
+	opClient, err := lroauto.NewOperationsRESTClient(ctx, lroOpts...)
+	if err != nil {
+		return nil, err
+	}
+	c.LROClient = &opClient
 
 	return &MessagingClient{internalClient: c, CallOptions: callOpts}, nil
 }
@@ -512,6 +683,188 @@ func (c *messagingGRPCClient) ListRooms(ctx context.Context, req *showcasepb.Lis
 	it.pageInfo.Token = req.GetPageToken()
 
 	return it
+}
+
+func (c *messagingGRPCClient) CreateBlurb(ctx context.Context, req *showcasepb.CreateBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).CreateBlurb[0:len((*c.CallOptions).CreateBlurb):len((*c.CallOptions).CreateBlurb)], opts...)
+	var resp *showcasepb.Blurb
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.messagingClient.CreateBlurb(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *messagingGRPCClient) GetBlurb(ctx context.Context, req *showcasepb.GetBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).GetBlurb[0:len((*c.CallOptions).GetBlurb):len((*c.CallOptions).GetBlurb)], opts...)
+	var resp *showcasepb.Blurb
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.messagingClient.GetBlurb(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *messagingGRPCClient) UpdateBlurb(ctx context.Context, req *showcasepb.UpdateBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "blurb.name", url.QueryEscape(req.GetBlurb().GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).UpdateBlurb[0:len((*c.CallOptions).UpdateBlurb):len((*c.CallOptions).UpdateBlurb)], opts...)
+	var resp *showcasepb.Blurb
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.messagingClient.UpdateBlurb(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *messagingGRPCClient) DeleteBlurb(ctx context.Context, req *showcasepb.DeleteBlurbRequest, opts ...gax.CallOption) error {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).DeleteBlurb[0:len((*c.CallOptions).DeleteBlurb):len((*c.CallOptions).DeleteBlurb)], opts...)
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		_, err = c.messagingClient.DeleteBlurb(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	return err
+}
+
+func (c *messagingGRPCClient) ListBlurbs(ctx context.Context, req *showcasepb.ListBlurbsRequest, opts ...gax.CallOption) *BlurbIterator {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).ListBlurbs[0:len((*c.CallOptions).ListBlurbs):len((*c.CallOptions).ListBlurbs)], opts...)
+	it := &BlurbIterator{}
+	req = proto.Clone(req).(*showcasepb.ListBlurbsRequest)
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*showcasepb.Blurb, string, error) {
+		resp := &showcasepb.ListBlurbsResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			var err error
+			resp, err = c.messagingClient.ListBlurbs(ctx, req, settings.GRPC...)
+			return err
+		}, opts...)
+		if err != nil {
+			return nil, "", err
+		}
+
+		it.Response = resp
+		return resp.GetBlurbs(), resp.GetNextPageToken(), nil
+	}
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
+func (c *messagingGRPCClient) SearchBlurbs(ctx context.Context, req *showcasepb.SearchBlurbsRequest, opts ...gax.CallOption) (*SearchBlurbsOperation, error) {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).SearchBlurbs[0:len((*c.CallOptions).SearchBlurbs):len((*c.CallOptions).SearchBlurbs)], opts...)
+	var resp *longrunningpb.Operation
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.messagingClient.SearchBlurbs(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &SearchBlurbsOperation{
+		lro: longrunning.InternalNewOperation(*c.LROClient, resp),
+	}, nil
+}
+
+func (c *messagingGRPCClient) StreamBlurbs(ctx context.Context, req *showcasepb.StreamBlurbsRequest, opts ...gax.CallOption) (showcasepb.MessagingService_StreamBlurbsClient, error) {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).StreamBlurbs[0:len((*c.CallOptions).StreamBlurbs):len((*c.CallOptions).StreamBlurbs)], opts...)
+	var resp showcasepb.MessagingService_StreamBlurbsClient
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.messagingClient.StreamBlurbs(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *messagingGRPCClient) SendBlurbs(ctx context.Context, opts ...gax.CallOption) (showcasepb.MessagingService_SendBlurbsClient, error) {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	var resp showcasepb.MessagingService_SendBlurbsClient
+	opts = append((*c.CallOptions).SendBlurbs[0:len((*c.CallOptions).SendBlurbs):len((*c.CallOptions).SendBlurbs)], opts...)
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.messagingClient.SendBlurbs(ctx, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *messagingGRPCClient) Connect(ctx context.Context, opts ...gax.CallOption) (showcasepb.MessagingService_ConnectClient, error) {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	var resp showcasepb.MessagingService_ConnectClient
+	opts = append((*c.CallOptions).Connect[0:len((*c.CallOptions).Connect):len((*c.CallOptions).Connect)], opts...)
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.messagingClient.Connect(ctx, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (c *messagingGRPCClient) ListOperations(ctx context.Context, req *longrunningpb.ListOperationsRequest, opts ...gax.CallOption) *OperationIterator {
@@ -914,6 +1267,510 @@ func (c *messagingRESTClient) ListRooms(ctx context.Context, req *showcasepb.Lis
 	return it
 }
 
+// CreateBlurb creates a blurb. If the parent is a room, the blurb is understood to be a
+// message in that room. If the parent is a profile, the blurb is understood
+// to be a post on the profile.
+func (c *messagingRESTClient) CreateBlurb(ctx context.Context, req *showcasepb.CreateBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1beta1/%v/blurbs", req.GetParent())
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).CreateBlurb[0:len((*c.CallOptions).CreateBlurb):len((*c.CallOptions).CreateBlurb)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &showcasepb.Blurb{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
+}
+
+// GetBlurb retrieves the Blurb with the given resource name.
+func (c *messagingRESTClient) GetBlurb(ctx context.Context, req *showcasepb.GetBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1beta1/%v", req.GetName())
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).GetBlurb[0:len((*c.CallOptions).GetBlurb):len((*c.CallOptions).GetBlurb)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &showcasepb.Blurb{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("GET", baseUrl.String(), nil)
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
+}
+
+// UpdateBlurb updates a blurb.
+func (c *messagingRESTClient) UpdateBlurb(ctx context.Context, req *showcasepb.UpdateBlurbRequest, opts ...gax.CallOption) (*showcasepb.Blurb, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	body := req.GetBlurb()
+	jsonReq, err := m.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1beta1/%v", req.GetBlurb().GetName())
+
+	params := url.Values{}
+	if req.GetUpdateMask() != nil {
+		updateMask, err := protojson.Marshal(req.GetUpdateMask())
+		if err != nil {
+			return nil, err
+		}
+		params.Add("updateMask", string(updateMask[1:len(updateMask)-1]))
+	}
+
+	baseUrl.RawQuery = params.Encode()
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "blurb.name", url.QueryEscape(req.GetBlurb().GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).UpdateBlurb[0:len((*c.CallOptions).UpdateBlurb):len((*c.CallOptions).UpdateBlurb)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &showcasepb.Blurb{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("PATCH", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
+}
+
+// DeleteBlurb deletes a blurb.
+func (c *messagingRESTClient) DeleteBlurb(ctx context.Context, req *showcasepb.DeleteBlurbRequest, opts ...gax.CallOption) error {
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1beta1/%v", req.GetName())
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	return gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("DELETE", baseUrl.String(), nil)
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		// Returns nil if there is no error, otherwise wraps
+		// the response code and body into a non-nil error
+		return googleapi.CheckResponse(httpRsp)
+	}, opts...)
+}
+
+// ListBlurbs lists blurbs for a specific chat room or user profile depending on the
+// parent resource name.
+func (c *messagingRESTClient) ListBlurbs(ctx context.Context, req *showcasepb.ListBlurbsRequest, opts ...gax.CallOption) *BlurbIterator {
+	it := &BlurbIterator{}
+	req = proto.Clone(req).(*showcasepb.ListBlurbsRequest)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*showcasepb.Blurb, string, error) {
+		resp := &showcasepb.ListBlurbsResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		baseUrl, err := url.Parse(c.endpoint)
+		if err != nil {
+			return nil, "", err
+		}
+		baseUrl.Path += fmt.Sprintf("/v1beta1/%v/blurbs", req.GetParent())
+
+		params := url.Values{}
+		if req.GetPageSize() != 0 {
+			params.Add("pageSize", fmt.Sprintf("%v", req.GetPageSize()))
+		}
+		if req.GetPageToken() != "" {
+			params.Add("pageToken", fmt.Sprintf("%v", req.GetPageToken()))
+		}
+
+		baseUrl.RawQuery = params.Encode()
+
+		// Build HTTP headers from client and context metadata.
+		hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+		headers := gax.BuildHeaders(ctx, hds...)
+		e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			if settings.Path != "" {
+				baseUrl.Path = settings.Path
+			}
+			httpReq, err := http.NewRequest("GET", baseUrl.String(), nil)
+			if err != nil {
+				return err
+			}
+			httpReq.Header = headers
+
+			httpRsp, err := c.httpClient.Do(httpReq)
+			if err != nil {
+				return err
+			}
+			defer httpRsp.Body.Close()
+
+			if err = googleapi.CheckResponse(httpRsp); err != nil {
+				return err
+			}
+
+			buf, err := io.ReadAll(httpRsp.Body)
+			if err != nil {
+				return err
+			}
+
+			if err := unm.Unmarshal(buf, resp); err != nil {
+				return err
+			}
+
+			return nil
+		}, opts...)
+		if e != nil {
+			return nil, "", e
+		}
+		it.Response = resp
+		return resp.GetBlurbs(), resp.GetNextPageToken(), nil
+	}
+
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
+// SearchBlurbs this method searches through all blurbs across all rooms and profiles
+// for blurbs containing to words found in the query. Only posts that
+// contain an exact match of a queried word will be returned.
+func (c *messagingRESTClient) SearchBlurbs(ctx context.Context, req *showcasepb.SearchBlurbsRequest, opts ...gax.CallOption) (*SearchBlurbsOperation, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1beta1/%v/blurbs:search", req.GetParent())
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &longrunningpb.Operation{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+
+	override := fmt.Sprintf("/v1beta1/%s", resp.GetName())
+	return &SearchBlurbsOperation{
+		lro:      longrunning.InternalNewOperation(*c.LROClient, resp),
+		pollPath: override,
+	}, nil
+}
+
+// StreamBlurbs this returns a stream that emits the blurbs that are created for a
+// particular chat room or user profile.
+func (c *messagingRESTClient) StreamBlurbs(ctx context.Context, req *showcasepb.StreamBlurbsRequest, opts ...gax.CallOption) (showcasepb.MessagingService_StreamBlurbsClient, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1beta1/%v/blurbs:stream", req.GetName())
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	var streamClient *streamBlurbsRESTClient
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		streamClient = &streamBlurbsRESTClient{
+			ctx:    ctx,
+			md:     metadata.MD(httpRsp.Header),
+			stream: gax.NewProtoJSONStreamReader(httpRsp.Body, (&showcasepb.StreamBlurbsResponse{}).ProtoReflect().Type()),
+		}
+		return nil
+	}, opts...)
+
+	return streamClient, e
+}
+
+// streamBlurbsRESTClient is the stream client used to consume the server stream created by
+// the REST implementation of StreamBlurbs.
+type streamBlurbsRESTClient struct {
+	ctx    context.Context
+	md     metadata.MD
+	stream *gax.ProtoJSONStream
+}
+
+func (c *streamBlurbsRESTClient) Recv() (*showcasepb.StreamBlurbsResponse, error) {
+	if err := c.ctx.Err(); err != nil {
+		defer c.stream.Close()
+		return nil, err
+	}
+	msg, err := c.stream.Recv()
+	if err != nil {
+		defer c.stream.Close()
+		return nil, err
+	}
+	res := msg.(*showcasepb.StreamBlurbsResponse)
+	return res, nil
+}
+
+func (c *streamBlurbsRESTClient) Header() (metadata.MD, error) {
+	return c.md, nil
+}
+
+func (c *streamBlurbsRESTClient) Trailer() metadata.MD {
+	return c.md
+}
+
+func (c *streamBlurbsRESTClient) CloseSend() error {
+	// This is a no-op to fulfill the interface.
+	return fmt.Errorf("this method is not implemented for a server-stream")
+}
+
+func (c *streamBlurbsRESTClient) Context() context.Context {
+	return c.ctx
+}
+
+func (c *streamBlurbsRESTClient) SendMsg(m interface{}) error {
+	// This is a no-op to fulfill the interface.
+	return fmt.Errorf("this method is not implemented for a server-stream")
+}
+
+func (c *streamBlurbsRESTClient) RecvMsg(m interface{}) error {
+	// This is a no-op to fulfill the interface.
+	return fmt.Errorf("this method is not implemented, use Recv")
+}
+
+// SendBlurbs this is a stream to create multiple blurbs. If an invalid blurb is
+// requested to be created, the stream will close with an error.
+//
+// This method is not supported for the REST transport.
+func (c *messagingRESTClient) SendBlurbs(ctx context.Context, opts ...gax.CallOption) (showcasepb.MessagingService_SendBlurbsClient, error) {
+	return nil, fmt.Errorf("SendBlurbs not yet supported for REST clients")
+}
+
+// Connect this method starts a bidirectional stream that receives all blurbs that
+// are being created after the stream has started and sends requests to create
+// blurbs. If an invalid blurb is requested to be created, the stream will
+// close with an error.
+//
+// This method is not supported for the REST transport.
+func (c *messagingRESTClient) Connect(ctx context.Context, opts ...gax.CallOption) (showcasepb.MessagingService_ConnectClient, error) {
+	return nil, fmt.Errorf("Connect not yet supported for REST clients")
+}
+
 // ListOperations is a utility method from google.longrunning.Operations.
 func (c *messagingRESTClient) ListOperations(ctx context.Context, req *longrunningpb.ListOperationsRequest, opts ...gax.CallOption) *OperationIterator {
 	it := &OperationIterator{}
@@ -1135,4 +1992,22 @@ func (c *messagingRESTClient) CancelOperation(ctx context.Context, req *longrunn
 		// the response code and body into a non-nil error
 		return googleapi.CheckResponse(httpRsp)
 	}, opts...)
+}
+
+// SearchBlurbsOperation returns a new SearchBlurbsOperation from a given name.
+// The name must be that of a previously created SearchBlurbsOperation, possibly from a different process.
+func (c *messagingGRPCClient) SearchBlurbsOperation(name string) *SearchBlurbsOperation {
+	return &SearchBlurbsOperation{
+		lro: longrunning.InternalNewOperation(*c.LROClient, &longrunningpb.Operation{Name: name}),
+	}
+}
+
+// SearchBlurbsOperation returns a new SearchBlurbsOperation from a given name.
+// The name must be that of a previously created SearchBlurbsOperation, possibly from a different process.
+func (c *messagingRESTClient) SearchBlurbsOperation(name string) *SearchBlurbsOperation {
+	override := fmt.Sprintf("/v1beta1/%s", name)
+	return &SearchBlurbsOperation{
+		lro:      longrunning.InternalNewOperation(*c.LROClient, &longrunningpb.Operation{Name: name}),
+		pollPath: override,
+	}
 }

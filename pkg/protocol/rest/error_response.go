@@ -16,7 +16,7 @@ import (
 
 // gRPCToHTTP status code mapping derived from internal source:
 // go/http-canonical-mapping.
-var gRPCToHTTP map[codes.Code]int = map[codes.Code]int{
+var gRPCToHTTP = map[codes.Code]int{
 	codes.OK:                 http.StatusOK,
 	codes.Canceled:           499, // There isn't a Go constant ClientClosedConnection
 	codes.Unknown:            http.StatusInternalServerError,
@@ -82,8 +82,6 @@ func ReportGRPCError(w http.ResponseWriter, err error) {
 		Error(w, http.StatusInternalServerError, "server error: %s", err.Error())
 		return
 	}
-
-	//Print(st.Message())
 
 	code := GRPCToHTTP(st.Code())
 	ErrorResponse(w, code, st.Message(), st.Details()...)

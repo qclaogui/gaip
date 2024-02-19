@@ -155,7 +155,7 @@ func setUpGoRuntimeMetrics(cfg Config, reg prometheus.Registerer) {
 
 // healthzHandler for a liveness probe.
 func (g *Gaip) healthzHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		_ = level.Info(lg.Logger).Log("msg", "[healthz] received request")
 		w.WriteHeader(http.StatusOK)
 	}

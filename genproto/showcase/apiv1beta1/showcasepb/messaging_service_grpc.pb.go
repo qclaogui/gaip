@@ -14,6 +14,7 @@ package showcasepb
 import (
 	context "context"
 
+	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -26,11 +27,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MessagingService_CreateRoom_FullMethodName = "/qclaogui.showcase.v1beta1.MessagingService/CreateRoom"
-	MessagingService_GetRoom_FullMethodName    = "/qclaogui.showcase.v1beta1.MessagingService/GetRoom"
-	MessagingService_UpdateRoom_FullMethodName = "/qclaogui.showcase.v1beta1.MessagingService/UpdateRoom"
-	MessagingService_DeleteRoom_FullMethodName = "/qclaogui.showcase.v1beta1.MessagingService/DeleteRoom"
-	MessagingService_ListRooms_FullMethodName  = "/qclaogui.showcase.v1beta1.MessagingService/ListRooms"
+	MessagingService_CreateRoom_FullMethodName   = "/qclaogui.showcase.v1beta1.MessagingService/CreateRoom"
+	MessagingService_GetRoom_FullMethodName      = "/qclaogui.showcase.v1beta1.MessagingService/GetRoom"
+	MessagingService_UpdateRoom_FullMethodName   = "/qclaogui.showcase.v1beta1.MessagingService/UpdateRoom"
+	MessagingService_DeleteRoom_FullMethodName   = "/qclaogui.showcase.v1beta1.MessagingService/DeleteRoom"
+	MessagingService_ListRooms_FullMethodName    = "/qclaogui.showcase.v1beta1.MessagingService/ListRooms"
+	MessagingService_CreateBlurb_FullMethodName  = "/qclaogui.showcase.v1beta1.MessagingService/CreateBlurb"
+	MessagingService_GetBlurb_FullMethodName     = "/qclaogui.showcase.v1beta1.MessagingService/GetBlurb"
+	MessagingService_UpdateBlurb_FullMethodName  = "/qclaogui.showcase.v1beta1.MessagingService/UpdateBlurb"
+	MessagingService_DeleteBlurb_FullMethodName  = "/qclaogui.showcase.v1beta1.MessagingService/DeleteBlurb"
+	MessagingService_ListBlurbs_FullMethodName   = "/qclaogui.showcase.v1beta1.MessagingService/ListBlurbs"
+	MessagingService_SearchBlurbs_FullMethodName = "/qclaogui.showcase.v1beta1.MessagingService/SearchBlurbs"
+	MessagingService_StreamBlurbs_FullMethodName = "/qclaogui.showcase.v1beta1.MessagingService/StreamBlurbs"
+	MessagingService_SendBlurbs_FullMethodName   = "/qclaogui.showcase.v1beta1.MessagingService/SendBlurbs"
+	MessagingService_Connect_FullMethodName      = "/qclaogui.showcase.v1beta1.MessagingService/Connect"
 )
 
 // MessagingServiceClient is the client API for MessagingService service.
@@ -47,6 +57,34 @@ type MessagingServiceClient interface {
 	DeleteRoom(ctx context.Context, in *DeleteRoomRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Lists all chat rooms.
 	ListRooms(ctx context.Context, in *ListRoomsRequest, opts ...grpc.CallOption) (*ListRoomsResponse, error)
+	// Creates a blurb. If the parent is a room, the blurb is understood to be a
+	// message in that room. If the parent is a profile, the blurb is understood
+	// to be a post on the profile.
+	CreateBlurb(ctx context.Context, in *CreateBlurbRequest, opts ...grpc.CallOption) (*Blurb, error)
+	// Retrieves the Blurb with the given resource name.
+	GetBlurb(ctx context.Context, in *GetBlurbRequest, opts ...grpc.CallOption) (*Blurb, error)
+	// Updates a blurb.
+	UpdateBlurb(ctx context.Context, in *UpdateBlurbRequest, opts ...grpc.CallOption) (*Blurb, error)
+	// Deletes a blurb.
+	DeleteBlurb(ctx context.Context, in *DeleteBlurbRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Lists blurbs for a specific chat room or user profile depending on the
+	// parent resource name.
+	ListBlurbs(ctx context.Context, in *ListBlurbsRequest, opts ...grpc.CallOption) (*ListBlurbsResponse, error)
+	// This method searches through all blurbs across all rooms and profiles
+	// for blurbs containing to words found in the query. Only posts that
+	// contain an exact match of a queried word will be returned.
+	SearchBlurbs(ctx context.Context, in *SearchBlurbsRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
+	// This returns a stream that emits the blurbs that are created for a
+	// particular chat room or user profile.
+	StreamBlurbs(ctx context.Context, in *StreamBlurbsRequest, opts ...grpc.CallOption) (MessagingService_StreamBlurbsClient, error)
+	// This is a stream to create multiple blurbs. If an invalid blurb is
+	// requested to be created, the stream will close with an error.
+	SendBlurbs(ctx context.Context, opts ...grpc.CallOption) (MessagingService_SendBlurbsClient, error)
+	// This method starts a bidirectional stream that receives all blurbs that
+	// are being created after the stream has started and sends requests to create
+	// blurbs. If an invalid blurb is requested to be created, the stream will
+	// close with an error.
+	Connect(ctx context.Context, opts ...grpc.CallOption) (MessagingService_ConnectClient, error)
 }
 
 type messagingServiceClient struct {
@@ -102,6 +140,157 @@ func (c *messagingServiceClient) ListRooms(ctx context.Context, in *ListRoomsReq
 	return out, nil
 }
 
+func (c *messagingServiceClient) CreateBlurb(ctx context.Context, in *CreateBlurbRequest, opts ...grpc.CallOption) (*Blurb, error) {
+	out := new(Blurb)
+	err := c.cc.Invoke(ctx, MessagingService_CreateBlurb_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagingServiceClient) GetBlurb(ctx context.Context, in *GetBlurbRequest, opts ...grpc.CallOption) (*Blurb, error) {
+	out := new(Blurb)
+	err := c.cc.Invoke(ctx, MessagingService_GetBlurb_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagingServiceClient) UpdateBlurb(ctx context.Context, in *UpdateBlurbRequest, opts ...grpc.CallOption) (*Blurb, error) {
+	out := new(Blurb)
+	err := c.cc.Invoke(ctx, MessagingService_UpdateBlurb_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagingServiceClient) DeleteBlurb(ctx context.Context, in *DeleteBlurbRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, MessagingService_DeleteBlurb_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagingServiceClient) ListBlurbs(ctx context.Context, in *ListBlurbsRequest, opts ...grpc.CallOption) (*ListBlurbsResponse, error) {
+	out := new(ListBlurbsResponse)
+	err := c.cc.Invoke(ctx, MessagingService_ListBlurbs_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagingServiceClient) SearchBlurbs(ctx context.Context, in *SearchBlurbsRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
+	out := new(longrunningpb.Operation)
+	err := c.cc.Invoke(ctx, MessagingService_SearchBlurbs_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *messagingServiceClient) StreamBlurbs(ctx context.Context, in *StreamBlurbsRequest, opts ...grpc.CallOption) (MessagingService_StreamBlurbsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MessagingService_ServiceDesc.Streams[0], MessagingService_StreamBlurbs_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &messagingServiceStreamBlurbsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type MessagingService_StreamBlurbsClient interface {
+	Recv() (*StreamBlurbsResponse, error)
+	grpc.ClientStream
+}
+
+type messagingServiceStreamBlurbsClient struct {
+	grpc.ClientStream
+}
+
+func (x *messagingServiceStreamBlurbsClient) Recv() (*StreamBlurbsResponse, error) {
+	m := new(StreamBlurbsResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *messagingServiceClient) SendBlurbs(ctx context.Context, opts ...grpc.CallOption) (MessagingService_SendBlurbsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MessagingService_ServiceDesc.Streams[1], MessagingService_SendBlurbs_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &messagingServiceSendBlurbsClient{stream}
+	return x, nil
+}
+
+type MessagingService_SendBlurbsClient interface {
+	Send(*CreateBlurbRequest) error
+	CloseAndRecv() (*SendBlurbsResponse, error)
+	grpc.ClientStream
+}
+
+type messagingServiceSendBlurbsClient struct {
+	grpc.ClientStream
+}
+
+func (x *messagingServiceSendBlurbsClient) Send(m *CreateBlurbRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *messagingServiceSendBlurbsClient) CloseAndRecv() (*SendBlurbsResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(SendBlurbsResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *messagingServiceClient) Connect(ctx context.Context, opts ...grpc.CallOption) (MessagingService_ConnectClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MessagingService_ServiceDesc.Streams[2], MessagingService_Connect_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &messagingServiceConnectClient{stream}
+	return x, nil
+}
+
+type MessagingService_ConnectClient interface {
+	Send(*ConnectRequest) error
+	Recv() (*StreamBlurbsResponse, error)
+	grpc.ClientStream
+}
+
+type messagingServiceConnectClient struct {
+	grpc.ClientStream
+}
+
+func (x *messagingServiceConnectClient) Send(m *ConnectRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *messagingServiceConnectClient) Recv() (*StreamBlurbsResponse, error) {
+	m := new(StreamBlurbsResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // MessagingServiceServer is the server API for MessagingService service.
 // All implementations should embed UnimplementedMessagingServiceServer
 // for forward compatibility
@@ -116,6 +305,34 @@ type MessagingServiceServer interface {
 	DeleteRoom(context.Context, *DeleteRoomRequest) (*emptypb.Empty, error)
 	// Lists all chat rooms.
 	ListRooms(context.Context, *ListRoomsRequest) (*ListRoomsResponse, error)
+	// Creates a blurb. If the parent is a room, the blurb is understood to be a
+	// message in that room. If the parent is a profile, the blurb is understood
+	// to be a post on the profile.
+	CreateBlurb(context.Context, *CreateBlurbRequest) (*Blurb, error)
+	// Retrieves the Blurb with the given resource name.
+	GetBlurb(context.Context, *GetBlurbRequest) (*Blurb, error)
+	// Updates a blurb.
+	UpdateBlurb(context.Context, *UpdateBlurbRequest) (*Blurb, error)
+	// Deletes a blurb.
+	DeleteBlurb(context.Context, *DeleteBlurbRequest) (*emptypb.Empty, error)
+	// Lists blurbs for a specific chat room or user profile depending on the
+	// parent resource name.
+	ListBlurbs(context.Context, *ListBlurbsRequest) (*ListBlurbsResponse, error)
+	// This method searches through all blurbs across all rooms and profiles
+	// for blurbs containing to words found in the query. Only posts that
+	// contain an exact match of a queried word will be returned.
+	SearchBlurbs(context.Context, *SearchBlurbsRequest) (*longrunningpb.Operation, error)
+	// This returns a stream that emits the blurbs that are created for a
+	// particular chat room or user profile.
+	StreamBlurbs(*StreamBlurbsRequest, MessagingService_StreamBlurbsServer) error
+	// This is a stream to create multiple blurbs. If an invalid blurb is
+	// requested to be created, the stream will close with an error.
+	SendBlurbs(MessagingService_SendBlurbsServer) error
+	// This method starts a bidirectional stream that receives all blurbs that
+	// are being created after the stream has started and sends requests to create
+	// blurbs. If an invalid blurb is requested to be created, the stream will
+	// close with an error.
+	Connect(MessagingService_ConnectServer) error
 }
 
 // UnimplementedMessagingServiceServer should be embedded to have forward compatible implementations.
@@ -136,6 +353,33 @@ func (UnimplementedMessagingServiceServer) DeleteRoom(context.Context, *DeleteRo
 }
 func (UnimplementedMessagingServiceServer) ListRooms(context.Context, *ListRoomsRequest) (*ListRoomsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRooms not implemented")
+}
+func (UnimplementedMessagingServiceServer) CreateBlurb(context.Context, *CreateBlurbRequest) (*Blurb, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBlurb not implemented")
+}
+func (UnimplementedMessagingServiceServer) GetBlurb(context.Context, *GetBlurbRequest) (*Blurb, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBlurb not implemented")
+}
+func (UnimplementedMessagingServiceServer) UpdateBlurb(context.Context, *UpdateBlurbRequest) (*Blurb, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateBlurb not implemented")
+}
+func (UnimplementedMessagingServiceServer) DeleteBlurb(context.Context, *DeleteBlurbRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteBlurb not implemented")
+}
+func (UnimplementedMessagingServiceServer) ListBlurbs(context.Context, *ListBlurbsRequest) (*ListBlurbsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListBlurbs not implemented")
+}
+func (UnimplementedMessagingServiceServer) SearchBlurbs(context.Context, *SearchBlurbsRequest) (*longrunningpb.Operation, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchBlurbs not implemented")
+}
+func (UnimplementedMessagingServiceServer) StreamBlurbs(*StreamBlurbsRequest, MessagingService_StreamBlurbsServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamBlurbs not implemented")
+}
+func (UnimplementedMessagingServiceServer) SendBlurbs(MessagingService_SendBlurbsServer) error {
+	return status.Errorf(codes.Unimplemented, "method SendBlurbs not implemented")
+}
+func (UnimplementedMessagingServiceServer) Connect(MessagingService_ConnectServer) error {
+	return status.Errorf(codes.Unimplemented, "method Connect not implemented")
 }
 
 // UnsafeMessagingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -239,6 +483,187 @@ func _MessagingService_ListRooms_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MessagingService_CreateBlurb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateBlurbRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).CreateBlurb(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_CreateBlurb_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).CreateBlurb(ctx, req.(*CreateBlurbRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessagingService_GetBlurb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBlurbRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).GetBlurb(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_GetBlurb_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).GetBlurb(ctx, req.(*GetBlurbRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessagingService_UpdateBlurb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateBlurbRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).UpdateBlurb(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_UpdateBlurb_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).UpdateBlurb(ctx, req.(*UpdateBlurbRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessagingService_DeleteBlurb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteBlurbRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).DeleteBlurb(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_DeleteBlurb_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).DeleteBlurb(ctx, req.(*DeleteBlurbRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessagingService_ListBlurbs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListBlurbsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).ListBlurbs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_ListBlurbs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).ListBlurbs(ctx, req.(*ListBlurbsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessagingService_SearchBlurbs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchBlurbsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MessagingServiceServer).SearchBlurbs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MessagingService_SearchBlurbs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MessagingServiceServer).SearchBlurbs(ctx, req.(*SearchBlurbsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MessagingService_StreamBlurbs_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(StreamBlurbsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MessagingServiceServer).StreamBlurbs(m, &messagingServiceStreamBlurbsServer{stream})
+}
+
+type MessagingService_StreamBlurbsServer interface {
+	Send(*StreamBlurbsResponse) error
+	grpc.ServerStream
+}
+
+type messagingServiceStreamBlurbsServer struct {
+	grpc.ServerStream
+}
+
+func (x *messagingServiceStreamBlurbsServer) Send(m *StreamBlurbsResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _MessagingService_SendBlurbs_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MessagingServiceServer).SendBlurbs(&messagingServiceSendBlurbsServer{stream})
+}
+
+type MessagingService_SendBlurbsServer interface {
+	SendAndClose(*SendBlurbsResponse) error
+	Recv() (*CreateBlurbRequest, error)
+	grpc.ServerStream
+}
+
+type messagingServiceSendBlurbsServer struct {
+	grpc.ServerStream
+}
+
+func (x *messagingServiceSendBlurbsServer) SendAndClose(m *SendBlurbsResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *messagingServiceSendBlurbsServer) Recv() (*CreateBlurbRequest, error) {
+	m := new(CreateBlurbRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _MessagingService_Connect_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MessagingServiceServer).Connect(&messagingServiceConnectServer{stream})
+}
+
+type MessagingService_ConnectServer interface {
+	Send(*StreamBlurbsResponse) error
+	Recv() (*ConnectRequest, error)
+	grpc.ServerStream
+}
+
+type messagingServiceConnectServer struct {
+	grpc.ServerStream
+}
+
+func (x *messagingServiceConnectServer) Send(m *StreamBlurbsResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *messagingServiceConnectServer) Recv() (*ConnectRequest, error) {
+	m := new(ConnectRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // MessagingService_ServiceDesc is the grpc.ServiceDesc for MessagingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,7 +691,48 @@ var MessagingService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "ListRooms",
 			Handler:    _MessagingService_ListRooms_Handler,
 		},
+		{
+			MethodName: "CreateBlurb",
+			Handler:    _MessagingService_CreateBlurb_Handler,
+		},
+		{
+			MethodName: "GetBlurb",
+			Handler:    _MessagingService_GetBlurb_Handler,
+		},
+		{
+			MethodName: "UpdateBlurb",
+			Handler:    _MessagingService_UpdateBlurb_Handler,
+		},
+		{
+			MethodName: "DeleteBlurb",
+			Handler:    _MessagingService_DeleteBlurb_Handler,
+		},
+		{
+			MethodName: "ListBlurbs",
+			Handler:    _MessagingService_ListBlurbs_Handler,
+		},
+		{
+			MethodName: "SearchBlurbs",
+			Handler:    _MessagingService_SearchBlurbs_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "StreamBlurbs",
+			Handler:       _MessagingService_StreamBlurbs_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SendBlurbs",
+			Handler:       _MessagingService_SendBlurbs_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Connect",
+			Handler:       _MessagingService_Connect_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "qclaogui/showcase/v1beta1/messaging_service.proto",
 }

@@ -13,7 +13,6 @@ import (
 	"net/http"
 
 	"github.com/go-kit/log/level"
-	"github.com/googleapis/gapic-showcase/util/genrest/resttools"
 	"github.com/gorilla/mux"
 	pb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/pkg/protocol/rest"
@@ -34,7 +33,7 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
@@ -50,12 +49,12 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
+		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
@@ -64,17 +63,17 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 			rest.Error(w, http.StatusBadRequest, "encountered unexpected query params: %v", queryParams)
 			return
 		}
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/echo:echo")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:echo")
 		response, err := srv.Echo(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -106,7 +105,7 @@ func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
@@ -122,12 +121,12 @@ func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
+		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
@@ -136,17 +135,17 @@ func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
 			rest.Error(w, http.StatusBadRequest, "encountered unexpected query params: %v", queryParams)
 			return
 		}
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/echo:error-details")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:error-details")
 		response, err := srv.EchoErrorDetails(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -179,7 +178,7 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
@@ -195,12 +194,12 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
+		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
@@ -210,17 +209,17 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		serverStreamer, err := resttools.NewServerStreamer(w, resttools.ServerStreamingChunkSize)
+		serverStreamer, err := rest.NewServerStreamer(w, rest.ServerStreamingChunkSize)
 		if err != nil {
 			rest.Error(w, http.StatusInternalServerError, "server error: could not construct server streamer: %s", err.Error())
 			return
@@ -260,7 +259,7 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
@@ -275,12 +274,12 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 			rest.Error(w, http.StatusBadRequest, "error reading body content: %s", err)
 		}
 
-		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
+		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
@@ -290,17 +289,17 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/echo:pagedExpand")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:pagedExpand")
 		response, err := srv.PagedExpand(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -332,7 +331,7 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
@@ -348,12 +347,12 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
+		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
@@ -363,17 +362,17 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/echo:wait")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:wait")
 		response, err := srv.Wait(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -406,7 +405,7 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 			return
 		}
 
-		systemParameters, queryParams, err := resttools.GetSystemParameters(r)
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
 		if err != nil {
 			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
 			return
@@ -422,12 +421,12 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.FromJSON().Unmarshal(rBytes, request); err != nil {
+		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
 			return
 		}
 
-		if err = resttools.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
 		}
@@ -437,17 +436,17 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 			return
 		}
 
-		if err = resttools.PopulateSingularFields(request, urlPathParams); err != nil {
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
 		}
 
-		marshaler := resttools.ToJSON()
+		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
 		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
-		ctx := context.WithValue(r.Context(), resttools.BindingURIKey, "/v1beta1/echo:block")
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:block")
 		response, err := srv.Block(ctx, request)
 		if err != nil {
 			rest.ReportGRPCError(w, err)
@@ -467,7 +466,7 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 // EchoServiceExpandServer implements pb.EchoServiceExpandServer to provide server-side streaming over REST, returning all the
 // individual responses as part of a long JSON list.
 type EchoServiceExpandServer struct {
-	*resttools.ServerStreamer
+	*rest.ServerStreamer
 }
 
 // Send accumulates a response to be fetched later as part of response list returned over REST.

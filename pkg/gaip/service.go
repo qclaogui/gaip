@@ -158,6 +158,11 @@ func (g *Gaip) initShowcase() error {
 	// Register MessagingServiceServer
 	showcasepb.RegisterMessagingServiceServer(g.Server.GRPCServer, srv)
 	g.RegisterRoute("/v1beta1/rooms", srv.HandleCreateRoom(), false, http.MethodPost)
+	g.RegisterRoute("/v1beta1/{name:rooms/[^:]+}", srv.HandleGetRoom(), false, http.MethodGet)
+	g.RegisterRoute("/v1beta1/{room.name:rooms/[^:]+}", srv.HandleUpdateRoom(), false, http.MethodPatch)
+	g.Server.Router.Path("/v1beta1/{room.name:rooms/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateRoom())
+	g.RegisterRoute("/v1beta1/{name:rooms/[^:]+}", srv.HandleDeleteRoom(), false, http.MethodDelete)
+	g.RegisterRoute("/v1beta1/rooms", srv.HandleListRooms(), false, http.MethodGet)
 
 	// FATAL: [core] grpc: Server.RegisterService found duplicate service registration for "google.longrunning.Operations"
 	// Register OperationsServer

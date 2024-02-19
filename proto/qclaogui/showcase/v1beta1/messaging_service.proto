@@ -8,7 +8,9 @@ package qclaogui.showcase.v1beta1;
 
 import "google/api/annotations.proto";
 import "google/api/client.proto";
+import "google/longrunning/operations.proto";
 import "google/protobuf/empty.proto";
+import "qclaogui/showcase/v1beta1/blurb.proto";
 import "qclaogui/showcase/v1beta1/room.proto";
 
 option go_package = "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb";
@@ -54,4 +56,115 @@ service MessagingService {
   rpc ListRooms(ListRoomsRequest) returns (ListRoomsResponse) {
     option (google.api.http) = {get: "/v1beta1/rooms"};
   }
+
+  // Creates a blurb. If the parent is a room, the blurb is understood to be a
+  // message in that room. If the parent is a profile, the blurb is understood
+  // to be a post on the profile.
+  rpc CreateBlurb(CreateBlurbRequest) returns (Blurb) {
+    option (google.api.http) = {
+      post: "/v1beta1/{parent=rooms/*}/blurbs"
+      body: "*"
+      additional_bindings: {
+        post: "/v1beta1/{parent=users/*/profile}/blurbs"
+        body: "*"
+      }
+    };
+
+    option (google.api.method_signature) = "parent,blurb.user,blurb.text";
+    option (google.api.method_signature) = "parent,blurb.user,blurb.image";
+  }
+
+  // Retrieves the Blurb with the given resource name.
+  rpc GetBlurb(GetBlurbRequest) returns (Blurb) {
+    option (google.api.http) = {
+      get: "/v1beta1/{name=rooms/*/blurbs/*}"
+      additional_bindings: {get: "/v1beta1/{name=users/*/profile/blurbs/*}"}
+    };
+
+    option (google.api.method_signature) = "name";
+  }
+
+  // Updates a blurb.
+  rpc UpdateBlurb(UpdateBlurbRequest) returns (Blurb) {
+    option (google.api.http) = {
+      patch: "/v1beta1/{blurb.name=rooms/*/blurbs/*}"
+      body: "blurb"
+      additional_bindings: {
+        patch: "/v1beta1/{blurb.name=users/*/profile/blurbs/*}"
+        body: "blurb"
+      }
+    };
+  }
+
+  // Deletes a blurb.
+  rpc DeleteBlurb(DeleteBlurbRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1beta1/{name=rooms/*/blurbs/*}"
+      additional_bindings: {delete: "/v1beta1/{name=users/*/profile/blurbs/*}"}
+    };
+
+    option (google.api.method_signature) = "name";
+  }
+
+  // Lists blurbs for a specific chat room or user profile depending on the
+  // parent resource name.
+  rpc ListBlurbs(ListBlurbsRequest) returns (ListBlurbsResponse) {
+    option (google.api.http) = {
+      get: "/v1beta1/{parent=rooms/*}/blurbs"
+      additional_bindings: {get: "/v1beta1/{parent=users/*/profile}/blurbs"}
+    };
+
+    option (google.api.method_signature) = "parent";
+  }
+
+  // This method searches through all blurbs across all rooms and profiles
+  // for blurbs containing to words found in the query. Only posts that
+  // contain an exact match of a queried word will be returned.
+  rpc SearchBlurbs(SearchBlurbsRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1beta1/{parent=rooms/*}/blurbs:search"
+      body: "*"
+      additional_bindings: {
+        post: "/v1beta1/{parent=users/*/profile}/blurbs:search"
+        body: "*"
+      }
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "SearchBlurbsResponse"
+      metadata_type: "SearchBlurbsMetadata"
+    };
+    option (google.api.method_signature) = "parent,query";
+  }
+
+  // This returns a stream that emits the blurbs that are created for a
+  // particular chat room or user profile.
+  rpc StreamBlurbs(StreamBlurbsRequest) returns (stream StreamBlurbsResponse) {
+    option (google.api.http) = {
+      post: "/v1beta1/{name=rooms/*}/blurbs:stream"
+      body: "*"
+      additional_bindings: {
+        post: "/v1beta1/{name=users/*/profile}/blurbs:stream"
+        body: "*"
+      }
+    };
+  }
+
+  // This is a stream to create multiple blurbs. If an invalid blurb is
+  // requested to be created, the stream will close with an error.
+  rpc SendBlurbs(stream CreateBlurbRequest) returns (SendBlurbsResponse) {
+    option (google.api.http) = {
+      post: "/v1beta1/{parent=rooms/*}/blurbs:send"
+      body: "*"
+      additional_bindings: {
+        post: "/v1beta1/{parent=users/*/profile}/blurbs:send"
+        body: "*"
+      }
+    };
+  }
+
+  // This method starts a bidirectional stream that receives all blurbs that
+  // are being created after the stream has started and sends requests to create
+  // blurbs. If an invalid blurb is requested to be created, the stream will
+  // close with an error.
+  rpc Connect(stream ConnectRequest) returns (stream StreamBlurbsResponse);
 }
