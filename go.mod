@@ -18,7 +18,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/googleapis/gax-go/v2 v2.12.1
 	github.com/gorilla/mux v1.8.1
-	github.com/grafana/dskit v0.0.0-20240216094944-102ab37233e4
+	github.com/grafana/dskit v0.0.0-20240219131454-ce15a838bb40
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/hashicorp/vault/api v1.12.0

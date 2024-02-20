@@ -7,14 +7,12 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"sync"
-
-	"github.com/spf13/cobra"
 )
 
 const binaryPath = "../../../bin/gaip_darwin_amd64"
@@ -127,16 +125,11 @@ func runAllTests() {
 		panic(err)
 	}
 
-	var wg sync.WaitGroup
 	for _, testDir := range testDirs {
 		fmt.Println("Running", testDir)
-		wg.Add(1)
-		go func(dir string) {
-			defer wg.Done()
-			runSingleTest(dir)
-		}(testDir)
+		runSingleTest(testDir)
 	}
-	wg.Wait()
+
 	close(logChan)
 }
 
