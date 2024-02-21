@@ -11,8 +11,8 @@ cloud.google.com/go/compute/metadata v0.2.3 h1:mg4jlk7mCAj6xXp9UJ4fjI9VUI5rubuGB
 cloud.google.com/go/compute/metadata v0.2.3/go.mod h1:VAV5nSsACxMJvgaAuX6Pk2AawlZn8kiOGuCv6gTkwuA=
 cloud.google.com/go/longrunning v0.5.5 h1:GOE6pZFdSrTb4KAiKnXsJBtlE6mEyaW44oKyMILWnOg=
 cloud.google.com/go/longrunning v0.5.5/go.mod h1:WV2LAxD8/rg5Z1cNW6FJ/ZpX4E4VnDnoTk0yawPBB7s=
-dagger.io/dagger v0.9.10 h1:pwFPbTL0yEGmFCkoEALXxSE6s5jfaRGz6gi6RYDBalI=
-dagger.io/dagger v0.9.10/go.mod h1:aq9P87v4apEOXKPXzn35uK+by5dUplSU5ZeXm+E8Sgw=
+dagger.io/dagger v0.9.11 h1:jyfqKKzkQHIzJHIaQRJ9C/rA7LSloRB1MRUJkm5J1bU=
+dagger.io/dagger v0.9.11/go.mod h1:aq9P87v4apEOXKPXzn35uK+by5dUplSU5ZeXm+E8Sgw=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 entgo.io/ent v0.13.0 h1:DclxWczaCpyiKn6ZWVcJjq1zIKtJ11iNKy+08lNYsJE=
 entgo.io/ent v0.13.0/go.mod h1:+oU8oGna69xy29O+g+NEz+/TM7yJDhQQGJfuOWq1pT8=
@@ -46,7 +46,6 @@ github.com/blang/semver v3.5.1+incompatible/go.mod h1:kRBLl5iJ+tD4TcOOxsy/0fnweb
 github.com/cenkalti/backoff/v3 v3.2.2 h1:cfUAAO3yvKMYKPrvhDuHSwQnhZNk/RMHKdZqKTxfm6M=
 github.com/cenkalti/backoff/v3 v3.2.2/go.mod h1:cIeZDE3IrqwwJl6VUwCN6trj1oXrTS4rc0ij+ULvLYs=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
-github.com/cespare/xxhash v1.1.0 h1:a6HrQnmkObjyL+Gs60czilIUGqrzKutQD6XZog3p+ko=
 github.com/cespare/xxhash/v2 v2.2.0 h1:DC2CZ1Ep5Y4k3ZQ899DldepgrayRUGE6BBZ/cd9Cj44=
 github.com/cespare/xxhash/v2 v2.2.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
@@ -158,8 +157,6 @@ github.com/googleapis/gax-go/v2 v2.12.1 h1:9F8GV9r9ztXyAi00gsMQHNoF51xPZm8uj1dpY
 github.com/googleapis/gax-go/v2 v2.12.1/go.mod h1:61M8vcyyXR2kqKFxKrfA22jaA8JGF7Dc8App1U3H6jc=
 github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
 github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
-github.com/grafana/dskit v0.0.0-20240216094944-102ab37233e4 h1:EoaRmYhx4yctMW1BaDud7760rzCrMfoY77YarJcbR1Q=
-github.com/grafana/dskit v0.0.0-20240216094944-102ab37233e4/go.mod h1:x5DMwyr1kyirtHOxoFSZ7RnyOgHdGh03ZruupdPetQM=
 github.com/grafana/dskit v0.0.0-20240219131454-ce15a838bb40 h1:AzCiKNyJyz+LlhO5qttP8IBZh3cFhZH1rsPUfJa2dTY=
 github.com/grafana/dskit v0.0.0-20240219131454-ce15a838bb40/go.mod h1:x5DMwyr1kyirtHOxoFSZ7RnyOgHdGh03ZruupdPetQM=
 github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1 h1:HcUWd006luQPljE73d5sk+/VgYPGUReEVz2y1/qylwY=
