@@ -12,7 +12,7 @@ import (
 )
 
 func TestProcessQueryString(t *testing.T) {
-	testCase := []struct {
+	for idx, tc := range []struct {
 		queryString string
 		wantInt     bool
 		wantParams  map[string][]string
@@ -222,9 +222,7 @@ func TestProcessQueryString(t *testing.T) {
 			queryString: "foo&$alt=json&bar&alt=json", // repeated
 			wantError:   true,
 		},
-	}
-
-	for idx, tc := range testCase {
+	} {
 		label := fmt.Sprintf("[%2d %q]", idx, tc.queryString)
 
 		systemParams, queryParams, err := processQueryString(tc.queryString)

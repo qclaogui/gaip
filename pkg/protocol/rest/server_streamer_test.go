@@ -22,7 +22,7 @@ func (wb *wireBuffer) Flush() {
 }
 
 func TestServerStreamer(t *testing.T) {
-	testCase := []struct {
+	for _, tc := range []struct {
 		name                     string
 		messages                 []string
 		expectedPerMessageChunks []string
@@ -114,14 +114,13 @@ func TestServerStreamer(t *testing.T) {
 				"s]",
 			},
 		},
-	}
-
-	for idx, tc := range testCase {
-		label := fmt.Sprintf("[%d:%s:per-message chunks]", idx, tc.name)
-		streamWithChunkSize(t, label, 0, tc.messages, tc.expectedPerMessageChunks)
-		label = fmt.Sprintf("[%d:%s: chunk size %d]", idx, tc.name, tc.chunkSize)
-		streamWithChunkSize(t, label, tc.chunkSize, tc.messages, tc.expectedFixedSizeChunks)
-
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			label := fmt.Sprintf("[%s:per-message chunks]", tc.name)
+			streamWithChunkSize(t, label, 0, tc.messages, tc.expectedPerMessageChunks)
+			label = fmt.Sprintf("[%s: chunk size %d]", tc.name, tc.chunkSize)
+			streamWithChunkSize(t, label, tc.chunkSize, tc.messages, tc.expectedFixedSizeChunks)
+		})
 	}
 }
 

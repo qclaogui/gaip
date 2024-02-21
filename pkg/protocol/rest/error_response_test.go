@@ -16,7 +16,7 @@ import (
 )
 
 func TestErrorResponse(t *testing.T) {
-	testCase := []struct {
+	for _, tc := range []struct {
 		name    string
 		message string
 		status  int
@@ -33,29 +33,28 @@ func TestErrorResponse(t *testing.T) {
 			message: "The request was bad",
 			status:  http.StatusBadRequest,
 		},
-	}
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			got := httptest.NewRecorder()
+			ErrorResponse(got, tc.status, tc.message, tc.details...)
+			if got.Code != tc.status {
+				t.Errorf("%s: Expected %d, but got %d", tc.name, tc.status, got.Code)
+			}
 
-	for _, tc := range testCase {
-		got := httptest.NewRecorder()
+			err := googleapi.CheckResponse(got.Result())
+			var gerr *googleapi.Error
+			if !errors.As(err, &gerr) {
+				t.Fatalf("%s: Expected response to be a googleapi.Error, but got %v", tc.name, err)
+			}
 
-		ErrorResponse(got, tc.status, tc.message, tc.details...)
-		if got.Code != tc.status {
-			t.Errorf("%s: Expected %d, but got %d", tc.name, tc.status, got.Code)
-		}
+			if diff := cmp.Diff(gerr.Message, tc.message); diff != "" {
+				t.Errorf("%s: got(-),want(+):%s\n", tc.name, diff)
+			}
 
-		err := googleapi.CheckResponse(got.Result())
-		var gerr *googleapi.Error
-		if !errors.As(err, &gerr) {
-			t.Fatalf("%s: Expected response to be a googleapi.Error, but got %v", tc.name, err)
-		}
-
-		if diff := cmp.Diff(gerr.Message, tc.message); diff != "" {
-			t.Errorf("%s: got(-),want(+):%s\n", tc.name, diff)
-		}
-
-		if diff := cmp.Diff(gerr.Details, tc.details); diff != "" {
-			t.Errorf("%s: got(-),want(+):%s\n", tc.name, diff)
-		}
+			if diff := cmp.Diff(gerr.Details, tc.details); diff != "" {
+				t.Errorf("%s: got(-),want(+):%s\n", tc.name, diff)
+			}
+		})
 	}
 }
 

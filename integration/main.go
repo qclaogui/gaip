@@ -7,12 +7,13 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 const binaryPath = "../../../bin/gaip_darwin_amd64"

@@ -9,12 +9,14 @@ import (
 )
 
 func TestKeysMatchPath(t *testing.T) {
-	testCase := []struct {
+	for _, tc := range []struct {
+		name        string
 		examine     map[string][]string
 		lookFor     []string
 		wantMatches map[string]bool
 	}{
 		{
+			name: "loc",
 			examine: map[string][]string{
 				"loc":           nil,
 				"location":      nil,
@@ -26,6 +28,7 @@ func TestKeysMatchPath(t *testing.T) {
 			wantMatches: map[string]bool{"loc": true, "loc.lat": true},
 		},
 		{
+			name: "location",
 			examine: map[string][]string{
 				"loc":           nil,
 				"location":      nil,
@@ -36,20 +39,18 @@ func TestKeysMatchPath(t *testing.T) {
 			lookFor:     []string{"location", "loc"},
 			wantMatches: map[string]bool{"loc": true, "location": true, "loc.lat": true, "location.lat": true},
 		},
-	}
-
-	for idx, tc := range testCase {
-		matches := KeysMatchPath(tc.examine, tc.lookFor)
-		if got, want := len(matches), len(tc.wantMatches); got != want {
-			t.Errorf("tc = %d: unexpected number of variables returned: got %v, want %v: returned elements: %v",
-				idx, got, want, matches)
-			continue
-		}
-		for matchIdx, got := range matches {
-			if !tc.wantMatches[got] {
-				t.Errorf("testCase = %d: got unexpected match #%d %q; expected matches: %v", idx, matchIdx, got, matches)
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			matches := KeysMatchPath(tc.examine, tc.lookFor)
+			if got, want := len(matches), len(tc.wantMatches); got != want {
+				t.Errorf("unexpected number of variables returned: got %v, want %v: returned elements: %v",
+					got, want, matches)
 			}
-		}
-
+			for matchIdx, got := range matches {
+				if !tc.wantMatches[got] {
+					t.Errorf("got unexpected match #%d %q; expected matches: %v", matchIdx, got, matches)
+				}
+			}
+		})
 	}
 }
