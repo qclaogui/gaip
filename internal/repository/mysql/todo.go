@@ -85,7 +85,7 @@ func (m *todoImpl) GetTodo(ctx context.Context, req *todopb.GetTodoRequest) (*to
 		return nil, fmt.Errorf("failed to retrieve field values from ToDo row-> " + err.Error())
 	}
 
-	todo.CreatedAt = timestamppb.New(reminder)
+	todo.CreateTime = timestamppb.New(reminder)
 	if rows.Next() {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("found multiple ToDo rows with ID='%s'", id))
 	}
@@ -103,7 +103,7 @@ func (m *todoImpl) CreateTodo(ctx context.Context, req *todopb.CreateTodoRequest
 
 	todo := req.GetItem()
 	_, err = c.ExecContext(ctx, "INSERT INTO ToDo(`ID`, `Title`, `Description`, `Reminder`) VALUES(?, ?, ?, ?)",
-		todo.GetId(), todo.GetTitle(), todo.GetDescription(), todo.GetCreatedAt().AsTime())
+		todo.GetId(), todo.GetTitle(), todo.GetDescription(), todo.GetCreateTime().AsTime())
 	if err != nil {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to insert into ToDo-> "+err.Error()))
 	}
@@ -121,7 +121,7 @@ func (m *todoImpl) UpdateTodo(ctx context.Context, req *todopb.UpdateTodoRequest
 	todo := req.GetItem()
 
 	res, err := c.ExecContext(ctx, "UPDATE ToDo SET `Title`=?, `Description`=?, `Reminder`=? WHERE `ID`=?",
-		todo.Title, todo.Description, todo.GetCreatedAt().AsTime(), todo.Id)
+		todo.Title, todo.Description, todo.GetCreateTime().AsTime(), todo.Id)
 	if err != nil {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to update ToDo-> "+err.Error()))
 	}
@@ -182,7 +182,7 @@ func (m *todoImpl) ListTodo(ctx context.Context, _ *todopb.ListTodoRequest) (*to
 		if err = rows.Scan(&todo.Id, &todo.Title, &todo.Description, &reminder); err != nil {
 			return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve field values from ToDo row-> "+err.Error()))
 		}
-		todo.CreatedAt = timestamppb.New(reminder)
+		todo.CreateTime = timestamppb.New(reminder)
 		todos = append(todos, todo)
 	}
 

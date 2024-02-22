@@ -33,7 +33,7 @@ func TestTodoCRUD(t *testing.T) {
 		item := &pb.ToDo{
 			Title:       "title",
 			Description: "description",
-			CreatedAt:   reminder,
+			CreateTime:  reminder,
 		}
 		create := &pb.CreateTodoRequest{
 			Api:  "v1",

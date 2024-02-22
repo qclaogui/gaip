@@ -37,7 +37,7 @@ func (s *Server) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb
 		return nil, status.Error(codes.Unknown, err.Error())
 	}
 
-	if err := req.GetItem().GetCreatedAt().CheckValid(); err != nil {
+	if err := req.GetItem().GetCreateTime().CheckValid(); err != nil {
 		return nil, status.Error(codes.InvalidArgument, "reminder field has invalid format-> "+err.Error())
 	}
 

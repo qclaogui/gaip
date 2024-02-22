@@ -32,9 +32,9 @@ message ToDo {
 
   bool completed = 4;
 
-  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp create_time = 5;
 
-  google.protobuf.Timestamp updated_at = 6;
+  google.protobuf.Timestamp update_time = 6;
 }
 
 message CreateTodoRequest {

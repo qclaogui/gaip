@@ -222,11 +222,11 @@
             "completed": {
               "type": "boolean"
             },
-            "createdAt": {
+            "createTime": {
               "type": "string",
               "format": "date-time"
             },
-            "updatedAt": {
+            "updateTime": {
               "type": "string",
               "format": "date-time"
             }
@@ -345,11 +345,11 @@
         "completed": {
           "type": "boolean"
         },
-        "createdAt": {
+        "createTime": {
           "type": "string",
           "format": "date-time"
         },
-        "updatedAt": {
+        "updateTime": {
           "type": "string",
           "format": "date-time"
         }
