@@ -523,6 +523,7 @@ func (srv *Server) HandleCreateBlurb1() http.HandlerFunc {
 //	Generated for HTTP binding pattern: GET "/v1beta1/{name=rooms/*/blurbs/*}"
 func (srv *Server) HandleGetBlurb() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{name=rooms/*/blurbs/*}': %q)", r.URL)
 	}
 }
 
@@ -531,6 +532,7 @@ func (srv *Server) HandleGetBlurb() http.HandlerFunc {
 //	Generated for HTTP binding pattern: GET "/v1beta1/{name=users/*/profile/blurbs/*}"
 func (srv *Server) HandleGetBlurb1() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{name=users/*/profile/blurbs/*}': %q)", r.URL)
 	}
 }
 
@@ -539,6 +541,7 @@ func (srv *Server) HandleGetBlurb1() http.HandlerFunc {
 //	Generated for HTTP binding pattern: PATCH "/v1beta1/{blurb.name=rooms/*/blurbs/*}"
 func (srv *Server) HandleUpdateBlurb() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{blurb.name=rooms/*/blurbs/*}': %q)", r.URL)
 	}
 }
 
@@ -547,6 +550,7 @@ func (srv *Server) HandleUpdateBlurb() http.HandlerFunc {
 //	Generated for HTTP binding pattern: PATCH "/v1beta1/{blurb.name=users/*/profile/blurbs/*}"
 func (srv *Server) HandleUpdateBlurb1() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{blurb.name=users/*/profile/blurbs/*}': %q)", r.URL)
 	}
 }
 
@@ -555,6 +559,7 @@ func (srv *Server) HandleUpdateBlurb1() http.HandlerFunc {
 //	Generated for HTTP binding pattern: DELETE "/v1beta1/{name=rooms/*/blurbs/*}"
 func (srv *Server) HandleDeleteBlurb() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{name=rooms/*/blurbs/*}': %q)", r.URL)
 	}
 }
 
@@ -563,6 +568,7 @@ func (srv *Server) HandleDeleteBlurb() http.HandlerFunc {
 //	Generated for HTTP binding pattern: DELETE "/v1beta1/{name=users/*/profile/blurbs/*}"
 func (srv *Server) HandleDeleteBlurb1() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{name=users/*/profile/blurbs/*}': %q)", r.URL)
 	}
 }
 
@@ -571,6 +577,7 @@ func (srv *Server) HandleDeleteBlurb1() http.HandlerFunc {
 //	Generated for HTTP binding pattern: GET "/v1beta1/{parent=rooms/*}/blurbs"
 func (srv *Server) HandleListBlurbs() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{parent=rooms/*}/blurbs': %q)", r.URL)
 	}
 }
 
@@ -579,6 +586,7 @@ func (srv *Server) HandleListBlurbs() http.HandlerFunc {
 //	Generated for HTTP binding pattern: GET "/v1beta1/{parent=users/*/profile}/blurbs"
 func (srv *Server) HandleListBlurbs1() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{parent=users/*/profile}/blurbs': %q)", r.URL)
 	}
 }
 
@@ -587,6 +595,7 @@ func (srv *Server) HandleListBlurbs1() http.HandlerFunc {
 //	Generated for HTTP binding pattern: POST "/v1beta1/{parent=rooms/*}/blurbs:search"
 func (srv *Server) HandleSearchBlurbs() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{parent=rooms/*}/blurbs:search': %q)", r.URL)
 	}
 }
 
@@ -595,6 +604,7 @@ func (srv *Server) HandleSearchBlurbs() http.HandlerFunc {
 //	Generated for HTTP binding pattern: POST "/v1beta1/{parent=users/*/profile}/blurbs:search"
 func (srv *Server) HandleSearchBlurbs1() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{parent=users/*/profile}/blurbs:search': %q)", r.URL)
 	}
 }
 
@@ -603,6 +613,7 @@ func (srv *Server) HandleSearchBlurbs1() http.HandlerFunc {
 //	Generated for HTTP binding pattern: POST "/v1beta1/{name=rooms/*}/blurbs:stream"
 func (srv *Server) HandleStreamBlurbs() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{name=users/*/profile}/blurbs:stream': %q)", r.URL)
 	}
 }
 
@@ -611,6 +622,7 @@ func (srv *Server) HandleStreamBlurbs() http.HandlerFunc {
 //	Generated for HTTP binding pattern: POST "/v1beta1/{name=users/*/profile}/blurbs:stream"
 func (srv *Server) HandleStreamBlurbs1() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		rest.Error(w, http.StatusNotImplemented, "methods not implemented yet (request matched '/v1beta1/{name=users/*/profile}/blurbs:stream': %q)", r.URL)
 	}
 }
 

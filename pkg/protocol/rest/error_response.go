@@ -58,7 +58,7 @@ func GRPCToHTTP(c codes.Code) int {
 // including the HTTP Status code, a message, and any error detail types, into
 // a googleAPIError and writes the response as JSON.
 func ErrorResponse(w http.ResponseWriter, status int, message string, details ...interface{}) {
-	googleAPIError := &googleAPIError{
+	apiError := &googleAPIError{
 		Error: &googleapi.Error{
 			Code:    status,
 			Message: message,
@@ -66,7 +66,7 @@ func ErrorResponse(w http.ResponseWriter, status int, message string, details ..
 		},
 	}
 	w.WriteHeader(status)
-	data, _ := json.Marshal(googleAPIError)
+	data, _ := json.Marshal(apiError)
 	_, _ = w.Write(data)
 }
 

@@ -122,15 +122,19 @@ func Test_CreateRoom_invalid(t *testing.T) {
 	}
 }
 
-func Test_Blurb_lifecycle(t *testing.T) {
-	usr, errU := identityGRPC.CreateUser(context.Background(), &pb.CreateUserRequest{
+func newUser(name string) (*pb.User, error) {
+	return identityGRPC.CreateUser(context.Background(), &pb.CreateUserRequest{
 		User: &pb.User{
-			DisplayName: "qclaogui",
-			Email:       "qclaogui@example.com",
-			Nickname:    proto.String("qc"),
+			DisplayName: name,
+			Email:       name + "@example.com",
+			Nickname:    proto.String(name),
 			HeightFeet:  proto.Float64(6.2),
 		},
 	})
+}
+
+func Test_Blurb_lifecycle(t *testing.T) {
+	usr, errU := newUser("Test_Blurb_lifecycle")
 	if errU != nil {
 		t.Fatalf("identityGRPC.CreateUser() failed: %v", errU)
 	}
@@ -244,18 +248,28 @@ func Test_Blurb_lifecycle(t *testing.T) {
 }
 
 func Test_CreateBlurb_invalid(t *testing.T) {
+	usr, errU := newUser("Test_CreateBlurb_invalid")
+	if errU != nil {
+		t.Fatalf("identityGRPC.CreateUser() failed: %v", errU)
+	}
+	parent := usr.GetName() + "/profile"
+
 	for typ, client := range map[string]*showcase.MessagingClient{
 		"grpc": messagingGRPC,
 		"rest": messagingREST,
 	} {
 		t.Run(typ, func(t *testing.T) {
 			_, err := client.CreateBlurb(context.Background(),
-				&pb.CreateBlurbRequest{Blurb: &pb.Blurb{}})
+				&pb.CreateBlurbRequest{
+					Parent: parent,
+					Blurb:  &pb.Blurb{},
+				})
 
 			st, _ := status.FromError(err)
-			if st.Code() != codes.InvalidArgument {
-				t.Errorf("client.CreateBlurb() Want error code %d got %d",
-					codes.InvalidArgument, st.Code())
+			want := "The field `user` is required."
+			if st.Message() != want {
+				t.Errorf("client.CreateBlurb() Want Message %s got %s",
+					want, st.Message())
 			}
 		})
 	}
