@@ -95,7 +95,7 @@ func CheckJSONEnumFields(payload jsonPayload, fieldsToCheck [][]protoreflect.Nam
 // means that if fieldPath is a path to an enum field, the boolean will be false if the enum is
 // encoded in the payload using a non-string representation.
 func CheckEnum(payload jsonPayload, fieldPath []protoreflect.Name) (fieldName string, ok bool) {
-	nameParts := []string{}
+	var nameParts []string
 	last := len(fieldPath) - 1
 	var value string
 	var found, isString bool

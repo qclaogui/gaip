@@ -41,6 +41,10 @@ func NewMessaging() (showcasepb.MessagingServiceServer, error) {
 		nowF:     time.Now,
 		token:    service.NewTokenGenerator(),
 		roomKeys: map[string]int{},
+
+		blurbKeys:  map[string]blurbIndex{},
+		blurbs:     map[string][]blurbEntry{},
+		parentUIDs: map[string]*service.UniqID{},
 	}
 	return s, nil
 }
@@ -298,7 +302,7 @@ func (s *messagingImpl) DeleteBlurb(_ context.Context, in *showcasepb.DeleteBlur
 	defer s.blurbMu.Unlock()
 
 	i, ok := s.blurbKeys[in.GetName()]
-	if ok {
+	if !ok {
 		return nil, status.Errorf(codes.NotFound, "A blurb with name %s not found.", in.GetName())
 	}
 

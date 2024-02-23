@@ -49,14 +49,16 @@ func TestEcho(t *testing.T) {
 		"grpc": echoGRPC,
 		"rest": echoREST,
 	} {
-		resp, err := client.Echo(context.Background(), req)
-		if err != nil {
-			t.Fatal(err)
-		}
+		t.Run(typ, func(t *testing.T) {
+			resp, err := client.Echo(context.Background(), req)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-		if resp.GetContent() != req.GetContent() {
-			t.Errorf("%s Echo() = %q, want %q", typ, resp.GetContent(), content)
-		}
+			if resp.GetContent() != req.GetContent() {
+				t.Errorf("client.Echo() = %q, want %q", resp.GetContent(), content)
+			}
+		})
 	}
 
 }
@@ -73,25 +75,27 @@ func TestEcho_error(t *testing.T) {
 		"grpc": echoGRPC,
 		"rest": echoREST,
 	} {
-		resp, err := client.Echo(context.Background(), req)
-		if resp != nil || err == nil {
-			t.Errorf("%s Echo() = %v, wanted error %d", typ, resp, val)
-		}
+		t.Run(typ, func(t *testing.T) {
+			resp, err := client.Echo(context.Background(), req)
+			if resp != nil || err == nil {
+				t.Errorf("client.Echo() = %v, wanted error %d", resp, val)
+			}
 
-		if typ == "grpc" {
-			s, _ := status.FromError(err)
-			if s.Code() != val {
-				t.Errorf("%s Echo() errors with %d, want %d", typ, s.Code(), val)
+			if typ == "grpc" {
+				s, _ := status.FromError(err)
+				if s.Code() != val {
+					t.Errorf("Echo() errors with %d, want %d", s.Code(), val)
+				}
+			} else {
+				want := 499
+				gerr := &googleapi.Error{}
+				if !errors.As(err, &gerr) {
+					t.Errorf("client.Echo() returned unexpected error type: %v", err)
+				} else if gerr.Code != want {
+					t.Errorf("client.Echo() errors with %d, want %d", gerr.Code, want)
+				}
 			}
-		} else {
-			want := 499
-			gerr := &googleapi.Error{}
-			if !errors.As(err, &gerr) {
-				t.Errorf("%s Echo() returned unexpected error type: %v", typ, err)
-			} else if gerr.Code != want {
-				t.Errorf("%s Echo() errors with %d, want %d", typ, gerr.Code, want)
-			}
-		}
+		})
 	}
 
 }
@@ -99,7 +103,7 @@ func TestEcho_error(t *testing.T) {
 // Test dynamic routing header generation. We cannot guarantee the order that headers are sent, so we check that the header sent contains the correct elements as opposed to checking
 // the header itself.
 func TestEchoHeader(t *testing.T) {
-	var testCases = []struct {
+	for _, tc := range []struct {
 		req  *pb.EchoRequest
 		want []string
 	}{
@@ -126,9 +130,7 @@ func TestEchoHeader(t *testing.T) {
 			},
 			want: []string{"baz=projects%2F123%2Finstances%2F456", "qux=projects%2F123", "table_name=regions%2F123%2Fzones%2F456", "header=regions%2F123%2Fzones%2F456", "routing_id=regions%2F123%2Fzones%2F456"},
 		},
-	}
-
-	for _, tc := range testCases {
+	} {
 		mdForHeaders := metadata.New(map[string]string{})
 		_, _ = echoGRPC.Echo(context.Background(), tc.req, gax.WithGRPCOptions(grpc.Header(&mdForHeaders)))
 		got := mdForHeaders.Get("x-goog-request-params")
@@ -143,7 +145,7 @@ func TestEchoHeader(t *testing.T) {
 }
 
 func TestEchoHeaderREST(t *testing.T) {
-	var testCases = []struct {
+	for _, tc := range []struct {
 		req  *pb.EchoRequest
 		want []string
 	}{
@@ -170,9 +172,7 @@ func TestEchoHeaderREST(t *testing.T) {
 			},
 			want: []string{"baz=projects%2F123%2Finstances%2F456", "qux=projects%2F123", "table_name=regions%2F123%2Fzones%2F456", "header=regions%2F123%2Fzones%2F456", "routing_id=regions%2F123%2Fzones%2F456"},
 		},
-	}
-
-	for _, tc := range testCases {
+	} {
 		// Wrap the default RoundTripper with our own that asserts on the response
 		// headers expected by the test.
 		wrapped := &http.Client{}
@@ -262,27 +262,29 @@ func TestExpand(t *testing.T) {
 		"grpc": echoGRPC,
 		"rest": echoREST,
 	} {
-		s, err := client.Expand(context.Background(), req)
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		var rests []string
-		for {
-			resp, err2 := s.Recv()
-			if errors.Is(err2, io.EOF) {
-				break
+		t.Run(typ, func(t *testing.T) {
+			s, err := client.Expand(context.Background(), req)
+			if err != nil {
+				t.Fatal(err)
 			}
-			if err2 != nil {
-				t.Fatal(err2)
-			}
-			rests = append(rests, resp.GetContent())
-		}
 
-		got := strings.Join(rests, " ")
-		if content != got {
-			t.Errorf("%s Expand() = %q, want %q", typ, got, content)
-		}
+			var rests []string
+			for {
+				resp, err2 := s.Recv()
+				if errors.Is(err2, io.EOF) {
+					break
+				}
+				if err2 != nil {
+					t.Fatal(err2)
+				}
+				rests = append(rests, resp.GetContent())
+			}
+
+			got := strings.Join(rests, " ")
+			if content != got {
+				t.Errorf("client.Expand() = %q, want %q", got, content)
+			}
+		})
 	}
 }
 
@@ -311,7 +313,7 @@ func TestCollect(t *testing.T) {
 	}
 
 	if content != resp.GetContent() {
-		t.Errorf("Collect() = %q, want %q", resp.GetContent(), content)
+		t.Errorf("client.Collect() = %q, want %q", resp.GetContent(), content)
 	}
 }
 
@@ -352,7 +354,7 @@ func TestChat(t *testing.T) {
 	}
 	got := strings.Join(rests, " ")
 	if content != got {
-		t.Errorf("Chat() = %q, want %q", got, content)
+		t.Errorf("client.Chat() = %q, want %q", got, content)
 	}
 }
 
@@ -373,20 +375,22 @@ func TestWait(t *testing.T) {
 		"grpc": echoGRPC,
 		"rest": echoREST,
 	} {
-		op, err := client.Wait(context.Background(), req)
-		if err != nil {
-			t.Fatal(err)
-		}
-		resp, err := op.Wait(context.Background())
-		if err != nil {
-			t.Fatal(err)
-		}
+		t.Run(typ, func(t *testing.T) {
+			op, err := client.Wait(context.Background(), req)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-		if resp.GetContent() != content {
-			t.Errorf("%s Wait() = %q, want %q", typ, resp.GetContent(), content)
-		}
+			resp, err := op.Wait(context.Background())
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if resp.GetContent() != content {
+				t.Errorf("client.Wait() = %q, want %q", resp.GetContent(), content)
+			}
+		})
 	}
-
 }
 
 func TestPagination(t *testing.T) {
@@ -401,24 +405,25 @@ func TestPagination(t *testing.T) {
 		"grpc": echoGRPC,
 		"rest": echoREST,
 	} {
-		it := client.PagedExpand(context.Background(), req)
+		t.Run(typ, func(t *testing.T) {
+			it := client.PagedExpand(context.Background(), req)
+			ndx := 0
+			for {
+				resp, err := it.Next()
+				if errors.Is(err, iterator.Done) {
+					break
+				}
 
-		ndx := 0
-		for {
-			resp, err := it.Next()
-			if errors.Is(err, iterator.Done) {
-				break
-			}
+				if err != nil {
+					t.Fatal(err)
+				}
 
-			if err != nil {
-				t.Fatal(err)
+				if resp.GetContent() != expected[ndx] {
+					t.Errorf("%s Chat() = %s, want %s", typ, resp.GetContent(), expected[ndx])
+				}
+				ndx++
 			}
-
-			if resp.GetContent() != expected[ndx] {
-				t.Errorf("%s Chat() = %s, want %s", typ, resp.GetContent(), expected[ndx])
-			}
-			ndx++
-		}
+		})
 	}
 }
 
@@ -435,29 +440,29 @@ func TestPaginationWithToken(t *testing.T) {
 		"grpc": echoGRPC,
 		"rest": echoREST,
 	} {
-		it := client.PagedExpand(context.Background(), req)
+		t.Run(typ, func(t *testing.T) {
+			it := client.PagedExpand(context.Background(), req)
 
-		ndx := 0
-		for {
-			resp, err := it.Next()
-			if errors.Is(err, iterator.Done) {
-				break
+			ndx := 0
+			for {
+				resp, err := it.Next()
+				if errors.Is(err, iterator.Done) {
+					break
+				}
+
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				if ndx >= len(expected) {
+					t.Error("client.PagedExpand() received more items than expected")
+				} else if resp.GetContent() != expected[ndx] {
+					t.Errorf("client.PagedExpand() = %s, want %s", resp.GetContent(), expected[ndx])
+				}
+				ndx++
 			}
-
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			if ndx >= len(expected) {
-				t.Errorf("%s PagedExpand() received more items than expected", typ)
-			} else if resp.GetContent() != expected[ndx] {
-				t.Errorf("%s PagedExpand() = %s, want %s", typ, resp.GetContent(), expected[ndx])
-			}
-			ndx++
-		}
-
+		})
 	}
-
 }
 
 func TestBlock(t *testing.T) {
@@ -475,7 +480,7 @@ func TestBlock(t *testing.T) {
 		t.Fatal(err)
 	}
 	if resp.GetContent() != content {
-		t.Errorf("Block() = %q, want %q", resp.GetContent(), content)
+		t.Errorf("client.Block() = %q, want %q", resp.GetContent(), content)
 	}
 }
 
@@ -495,9 +500,9 @@ func TestBlock_timeout(t *testing.T) {
 	want := status.New(codes.DeadlineExceeded, "context deadline exceeded")
 	resp, err := echoGRPC.Block(ctx, req)
 	if err == nil {
-		t.Errorf("Block() got %+v, want %+v", resp, want)
+		t.Errorf("client.Block() got %+v, want %+v", resp, want)
 	} else if got, ok := status.FromError(err); !ok || got.Code() != want.Code() {
-		t.Errorf("Block() got %+v, want %+v", err, want)
+		t.Errorf("client.Block() got %+v, want %+v", err, want)
 	}
 }
 
@@ -515,9 +520,9 @@ func TestBlock_default_timeout(t *testing.T) {
 	want := status.New(codes.DeadlineExceeded, "context deadline exceeded")
 	resp, err := echoGRPC.Block(context.Background(), req)
 	if err == nil {
-		t.Errorf("Block() got %+v, want %+v", resp, want)
+		t.Errorf("client.Block() got %+v, want %+v", resp, want)
 	} else if got, ok := status.FromError(err); !ok || got.Code() != want.Code() {
-		t.Errorf("Block() got %+v, want %+v", err, want)
+		t.Errorf("client.Block() got %+v, want %+v", err, want)
 	}
 }
 
@@ -537,6 +542,6 @@ func TestBlock_override_default_timeout(t *testing.T) {
 		t.Error(err)
 	}
 	if resp.GetContent() != content {
-		t.Errorf("Block() = %q, want %q", resp.GetContent(), content)
+		t.Errorf("client.Block() = %q, want %q", resp.GetContent(), content)
 	}
 }

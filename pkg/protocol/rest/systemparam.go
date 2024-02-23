@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strings"
 )
 
 // SystemParameters encapsulates the system parameters recognized by Showcase. These are a subset of
@@ -44,16 +43,7 @@ func processQueryString(queryString string) (systemParams *SystemParameters, que
 		return nil, nil, err
 	}
 
-	// TODO: Try removing this workaround when we update the Go version in the Showcase CI to
-	// 1.17+. As of this writing, CI uses 1.16.3, and the tests fail
-	// (https://github.com/googleapis/gapic-showcase/runs/6798834903?check_suite_focus=true#step:6:60)
-	// without this explicit check. The tests pass without this workaround on local machines or in the Go
-	// Playground (https://go.dev/play/p/ewyv5qj55an) using Go >=1.17
-	if strings.Contains(queryString, ";") {
-		return nil, nil, fmt.Errorf("found unescaped semicolon in query string %q", queryString)
-	}
-
-	queryParams = map[string][]string(queryPairs)
+	queryParams = queryPairs
 	systemParams = &SystemParameters{}
 	sawAltParam := false
 	for param, values := range queryPairs {

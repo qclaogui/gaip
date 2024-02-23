@@ -25,8 +25,6 @@ var (
 )
 
 func TestUserCRUD(t *testing.T) {
-	ctx := context.Background()
-
 	for _, client := range map[string]*showcase.IdentityClient{
 		"grpc": identityGRPC,
 		"rest": identityREST,
@@ -40,7 +38,7 @@ func TestUserCRUD(t *testing.T) {
 				HeightFeet:  proto.Float64(6.2),
 			},
 		}
-		usr, err := client.CreateUser(ctx, create)
+		usr, err := client.CreateUser(context.Background(), create)
 		if err != nil {
 			t.Fatalf("client.CreateUser() failed: %v", err)
 		}
@@ -100,7 +98,7 @@ func TestUserCRUD(t *testing.T) {
 			Name: usr.GetName(),
 		}
 
-		got, err := client.GetUser(ctx, get)
+		got, err := client.GetUser(context.Background(), get)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -127,7 +125,7 @@ func TestUserCRUD(t *testing.T) {
 				},
 			},
 		}
-		updated, err := client.UpdateUser(ctx, update)
+		updated, err := client.UpdateUser(context.Background(), update)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -157,7 +155,7 @@ func TestUserCRUD(t *testing.T) {
 		del := &pb.DeleteUserRequest{
 			Name: usr.GetName(),
 		}
-		if err = client.DeleteUser(ctx, del); err != nil {
+		if err = client.DeleteUser(context.Background(), del); err != nil {
 			t.Fatal(err)
 		}
 
