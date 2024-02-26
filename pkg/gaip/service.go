@@ -17,6 +17,7 @@ import (
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb/genrest"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/repository"
 	"github.com/qclaogui/gaip/pkg/service/bookstore"
@@ -138,49 +139,15 @@ func (g *Gaip) initShowcase() error {
 	}
 
 	showcasepb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
-	g.RegisterRoute("/v1beta1/echo:echo", srv.HandleEcho(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/echo:error-details", srv.HandleEchoErrorDetails(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/echo:expand", srv.HandleExpand(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/echo:collect", srv.HandleCollect(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/echo:pagedExpand", srv.HandlePagedExpand(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/echo:wait", srv.HandleWait(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/echo:block", srv.HandleBlock(), false, http.MethodPost)
+	genrest.RegisterHandlersEchoService(g.Server.Router, srv, g.Server.Log)
 
 	// Register IdentityServiceServer
 	showcasepb.RegisterIdentityServiceServer(g.Server.GRPCServer, srv)
-	g.RegisterRoute("/v1beta1/users", srv.HandleCreateUser(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{name:users/[^:]+}", srv.HandleGetUser(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{user.name:users/[^:]+}", srv.HandleUpdateUser(), false, http.MethodPatch)
-	g.Server.Router.Path("/v1beta1/{user.name:users/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateUser())
-	g.RegisterRoute("/v1beta1/{name:users/[^:]+}", srv.HandleDeleteUser(), false, http.MethodDelete)
-	g.RegisterRoute("/v1beta1/users", srv.HandleListUsers(), false, http.MethodGet)
+	genrest.RegisterHandlersIdentityService(g.Server.Router, srv, g.Server.Log)
 
 	// Register MessagingServiceServer
 	showcasepb.RegisterMessagingServiceServer(g.Server.GRPCServer, srv)
-	g.RegisterRoute("/v1beta1/rooms", srv.HandleCreateRoom(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{name:rooms/[^:]+}", srv.HandleGetRoom(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{room.name:rooms/[^:]+}", srv.HandleUpdateRoom(), false, http.MethodPatch)
-	g.Server.Router.Path("/v1beta1/{room.name:rooms/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateRoom())
-	g.RegisterRoute("/v1beta1/{name:rooms/[^:]+}", srv.HandleDeleteRoom(), false, http.MethodDelete)
-	g.RegisterRoute("/v1beta1/rooms", srv.HandleListRooms(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{parent:rooms/[^:]+}/blurbs", srv.HandleCreateBlurb(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{parent:users/[^:]+/profile}/blurbs", srv.HandleCreateBlurb1(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{name:rooms/[^:]+/blurbs/[^:]+}", srv.HandleGetBlurb(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{name:users/[^:]+/profile/blurbs/[^:]+}", srv.HandleGetBlurb1(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{blurb.name:rooms/[^:]+/blurbs/[^:]+}", srv.HandleUpdateBlurb(), false, http.MethodPatch)
-	g.Server.Router.Path("/v1beta1/{blurb.name:rooms/[^:]+/blurbs/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateBlurb())
-	g.RegisterRoute("/v1beta1/{blurb.name:users/[^:]+/profile/blurbs/[^:]+}", srv.HandleUpdateBlurb1(), false, http.MethodPatch)
-	g.Server.Router.Path("/v1beta1/{blurb.name:users/[^:]+/profile/blurbs/[^:]+}").HeadersRegexp("X-HTTP-Method-Override", "^PATCH$").Methods(http.MethodPost).Handler(srv.HandleUpdateBlurb1())
-	g.RegisterRoute("/v1beta1/{name:rooms/[^:]+/blurbs/[^:]+}", srv.HandleDeleteBlurb(), false, http.MethodDelete)
-	g.RegisterRoute("/v1beta1/{name:users/[^:]+/profile}/blurbs", srv.HandleDeleteBlurb1(), false, http.MethodDelete)
-	g.RegisterRoute("/v1beta1/{parent:rooms/[^:]+}/blurbs", srv.HandleListBlurbs(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{parent:users/[^:]+/profile}/blurbs", srv.HandleListBlurbs1(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{parent:rooms/[^:]+}/blurbs:search", srv.HandleSearchBlurbs(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{parent:users/[^:]+/profile}/blurbs:search", srv.HandleSearchBlurbs1(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{parent:rooms/[^:]+}/blurbs:stream", srv.HandleStreamBlurbs(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{parent:users/[^:]+/profile}/blurbs:stream", srv.HandleStreamBlurbs1(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{parent:rooms/[^:]+}/blurbs:stream", srv.HandleSendBlurbs(), false, http.MethodPost)
-	g.RegisterRoute("/v1beta1/{parent:users/[^:]+/profile}/blurbs:stream", srv.HandleSendBlurbs1(), false, http.MethodPost)
+	genrest.RegisterHandlersMessagingService(g.Server.Router, srv, g.Server.Log)
 
 	// FATAL: [core] grpc: Server.RegisterService found duplicate service registration for "google.longrunning.Operations"
 	// Register OperationsServer

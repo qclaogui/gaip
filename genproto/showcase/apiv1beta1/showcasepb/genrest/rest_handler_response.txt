@@ -1,0 +1,197 @@
+Generated via "google.golang.org/protobuf/compiler/protogen" via ProtoModel!
+
+
+Proto Files:
+qclaogui/showcase/v1beta1/blurb.proto
+qclaogui/showcase/v1beta1/echo.proto
+qclaogui/showcase/v1beta1/echo_service.proto
+qclaogui/showcase/v1beta1/identity_service.proto
+qclaogui/showcase/v1beta1/messaging_service.proto
+qclaogui/showcase/v1beta1/room.proto
+qclaogui/showcase/v1beta1/user.proto
+
+Proto Model:
+EchoService (.qclaogui.showcase.v1beta1.EchoService):
+  .qclaogui.showcase.v1beta1.EchoService.Echo[0] : POST: "/v1beta1/echo:echo"
+  .qclaogui.showcase.v1beta1.EchoService.EchoErrorDetails[0] : POST: "/v1beta1/echo:error-details"
+  .qclaogui.showcase.v1beta1.EchoService.Expand[0] : POST: "/v1beta1/echo:expand"
+  .qclaogui.showcase.v1beta1.EchoService.Collect[0] : POST: "/v1beta1/echo:collect"
+  .qclaogui.showcase.v1beta1.EchoService.PagedExpand[0] : POST: "/v1beta1/echo:pagedExpand"
+  .qclaogui.showcase.v1beta1.EchoService.Wait[0] : POST: "/v1beta1/echo:wait"
+  .qclaogui.showcase.v1beta1.EchoService.Block[0] : POST: "/v1beta1/echo:block"
+
+IdentityService (.qclaogui.showcase.v1beta1.IdentityService):
+  .qclaogui.showcase.v1beta1.IdentityService.CreateUser[0] : POST: "/v1beta1/users"
+  .qclaogui.showcase.v1beta1.IdentityService.GetUser[0] : GET: "/v1beta1/{name=users/*}"
+  .qclaogui.showcase.v1beta1.IdentityService.ListUsers[0] : GET: "/v1beta1/users"
+  .qclaogui.showcase.v1beta1.IdentityService.UpdateUser[0] : PATCH: "/v1beta1/{user.name=users/*}"
+  .qclaogui.showcase.v1beta1.IdentityService.DeleteUser[0] : DELETE: "/v1beta1/{name=users/*}"
+
+MessagingService (.qclaogui.showcase.v1beta1.MessagingService):
+  .qclaogui.showcase.v1beta1.MessagingService.CreateRoom[0] : POST: "/v1beta1/rooms"
+  .qclaogui.showcase.v1beta1.MessagingService.GetRoom[0] : GET: "/v1beta1/{name=rooms/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.UpdateRoom[0] : PATCH: "/v1beta1/{room.name=rooms/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.DeleteRoom[0] : DELETE: "/v1beta1/{name=rooms/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.ListRooms[0] : GET: "/v1beta1/rooms"
+  .qclaogui.showcase.v1beta1.MessagingService.CreateBlurb[0] : POST: "/v1beta1/{parent=rooms/*}/blurbs"
+  .qclaogui.showcase.v1beta1.MessagingService.CreateBlurb[1] : POST: "/v1beta1/{parent=users/*/profile}/blurbs"
+  .qclaogui.showcase.v1beta1.MessagingService.GetBlurb[0] : GET: "/v1beta1/{name=rooms/*/blurbs/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.GetBlurb[1] : GET: "/v1beta1/{name=users/*/profile/blurbs/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.UpdateBlurb[0] : PATCH: "/v1beta1/{blurb.name=rooms/*/blurbs/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.UpdateBlurb[1] : PATCH: "/v1beta1/{blurb.name=users/*/profile/blurbs/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.DeleteBlurb[0] : DELETE: "/v1beta1/{name=rooms/*/blurbs/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.DeleteBlurb[1] : DELETE: "/v1beta1/{name=users/*/profile/blurbs/*}"
+  .qclaogui.showcase.v1beta1.MessagingService.ListBlurbs[0] : GET: "/v1beta1/{parent=rooms/*}/blurbs"
+  .qclaogui.showcase.v1beta1.MessagingService.ListBlurbs[1] : GET: "/v1beta1/{parent=users/*/profile}/blurbs"
+  .qclaogui.showcase.v1beta1.MessagingService.SearchBlurbs[0] : POST: "/v1beta1/{parent=rooms/*}/blurbs:search"
+  .qclaogui.showcase.v1beta1.MessagingService.SearchBlurbs[1] : POST: "/v1beta1/{parent=users/*/profile}/blurbs:search"
+  .qclaogui.showcase.v1beta1.MessagingService.StreamBlurbs[0] : POST: "/v1beta1/{name=rooms/*}/blurbs:stream"
+  .qclaogui.showcase.v1beta1.MessagingService.StreamBlurbs[1] : POST: "/v1beta1/{name=users/*/profile}/blurbs:stream"
+  .qclaogui.showcase.v1beta1.MessagingService.SendBlurbs[0] : POST: "/v1beta1/{parent=rooms/*}/blurbs:send"
+  .qclaogui.showcase.v1beta1.MessagingService.SendBlurbs[1] : POST: "/v1beta1/{parent=users/*/profile}/blurbs:send"
+
+Operations (.google.longrunning.Operations):
+  .google.longrunning.Operations.ListOperations[0] : GET: "/v1beta1/operations"
+  .google.longrunning.Operations.GetOperation[0] : GET: "/v1beta1/{name=operations/**}"
+  .google.longrunning.Operations.DeleteOperation[0] : DELETE: "/v1beta1/{name=operations/**}"
+  .google.longrunning.Operations.CancelOperation[0] : POST: "/v1beta1/{name=operations/**}:cancel"
+
+
+
+GoModel
+----------------------------------------
+Shim "EchoService" (.qclaogui.showcase.v1beta1.EchoService)
+  Imports:
+    longrunningpbpb: "cloud.google.com/go/longrunning/autogen/longrunningpb" "cloud.google.com/go/longrunning/autogen/longrunningpb"
+    showcasepbpb: "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb" "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+  Handlers (7):
+        POST                                 /v1beta1/echo:echo func Echo(request showcasepbpb.EchoRequest) (response showcasepbpb.EchoResponse) {}
+["/" "v1beta1" "/" "echo" ":" "echo"]
+
+        POST                                 /v1beta1/echo:wait func Wait(request showcasepbpb.WaitRequest) (response longrunningpbpb.Operation) {}
+["/" "v1beta1" "/" "echo" ":" "wait"]
+
+        POST                                /v1beta1/echo:block func Block(request showcasepbpb.BlockRequest) (response showcasepbpb.BlockResponse) {}
+["/" "v1beta1" "/" "echo" ":" "block"]
+
+        POST                               /v1beta1/echo:expand func Expand(request showcasepbpb.ExpandRequest) (response showcasepbpb.EchoResponse) {}
+["/" "v1beta1" "/" "echo" ":" "expand"]
+
+        POST                              /v1beta1/echo:collect func Collect(request showcasepbpb.EchoRequest) (response showcasepbpb.EchoResponse) {}
+["/" "v1beta1" "/" "echo" ":" "collect"]
+
+        POST                          /v1beta1/echo:pagedExpand func PagedExpand(request showcasepbpb.PagedExpandRequest) (response showcasepbpb.PagedExpandResponse) {}
+["/" "v1beta1" "/" "echo" ":" "pagedExpand"]
+
+        POST                        /v1beta1/echo:error-details func EchoErrorDetails(request showcasepbpb.EchoErrorDetailsRequest) (response showcasepbpb.EchoErrorDetailsResponse) {}
+["/" "v1beta1" "/" "echo" ":" "error-details"]
+
+----------------------------------------
+Shim "IdentityService" (.qclaogui.showcase.v1beta1.IdentityService)
+  Imports:
+    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    showcasepbpb: "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb" "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+  Handlers (5):
+         GET                                     /v1beta1/users func ListUsers(request showcasepbpb.ListUsersRequest) (response showcasepbpb.ListUsersResponse) {}
+["/" "v1beta1" "/" "users"]
+
+         GET                            /v1beta1/{name=users/*} func GetUser(request showcasepbpb.GetUserRequest) (response showcasepbpb.User) {}
+["/" "v1beta1" "/" {name = ["users" "/" *]}]
+
+        POST                                     /v1beta1/users func CreateUser(request showcasepbpb.CreateUserRequest) (response showcasepbpb.User) {}
+["/" "v1beta1" "/" "users"]
+
+       PATCH                       /v1beta1/{user.name=users/*} func UpdateUser(request showcasepbpb.UpdateUserRequest) (response showcasepbpb.User) {}
+["/" "v1beta1" "/" {user.name = ["users" "/" *]}]
+
+      DELETE                            /v1beta1/{name=users/*} func DeleteUser(request showcasepbpb.DeleteUserRequest) (response emptypbpb.Empty) {}
+["/" "v1beta1" "/" {name = ["users" "/" *]}]
+
+----------------------------------------
+Shim "MessagingService" (.qclaogui.showcase.v1beta1.MessagingService)
+  Imports:
+    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    longrunningpbpb: "cloud.google.com/go/longrunning/autogen/longrunningpb" "cloud.google.com/go/longrunning/autogen/longrunningpb"
+    showcasepbpb: "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb" "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+  Handlers (21):
+         GET                                     /v1beta1/rooms func ListRooms(request showcasepbpb.ListRoomsRequest) (response showcasepbpb.ListRoomsResponse) {}
+["/" "v1beta1" "/" "rooms"]
+
+         GET                            /v1beta1/{name=rooms/*} func GetRoom(request showcasepbpb.GetRoomRequest) (response showcasepbpb.Room) {}
+["/" "v1beta1" "/" {name = ["rooms" "/" *]}]
+
+         GET                   /v1beta1/{name=rooms/*/blurbs/*} func GetBlurb(request showcasepbpb.GetBlurbRequest) (response showcasepbpb.Blurb) {}
+["/" "v1beta1" "/" {name = ["rooms" "/" * "/" "blurbs" "/" *]}]
+
+         GET                   /v1beta1/{parent=rooms/*}/blurbs func ListBlurbs(request showcasepbpb.ListBlurbsRequest) (response showcasepbpb.ListBlurbsResponse) {}
+["/" "v1beta1" "/" {parent = ["rooms" "/" *]} "/" "blurbs"]
+
+         GET           /v1beta1/{name=users/*/profile/blurbs/*} func GetBlurb(request showcasepbpb.GetBlurbRequest) (response showcasepbpb.Blurb) {}
+["/" "v1beta1" "/" {name = ["users" "/" * "/" "profile" "/" "blurbs" "/" *]}]
+
+         GET           /v1beta1/{parent=users/*/profile}/blurbs func ListBlurbs(request showcasepbpb.ListBlurbsRequest) (response showcasepbpb.ListBlurbsResponse) {}
+["/" "v1beta1" "/" {parent = ["users" "/" * "/" "profile"]} "/" "blurbs"]
+
+        POST                                     /v1beta1/rooms func CreateRoom(request showcasepbpb.CreateRoomRequest) (response showcasepbpb.Room) {}
+["/" "v1beta1" "/" "rooms"]
+
+        POST                   /v1beta1/{parent=rooms/*}/blurbs func CreateBlurb(request showcasepbpb.CreateBlurbRequest) (response showcasepbpb.Blurb) {}
+["/" "v1beta1" "/" {parent = ["rooms" "/" *]} "/" "blurbs"]
+
+        POST              /v1beta1/{name=rooms/*}/blurbs:stream func StreamBlurbs(request showcasepbpb.StreamBlurbsRequest) (response showcasepbpb.StreamBlurbsResponse) {}
+["/" "v1beta1" "/" {name = ["rooms" "/" *]} "/" "blurbs" ":" "stream"]
+
+        POST              /v1beta1/{parent=rooms/*}/blurbs:send func SendBlurbs(request showcasepbpb.CreateBlurbRequest) (response showcasepbpb.SendBlurbsResponse) {}
+["/" "v1beta1" "/" {parent = ["rooms" "/" *]} "/" "blurbs" ":" "send"]
+
+        POST            /v1beta1/{parent=rooms/*}/blurbs:search func SearchBlurbs(request showcasepbpb.SearchBlurbsRequest) (response longrunningpbpb.Operation) {}
+["/" "v1beta1" "/" {parent = ["rooms" "/" *]} "/" "blurbs" ":" "search"]
+
+        POST           /v1beta1/{parent=users/*/profile}/blurbs func CreateBlurb(request showcasepbpb.CreateBlurbRequest) (response showcasepbpb.Blurb) {}
+["/" "v1beta1" "/" {parent = ["users" "/" * "/" "profile"]} "/" "blurbs"]
+
+        POST      /v1beta1/{name=users/*/profile}/blurbs:stream func StreamBlurbs(request showcasepbpb.StreamBlurbsRequest) (response showcasepbpb.StreamBlurbsResponse) {}
+["/" "v1beta1" "/" {name = ["users" "/" * "/" "profile"]} "/" "blurbs" ":" "stream"]
+
+        POST      /v1beta1/{parent=users/*/profile}/blurbs:send func SendBlurbs(request showcasepbpb.CreateBlurbRequest) (response showcasepbpb.SendBlurbsResponse) {}
+["/" "v1beta1" "/" {parent = ["users" "/" * "/" "profile"]} "/" "blurbs" ":" "send"]
+
+        POST    /v1beta1/{parent=users/*/profile}/blurbs:search func SearchBlurbs(request showcasepbpb.SearchBlurbsRequest) (response longrunningpbpb.Operation) {}
+["/" "v1beta1" "/" {parent = ["users" "/" * "/" "profile"]} "/" "blurbs" ":" "search"]
+
+       PATCH                       /v1beta1/{room.name=rooms/*} func UpdateRoom(request showcasepbpb.UpdateRoomRequest) (response showcasepbpb.Room) {}
+["/" "v1beta1" "/" {room.name = ["rooms" "/" *]}]
+
+       PATCH             /v1beta1/{blurb.name=rooms/*/blurbs/*} func UpdateBlurb(request showcasepbpb.UpdateBlurbRequest) (response showcasepbpb.Blurb) {}
+["/" "v1beta1" "/" {blurb.name = ["rooms" "/" * "/" "blurbs" "/" *]}]
+
+       PATCH     /v1beta1/{blurb.name=users/*/profile/blurbs/*} func UpdateBlurb(request showcasepbpb.UpdateBlurbRequest) (response showcasepbpb.Blurb) {}
+["/" "v1beta1" "/" {blurb.name = ["users" "/" * "/" "profile" "/" "blurbs" "/" *]}]
+
+      DELETE                            /v1beta1/{name=rooms/*} func DeleteRoom(request showcasepbpb.DeleteRoomRequest) (response emptypbpb.Empty) {}
+["/" "v1beta1" "/" {name = ["rooms" "/" *]}]
+
+      DELETE                   /v1beta1/{name=rooms/*/blurbs/*} func DeleteBlurb(request showcasepbpb.DeleteBlurbRequest) (response emptypbpb.Empty) {}
+["/" "v1beta1" "/" {name = ["rooms" "/" * "/" "blurbs" "/" *]}]
+
+      DELETE           /v1beta1/{name=users/*/profile/blurbs/*} func DeleteBlurb(request showcasepbpb.DeleteBlurbRequest) (response emptypbpb.Empty) {}
+["/" "v1beta1" "/" {name = ["users" "/" * "/" "profile" "/" "blurbs" "/" *]}]
+
+----------------------------------------
+Shim "Operations" (.google.longrunning.Operations)
+  Imports:
+    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    longrunningpbpb: "cloud.google.com/go/longrunning/autogen/longrunningpb" "cloud.google.com/go/longrunning/autogen/longrunningpb"
+  Handlers (4):
+         GET                                /v1beta1/operations func ListOperations(request longrunningpbpb.ListOperationsRequest) (response longrunningpbpb.ListOperationsResponse) {}
+["/" "v1beta1" "/" "operations"]
+
+         GET                      /v1beta1/{name=operations/**} func GetOperation(request longrunningpbpb.GetOperationRequest) (response longrunningpbpb.Operation) {}
+["/" "v1beta1" "/" {name = ["operations" "/" **]}]
+
+        POST               /v1beta1/{name=operations/**}:cancel func CancelOperation(request longrunningpbpb.CancelOperationRequest) (response emptypbpb.Empty) {}
+["/" "v1beta1" "/" {name = ["operations" "/" **]} ":" "cancel"]
+
+      DELETE                      /v1beta1/{name=operations/**} func DeleteOperation(request longrunningpbpb.DeleteOperationRequest) (response emptypbpb.Empty) {}
+["/" "v1beta1" "/" {name = ["operations" "/" **]}]
+
