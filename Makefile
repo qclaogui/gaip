@@ -150,7 +150,7 @@ swagger-ui:
 	@SWAGGER_UI_VERSION=$(SWAGGER_UI_VERSION) tools/scripts/generate-swagger-ui.sh
 
 protoc-gen: ## Regenerate proto by protoc
-protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
+protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2) $(PROTOC_GEN_GO_REST_HANDLER)
 	@rm -Rf genproto third_party/gen
 	@mkdir -p genproto third_party/gen/openapiv2
 	@$(PROTOC) --proto_path=proto \
@@ -179,8 +179,17 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
  		proto/qclaogui/routeguide/v1/*.proto \
  		proto/qclaogui/todo/v1/*.proto
 
-    # plugin protoc-gen-go_handler
+    # plugin protoc-gen-go_rest_handler
 	@$(PROTOC) --proto_path=proto \
+		--plugin=protoc-gen-go_rest_handler=$(PROTOC_GEN_GO_REST_HANDLER) \
+		--go_rest_handler_out=genproto \
+		--go_rest_handler_opt='module=github.com/qclaogui/gaip/genproto' \
+		--go_rest_handler_opt='api-service-config=proto/qclaogui/library/v1/library_v1.yaml' \
+		proto/qclaogui/library/v1/*.proto
+
+    # plugin protoc-gen-go_rest_handler
+	@$(PROTOC) --proto_path=proto \
+		--plugin=protoc-gen-go_rest_handler=$(PROTOC_GEN_GO_REST_HANDLER) \
 		--go_rest_handler_out=genproto \
 		--go_rest_handler_opt='module=github.com/qclaogui/gaip/genproto' \
 		--go_rest_handler_opt='api-service-config=proto/qclaogui/showcase/v1beta1/showcase_v1beta1.yaml' \

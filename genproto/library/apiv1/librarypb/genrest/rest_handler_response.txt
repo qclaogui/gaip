@@ -1,0 +1,64 @@
+Generated via "google.golang.org/protobuf/compiler/protogen" via ProtoModel!
+
+
+Proto Files:
+qclaogui/library/v1/book.proto
+qclaogui/library/v1/service.proto
+qclaogui/library/v1/shelf.proto
+
+Proto Model:
+LibraryService (.qclaogui.library.v1.LibraryService):
+  .qclaogui.library.v1.LibraryService.CreateShelf[0] : POST: "/v1/shelves"
+  .qclaogui.library.v1.LibraryService.GetShelf[0] : GET: "/v1/{name=shelves/*}"
+  .qclaogui.library.v1.LibraryService.ListShelves[0] : GET: "/v1/shelves"
+  .qclaogui.library.v1.LibraryService.DeleteShelf[0] : DELETE: "/v1/{name=shelves/*}"
+  .qclaogui.library.v1.LibraryService.MergeShelves[0] : POST: "/v1/{name=shelves/*}:merge"
+  .qclaogui.library.v1.LibraryService.CreateBook[0] : POST: "/v1/{parent=shelves/*}/books"
+  .qclaogui.library.v1.LibraryService.GetBook[0] : GET: "/v1/{name=shelves/*/books/*}"
+  .qclaogui.library.v1.LibraryService.ListBooks[0] : GET: "/v1/{parent=shelves/*}/books"
+  .qclaogui.library.v1.LibraryService.DeleteBook[0] : DELETE: "/v1/{name=shelves/*/books/*}"
+  .qclaogui.library.v1.LibraryService.UpdateBook[0] : PATCH: "/v1/{book.name=shelves/*/books/*}"
+  .qclaogui.library.v1.LibraryService.MoveBook[0] : POST: "/v1/{name=shelves/*/books/*}:move"
+
+
+
+GoModel
+----------------------------------------
+Shim "LibraryService" (.qclaogui.library.v1.LibraryService)
+  Imports:
+    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    librarypbpb: "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb" "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
+  Handlers (11):
+         GET                                        /v1/shelves func ListShelves(request librarypbpb.ListShelvesRequest) (response librarypbpb.ListShelvesResponse) {}
+["/" "v1" "/" "shelves"]
+
+         GET                               /v1/{name=shelves/*} func GetShelf(request librarypbpb.GetShelfRequest) (response librarypbpb.Shelf) {}
+["/" "v1" "/" {name = ["shelves" "/" *]}]
+
+         GET                       /v1/{name=shelves/*/books/*} func GetBook(request librarypbpb.GetBookRequest) (response librarypbpb.Book) {}
+["/" "v1" "/" {name = ["shelves" "/" * "/" "books" "/" *]}]
+
+         GET                       /v1/{parent=shelves/*}/books func ListBooks(request librarypbpb.ListBooksRequest) (response librarypbpb.ListBooksResponse) {}
+["/" "v1" "/" {parent = ["shelves" "/" *]} "/" "books"]
+
+        POST                                        /v1/shelves func CreateShelf(request librarypbpb.CreateShelfRequest) (response librarypbpb.Shelf) {}
+["/" "v1" "/" "shelves"]
+
+        POST                         /v1/{name=shelves/*}:merge func MergeShelves(request librarypbpb.MergeShelvesRequest) (response librarypbpb.Shelf) {}
+["/" "v1" "/" {name = ["shelves" "/" *]} ":" "merge"]
+
+        POST                       /v1/{parent=shelves/*}/books func CreateBook(request librarypbpb.CreateBookRequest) (response librarypbpb.Book) {}
+["/" "v1" "/" {parent = ["shelves" "/" *]} "/" "books"]
+
+        POST                  /v1/{name=shelves/*/books/*}:move func MoveBook(request librarypbpb.MoveBookRequest) (response librarypbpb.Book) {}
+["/" "v1" "/" {name = ["shelves" "/" * "/" "books" "/" *]} ":" "move"]
+
+       PATCH                  /v1/{book.name=shelves/*/books/*} func UpdateBook(request librarypbpb.UpdateBookRequest) (response librarypbpb.Book) {}
+["/" "v1" "/" {book.name = ["shelves" "/" * "/" "books" "/" *]}]
+
+      DELETE                               /v1/{name=shelves/*} func DeleteShelf(request librarypbpb.DeleteShelfRequest) (response emptypbpb.Empty) {}
+["/" "v1" "/" {name = ["shelves" "/" *]}]
+
+      DELETE                       /v1/{name=shelves/*/books/*} func DeleteBook(request librarypbpb.DeleteBookRequest) (response emptypbpb.Empty) {}
+["/" "v1" "/" {name = ["shelves" "/" * "/" "books" "/" *]}]
+

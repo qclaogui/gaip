@@ -6,26 +6,19 @@ package gaip
 
 import (
 	"context"
-	"net/http"
 
-	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	"github.com/go-kit/log/level"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"github.com/qclaogui/gaip/genproto/generativelanguage/apiv1/generativelanguagepb"
-	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
-	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
-	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb/genrest"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/repository"
 	"github.com/qclaogui/gaip/pkg/service/bookstore"
 	"github.com/qclaogui/gaip/pkg/service/generativeai"
-	"github.com/qclaogui/gaip/pkg/service/library"
 	"github.com/qclaogui/gaip/pkg/service/project"
 	"github.com/qclaogui/gaip/pkg/service/routeguide"
-	"github.com/qclaogui/gaip/pkg/service/showcase"
 	"github.com/qclaogui/gaip/pkg/service/todo"
 	"github.com/qclaogui/gaip/pkg/vault"
 	"google.golang.org/grpc"
@@ -81,81 +74,6 @@ func (g *Gaip) initGenerativeai() error {
 
 	// Register Service Server
 	generativelanguagepb.RegisterGenerativeServiceServer(g.Server.GRPCServer, srv)
-
-	return nil
-}
-
-func (g *Gaip) initLibrary() error {
-	if !g.Cfg.LibraryCfg.Enabled {
-		_ = level.Warn(g.Server.Log).Log("msg", "library.enabled=false")
-		return nil
-	}
-
-	g.Cfg.LibraryCfg.Log = g.Server.Log
-	g.Cfg.LibraryCfg.Registerer = g.Registerer
-
-	repo, err := repository.NewLibrary(g.Cfg.RepoCfg)
-	if err != nil {
-		return err
-	}
-	g.Cfg.LibraryCfg.Repo = repo
-
-	srv, err := library.NewServer(g.Cfg.LibraryCfg)
-	if err != nil {
-		return err
-	}
-
-	// Register Service Server
-	librarypb.RegisterLibraryServiceServer(g.Server.GRPCServer, srv)
-
-	g.RegisterRoute("/library/healthz", g.healthzHandler(), false, http.MethodGet)
-	return nil
-}
-
-func (g *Gaip) initShowcase() error {
-	if !g.Cfg.ShowcaseCfg.Enabled {
-		_ = level.Warn(g.Server.Log).Log("msg", "showcase.enabled=false")
-		return nil
-	}
-
-	g.Cfg.ShowcaseCfg.Log = g.Server.Log
-	g.Cfg.ShowcaseCfg.Registerer = g.Registerer
-
-	repoIdentity, err := repository.NewIdentity(g.Cfg.RepoCfg)
-	if err != nil {
-		return err
-	}
-	g.Cfg.ShowcaseCfg.RepoIdentity = repoIdentity
-
-	repoMessaging, err := repository.NewMessaging(g.Cfg.RepoCfg)
-	if err != nil {
-		return err
-	}
-	g.Cfg.ShowcaseCfg.RepoMessaging = repoMessaging
-
-	srv, err := showcase.NewServer(g.Cfg.ShowcaseCfg)
-	if err != nil {
-		return err
-	}
-
-	showcasepb.RegisterEchoServiceServer(g.Server.GRPCServer, srv)
-	genrest.RegisterHandlersEchoService(g.Server.Router, srv, g.Server.Log)
-
-	// Register IdentityServiceServer
-	showcasepb.RegisterIdentityServiceServer(g.Server.GRPCServer, srv)
-	genrest.RegisterHandlersIdentityService(g.Server.Router, srv, g.Server.Log)
-
-	// Register MessagingServiceServer
-	showcasepb.RegisterMessagingServiceServer(g.Server.GRPCServer, srv)
-	genrest.RegisterHandlersMessagingService(g.Server.Router, srv, g.Server.Log)
-
-	// FATAL: [core] grpc: Server.RegisterService found duplicate service registration for "google.longrunning.Operations"
-	// Register OperationsServer
-	longrunningpb.RegisterOperationsServer(g.Server.GRPCServer, srv)
-	g.RegisterRoute("/v1beta1/operations", srv.HandleListOperations(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{name:operations/[^:]+}", srv.HandleGetOperation(), false, http.MethodGet)
-	g.RegisterRoute("/v1beta1/{name:operations/[^:]+}", srv.HandleDeleteOperation(), false, http.MethodDelete)
-	g.RegisterRoute("/v1beta1/{name:operations/[^:]+}:cancel", srv.HandleCancelOperation(), false, http.MethodPost)
 
 	return nil
 }
