@@ -44,7 +44,7 @@
 //	// - It may require correct/in-range values for request initialization.
 //	// - It may require specifying regional endpoints when creating the service client as shown in:
 //	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-//	c, err := project.NewMessagingClient(ctx)
+//	c, err := project.NewClient(ctx)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}
@@ -64,17 +64,17 @@
 //	// - It may require correct/in-range values for request initialization.
 //	// - It may require specifying regional endpoints when creating the service client as shown in:
 //	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-//	c, err := project.NewMessagingClient(ctx)
+//	c, err := project.NewClient(ctx)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}
 //	defer c.Close()
 //
-//	req := &projectpb.CreateRoomRequest{
+//	req := &projectpb.CreateProjectRequest{
 //		// TODO: Fill request struct fields.
-//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#CreateRoomRequest.
+//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/project/apiv1/projectpb#CreateProjectRequest.
 //	}
-//	resp, err := c.CreateRoom(ctx, req)
+//	resp, err := c.CreateProject(ctx, req)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}
@@ -83,7 +83,7 @@
 //
 // # Use of Context
 //
-// The ctx passed to NewMessagingClient is used for authentication requests and
+// The ctx passed to NewClient is used for authentication requests and
 // for creating the underlying connection, but is not used for subsequent calls.
 // Individual methods on the client use the ctx given to them.
 //

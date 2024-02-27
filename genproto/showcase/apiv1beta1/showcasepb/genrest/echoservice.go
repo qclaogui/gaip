@@ -1,6 +1,6 @@
-// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//Copyright © Weifeng Wang <qclaogui@gmail.com>
 //
-// Licensed under the Apache License 2.0.
+//Licensed under the Apache License 2.0.
 
 // DO NOT EDIT. This is an auto-generated file containing the REST handlers
 // for service #0: "EchoService" (.qclaogui.showcase.v1beta1.EchoService).
