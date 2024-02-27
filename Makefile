@@ -179,6 +179,13 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
  		proto/qclaogui/routeguide/v1/*.proto \
  		proto/qclaogui/todo/v1/*.proto
 
+    # plugin protoc-gen-go_handler
+	@$(PROTOC) --proto_path=proto \
+		--go_rest_handler_out=genproto \
+		--go_rest_handler_opt='module=github.com/qclaogui/gaip/genproto' \
+		--go_rest_handler_opt='api-service-config=proto/qclaogui/showcase/v1beta1/showcase_v1beta1.yaml' \
+ 		proto/qclaogui/showcase/v1beta1/*.proto
+
     # plugin protoc-gen-go_gapic
     # https://github.com/googleapis/gapic-generator-go?tab=readme-ov-file#invocation
 	@$(PROTOC) --proto_path=proto \
@@ -322,7 +329,7 @@ go-fmt: $(GOIMPORTS)
 	done
 	@$(GOIMPORTS) -w $(GO_FILES_TO_FMT)
 
-buf-fmt:
+buf-fmt: $(BUF)
 	@echo ">> run buf format"
 	@cd proto/ && $(BUF) format -w --exit-code
 

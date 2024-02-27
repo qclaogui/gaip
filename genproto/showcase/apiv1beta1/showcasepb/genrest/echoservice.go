@@ -2,7 +2,10 @@
 //
 // Licensed under the Apache License 2.0.
 
-package showcase
+// DO NOT EDIT. This is an auto-generated file containing the REST handlers
+// for service #0: "EchoService" (.qclaogui.showcase.v1beta1.EchoService).
+
+package genrest
 
 import (
 	"bytes"
@@ -12,24 +15,26 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
 	"github.com/gorilla/mux"
-	pb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+	showcasepbpb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/pkg/protocol/rest"
 )
 
 // HandleEcho translates REST requests/responses on the wire to internal proto messages for Echo
 //
-//	HTTP binding pattern: POST "/v1beta1/echo:echo"
-func (srv *Server) HandleEcho() http.HandlerFunc {
+//	Generated for HTTP binding pattern: POST "/v1beta1/echo:echo"
+func HandleEcho(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
-		numURLPathParams := len(urlPathParams)
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:echo': %q", r.Method, r.URL))
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		numUrlPathParams := len(urlPathParams)
 
-		if numURLPathParams != 0 {
-			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:echo': %q", r.Method, r.URL))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+
+		if numUrlPathParams != 0 {
+			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
 			return
 		}
 
@@ -39,7 +44,7 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 			return
 		}
 
-		request := &pb.EchoRequest{}
+		request := &showcasepbpb.EchoRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -71,7 +76,7 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
+		_ = level.Info(logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
 		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:echo")
 		response, err := srv.Echo(ctx, request)
@@ -93,15 +98,16 @@ func (srv *Server) HandleEcho() http.HandlerFunc {
 // HandleEchoErrorDetails translates REST requests/responses on the wire to internal proto messages for EchoErrorDetails
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:error-details"
-func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
+func HandleEchoErrorDetails(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
-		numURLPathParams := len(urlPathParams)
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:error-details': %q", r.Method, r.URL))
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		numUrlPathParams := len(urlPathParams)
 
-		if numURLPathParams != 0 {
-			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:error-details': %q", r.Method, r.URL))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+
+		if numUrlPathParams != 0 {
+			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
 			return
 		}
 
@@ -111,7 +117,7 @@ func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
 			return
 		}
 
-		request := &pb.EchoErrorDetailsRequest{}
+		request := &showcasepbpb.EchoErrorDetailsRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -143,7 +149,7 @@ func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
 		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
+		_ = level.Info(logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
 		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:error-details")
 		response, err := srv.EchoErrorDetails(ctx, request)
@@ -165,16 +171,16 @@ func (srv *Server) HandleEchoErrorDetails() http.HandlerFunc {
 // HandleExpand translates REST requests/responses on the wire to internal proto messages for Expand
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:expand"
-
-func (srv *Server) HandleExpand() http.HandlerFunc {
+func HandleExpand(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
-		numURLPathParams := len(urlPathParams)
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:expand': %q", r.Method, r.URL))
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		numUrlPathParams := len(urlPathParams)
 
-		if numURLPathParams != 0 {
-			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:expand': %q", r.Method, r.URL))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+
+		if numUrlPathParams != 0 {
+			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
 			return
 		}
 
@@ -184,7 +190,7 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 			return
 		}
 
-		request := &pb.ExpandRequest{}
+		request := &showcasepbpb.ExpandRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -208,7 +214,6 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 			rest.Error(w, http.StatusBadRequest, "encountered unexpected query params: %v", queryParams)
 			return
 		}
-
 		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
@@ -217,7 +222,7 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
+		_ = level.Info(logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
 		serverStreamer, err := rest.NewServerStreamer(w, rest.ServerStreamingChunkSize)
 		if err != nil {
@@ -225,21 +230,20 @@ func (srv *Server) HandleExpand() http.HandlerFunc {
 			return
 		}
 		defer func() { _ = serverStreamer.End() }()
-
 		streamer := &EchoServiceExpandServer{serverStreamer}
-
 		if err = srv.Expand(request, streamer); err != nil {
 			rest.ReportGRPCError(w, err)
 		}
-
 	}
 }
 
 // HandleCollect translates REST requests/responses on the wire to internal proto messages for Collect
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:collect"
-func (srv *Server) HandleCollect() http.HandlerFunc {
+func HandleCollect(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		_ = srv
+		_ = level.Warn(logger).Log("msg", fmt.Sprintf("client-streaming methods not implemented yet (request matched '/v1beta1/echo:collect': %q)", r.URL))
 		rest.Error(w, http.StatusNotImplemented, "client-streaming methods not implemented yet (request matched '/v1beta1/echo:collect': %q)", r.URL)
 	}
 }
@@ -247,15 +251,16 @@ func (srv *Server) HandleCollect() http.HandlerFunc {
 // HandlePagedExpand translates REST requests/responses on the wire to internal proto messages for PagedExpand
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:pagedExpand"
-func (srv *Server) HandlePagedExpand() http.HandlerFunc {
+func HandlePagedExpand(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
-		numURLPathParams := len(urlPathParams)
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:pagedExpand': %q", r.Method, r.URL))
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		numUrlPathParams := len(urlPathParams)
 
-		if numURLPathParams != 0 {
-			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:pagedExpand': %q", r.Method, r.URL))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+
+		if numUrlPathParams != 0 {
+			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
 			return
 		}
 
@@ -265,13 +270,14 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 			return
 		}
 
-		request := &pb.PagedExpandRequest{}
+		request := &showcasepbpb.PagedExpandRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
 		rBytes := make([]byte, r.ContentLength)
 		if _, err = bodyReader.Read(rBytes); err != nil && !errors.Is(err, io.EOF) {
 			rest.Error(w, http.StatusBadRequest, "error reading body content: %s", err)
+			return
 		}
 
 		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
@@ -288,7 +294,6 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 			rest.Error(w, http.StatusBadRequest, "encountered unexpected query params: %v", queryParams)
 			return
 		}
-
 		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
@@ -297,7 +302,7 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
+		_ = level.Info(logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
 		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:pagedExpand")
 		response, err := srv.PagedExpand(ctx, request)
@@ -319,15 +324,16 @@ func (srv *Server) HandlePagedExpand() http.HandlerFunc {
 // HandleWait translates REST requests/responses on the wire to internal proto messages for Wait
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:wait"
-func (srv *Server) HandleWait() http.HandlerFunc {
+func HandleWait(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
-		numURLPathParams := len(urlPathParams)
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:wait': %q", r.Method, r.URL))
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		numUrlPathParams := len(urlPathParams)
 
-		if numURLPathParams != 0 {
-			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:wait': %q", r.Method, r.URL))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+
+		if numUrlPathParams != 0 {
+			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
 			return
 		}
 
@@ -337,7 +343,7 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 			return
 		}
 
-		request := &pb.WaitRequest{}
+		request := &showcasepbpb.WaitRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -361,7 +367,6 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 			rest.Error(w, http.StatusBadRequest, "encountered unexpected query params: %v", queryParams)
 			return
 		}
-
 		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
@@ -370,7 +375,7 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
+		_ = level.Info(logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
 		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:wait")
 		response, err := srv.Wait(ctx, request)
@@ -386,22 +391,22 @@ func (srv *Server) HandleWait() http.HandlerFunc {
 		}
 
 		_, _ = w.Write(json)
-
 	}
 }
 
 // HandleBlock translates REST requests/responses on the wire to internal proto messages for Block
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:block"
-func (srv *Server) HandleBlock() http.HandlerFunc {
+func HandleBlock(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
-		numURLPathParams := len(urlPathParams)
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:block': %q", r.Method, r.URL))
-		_ = level.Debug(srv.logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numURLPathParams, urlPathParams))
+		numUrlPathParams := len(urlPathParams)
 
-		if numURLPathParams != 0 {
-			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numURLPathParams, urlPathParams)
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:block': %q", r.Method, r.URL))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+
+		if numUrlPathParams != 0 {
+			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
 			return
 		}
 
@@ -411,7 +416,7 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 			return
 		}
 
-		request := &pb.BlockRequest{}
+		request := &showcasepbpb.BlockRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -435,7 +440,6 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 			rest.Error(w, http.StatusBadRequest, "encountered unexpected query params: %v", queryParams)
 			return
 		}
-
 		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
 			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
 			return
@@ -444,7 +448,7 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 		marshaler := rest.ToJSON()
 		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
 		requestJSON, _ := marshaler.Marshal(request)
-		_ = level.Info(srv.logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
+		_ = level.Info(logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
 
 		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:block")
 		response, err := srv.Block(ctx, request)
@@ -463,13 +467,24 @@ func (srv *Server) HandleBlock() http.HandlerFunc {
 	}
 }
 
-// EchoServiceExpandServer implements pb.EchoServiceExpandServer to provide server-side streaming over REST, returning all the
+// EchoServiceExpandServer implements showcasepbpb.EchoServiceExpandServer to provide server-side streaming over REST, returning all the
 // individual responses as part of a long JSON list.
 type EchoServiceExpandServer struct {
 	*rest.ServerStreamer
 }
 
 // Send accumulates a response to be fetched later as part of response list returned over REST.
-func (streamer *EchoServiceExpandServer) Send(response *pb.EchoResponse) error {
+func (streamer *EchoServiceExpandServer) Send(response *showcasepbpb.EchoResponse) error {
 	return streamer.ServerStreamer.Send(response)
+}
+
+// RegisterHandlersEchoService register REST requests/responses on the wire to internal proto messages for
+func RegisterHandlersEchoService(router *mux.Router, srv showcasepbpb.EchoServiceServer, logger log.Logger) {
+	router.Handle("/v1beta1/echo:echo", HandleEcho(srv, logger)).Methods("POST")
+	router.Handle("/v1beta1/echo:error-details", HandleEchoErrorDetails(srv, logger)).Methods("POST")
+	router.Handle("/v1beta1/echo:expand", HandleExpand(srv, logger)).Methods("POST")
+	router.Handle("/v1beta1/echo:collect", HandleCollect(srv, logger)).Methods("POST")
+	router.Handle("/v1beta1/echo:pagedExpand", HandlePagedExpand(srv, logger)).Methods("POST")
+	router.Handle("/v1beta1/echo:wait", HandleWait(srv, logger)).Methods("POST")
+	router.Handle("/v1beta1/echo:block", HandleBlock(srv, logger)).Methods("POST")
 }

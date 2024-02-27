@@ -21,3 +21,4 @@ dist/
 *_gen.go
 
 .cache/
+.fleet/
