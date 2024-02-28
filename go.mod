@@ -6,7 +6,7 @@ toolchain go1.22.0
 
 require (
 	cloud.google.com/go/longrunning v0.5.5
-	dagger.io/dagger v0.9.11
+	dagger.io/dagger v0.10.0
 	entgo.io/ent v0.13.1
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/containerd/containerd v1.7.13
