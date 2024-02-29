@@ -18,14 +18,14 @@ import (
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
 	"github.com/gorilla/mux"
-	showcasepbpb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+	showcasepb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/pkg/protocol/rest"
 )
 
 // HandleCreateUser translates REST requests/responses on the wire to internal proto messages for CreateUser
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/users"
-func HandleCreateUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleCreateUser(srv showcasepb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -44,7 +44,7 @@ func HandleCreateUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger)
 			return
 		}
 
-		request := &showcasepbpb.CreateUserRequest{}
+		request := &showcasepb.CreateUserRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -98,7 +98,7 @@ func HandleCreateUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger)
 // HandleGetUser translates REST requests/responses on the wire to internal proto messages for GetUser
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/{name=users/*}"
-func HandleGetUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleGetUser(srv showcasepb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -117,7 +117,7 @@ func HandleGetUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger) ht
 			return
 		}
 
-		request := &showcasepbpb.GetUserRequest{}
+		request := &showcasepb.GetUserRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -163,7 +163,7 @@ func HandleGetUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger) ht
 // HandleListUsers translates REST requests/responses on the wire to internal proto messages for ListUsers
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/users"
-func HandleListUsers(srv showcasepbpb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleListUsers(srv showcasepb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -182,7 +182,7 @@ func HandleListUsers(srv showcasepbpb.IdentityServiceServer, logger log.Logger) 
 			return
 		}
 
-		request := &showcasepbpb.ListUsersRequest{}
+		request := &showcasepb.ListUsersRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -223,7 +223,7 @@ func HandleListUsers(srv showcasepbpb.IdentityServiceServer, logger log.Logger) 
 // HandleUpdateUser translates REST requests/responses on the wire to internal proto messages for UpdateUser
 //
 //	Generated for HTTP binding pattern: PATCH "/v1beta1/{user.name=users/*}"
-func HandleUpdateUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleUpdateUser(srv showcasepb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -242,9 +242,9 @@ func HandleUpdateUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger)
 			return
 		}
 
-		request := &showcasepbpb.UpdateUserRequest{}
+		request := &showcasepb.UpdateUserRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
-		var bodyField showcasepbpb.User
+		var bodyField showcasepb.User
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
 		rBytes := make([]byte, r.ContentLength)
@@ -305,7 +305,7 @@ func HandleUpdateUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger)
 // HandleDeleteUser translates REST requests/responses on the wire to internal proto messages for DeleteUser
 //
 //	Generated for HTTP binding pattern: DELETE "/v1beta1/{name=users/*}"
-func HandleDeleteUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleDeleteUser(srv showcasepb.IdentityServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -324,7 +324,7 @@ func HandleDeleteUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger)
 			return
 		}
 
-		request := &showcasepbpb.DeleteUserRequest{}
+		request := &showcasepb.DeleteUserRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -368,7 +368,7 @@ func HandleDeleteUser(srv showcasepbpb.IdentityServiceServer, logger log.Logger)
 }
 
 // RegisterHandlersIdentityService register REST requests/responses on the wire to internal proto messages for
-func RegisterHandlersIdentityService(router *mux.Router, srv showcasepbpb.IdentityServiceServer, logger log.Logger) {
+func RegisterHandlersIdentityService(router *mux.Router, srv showcasepb.IdentityServiceServer, logger log.Logger) {
 	router.Handle("/v1beta1/users", HandleCreateUser(srv, logger)).Methods("POST")
 	router.Handle("/v1beta1/{name:users/[^:]+}", HandleGetUser(srv, logger)).Methods("GET")
 	router.Handle("/v1beta1/users", HandleListUsers(srv, logger)).Methods("GET")

@@ -26,39 +26,39 @@ GoModel
 ----------------------------------------
 Shim "LibraryService" (.qclaogui.library.v1.LibraryService)
   Imports:
-    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
-    librarypbpb: "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb" "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
+    emptypb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    librarypb: "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb" "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
   Handlers (11):
-         GET                                        /v1/shelves func ListShelves(request librarypbpb.ListShelvesRequest) (response librarypbpb.ListShelvesResponse) {}
+         GET                                        /v1/shelves func ListShelves(request librarypb.ListShelvesRequest) (response librarypb.ListShelvesResponse) {}
 ["/" "v1" "/" "shelves"]
 
-         GET                               /v1/{name=shelves/*} func GetShelf(request librarypbpb.GetShelfRequest) (response librarypbpb.Shelf) {}
+         GET                               /v1/{name=shelves/*} func GetShelf(request librarypb.GetShelfRequest) (response librarypb.Shelf) {}
 ["/" "v1" "/" {name = ["shelves" "/" *]}]
 
-         GET                       /v1/{name=shelves/*/books/*} func GetBook(request librarypbpb.GetBookRequest) (response librarypbpb.Book) {}
+         GET                       /v1/{name=shelves/*/books/*} func GetBook(request librarypb.GetBookRequest) (response librarypb.Book) {}
 ["/" "v1" "/" {name = ["shelves" "/" * "/" "books" "/" *]}]
 
-         GET                       /v1/{parent=shelves/*}/books func ListBooks(request librarypbpb.ListBooksRequest) (response librarypbpb.ListBooksResponse) {}
+         GET                       /v1/{parent=shelves/*}/books func ListBooks(request librarypb.ListBooksRequest) (response librarypb.ListBooksResponse) {}
 ["/" "v1" "/" {parent = ["shelves" "/" *]} "/" "books"]
 
-        POST                                        /v1/shelves func CreateShelf(request librarypbpb.CreateShelfRequest) (response librarypbpb.Shelf) {}
+        POST                                        /v1/shelves func CreateShelf(request librarypb.CreateShelfRequest) (response librarypb.Shelf) {}
 ["/" "v1" "/" "shelves"]
 
-        POST                         /v1/{name=shelves/*}:merge func MergeShelves(request librarypbpb.MergeShelvesRequest) (response librarypbpb.Shelf) {}
+        POST                         /v1/{name=shelves/*}:merge func MergeShelves(request librarypb.MergeShelvesRequest) (response librarypb.Shelf) {}
 ["/" "v1" "/" {name = ["shelves" "/" *]} ":" "merge"]
 
-        POST                       /v1/{parent=shelves/*}/books func CreateBook(request librarypbpb.CreateBookRequest) (response librarypbpb.Book) {}
+        POST                       /v1/{parent=shelves/*}/books func CreateBook(request librarypb.CreateBookRequest) (response librarypb.Book) {}
 ["/" "v1" "/" {parent = ["shelves" "/" *]} "/" "books"]
 
-        POST                  /v1/{name=shelves/*/books/*}:move func MoveBook(request librarypbpb.MoveBookRequest) (response librarypbpb.Book) {}
+        POST                  /v1/{name=shelves/*/books/*}:move func MoveBook(request librarypb.MoveBookRequest) (response librarypb.Book) {}
 ["/" "v1" "/" {name = ["shelves" "/" * "/" "books" "/" *]} ":" "move"]
 
-       PATCH                  /v1/{book.name=shelves/*/books/*} func UpdateBook(request librarypbpb.UpdateBookRequest) (response librarypbpb.Book) {}
+       PATCH                  /v1/{book.name=shelves/*/books/*} func UpdateBook(request librarypb.UpdateBookRequest) (response librarypb.Book) {}
 ["/" "v1" "/" {book.name = ["shelves" "/" * "/" "books" "/" *]}]
 
-      DELETE                               /v1/{name=shelves/*} func DeleteShelf(request librarypbpb.DeleteShelfRequest) (response emptypbpb.Empty) {}
+      DELETE                               /v1/{name=shelves/*} func DeleteShelf(request librarypb.DeleteShelfRequest) (response emptypb.Empty) {}
 ["/" "v1" "/" {name = ["shelves" "/" *]}]
 
-      DELETE                       /v1/{name=shelves/*/books/*} func DeleteBook(request librarypbpb.DeleteBookRequest) (response emptypbpb.Empty) {}
+      DELETE                       /v1/{name=shelves/*/books/*} func DeleteBook(request librarypb.DeleteBookRequest) (response emptypb.Empty) {}
 ["/" "v1" "/" {name = ["shelves" "/" * "/" "books" "/" *]}]
 

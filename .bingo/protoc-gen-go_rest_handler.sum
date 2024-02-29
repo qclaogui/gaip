@@ -11,6 +11,8 @@ github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSAS
 github.com/iancoleman/strcase v0.3.0/go.mod h1:iwCmte+B7n89clKwxIoIXy/HfoL7AsD47ZCWhYzw7ho=
 github.com/qclaogui/gaip v0.0.0-20240227073105-28716dd8b922 h1:7hPKWKa3JfPMQXbIUUqCQQBZcR4mnaAtIonCqiBofI8=
 github.com/qclaogui/gaip v0.0.0-20240227073105-28716dd8b922/go.mod h1:fy142Wl+wEONmCHLuulvGw+zZJcLEhyMZi4UBGECSz0=
+github.com/qclaogui/gaip v0.0.0-20240229100118-56242e8b774e h1:V8P76LhZBlxHIM2dPw/AH+0lb7UB1OGjzn55NXbSObE=
+github.com/qclaogui/gaip v0.0.0-20240229100118-56242e8b774e/go.mod h1:IxL6b6rnU2et9I/fx3k//U8hDW9SwwXUAgLA/pi5NT0=
 golang.org/x/net v0.21.0 h1:AQyQV4dYCvJ7vGmJyKki9+PBdyvhkSd8EIx/qb0AYv4=
 golang.org/x/net v0.21.0/go.mod h1:bIjVDfnllIU7BJ2DNgfnXvpSvtn8VRwhlsaeUTyUS44=
 golang.org/x/sys v0.17.0 h1:25cE3gD+tdBA7lp7QfhuV+rJiE9YXTcS3VG1SqssI/Y=

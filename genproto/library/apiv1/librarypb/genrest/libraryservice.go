@@ -18,14 +18,14 @@ import (
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
 	"github.com/gorilla/mux"
-	librarypbpb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
+	librarypb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"github.com/qclaogui/gaip/pkg/protocol/rest"
 )
 
 // HandleCreateShelf translates REST requests/responses on the wire to internal proto messages for CreateShelf
 //
 //	Generated for HTTP binding pattern: POST "/v1/shelves"
-func HandleCreateShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleCreateShelf(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -44,9 +44,9 @@ func HandleCreateShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) 
 			return
 		}
 
-		request := &librarypbpb.CreateShelfRequest{}
+		request := &librarypb.CreateShelfRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
-		var bodyField librarypbpb.Shelf
+		var bodyField librarypb.Shelf
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
 		rBytes := make([]byte, r.ContentLength)
@@ -107,7 +107,7 @@ func HandleCreateShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) 
 // HandleGetShelf translates REST requests/responses on the wire to internal proto messages for GetShelf
 //
 //	Generated for HTTP binding pattern: GET "/v1/{name=shelves/*}"
-func HandleGetShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleGetShelf(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -126,7 +126,7 @@ func HandleGetShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) htt
 			return
 		}
 
-		request := &librarypbpb.GetShelfRequest{}
+		request := &librarypb.GetShelfRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -172,7 +172,7 @@ func HandleGetShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) htt
 // HandleListShelves translates REST requests/responses on the wire to internal proto messages for ListShelves
 //
 //	Generated for HTTP binding pattern: GET "/v1/shelves"
-func HandleListShelves(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleListShelves(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -191,7 +191,7 @@ func HandleListShelves(srv librarypbpb.LibraryServiceServer, logger log.Logger) 
 			return
 		}
 
-		request := &librarypbpb.ListShelvesRequest{}
+		request := &librarypb.ListShelvesRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -232,7 +232,7 @@ func HandleListShelves(srv librarypbpb.LibraryServiceServer, logger log.Logger) 
 // HandleDeleteShelf translates REST requests/responses on the wire to internal proto messages for DeleteShelf
 //
 //	Generated for HTTP binding pattern: DELETE "/v1/{name=shelves/*}"
-func HandleDeleteShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleDeleteShelf(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -251,7 +251,7 @@ func HandleDeleteShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) 
 			return
 		}
 
-		request := &librarypbpb.DeleteShelfRequest{}
+		request := &librarypb.DeleteShelfRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -297,7 +297,7 @@ func HandleDeleteShelf(srv librarypbpb.LibraryServiceServer, logger log.Logger) 
 // HandleMergeShelves translates REST requests/responses on the wire to internal proto messages for MergeShelves
 //
 //	Generated for HTTP binding pattern: POST "/v1/{name=shelves/*}:merge"
-func HandleMergeShelves(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleMergeShelves(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -316,7 +316,7 @@ func HandleMergeShelves(srv librarypbpb.LibraryServiceServer, logger log.Logger)
 			return
 		}
 
-		request := &librarypbpb.MergeShelvesRequest{}
+		request := &librarypb.MergeShelvesRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -370,7 +370,7 @@ func HandleMergeShelves(srv librarypbpb.LibraryServiceServer, logger log.Logger)
 // HandleCreateBook translates REST requests/responses on the wire to internal proto messages for CreateBook
 //
 //	Generated for HTTP binding pattern: POST "/v1/{parent=shelves/*}/books"
-func HandleCreateBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleCreateBook(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -389,9 +389,9 @@ func HandleCreateBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) h
 			return
 		}
 
-		request := &librarypbpb.CreateBookRequest{}
+		request := &librarypb.CreateBookRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
-		var bodyField librarypbpb.Book
+		var bodyField librarypb.Book
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
 		rBytes := make([]byte, r.ContentLength)
@@ -452,7 +452,7 @@ func HandleCreateBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) h
 // HandleGetBook translates REST requests/responses on the wire to internal proto messages for GetBook
 //
 //	Generated for HTTP binding pattern: GET "/v1/{name=shelves/*/books/*}"
-func HandleGetBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleGetBook(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -471,7 +471,7 @@ func HandleGetBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) http
 			return
 		}
 
-		request := &librarypbpb.GetBookRequest{}
+		request := &librarypb.GetBookRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -517,7 +517,7 @@ func HandleGetBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) http
 // HandleListBooks translates REST requests/responses on the wire to internal proto messages for ListBooks
 //
 //	Generated for HTTP binding pattern: GET "/v1/{parent=shelves/*}/books"
-func HandleListBooks(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleListBooks(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -536,7 +536,7 @@ func HandleListBooks(srv librarypbpb.LibraryServiceServer, logger log.Logger) ht
 			return
 		}
 
-		request := &librarypbpb.ListBooksRequest{}
+		request := &librarypb.ListBooksRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -582,7 +582,7 @@ func HandleListBooks(srv librarypbpb.LibraryServiceServer, logger log.Logger) ht
 // HandleDeleteBook translates REST requests/responses on the wire to internal proto messages for DeleteBook
 //
 //	Generated for HTTP binding pattern: DELETE "/v1/{name=shelves/*/books/*}"
-func HandleDeleteBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleDeleteBook(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -601,7 +601,7 @@ func HandleDeleteBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) h
 			return
 		}
 
-		request := &librarypbpb.DeleteBookRequest{}
+		request := &librarypb.DeleteBookRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -647,7 +647,7 @@ func HandleDeleteBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) h
 // HandleUpdateBook translates REST requests/responses on the wire to internal proto messages for UpdateBook
 //
 //	Generated for HTTP binding pattern: PATCH "/v1/{book.name=shelves/*/books/*}"
-func HandleUpdateBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleUpdateBook(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -666,7 +666,7 @@ func HandleUpdateBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) h
 			return
 		}
 
-		request := &librarypbpb.UpdateBookRequest{}
+		request := &librarypb.UpdateBookRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -720,7 +720,7 @@ func HandleUpdateBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) h
 // HandleMoveBook translates REST requests/responses on the wire to internal proto messages for MoveBook
 //
 //	Generated for HTTP binding pattern: POST "/v1/{name=shelves/*/books/*}:move"
-func HandleMoveBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleMoveBook(srv librarypb.LibraryServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -739,7 +739,7 @@ func HandleMoveBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) htt
 			return
 		}
 
-		request := &librarypbpb.MoveBookRequest{}
+		request := &librarypb.MoveBookRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -791,7 +791,7 @@ func HandleMoveBook(srv librarypbpb.LibraryServiceServer, logger log.Logger) htt
 }
 
 // RegisterHandlersLibraryService register REST requests/responses on the wire to internal proto messages for
-func RegisterHandlersLibraryService(router *mux.Router, srv librarypbpb.LibraryServiceServer, logger log.Logger) {
+func RegisterHandlersLibraryService(router *mux.Router, srv librarypb.LibraryServiceServer, logger log.Logger) {
 	router.Handle("/v1/shelves", HandleCreateShelf(srv, logger)).Methods("POST")
 	router.Handle("/v1/{name:shelves/[^:]+}", HandleGetShelf(srv, logger)).Methods("GET")
 	router.Handle("/v1/shelves", HandleListShelves(srv, logger)).Methods("GET")

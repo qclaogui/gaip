@@ -18,14 +18,14 @@ import (
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
 	"github.com/gorilla/mux"
-	showcasepbpb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+	showcasepb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/pkg/protocol/rest"
 )
 
 // HandleCreateRoom translates REST requests/responses on the wire to internal proto messages for CreateRoom
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/rooms"
-func HandleCreateRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleCreateRoom(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -44,7 +44,7 @@ func HandleCreateRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 			return
 		}
 
-		request := &showcasepbpb.CreateRoomRequest{}
+		request := &showcasepb.CreateRoomRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -98,7 +98,7 @@ func HandleCreateRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 // HandleGetRoom translates REST requests/responses on the wire to internal proto messages for GetRoom
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/{name=rooms/*}"
-func HandleGetRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleGetRoom(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -117,7 +117,7 @@ func HandleGetRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger) h
 			return
 		}
 
-		request := &showcasepbpb.GetRoomRequest{}
+		request := &showcasepb.GetRoomRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -163,7 +163,7 @@ func HandleGetRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger) h
 // HandleUpdateRoom translates REST requests/responses on the wire to internal proto messages for UpdateRoom
 //
 //	Generated for HTTP binding pattern: PATCH "/v1beta1/{room.name=rooms/*}"
-func HandleUpdateRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleUpdateRoom(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -182,9 +182,9 @@ func HandleUpdateRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 			return
 		}
 
-		request := &showcasepbpb.UpdateRoomRequest{}
+		request := &showcasepb.UpdateRoomRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
-		var bodyField showcasepbpb.Room
+		var bodyField showcasepb.Room
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
 		rBytes := make([]byte, r.ContentLength)
@@ -245,7 +245,7 @@ func HandleUpdateRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 // HandleDeleteRoom translates REST requests/responses on the wire to internal proto messages for DeleteRoom
 //
 //	Generated for HTTP binding pattern: DELETE "/v1beta1/{name=rooms/*}"
-func HandleDeleteRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleDeleteRoom(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -264,7 +264,7 @@ func HandleDeleteRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 			return
 		}
 
-		request := &showcasepbpb.DeleteRoomRequest{}
+		request := &showcasepb.DeleteRoomRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -310,7 +310,7 @@ func HandleDeleteRoom(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 // HandleListRooms translates REST requests/responses on the wire to internal proto messages for ListRooms
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/rooms"
-func HandleListRooms(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleListRooms(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -329,7 +329,7 @@ func HandleListRooms(srv showcasepbpb.MessagingServiceServer, logger log.Logger)
 			return
 		}
 
-		request := &showcasepbpb.ListRoomsRequest{}
+		request := &showcasepb.ListRoomsRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -370,7 +370,7 @@ func HandleListRooms(srv showcasepbpb.MessagingServiceServer, logger log.Logger)
 // HandleCreateBlurb translates REST requests/responses on the wire to internal proto messages for CreateBlurb
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{parent=rooms/*}/blurbs"
-func HandleCreateBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleCreateBlurb(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -389,7 +389,7 @@ func HandleCreateBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 			return
 		}
 
-		request := &showcasepbpb.CreateBlurbRequest{}
+		request := &showcasepb.CreateBlurbRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -443,7 +443,7 @@ func HandleCreateBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 // HandleCreateBlurb1 translates REST requests/responses on the wire to internal proto messages for CreateBlurb
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{parent=users/*/profile}/blurbs"
-func HandleCreateBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleCreateBlurb1(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -462,7 +462,7 @@ func HandleCreateBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 			return
 		}
 
-		request := &showcasepbpb.CreateBlurbRequest{}
+		request := &showcasepb.CreateBlurbRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -516,7 +516,7 @@ func HandleCreateBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 // HandleGetBlurb translates REST requests/responses on the wire to internal proto messages for GetBlurb
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/{name=rooms/*/blurbs/*}"
-func HandleGetBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleGetBlurb(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -535,7 +535,7 @@ func HandleGetBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logger) 
 			return
 		}
 
-		request := &showcasepbpb.GetBlurbRequest{}
+		request := &showcasepb.GetBlurbRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -581,7 +581,7 @@ func HandleGetBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logger) 
 // HandleGetBlurb1 translates REST requests/responses on the wire to internal proto messages for GetBlurb
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/{name=users/*/profile/blurbs/*}"
-func HandleGetBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleGetBlurb1(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -600,7 +600,7 @@ func HandleGetBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logger)
 			return
 		}
 
-		request := &showcasepbpb.GetBlurbRequest{}
+		request := &showcasepb.GetBlurbRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -646,7 +646,7 @@ func HandleGetBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logger)
 // HandleUpdateBlurb translates REST requests/responses on the wire to internal proto messages for UpdateBlurb
 //
 //	Generated for HTTP binding pattern: PATCH "/v1beta1/{blurb.name=rooms/*/blurbs/*}"
-func HandleUpdateBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleUpdateBlurb(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -665,9 +665,9 @@ func HandleUpdateBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 			return
 		}
 
-		request := &showcasepbpb.UpdateBlurbRequest{}
+		request := &showcasepb.UpdateBlurbRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
-		var bodyField showcasepbpb.Blurb
+		var bodyField showcasepb.Blurb
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
 		rBytes := make([]byte, r.ContentLength)
@@ -728,7 +728,7 @@ func HandleUpdateBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 // HandleUpdateBlurb1 translates REST requests/responses on the wire to internal proto messages for UpdateBlurb
 //
 //	Generated for HTTP binding pattern: PATCH "/v1beta1/{blurb.name=users/*/profile/blurbs/*}"
-func HandleUpdateBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleUpdateBlurb1(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -747,9 +747,9 @@ func HandleUpdateBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 			return
 		}
 
-		request := &showcasepbpb.UpdateBlurbRequest{}
+		request := &showcasepb.UpdateBlurbRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
-		var bodyField showcasepbpb.Blurb
+		var bodyField showcasepb.Blurb
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
 		rBytes := make([]byte, r.ContentLength)
@@ -810,7 +810,7 @@ func HandleUpdateBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 // HandleDeleteBlurb translates REST requests/responses on the wire to internal proto messages for DeleteBlurb
 //
 //	Generated for HTTP binding pattern: DELETE "/v1beta1/{name=rooms/*/blurbs/*}"
-func HandleDeleteBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleDeleteBlurb(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -829,7 +829,7 @@ func HandleDeleteBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 			return
 		}
 
-		request := &showcasepbpb.DeleteBlurbRequest{}
+		request := &showcasepb.DeleteBlurbRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -875,7 +875,7 @@ func HandleDeleteBlurb(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 // HandleDeleteBlurb1 translates REST requests/responses on the wire to internal proto messages for DeleteBlurb
 //
 //	Generated for HTTP binding pattern: DELETE "/v1beta1/{name=users/*/profile/blurbs/*}"
-func HandleDeleteBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleDeleteBlurb1(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -894,7 +894,7 @@ func HandleDeleteBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 			return
 		}
 
-		request := &showcasepbpb.DeleteBlurbRequest{}
+		request := &showcasepb.DeleteBlurbRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -940,7 +940,7 @@ func HandleDeleteBlurb1(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 // HandleListBlurbs translates REST requests/responses on the wire to internal proto messages for ListBlurbs
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/{parent=rooms/*}/blurbs"
-func HandleListBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleListBlurbs(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -959,7 +959,7 @@ func HandleListBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 			return
 		}
 
-		request := &showcasepbpb.ListBlurbsRequest{}
+		request := &showcasepb.ListBlurbsRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -1005,7 +1005,7 @@ func HandleListBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 // HandleListBlurbs1 translates REST requests/responses on the wire to internal proto messages for ListBlurbs
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/{parent=users/*/profile}/blurbs"
-func HandleListBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleListBlurbs1(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -1024,7 +1024,7 @@ func HandleListBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 			return
 		}
 
-		request := &showcasepbpb.ListBlurbsRequest{}
+		request := &showcasepb.ListBlurbsRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -1070,7 +1070,7 @@ func HandleListBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 // HandleSearchBlurbs translates REST requests/responses on the wire to internal proto messages for SearchBlurbs
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{parent=rooms/*}/blurbs:search"
-func HandleSearchBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleSearchBlurbs(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -1089,7 +1089,7 @@ func HandleSearchBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 			return
 		}
 
-		request := &showcasepbpb.SearchBlurbsRequest{}
+		request := &showcasepb.SearchBlurbsRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -1143,7 +1143,7 @@ func HandleSearchBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 // HandleSearchBlurbs1 translates REST requests/responses on the wire to internal proto messages for SearchBlurbs
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{parent=users/*/profile}/blurbs:search"
-func HandleSearchBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleSearchBlurbs1(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -1162,7 +1162,7 @@ func HandleSearchBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Log
 			return
 		}
 
-		request := &showcasepbpb.SearchBlurbsRequest{}
+		request := &showcasepb.SearchBlurbsRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -1216,7 +1216,7 @@ func HandleSearchBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Log
 // HandleStreamBlurbs translates REST requests/responses on the wire to internal proto messages for StreamBlurbs
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{name=rooms/*}/blurbs:stream"
-func HandleStreamBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleStreamBlurbs(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -1235,7 +1235,7 @@ func HandleStreamBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 			return
 		}
 
-		request := &showcasepbpb.StreamBlurbsRequest{}
+		request := &showcasepb.StreamBlurbsRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -1285,7 +1285,7 @@ func HandleStreamBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logg
 // HandleStreamBlurbs1 translates REST requests/responses on the wire to internal proto messages for StreamBlurbs
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{name=users/*/profile}/blurbs:stream"
-func HandleStreamBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleStreamBlurbs1(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -1304,7 +1304,7 @@ func HandleStreamBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Log
 			return
 		}
 
-		request := &showcasepbpb.StreamBlurbsRequest{}
+		request := &showcasepb.StreamBlurbsRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -1354,7 +1354,7 @@ func HandleStreamBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Log
 // HandleSendBlurbs translates REST requests/responses on the wire to internal proto messages for SendBlurbs
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{parent=rooms/*}/blurbs:send"
-func HandleSendBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleSendBlurbs(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_ = srv
 		_ = level.Warn(logger).Log("msg", fmt.Sprintf("client-streaming methods not implemented yet (request matched '/v1beta1/{parent=rooms/*}/blurbs:send': %q)", r.URL))
@@ -1365,7 +1365,7 @@ func HandleSendBlurbs(srv showcasepbpb.MessagingServiceServer, logger log.Logger
 // HandleSendBlurbs1 translates REST requests/responses on the wire to internal proto messages for SendBlurbs
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{parent=users/*/profile}/blurbs:send"
-func HandleSendBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleSendBlurbs1(srv showcasepb.MessagingServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_ = srv
 		_ = level.Warn(logger).Log("msg", fmt.Sprintf("client-streaming methods not implemented yet (request matched '/v1beta1/{parent=users/*/profile}/blurbs:send': %q)", r.URL))
@@ -1373,19 +1373,19 @@ func HandleSendBlurbs1(srv showcasepbpb.MessagingServiceServer, logger log.Logge
 	}
 }
 
-// MessagingServiceStreamBlurbsServer implements showcasepbpb.MessagingServiceStreamBlurbsServer to provide server-side streaming over REST, returning all the
+// MessagingServiceStreamBlurbsServer implements showcasepb.MessagingServiceStreamBlurbsServer to provide server-side streaming over REST, returning all the
 // individual responses as part of a long JSON list.
 type MessagingServiceStreamBlurbsServer struct {
 	*rest.ServerStreamer
 }
 
 // Send accumulates a response to be fetched later as part of response list returned over REST.
-func (streamer *MessagingServiceStreamBlurbsServer) Send(response *showcasepbpb.StreamBlurbsResponse) error {
+func (streamer *MessagingServiceStreamBlurbsServer) Send(response *showcasepb.StreamBlurbsResponse) error {
 	return streamer.ServerStreamer.Send(response)
 }
 
 // RegisterHandlersMessagingService register REST requests/responses on the wire to internal proto messages for
-func RegisterHandlersMessagingService(router *mux.Router, srv showcasepbpb.MessagingServiceServer, logger log.Logger) {
+func RegisterHandlersMessagingService(router *mux.Router, srv showcasepb.MessagingServiceServer, logger log.Logger) {
 	router.Handle("/v1beta1/rooms", HandleCreateRoom(srv, logger)).Methods("POST")
 	router.Handle("/v1beta1/{name:rooms/[^:]+}", HandleGetRoom(srv, logger)).Methods("GET")
 	router.Handle("/v1beta1/{room.name:rooms/[^:]+}", HandleUpdateRoom(srv, logger)).Methods("PATCH")

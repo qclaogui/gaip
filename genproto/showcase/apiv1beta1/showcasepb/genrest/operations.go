@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
-	longrunningpbpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
+	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
 	"github.com/gorilla/mux"
@@ -22,7 +22,7 @@ import (
 // HandleListOperations translates REST requests/responses on the wire to internal proto messages for ListOperations
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/operations"
-func HandleListOperations(srv longrunningpbpb.OperationsServer, logger log.Logger) http.HandlerFunc {
+func HandleListOperations(srv longrunningpb.OperationsServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -41,7 +41,7 @@ func HandleListOperations(srv longrunningpbpb.OperationsServer, logger log.Logge
 			return
 		}
 
-		request := &longrunningpbpb.ListOperationsRequest{}
+		request := &longrunningpb.ListOperationsRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -82,7 +82,7 @@ func HandleListOperations(srv longrunningpbpb.OperationsServer, logger log.Logge
 // HandleGetOperation translates REST requests/responses on the wire to internal proto messages for GetOperation
 //
 //	Generated for HTTP binding pattern: GET "/v1beta1/{name=operations/**}"
-func HandleGetOperation(srv longrunningpbpb.OperationsServer, logger log.Logger) http.HandlerFunc {
+func HandleGetOperation(srv longrunningpb.OperationsServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -101,7 +101,7 @@ func HandleGetOperation(srv longrunningpbpb.OperationsServer, logger log.Logger)
 			return
 		}
 
-		request := &longrunningpbpb.GetOperationRequest{}
+		request := &longrunningpb.GetOperationRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -147,7 +147,7 @@ func HandleGetOperation(srv longrunningpbpb.OperationsServer, logger log.Logger)
 // HandleDeleteOperation translates REST requests/responses on the wire to internal proto messages for DeleteOperation
 //
 //	Generated for HTTP binding pattern: DELETE "/v1beta1/{name=operations/**}"
-func HandleDeleteOperation(srv longrunningpbpb.OperationsServer, logger log.Logger) http.HandlerFunc {
+func HandleDeleteOperation(srv longrunningpb.OperationsServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -166,7 +166,7 @@ func HandleDeleteOperation(srv longrunningpbpb.OperationsServer, logger log.Logg
 			return
 		}
 
-		request := &longrunningpbpb.DeleteOperationRequest{}
+		request := &longrunningpb.DeleteOperationRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -212,7 +212,7 @@ func HandleDeleteOperation(srv longrunningpbpb.OperationsServer, logger log.Logg
 // HandleCancelOperation translates REST requests/responses on the wire to internal proto messages for CancelOperation
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/{name=operations/**}:cancel"
-func HandleCancelOperation(srv longrunningpbpb.OperationsServer, logger log.Logger) http.HandlerFunc {
+func HandleCancelOperation(srv longrunningpb.OperationsServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -231,7 +231,7 @@ func HandleCancelOperation(srv longrunningpbpb.OperationsServer, logger log.Logg
 			return
 		}
 
-		request := &longrunningpbpb.CancelOperationRequest{}
+		request := &longrunningpb.CancelOperationRequest{}
 		if err = rest.CheckRequestFormat(nil, r, request.ProtoReflect()); err != nil {
 			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
 			return
@@ -275,7 +275,7 @@ func HandleCancelOperation(srv longrunningpbpb.OperationsServer, logger log.Logg
 }
 
 // RegisterHandlersOperations register REST requests/responses on the wire to internal proto messages for
-func RegisterHandlersOperations(router *mux.Router, srv longrunningpbpb.OperationsServer, logger log.Logger) {
+func RegisterHandlersOperations(router *mux.Router, srv longrunningpb.OperationsServer, logger log.Logger) {
 	router.Handle("/v1beta1/operations", HandleListOperations(srv, logger)).Methods("GET")
 	router.Handle("/v1beta1/{name:operations/[^:]+}", HandleGetOperation(srv, logger)).Methods("GET")
 	router.Handle("/v1beta1/{name:operations/[^:]+}", HandleDeleteOperation(srv, logger)).Methods("DELETE")

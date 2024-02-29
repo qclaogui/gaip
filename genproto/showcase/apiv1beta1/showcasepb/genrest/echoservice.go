@@ -18,14 +18,14 @@ import (
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
 	"github.com/gorilla/mux"
-	showcasepbpb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+	showcasepb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/pkg/protocol/rest"
 )
 
 // HandleEcho translates REST requests/responses on the wire to internal proto messages for Echo
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:echo"
-func HandleEcho(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleEcho(srv showcasepb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -44,7 +44,7 @@ func HandleEcho(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.Hand
 			return
 		}
 
-		request := &showcasepbpb.EchoRequest{}
+		request := &showcasepb.EchoRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -98,7 +98,7 @@ func HandleEcho(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.Hand
 // HandleEchoErrorDetails translates REST requests/responses on the wire to internal proto messages for EchoErrorDetails
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:error-details"
-func HandleEchoErrorDetails(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleEchoErrorDetails(srv showcasepb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -117,7 +117,7 @@ func HandleEchoErrorDetails(srv showcasepbpb.EchoServiceServer, logger log.Logge
 			return
 		}
 
-		request := &showcasepbpb.EchoErrorDetailsRequest{}
+		request := &showcasepb.EchoErrorDetailsRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -171,7 +171,7 @@ func HandleEchoErrorDetails(srv showcasepbpb.EchoServiceServer, logger log.Logge
 // HandleExpand translates REST requests/responses on the wire to internal proto messages for Expand
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:expand"
-func HandleExpand(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleExpand(srv showcasepb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -190,7 +190,7 @@ func HandleExpand(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.Ha
 			return
 		}
 
-		request := &showcasepbpb.ExpandRequest{}
+		request := &showcasepb.ExpandRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -240,7 +240,7 @@ func HandleExpand(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.Ha
 // HandleCollect translates REST requests/responses on the wire to internal proto messages for Collect
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:collect"
-func HandleCollect(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleCollect(srv showcasepb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_ = srv
 		_ = level.Warn(logger).Log("msg", fmt.Sprintf("client-streaming methods not implemented yet (request matched '/v1beta1/echo:collect': %q)", r.URL))
@@ -251,7 +251,7 @@ func HandleCollect(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.H
 // HandlePagedExpand translates REST requests/responses on the wire to internal proto messages for PagedExpand
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:pagedExpand"
-func HandlePagedExpand(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
+func HandlePagedExpand(srv showcasepb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -270,7 +270,7 @@ func HandlePagedExpand(srv showcasepbpb.EchoServiceServer, logger log.Logger) ht
 			return
 		}
 
-		request := &showcasepbpb.PagedExpandRequest{}
+		request := &showcasepb.PagedExpandRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -324,7 +324,7 @@ func HandlePagedExpand(srv showcasepbpb.EchoServiceServer, logger log.Logger) ht
 // HandleWait translates REST requests/responses on the wire to internal proto messages for Wait
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:wait"
-func HandleWait(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleWait(srv showcasepb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -343,7 +343,7 @@ func HandleWait(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.Hand
 			return
 		}
 
-		request := &showcasepbpb.WaitRequest{}
+		request := &showcasepb.WaitRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -397,7 +397,7 @@ func HandleWait(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.Hand
 // HandleBlock translates REST requests/responses on the wire to internal proto messages for Block
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:block"
-func HandleBlock(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
+func HandleBlock(srv showcasepb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathParams := mux.Vars(r)
 		numUrlPathParams := len(urlPathParams)
@@ -416,7 +416,7 @@ func HandleBlock(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.Han
 			return
 		}
 
-		request := &showcasepbpb.BlockRequest{}
+		request := &showcasepb.BlockRequest{}
 		// Intentional: Field values in the URL path override those set in the body.
 		var jsonReader bytes.Buffer
 		bodyReader := io.TeeReader(r.Body, &jsonReader)
@@ -467,19 +467,19 @@ func HandleBlock(srv showcasepbpb.EchoServiceServer, logger log.Logger) http.Han
 	}
 }
 
-// EchoServiceExpandServer implements showcasepbpb.EchoServiceExpandServer to provide server-side streaming over REST, returning all the
+// EchoServiceExpandServer implements showcasepb.EchoServiceExpandServer to provide server-side streaming over REST, returning all the
 // individual responses as part of a long JSON list.
 type EchoServiceExpandServer struct {
 	*rest.ServerStreamer
 }
 
 // Send accumulates a response to be fetched later as part of response list returned over REST.
-func (streamer *EchoServiceExpandServer) Send(response *showcasepbpb.EchoResponse) error {
+func (streamer *EchoServiceExpandServer) Send(response *showcasepb.EchoResponse) error {
 	return streamer.ServerStreamer.Send(response)
 }
 
 // RegisterHandlersEchoService register REST requests/responses on the wire to internal proto messages for
-func RegisterHandlersEchoService(router *mux.Router, srv showcasepbpb.EchoServiceServer, logger log.Logger) {
+func RegisterHandlersEchoService(router *mux.Router, srv showcasepb.EchoServiceServer, logger log.Logger) {
 	router.Handle("/v1beta1/echo:echo", HandleEcho(srv, logger)).Methods("POST")
 	router.Handle("/v1beta1/echo:error-details", HandleEchoErrorDetails(srv, logger)).Methods("POST")
 	router.Handle("/v1beta1/echo:expand", HandleExpand(srv, logger)).Methods("POST")
