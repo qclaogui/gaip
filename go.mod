@@ -21,7 +21,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/googleapis/gax-go/v2 v2.12.2
 	github.com/gorilla/mux v1.8.1
-	github.com/grafana/dskit v0.0.0-20240223204243-057a4ceca444
+	github.com/grafana/dskit v0.0.0-20240227143701-ffb15fd72381
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/hashicorp/vault/api v1.12.0
@@ -42,9 +42,9 @@ require (
 	go.opentelemetry.io/otel/sdk v1.24.0
 	golang.org/x/net v0.21.0
 	google.golang.org/api v0.167.0
-	google.golang.org/genproto v0.0.0-20240221002015-b0ce06bbee7c
-	google.golang.org/genproto/googleapis/api v0.0.0-20240221002015-b0ce06bbee7c
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240221002015-b0ce06bbee7c
+	google.golang.org/genproto v0.0.0-20240228224816-df926f6c8641
+	google.golang.org/genproto/googleapis/api v0.0.0-20240228224816-df926f6c8641
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240228224816-df926f6c8641
 	google.golang.org/grpc v1.62.0
 	google.golang.org/protobuf v1.32.0
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
@@ -81,7 +81,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/gogo/status v1.1.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/google/pprof v0.0.0-20240225044709-fd706174c886 // indirect
+	github.com/google/pprof v0.0.0-20240227163752-401108e1b7e7 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
