@@ -14,7 +14,7 @@ require (
 	github.com/felixge/fgprof v0.9.4
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-kit/log v0.2.1
-	github.com/go-sql-driver/mysql v1.7.1
+	github.com/go-sql-driver/mysql v1.8.0
 	github.com/golang/protobuf v1.5.4
 	github.com/google/generative-ai-go v0.8.0
 	github.com/google/go-cmp v0.6.0
@@ -57,6 +57,7 @@ require (
 	cloud.google.com/go/ai v0.3.2 // indirect
 	cloud.google.com/go/compute v1.25.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/99designs/gqlgen v0.17.44 // indirect
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/Khan/genqlient v0.7.0 // indirect
