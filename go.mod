@@ -22,7 +22,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.12.2
 	github.com/gorilla/mux v1.8.1
 	github.com/grafana/dskit v0.0.0-20240306142309-0e1c99b54ea7
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/hashicorp/vault/api v1.12.0
 	github.com/iancoleman/strcase v0.3.0
