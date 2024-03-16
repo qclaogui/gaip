@@ -19,7 +19,7 @@ require (
 	github.com/google/generative-ai-go v0.8.0
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
-	github.com/googleapis/gax-go/v2 v2.12.2
+	github.com/googleapis/gax-go/v2 v2.12.3
 	github.com/gorilla/mux v1.8.1
 	github.com/grafana/dskit v0.0.0-20240306142309-0e1c99b54ea7
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
@@ -43,8 +43,8 @@ require (
 	golang.org/x/net v0.22.0
 	google.golang.org/api v0.169.0
 	google.golang.org/genproto v0.0.0-20240308144416-29370a3891b7
-	google.golang.org/genproto/googleapis/api v0.0.0-20240308144416-29370a3891b7
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240308144416-29370a3891b7
+	google.golang.org/genproto/googleapis/api v0.0.0-20240311132316-a219d84964c2
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240311132316-a219d84964c2
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
