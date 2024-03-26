@@ -5,7 +5,7 @@ go 1.22
 toolchain go1.22.0
 
 require (
-	cloud.google.com/go/longrunning v0.5.5
+	cloud.google.com/go/longrunning v0.5.6
 	dagger.io/dagger v0.10.2
 	entgo.io/ent v0.13.1
 	github.com/blang/semver v3.5.1+incompatible
