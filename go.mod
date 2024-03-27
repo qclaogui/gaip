@@ -41,10 +41,10 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.24.0
 	go.opentelemetry.io/otel/sdk v1.24.0
 	golang.org/x/net v0.22.0
-	google.golang.org/api v0.169.0
+	google.golang.org/api v0.171.0
 	google.golang.org/genproto v0.0.0-20240308144416-29370a3891b7
 	google.golang.org/genproto/googleapis/api v0.0.0-20240311132316-a219d84964c2
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240311132316-a219d84964c2
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240314234333-6e1732d8331c
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
