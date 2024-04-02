@@ -12,13 +12,18 @@ import (
 
 //go:generate go run ./release_generate.go
 
-// Info VersionInfo contains build information.
+// Info holds version information
 type Info struct {
 	Version      string
 	PreReleaseID string
-	GitCommit    string
-	BuildDate    string
-	GoVersion    string
+	Metadata     BuildMetadata
+}
+
+// BuildMetadata contains the semver build metadata:
+// short commit hash and date in format YYYYMMDDTHHmmSS
+type BuildMetadata struct {
+	BuildDate string
+	GitCommit string
 }
 
 // GetVersionInfo returns version Info struct
@@ -26,9 +31,10 @@ func GetVersionInfo() Info {
 	return Info{
 		Version:      Version,
 		PreReleaseID: PreReleaseID,
-		GitCommit:    GitCommit,
-		BuildDate:    BuildDate,
-		GoVersion:    GoVersion,
+		Metadata: BuildMetadata{
+			GitCommit: gitCommit,
+			BuildDate: buildDate,
+		},
 	}
 }
 
@@ -51,15 +57,15 @@ func GetVersion() string {
 
 	versionWithPR := fmt.Sprintf("%s%s%s", Version, ExtraSep, PreReleaseID)
 
-	if isReleaseCandidate(PreReleaseID) || (GitCommit == "" || BuildDate == "") {
+	if isReleaseCandidate(PreReleaseID) || (gitCommit == "" || buildDate == "") {
 		return versionWithPR
 	}
 
 	//  Include build metadata
 	return fmt.Sprintf("%s+%s.%s",
 		versionWithPR,
-		GitCommit,
-		BuildDate,
+		gitCommit,
+		buildDate,
 	)
 }
 

@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"runtime"
 	"strings"
 
 	"github.com/blang/semver"
@@ -129,14 +128,11 @@ func writeVersionToFile(version, preReleaseID, fileName string) error {
 	f.Comment("PreReleaseID can be empty for releases, \"rc.X\" for release candidates and \"dev\" for snapshots")
 	f.Var().Id("PreReleaseID").Op("=").Lit(preReleaseID)
 
-	f.Comment("GitCommit is the short commit hash. It will be set by the linker.")
-	f.Var().Id("GitCommit").Op("=").Lit("")
+	f.Comment("gitCommit is the short commit hash. It will be set by the linker.")
+	f.Var().Id("gitCommit").Op("=").Lit("")
 
-	f.Comment("BuildDate is the time of the build with format yyyy-mm-ddThh:mm:ssZ. It will be set by the linker.")
-	f.Var().Id("BuildDate").Op("=").Lit("")
-
-	f.Comment("GoVersion returns the Go version string.")
-	f.Var().Id("GoVersion").Op("=").Lit(runtime.Version())
+	f.Comment("buildDate is the time of the build with format yyyy-mm-ddThh:mm:ssZ. It will be set by the linker.")
+	f.Var().Id("buildDate").Op("=").Lit("")
 
 	return f.Save(fileName)
 }

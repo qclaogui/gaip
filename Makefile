@@ -59,9 +59,9 @@ build: ## Build binary for current OS and place it at ./bin/gaip_$(GOOS)_$(GOARC
 
 .PHONY: build-all
 build-all: ## Build binaries for Linux and Mac and place them in dist/
-	@cat ./.goreleaser.yml ./.goreleaser.docker.yml > .goreleaser.combined.yml
-	RELEASE_BUILD=$(RELEASE_BUILD) PRE_RELEASE_ID="" $(GORELEASER) --config=.goreleaser.combined.yml --snapshot --skip=publish --clean
-	@rm .goreleaser.combined.yml
+	@cat .github/.goreleaser.yml .github/.goreleaser.docker.yml > .github/.goreleaser.combined.yml
+	RELEASE_BUILD=$(RELEASE_BUILD) PRE_RELEASE_ID="" $(GORELEASER) --config=.github/.goreleaser.combined.yml --snapshot --skip=publish --clean
+	@rm .github/.goreleaser.combined.yml
 
 .PHONY: clean
 clean: ## Remove artefacts or generated files from previous build
@@ -346,8 +346,8 @@ buf-fmt: $(BUF)
 .PHONY: goreleaser-lint
 goreleaser-lint: $(GORELEASER)
 	@echo ">> run goreleaser check"
-	@for config_file in $(shell ls .goreleaser*); do cat $${config_file} > .goreleaser.combined.yml; done
-	@$(GORELEASER) check -f .goreleaser.combined.yml || exit 1 && rm .goreleaser.combined.yml
+	@for config_file in $(shell ls .github/.goreleaser*); do cat $${config_file} > .github/.goreleaser.combined.yml; done
+	@$(GORELEASER) check -f .github/.goreleaser.combined.yml || exit 1 && rm .github/.goreleaser.combined.yml
 
 go-lint: $(GOLANGCI_LINT)
 	@echo ">> run golangci-lint"
