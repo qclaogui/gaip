@@ -18,6 +18,7 @@ lint:
   ignore:
     - qclaogui/library/v1beta1
     - google
+    - buf/validate
   ignore_only:
     RPC_REQUEST_STANDARD_NAME:
       - qclaogui/project/v1/identity_service.proto

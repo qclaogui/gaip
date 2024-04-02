@@ -7,6 +7,7 @@ package bookstore
 import (
 	"context"
 
+	"github.com/bufbuild/protovalidate-go"
 	pb "github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
@@ -30,6 +31,15 @@ func (s *Server) ListBooks(ctx context.Context, req *pb.ListBooksRequest) (*pb.L
 
 }
 func (s *Server) CreateBook(ctx context.Context, req *pb.CreateBookRequest) (*pb.Book, error) {
+	v, err := protovalidate.New()
+	if err != nil {
+		return nil, err
+	}
+
+	if err = v.Validate(req.Book); err != nil {
+		return nil, err
+	}
+
 	return s.repo.CreateBook(ctx, req)
 }
 func (s *Server) GetBook(ctx context.Context, req *pb.GetBookRequest) (*pb.Book, error) {
