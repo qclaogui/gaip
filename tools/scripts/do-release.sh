@@ -18,4 +18,4 @@ if [ ! -f "${RELEASE_NOTES_FILE}" ]; then
 fi
 
 cat ./.goreleaser.yml ./.goreleaser.ko.yml > .goreleaser.combined.yml
-GORELEASER_CURRENT_TAG=v${tag} RELEASE_BUILD=1 PRE_RELEASE_ID="" ${GORELEASER} release --clean --timeout 60m --skip=validate --config=./.goreleaser.combined.yml --release-notes="${RELEASE_NOTES_FILE}"
+RELEASE_BUILD=1 GORELEASER_CURRENT_TAG=v${tag} PRE_RELEASE_ID="" ${GORELEASER} release --clean --timeout 60m --skip=validate --config=.github/.goreleaser.combined.yml --release-notes="${RELEASE_NOTES_FILE}"

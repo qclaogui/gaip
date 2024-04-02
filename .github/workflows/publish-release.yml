@@ -1,20 +1,58 @@
-name: Publish Release
-run-name: Publish Release by @${{ github.actor }}
+name: GoReleaser Publish Release
 
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_call:
+    inputs:
+      isPreRelease:
+        required: true
+        type: boolean
+    secrets:
+      ghPAT:
+        required: true
+      dhUsername:
+        required: true
+      dhPassword:
+        required: true
+
+env:
+  GORELEASER_VERSION: '1.24.0'
+
+# permissions:
+#   contents: read
+#   packages: write # needed for ghcr access
 
 jobs:
+  publish_release:
+    name: ${{ inputs.isPreRelease && 'prerelease' || 'release' }} publishing
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
+      - 
+        name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - 
+        name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.dhUsername }}
+          password: ${{ secrets.dhPassword }}
+      - 
+        name: Install GoReleaser
+        run: |
+          wget -q https://github.com/goreleaser/goreleaser/releases/download/v${GORELEASER_VERSION}/goreleaser_Linux_x86_64.tar.gz
+          tar -xzf goreleaser_Linux_x86_64.tar.gz
+          mv goreleaser /home/runner/go/bin/goreleaser-v${GORELEASER_VERSION}
+  
+      - if: ${{ !inputs.isPreRelease }}
+        run: ./tools/scripts/do-release.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.ghPAT }}
 
-  publish-release:
-    name: Publish Release
-    uses: ./.github/workflows/publish.yml
-    with:
-      isReleaseCandidate: false
-      name: release
-    secrets:
-      ghPAT: ${{ secrets.QCBOT_TOKEN }}
-      dhUsername: ${{ secrets.DOCKERHUB_USERNAME }}
-      dhPassword: ${{ secrets.DOCKERHUB_TOKEN }}
+      - if: ${{ inputs.isPreRelease }}
+        run: ./tools/scripts/do-release-candidate.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.ghPAT }}
