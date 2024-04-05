@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package qclaogui.todo.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/qclaogui/gaip/genproto/todo/apiv1/todopb";
+
+// Tasks wo have to do
+message ToDo {
+  // Unique integer identifier of the todo task
+  string id = 1;
+
+  string title = 2;
+
+  string description = 3;
+
+  bool completed = 4;
+
+  google.protobuf.Timestamp create_time = 5;
+
+  google.protobuf.Timestamp update_time = 6;
+}
+
+message CreateTodoRequest {
+  // API version
+  string api = 1;
+
+  ToDo item = 2;
+}
+
+message CreateTodoResponse {
+  // API version
+  string api = 1;
+
+  string id = 2;
+}
+
+message GetTodoRequest {
+  // API version
+  string api = 1;
+
+  string id = 2;
+}
+
+message GetTodoResponse {
+  // API version
+  string api = 1;
+
+  ToDo item = 2;
+}
+
+message UpdateTodoRequest {
+  // API version
+  string api = 1;
+
+  ToDo item = 2;
+}
+
+message UpdateTodoResponse {
+  // API version
+  string api = 1;
+
+  int64 updated = 2;
+}
+
+message DeleteTodoRequest {
+  // API version
+  string api = 1;
+
+  string id = 2;
+}
+
+message DeleteTodoResponse {
+  // API version
+  string api = 1;
+
+  int64 deleted = 2;
+}
+
+message ListTodoRequest {
+  // API version
+  string api = 1;
+
+  int32 limit = 2;
+
+  bool completed = 3;
+}
+
+message ListTodoResponse {
+  // API version
+  string api = 1;
+
+  // List of all
+  repeated ToDo items = 2;
+}
