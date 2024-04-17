@@ -7,7 +7,7 @@ toolchain go1.22.0
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.33.0-20240401165935-b983156c5e99.1
 	cloud.google.com/go/longrunning v0.5.6
-	dagger.io/dagger v0.11.0
+	dagger.io/dagger v0.11.1
 	entgo.io/ent v0.13.1
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/bufbuild/protovalidate-go v0.6.1
