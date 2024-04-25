@@ -40,8 +40,8 @@ require (
 	github.com/stretchr/testify v1.9.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.51.0
 	go.opentelemetry.io/otel v1.26.0
-	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.25.0
-	go.opentelemetry.io/otel/sdk v1.25.0
+	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.26.0
+	go.opentelemetry.io/otel/sdk v1.26.0
 	golang.org/x/net v0.24.0
 	google.golang.org/api v0.176.1
 	google.golang.org/genproto v0.0.0-20240401170217-c3f982113cda
