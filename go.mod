@@ -21,7 +21,7 @@ require (
 	github.com/google/generative-ai-go v0.11.0
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
-	github.com/googleapis/gax-go/v2 v2.12.3
+	github.com/googleapis/gax-go/v2 v2.12.4
 	github.com/gorilla/mux v1.8.1
 	github.com/grafana/dskit v0.0.0-20240411172511-de4086540f6f
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
