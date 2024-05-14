@@ -18,7 +18,7 @@ require (
 	github.com/go-kit/log v0.2.1
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/golang/protobuf v1.5.4
-	github.com/google/generative-ai-go v0.11.2
+	github.com/google/generative-ai-go v0.12.0
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/googleapis/gax-go/v2 v2.12.4
@@ -55,8 +55,8 @@ require (
 
 require (
 	ariga.io/atlas v0.22.0 // indirect
-	cloud.google.com/go v0.112.2 // indirect
-	cloud.google.com/go/ai v0.4.1 // indirect
+	cloud.google.com/go v0.113.0 // indirect
+	cloud.google.com/go/ai v0.5.0 // indirect
 	cloud.google.com/go/auth v0.4.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
 	cloud.google.com/go/compute/metadata v0.3.0 // indirect
