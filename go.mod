@@ -43,7 +43,7 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.26.0
 	go.opentelemetry.io/otel/sdk v1.26.0
 	golang.org/x/net v0.25.0
-	google.golang.org/api v0.178.0
+	google.golang.org/api v0.180.0
 	google.golang.org/genproto v0.0.0-20240506185236-b8a5c65736ae
 	google.golang.org/genproto/googleapis/api v0.0.0-20240506185236-b8a5c65736ae
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240506185236-b8a5c65736ae
@@ -57,7 +57,7 @@ require (
 	ariga.io/atlas v0.22.0 // indirect
 	cloud.google.com/go v0.113.0 // indirect
 	cloud.google.com/go/ai v0.5.0 // indirect
-	cloud.google.com/go/auth v0.4.0 // indirect
+	cloud.google.com/go/auth v0.4.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
 	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
