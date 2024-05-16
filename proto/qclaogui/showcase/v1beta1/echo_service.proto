@@ -23,6 +23,8 @@ option go_package = "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showc
 // echoed in the response headers.
 service EchoService {
   option (google.api.default_host) = "localhost:9095";
+  // See https://github.com/aip-dev/google.aip.dev/pull/1331
+  option (google.api.api_version) = "v1_20240506";
 
   // This method simply echoes the request. This method showcases unary RPCs.
   rpc Echo(EchoRequest) returns (EchoResponse) {
