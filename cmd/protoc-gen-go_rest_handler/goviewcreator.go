@@ -85,6 +85,9 @@ func NewView(model *gomodel.Model) (*goview.View, error) {
 
 			source.P(`  _ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %%s request matching '%s': %%q", r.Method, r.URL))`, handler.URIPattern)
 			source.P(`  _ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect %d, have %%d): %%q", numUrlPathParams, urlPathParams))`, len(allURLVariables))
+			source.P(`  _ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %%s", rest.PrettyPrintHeaders(r, "    ")))`)
+			source.P("")
+			source.P("  rest.IncludeRequestHeadersInResponse(w, r)")
 			source.P("")
 			source.P("  if numUrlPathParams != %d {", len(allURLVariables))
 			source.P(`    rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected %d, have %%d: %%#v", numUrlPathParams, urlPathParams)`, len(allURLVariables))
