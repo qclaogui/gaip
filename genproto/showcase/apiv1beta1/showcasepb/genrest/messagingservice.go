@@ -32,6 +32,9 @@ func HandleCreateRoom(srv showcasepb.MessagingServiceServer, logger log.Logger) 
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/rooms': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -105,6 +108,9 @@ func HandleGetRoom(srv showcasepb.MessagingServiceServer, logger log.Logger) htt
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=rooms/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -170,6 +176,9 @@ func HandleUpdateRoom(srv showcasepb.MessagingServiceServer, logger log.Logger) 
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{room.name=rooms/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -252,6 +261,9 @@ func HandleDeleteRoom(srv showcasepb.MessagingServiceServer, logger log.Logger) 
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=rooms/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -317,6 +329,9 @@ func HandleListRooms(srv showcasepb.MessagingServiceServer, logger log.Logger) h
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/rooms': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -377,6 +392,9 @@ func HandleCreateBlurb(srv showcasepb.MessagingServiceServer, logger log.Logger)
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{parent=rooms/*}/blurbs': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -450,6 +468,9 @@ func HandleCreateBlurb1(srv showcasepb.MessagingServiceServer, logger log.Logger
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{parent=users/*/profile}/blurbs': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -523,6 +544,9 @@ func HandleGetBlurb(srv showcasepb.MessagingServiceServer, logger log.Logger) ht
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=rooms/*/blurbs/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -588,6 +612,9 @@ func HandleGetBlurb1(srv showcasepb.MessagingServiceServer, logger log.Logger) h
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=users/*/profile/blurbs/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -653,6 +680,9 @@ func HandleUpdateBlurb(srv showcasepb.MessagingServiceServer, logger log.Logger)
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{blurb.name=rooms/*/blurbs/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -735,6 +765,9 @@ func HandleUpdateBlurb1(srv showcasepb.MessagingServiceServer, logger log.Logger
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{blurb.name=users/*/profile/blurbs/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -817,6 +850,9 @@ func HandleDeleteBlurb(srv showcasepb.MessagingServiceServer, logger log.Logger)
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=rooms/*/blurbs/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -882,6 +918,9 @@ func HandleDeleteBlurb1(srv showcasepb.MessagingServiceServer, logger log.Logger
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=users/*/profile/blurbs/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -947,6 +986,9 @@ func HandleListBlurbs(srv showcasepb.MessagingServiceServer, logger log.Logger) 
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{parent=rooms/*}/blurbs': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -1012,6 +1054,9 @@ func HandleListBlurbs1(srv showcasepb.MessagingServiceServer, logger log.Logger)
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{parent=users/*/profile}/blurbs': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -1077,6 +1122,9 @@ func HandleSearchBlurbs(srv showcasepb.MessagingServiceServer, logger log.Logger
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{parent=rooms/*}/blurbs:search': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -1150,6 +1198,9 @@ func HandleSearchBlurbs1(srv showcasepb.MessagingServiceServer, logger log.Logge
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{parent=users/*/profile}/blurbs:search': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -1223,6 +1274,9 @@ func HandleStreamBlurbs(srv showcasepb.MessagingServiceServer, logger log.Logger
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=rooms/*}/blurbs:stream': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -1292,6 +1346,9 @@ func HandleStreamBlurbs1(srv showcasepb.MessagingServiceServer, logger log.Logge
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=users/*/profile}/blurbs:stream': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)

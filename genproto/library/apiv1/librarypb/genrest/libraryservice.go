@@ -32,6 +32,9 @@ func HandleCreateShelf(srv librarypb.LibraryServiceServer, logger log.Logger) ht
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/shelves': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -114,6 +117,9 @@ func HandleGetShelf(srv librarypb.LibraryServiceServer, logger log.Logger) http.
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{name=shelves/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -179,6 +185,9 @@ func HandleListShelves(srv librarypb.LibraryServiceServer, logger log.Logger) ht
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/shelves': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -239,6 +248,9 @@ func HandleDeleteShelf(srv librarypb.LibraryServiceServer, logger log.Logger) ht
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{name=shelves/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -304,6 +316,9 @@ func HandleMergeShelves(srv librarypb.LibraryServiceServer, logger log.Logger) h
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{name=shelves/*}:merge': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -377,6 +392,9 @@ func HandleCreateBook(srv librarypb.LibraryServiceServer, logger log.Logger) htt
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{parent=shelves/*}/books': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -459,6 +477,9 @@ func HandleGetBook(srv librarypb.LibraryServiceServer, logger log.Logger) http.H
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{name=shelves/*/books/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -524,6 +545,9 @@ func HandleListBooks(srv librarypb.LibraryServiceServer, logger log.Logger) http
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{parent=shelves/*}/books': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -589,6 +613,9 @@ func HandleDeleteBook(srv librarypb.LibraryServiceServer, logger log.Logger) htt
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{name=shelves/*/books/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -654,6 +681,9 @@ func HandleUpdateBook(srv librarypb.LibraryServiceServer, logger log.Logger) htt
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{book.name=shelves/*/books/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -727,6 +757,9 @@ func HandleMoveBook(srv librarypb.LibraryServiceServer, logger log.Logger) http.
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1/{name=shelves/*/books/*}:move': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)

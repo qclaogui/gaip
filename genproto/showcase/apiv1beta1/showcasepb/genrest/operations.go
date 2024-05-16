@@ -29,6 +29,9 @@ func HandleListOperations(srv longrunningpb.OperationsServer, logger log.Logger)
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/operations': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -89,6 +92,9 @@ func HandleGetOperation(srv longrunningpb.OperationsServer, logger log.Logger) h
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=operations/**}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -154,6 +160,9 @@ func HandleDeleteOperation(srv longrunningpb.OperationsServer, logger log.Logger
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=operations/**}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -219,6 +228,9 @@ func HandleCancelOperation(srv longrunningpb.OperationsServer, logger log.Logger
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=operations/**}:cancel': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)

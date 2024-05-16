@@ -20,6 +20,8 @@ github.com/qclaogui/gaip v0.0.0-20240229100118-56242e8b774e h1:V8P76LhZBlxHIM2dP
 github.com/qclaogui/gaip v0.0.0-20240229100118-56242e8b774e/go.mod h1:IxL6b6rnU2et9I/fx3k//U8hDW9SwwXUAgLA/pi5NT0=
 github.com/qclaogui/gaip v0.0.0-20240516064410-9afae75fd8af h1:qDlbmFImDQTfldF6KtvzUx7moWax0s48I5i2t1HYWro=
 github.com/qclaogui/gaip v0.0.0-20240516064410-9afae75fd8af/go.mod h1:ihmI0u2jdOpEA96lDpuP3x2GPqjxzTf2PeHwLbCC/4c=
+github.com/qclaogui/gaip v0.0.0-20240516080558-0052bb7d2276 h1:vyRJXzgGoA+zpwdGRgi/ovMt3In5IomWcCQKnWMpCyo=
+github.com/qclaogui/gaip v0.0.0-20240516080558-0052bb7d2276/go.mod h1:ihmI0u2jdOpEA96lDpuP3x2GPqjxzTf2PeHwLbCC/4c=
 golang.org/x/net v0.21.0 h1:AQyQV4dYCvJ7vGmJyKki9+PBdyvhkSd8EIx/qb0AYv4=
 golang.org/x/net v0.21.0/go.mod h1:bIjVDfnllIU7BJ2DNgfnXvpSvtn8VRwhlsaeUTyUS44=
 golang.org/x/net v0.25.0 h1:d/OCCoBEUq33pjydKrGQhw7IlUPI2Oylr+8qLx49kac=

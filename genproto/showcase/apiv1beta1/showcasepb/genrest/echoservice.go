@@ -32,6 +32,9 @@ func HandleEcho(srv showcasepb.EchoServiceServer, logger log.Logger) http.Handle
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:echo': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -105,6 +108,9 @@ func HandleEchoErrorDetails(srv showcasepb.EchoServiceServer, logger log.Logger)
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:error-details': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -178,6 +184,9 @@ func HandleExpand(srv showcasepb.EchoServiceServer, logger log.Logger) http.Hand
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:expand': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -258,6 +267,9 @@ func HandlePagedExpand(srv showcasepb.EchoServiceServer, logger log.Logger) http
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:pagedExpand': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -331,6 +343,9 @@ func HandleWait(srv showcasepb.EchoServiceServer, logger log.Logger) http.Handle
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:wait': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -404,6 +419,9 @@ func HandleBlock(srv showcasepb.EchoServiceServer, logger log.Logger) http.Handl
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:block': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)

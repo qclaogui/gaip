@@ -32,6 +32,9 @@ func HandleCreateUser(srv showcasepb.IdentityServiceServer, logger log.Logger) h
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/users': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -105,6 +108,9 @@ func HandleGetUser(srv showcasepb.IdentityServiceServer, logger log.Logger) http
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=users/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -170,6 +176,9 @@ func HandleListUsers(srv showcasepb.IdentityServiceServer, logger log.Logger) ht
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/users': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 0 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -230,6 +239,9 @@ func HandleUpdateUser(srv showcasepb.IdentityServiceServer, logger log.Logger) h
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{user.name=users/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
@@ -312,6 +324,9 @@ func HandleDeleteUser(srv showcasepb.IdentityServiceServer, logger log.Logger) h
 
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/{name=users/*}': %q", r.Method, r.URL))
 		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 1, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
 
 		if numUrlPathParams != 1 {
 			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 1, have %d: %#v", numUrlPathParams, urlPathParams)
