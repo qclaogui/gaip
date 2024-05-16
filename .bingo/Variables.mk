@@ -101,11 +101,11 @@ $(PROTOC_GEN_GO_GAPIC): $(BINGO_DIR)/protoc-gen-go_gapic.mod
 	@echo "(re)installing $(GOBIN)/protoc-gen-go_gapic-v0.42.0"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go_gapic.mod -o=$(GOBIN)/protoc-gen-go_gapic-v0.42.0 "github.com/googleapis/gapic-generator-go/cmd/protoc-gen-go_gapic"
 
-PROTOC_GEN_GO_REST_HANDLER := $(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240229100118-56242e8b774e
+PROTOC_GEN_GO_REST_HANDLER := $(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240516064410-9afae75fd8af
 $(PROTOC_GEN_GO_REST_HANDLER): $(BINGO_DIR)/protoc-gen-go_rest_handler.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240229100118-56242e8b774e"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go_rest_handler.mod -o=$(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240229100118-56242e8b774e "github.com/qclaogui/gaip/cmd/protoc-gen-go_rest_handler"
+	@echo "(re)installing $(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240516064410-9afae75fd8af"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go_rest_handler.mod -o=$(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240516064410-9afae75fd8af "github.com/qclaogui/gaip/cmd/protoc-gen-go_rest_handler"
 
 PROTOC_GEN_GRPC_GATEWAY := $(GOBIN)/protoc-gen-grpc-gateway-v2.20.0
 $(PROTOC_GEN_GRPC_GATEWAY): $(BINGO_DIR)/protoc-gen-grpc-gateway.mod
