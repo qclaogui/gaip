@@ -10,6 +10,7 @@ import (
 	"errors"
 	"io"
 	"reflect"
+	"sort"
 	"strings"
 	"testing"
 	"time"
@@ -51,6 +52,10 @@ func (m *mockUnaryStream) Send(_ *pb.EchoResponse) error { return nil }
 func (m *mockUnaryStream) Context() context.Context      { return nil }
 func (m *mockUnaryStream) SetTrailer(md metadata.MD) {
 	m.trail = append(m.trail, md.Get("showcase-trailer")...)
+	m.trail = append(m.trail, md.Get("x-goog-api-version")...)
+
+	// Sort the trailer values as having a guaranteed order will help with array comparison
+	sort.Strings(m.trail)
 }
 
 func (m *mockUnaryStream) SetHeader(md metadata.MD) error {
@@ -59,7 +64,7 @@ func (m *mockUnaryStream) SetHeader(md metadata.MD) error {
 }
 
 func (m *mockUnaryStream) verify(expectHeadersAndTrailers bool) {
-	if expectHeadersAndTrailers && !reflect.DeepEqual([]string{"show", "case"}, m.trail) && !reflect.DeepEqual([]string{"showcaseHeader, anotherHeader"}, m.head) {
+	if expectHeadersAndTrailers && (!reflect.DeepEqual([]string{"apiVersion", "case", "show"}, m.trail) || !reflect.DeepEqual([]string{"showcaseHeader", "anotherHeader"}, m.head)) {
 		m.t.Errorf("Unary stream did not get all expected headers and trailers.\nGot these headers: %+v\nGot these trailers: %+v", m.head, m.trail)
 	}
 }
@@ -93,6 +98,7 @@ func (m *mockExpandStream) SetTrailer(md metadata.MD) {
 
 func (m *mockExpandStream) SetHeader(md metadata.MD) error {
 	m.head = append(m.head, md.Get("x-goog-request-params")...)
+	m.head = append(m.head, md.Get("x-goog-api-version")...)
 	return nil
 }
 
@@ -101,7 +107,7 @@ func (m *mockExpandStream) verify(expectHeadersAndTrailers bool) {
 		m.t.Errorf("Expand did not stream all expected values. %d expected values remaining.", len(m.exp))
 	}
 
-	if expectHeadersAndTrailers && !reflect.DeepEqual([]string{"show", "case"}, m.trail) && !reflect.DeepEqual([]string{"showcaseHeader", "anotherHeader"}, m.head) {
+	if expectHeadersAndTrailers && (!reflect.DeepEqual([]string{"show", "case"}, m.trail) || !reflect.DeepEqual([]string{"showcaseHeader", "anotherHeader"}, m.head)) {
 		m.t.Errorf("Expand did not get all expected headers and trailers.\nGot these headers: %+v\nGot these trailers: %+v", m.head, m.trail)
 	}
 }
@@ -222,8 +228,8 @@ func (m *mockCollectStream) SetTrailer(md metadata.MD) {
 }
 
 func (m *mockCollectStream) verify(expectHeadersAndTrailers bool) {
-	if expectHeadersAndTrailers && !reflect.DeepEqual([]string{"show", "case"}, m.trail) && !reflect.DeepEqual([]string{"showcaseHeader", "anotherHeader"}, m.head) {
-		m.t.Errorf("Collect did not get all expected trailers.\nGot these headers: %+v\nGot these trailers: %+v", m.head, m.trail)
+	if expectHeadersAndTrailers && (!reflect.DeepEqual([]string{"show", "case"}, m.trail) || !reflect.DeepEqual([]string{"showcaseHeader", "anotherHeader"}, m.head)) {
+		m.t.Errorf("Expand did not get all expected headers and trailers.\nGot these headers: %+v\nGot these trailers: %+v", m.head, m.trail)
 	}
 }
 
@@ -327,8 +333,8 @@ func (m *mockChatStream) SetTrailer(md metadata.MD) {
 }
 
 func (m *mockChatStream) verify(expectHeadersAndTrailers bool) {
-	if expectHeadersAndTrailers && !reflect.DeepEqual([]string{"show", "case"}, m.trail) && !reflect.DeepEqual([]string{"showcaseHeader", "anotherHeader"}, m.head) {
-		m.t.Errorf("Chat did not get all expected trailers.\nGot these headers: %+v\nGot these trailers: %+v", m.head, m.trail)
+	if expectHeadersAndTrailers && (!reflect.DeepEqual([]string{"show", "case"}, m.trail) || !reflect.DeepEqual([]string{"showcaseHeader", "anotherHeader"}, m.head)) {
+		m.t.Errorf("Expand did not get all expected headers and trailers.\nGot these headers: %+v\nGot these trailers: %+v", m.head, m.trail)
 	}
 }
 
@@ -390,7 +396,15 @@ func TestChat_streamErr(t *testing.T) {
 
 func appendTestOutgoingMetadata(ctx context.Context, stream grpc.ServerTransportStream) context.Context {
 	ctx = grpc.NewContextWithServerTransportStream(ctx, stream)
-	ctx = metadata.NewIncomingContext(ctx, metadata.Pairs("showcase-trailer", "show", "showcase-trailer", "case", "trailer", "trail", "x-goog-request-params", "showcaseHeader", "x-goog-request-params", "anotherHeader", "header", "head"))
+	ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(
+		"showcase-trailer", "show",
+		"showcase-trailer", "case",
+		"trailer", "trail",
+		"x-goog-request-params", "showcaseHeader",
+		"x-goog-request-params", "anotherHeader",
+		"header", "head",
+		"x-goog-api-version", "apiVersion",
+	))
 	return ctx
 }
 

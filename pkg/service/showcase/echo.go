@@ -109,7 +109,6 @@ func (srv *Server) Expand(req *pb.ExpandRequest, stream pb.EchoService_ExpandSer
 	}
 
 	echoStreamingHeaders(stream)
-
 	if req.GetError() != nil {
 		return status.ErrorProto(req.GetError())
 	}
@@ -155,6 +154,8 @@ func (srv *Server) Chat(stream pb.EchoService_ChatServer) error {
 	for {
 		req, err := stream.Recv()
 		if errors.Is(err, io.EOF) {
+			// Echo headers and trailers when the stream ends
+			echoStreamingHeaders(stream)
 			echoStreamingTrailers(stream)
 			return nil
 		}
@@ -165,7 +166,6 @@ func (srv *Server) Chat(stream pb.EchoService_ChatServer) error {
 		if err = status.ErrorProto(req.GetError()); err != nil {
 			return err
 		}
-		echoStreamingHeaders(stream)
 		_ = stream.Send(&pb.EchoResponse{Content: req.GetContent()})
 	}
 }
@@ -324,20 +324,6 @@ func echoHeaders(ctx context.Context) {
 	}
 }
 
-// echo any provided trailing metadata
-func echoTrailers(ctx context.Context) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return
-	}
-
-	values := md.Get("showcase-trailer")
-	for _, value := range values {
-		trailer := metadata.Pairs("showcase-trailer", value)
-		_ = grpc.SetTrailer(ctx, trailer)
-	}
-}
-
 func echoStreamingHeaders(stream grpc.ServerStream) {
 	md, ok := metadata.FromIncomingContext(stream.Context())
 	if !ok {
@@ -353,15 +339,31 @@ func echoStreamingHeaders(stream grpc.ServerStream) {
 	}
 }
 
+// echo any provided trailing metadata
+func echoTrailers(ctx context.Context) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return
+	}
+
+	for k, v := range md {
+		for _, value := range v {
+			trailer := metadata.Pairs(k, value)
+			_ = grpc.SetTrailer(ctx, trailer)
+		}
+	}
+}
+
 func echoStreamingTrailers(stream grpc.ServerStream) {
 	md, ok := metadata.FromIncomingContext(stream.Context())
 	if !ok {
 		return
 	}
 
-	values := md.Get("showcase-trailer")
-	for _, value := range values {
-		trailer := metadata.Pairs("showcase-trailer", value)
-		stream.SetTrailer(trailer)
+	for k, v := range md {
+		for _, value := range v {
+			trailer := metadata.Pairs(k, value)
+			stream.SetTrailer(trailer)
+		}
 	}
 }
