@@ -5,7 +5,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -39,7 +38,7 @@ func main() {
 	// LOG_LEVEL is set, let's default to the desired level
 	if lvlEnv, ok := os.LookupEnv("LOG_LEVEL"); ok {
 		if err := lvl.UnmarshalText([]byte(lvlEnv)); err != nil {
-			slog.Error("unknown log level specified, choises are [DEBUG, INFO, WARN, ERROR]", errors.New(lvlEnv))
+			slog.Error("unknown log level specified, choises are [DEBUG, INFO, WARN, ERROR]", "err", lvlEnv)
 			os.Exit(-1)
 		}
 	}
