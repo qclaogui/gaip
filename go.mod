@@ -43,7 +43,7 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.26.0
 	go.opentelemetry.io/otel/sdk v1.26.0
 	golang.org/x/net v0.25.0
-	google.golang.org/api v0.180.0
+	google.golang.org/api v0.181.0
 	google.golang.org/genproto v0.0.0-20240515191416-fc5f0ca64291
 	google.golang.org/genproto/googleapis/api v0.0.0-20240515191416-fc5f0ca64291
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240515191416-fc5f0ca64291
