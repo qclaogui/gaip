@@ -38,7 +38,7 @@ require (
 	github.com/prometheus/client_golang v1.19.1
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.9.0
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.51.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.52.0
 	go.opentelemetry.io/otel v1.27.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.27.0
 	go.opentelemetry.io/otel/sdk v1.27.0
@@ -46,7 +46,7 @@ require (
 	google.golang.org/api v0.181.0
 	google.golang.org/genproto v0.0.0-20240515191416-fc5f0ca64291
 	google.golang.org/genproto/googleapis/api v0.0.0-20240515191416-fc5f0ca64291
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240515191416-fc5f0ca64291
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240520151616-dc85e6b867a5
 	google.golang.org/grpc v1.64.0
 	google.golang.org/protobuf v1.34.1
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
