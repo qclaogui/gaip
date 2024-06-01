@@ -5,7 +5,7 @@ go 1.22.3
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.34.1-20240508200655-46a4cf4ba109.1
 	cloud.google.com/go/longrunning v0.5.7
-	dagger.io/dagger v0.11.5
+	dagger.io/dagger v0.11.6
 	entgo.io/ent v0.13.1
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/bufbuild/protovalidate-go v0.6.2
