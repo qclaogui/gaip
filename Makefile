@@ -2,8 +2,8 @@ include .bingo/Variables.mk
 
 .DEFAULT_GOAL := help
 
-SWAGGER_UI_VERSION	:=v5.17.12
-PROTOC_VERSION		:=27.0
+SWAGGER_UI_VERSION	:=v5.17.14
+PROTOC_VERSION		:=27.1
 
 # Download the proper protoc version for Darwin (osx) and Linux.
 PROTOC_URL := https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/
@@ -351,7 +351,7 @@ goreleaser-lint: $(GORELEASER)
 
 go-lint: $(GOLANGCI_LINT)
 	@echo ">> run golangci-lint"
-	@$(GOLANGCI_LINT) run --out-format=github-actions --timeout=15m
+	@$(GOLANGCI_LINT) run --timeout=15m
 
 buf-lint: $(BUF) buf-fmt
 	@echo ">> run buf lint"

@@ -4,4 +4,4 @@ go 1.22
 
 toolchain go1.22.3
 
-require github.com/goreleaser/goreleaser v1.26.1
+require github.com/goreleaser/goreleaser v1.26.2

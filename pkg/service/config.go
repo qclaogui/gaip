@@ -28,16 +28,16 @@ type Config struct {
 	MetricsNativeHistogramFactor float64 `yaml:"-"`
 
 	// HTTP configs
-	HTTPListenNetwork            string                 `yaml:"http_listen_network"`
-	HTTPListenAddress            string                 `yaml:"http_listen_address"`
-	HTTPListenPort               int                    `yaml:"http_listen_port"`
-	HTTPConnLimit                int                    `yaml:"http_listen_conn_limit"`
-	HTTPServerReadTimeout        time.Duration          `yaml:"http_server_read_timeout"`
-	HTTPServerReadHeaderTimeout  time.Duration          `yaml:"http_server_read_header_timeout"`
-	HTTPServerWriteTimeout       time.Duration          `yaml:"http_server_write_timeout"`
-	HTTPServerIdleTimeout        time.Duration          `yaml:"http_server_idle_timeout"`
-	HTTPMiddleware               []middleware.Interface `yaml:"-"`
-	DisableDefaultHTTPMiddleware bool                   `yaml:"-"`
+	HTTPListenNetwork             string                 `yaml:"http_listen_network"`
+	HTTPListenAddress             string                 `yaml:"http_listen_address"`
+	HTTPListenPort                int                    `yaml:"http_listen_port"`
+	HTTPConnLimit                 int                    `yaml:"http_listen_conn_limit"`
+	HTTPServerReadTimeout         time.Duration          `yaml:"http_server_read_timeout"`
+	HTTPServerReadHeaderTimeout   time.Duration          `yaml:"http_server_read_header_timeout"`
+	HTTPServerWriteTimeout        time.Duration          `yaml:"http_server_write_timeout"`
+	HTTPServerIdleTimeout         time.Duration          `yaml:"http_server_idle_timeout"`
+	HTTPMiddleware                []middleware.Interface `yaml:"-"`
+	DoNotAddDefaultHTTPMiddleware bool                   `yaml:"-"`
 
 	// gRPC configs
 	GRPCListenNetwork                     string              `yaml:"grpc_listen_network"`
@@ -55,6 +55,8 @@ type Config struct {
 	GRPCServerMinTimeBetweenPings         time.Duration       `yaml:"grpc_server_min_time_between_pings"`
 	GRPCServerPingWithoutStreamAllowed    bool                `yaml:"grpc_server_ping_without_stream_allowed"`
 	GRPCServerNumWorkers                  int                 `yaml:"grpc_server_num_workers"`
+	GRPCServerStatsTrackingEnabled        bool                `yaml:"grpc_server_stats_tracking_enabled"`
+	GRPCServerRecvBufferPoolsEnabled      bool                `yaml:"grpc_server_recv_buffer_pools_enabled"`
 	GRPCOptions                           []grpc.ServerOption `yaml:"-"`
 	ReportGRPCCodesInInstrumentationLabel bool                `yaml:"report_grpc_codes_in_instrumentation_label_enabled"`
 
@@ -73,6 +75,7 @@ type Config struct {
 	ExcludeRequestInLog          bool            `yaml:"-"`
 	DisableRequestSuccessLog     bool            `yaml:"-"`
 	LogSourceIPs                 bool            `yaml:"log_source_ips_enabled"`
+	LogSourceIPsFull             bool            `yaml:"log_source_ips_full"`
 	LogSourceIPsHeader           string          `yaml:"log_source_ips_header"`
 	LogSourceIPsRegex            string          `yaml:"log_source_ips_regex"`
 	LogRequestHeaders            bool            `yaml:"log_request_headers"`
@@ -118,6 +121,8 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	fs.DurationVar(&cfg.GRPCServerMinTimeBetweenPings, "server.grpc.keepalive.min-time-between-pings", 5*time.Minute, "Minimum amount of time a client should wait before sending a keepalive ping. If client sends keepalive ping more often, server will send GOAWAY and close the connection.")
 	fs.BoolVar(&cfg.GRPCServerPingWithoutStreamAllowed, "server.grpc.keepalive.ping-without-stream-allowed", false, "If true, server allows keepalive pings even when there are no active streams(RPCs). If false, and client sends ping when there are no active streams, server will send GOAWAY and close the connection.")
 	fs.IntVar(&cfg.GRPCServerNumWorkers, "server.grpc.num-workers", 0, "If non-zero, configures the amount of GRPC server workers used to serve the requests.")
+	fs.BoolVar(&cfg.GRPCServerStatsTrackingEnabled, "server.grpc.stats-tracking-enabled", true, "If true, the request_message_bytes, response_message_bytes, and inflight_requests metrics will be tracked. Enabling this option prevents the use of memory pools for parsing gRPC request bodies and may lead to more memory allocations.")
+	fs.BoolVar(&cfg.GRPCServerRecvBufferPoolsEnabled, "server.grpc.recv-buffer-pools-enabled", false, "If true, gGPC's buffer pools will be used to handle incoming requests. Enabling this feature can reduce memory allocation, but also requires disabling GRPC server stats tracking by setting `server.grpc.stats-tracking-enabled=false`. This is an experimental gRPC feature, so it might be removed in a future version of the gRPC library.")
 	fs.BoolVar(&cfg.ReportGRPCCodesInInstrumentationLabel, "server.report-grpc-codes-in-instrumentation-label-enabled", false, "If set to true, gRPC statuses will be reported in instrumentation labels with their string representations. Otherwise, they will be reported as \"error\".")
 
 	fs.BoolVar(&cfg.RegisterInstrumentation, "server.register-instrumentation", true, "Register the intrumentation handlers (/metrics etc).")
@@ -127,7 +132,8 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 
 	fs.StringVar(&cfg.LogFormat, "log.format", log.LogfmtFormat, "Output log messages in the given format. Valid formats: [logfmt, json]")
 	cfg.LogLevel.RegisterFlags(fs)
-	fs.BoolVar(&cfg.LogSourceIPs, "server.log-source-ips-enabled", false, "Optionally log the source IPs.")
+	fs.BoolVar(&cfg.LogSourceIPs, "server.log-source-ips-enabled", true, "Optionally log the source IPs.")
+	fs.BoolVar(&cfg.LogSourceIPsFull, "server.log-source-ips-full", true, "Log all source IPs instead of only the originating one. Only used if server.log-source-ips-enabled is true")
 	fs.StringVar(&cfg.LogSourceIPsHeader, "server.log-source-ips-header", "", "Header field storing the source IPs. Only used if server.log-source-ips-enabled is true. If not set the default Forwarded, X-Real-IP and X-Forwarded-For headers are used")
 	fs.StringVar(&cfg.LogSourceIPsRegex, "server.log-source-ips-regex", "", "Regex for matching the source IPs. Only used if server.log-source-ips-enabled is true. If not set the default Forwarded, X-Real-IP and X-Forwarded-For headers are used")
 	fs.BoolVar(&cfg.LogRequestHeaders, "server.log-request-headers", false, "Optionally log request headers.")

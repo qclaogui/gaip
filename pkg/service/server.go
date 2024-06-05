@@ -21,6 +21,7 @@ import (
 	lg "github.com/grafana/dskit/log"
 	"github.com/grafana/dskit/middleware"
 	"github.com/grafana/dskit/signals"
+	_ "github.com/grafana/pyroscope-go/godeltaprof/http/pprof" // anonymous import to get godelatprof handlers registered
 	otgrpc "github.com/opentracing-contrib/go-grpc"
 	"github.com/opentracing/opentracing-go"
 	"github.com/prometheus/client_golang/prometheus"
@@ -28,6 +29,7 @@ import (
 	"github.com/qclaogui/gaip/third_party"
 	"golang.org/x/net/netutil"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/experimental"
 	"google.golang.org/grpc/keepalive"
 )
 
@@ -158,41 +160,9 @@ func newEndpointREST(cfg Config, router *mux.Router, metrics *Metrics, logger lo
 		httpListener = netutil.LimitListener(httpListener, cfg.HTTPConnLimit)
 	}
 
-	sourceIPs, err := middleware.NewSourceIPs(cfg.LogSourceIPsHeader, cfg.LogSourceIPsRegex, true)
+	httpMiddleware, err := BuildHTTPMiddleware(cfg, router, metrics, logger)
 	if err != nil {
-		return nil, nil, fmt.Errorf("error setting up source IP extraction: %v", err)
-	}
-
-	logSourceIPs := sourceIPs
-	if !cfg.LogSourceIPs {
-		// We always include the source IPs for traces,
-		// but only want to log them in the middleware if that is enabled.
-		logSourceIPs = nil
-	}
-
-	defaultLogMiddleware := middleware.NewLogMiddleware(logger, cfg.LogRequestHeaders, cfg.LogRequestAtInfoLevel, logSourceIPs, strings.Split(cfg.LogRequestExcludeHeadersList, ","))
-	defaultLogMiddleware.DisableRequestSuccessLog = cfg.DisableRequestSuccessLog
-
-	defaultHTTPMiddleware := []middleware.Interface{
-		middleware.Tracer{
-			RouteMatcher: router,
-			SourceIPs:    sourceIPs,
-		},
-		defaultLogMiddleware,
-		middleware.Instrument{
-			RouteMatcher:     router,
-			Duration:         metrics.RequestDuration,
-			RequestBodySize:  metrics.ReceivedMessageSize,
-			ResponseBodySize: metrics.SentMessageSize,
-			InflightRequests: metrics.InflightRequests,
-		},
-	}
-
-	var httpMiddleware []middleware.Interface
-	if cfg.DisableDefaultHTTPMiddleware {
-		httpMiddleware = cfg.HTTPMiddleware
-	} else {
-		httpMiddleware = append(defaultHTTPMiddleware, cfg.HTTPMiddleware...)
+		return nil, nil, fmt.Errorf("error building http middleware: %w", err)
 	}
 
 	httpServer := &http.Server{
@@ -274,13 +244,22 @@ func newEndpointGRPC(cfg Config, router *mux.Router, metrics *Metrics, logger lo
 		grpc.NumStreamWorkers(uint32(cfg.GRPCServerNumWorkers)),
 	}
 
-	grpcOptions = append(grpcOptions,
-		grpc.StatsHandler(middleware.NewStatsHandler(
-			metrics.ReceivedMessageSize,
-			metrics.SentMessageSize,
-			metrics.InflightRequests,
-		)),
-	)
+	if cfg.GRPCServerStatsTrackingEnabled {
+		grpcOptions = append(grpcOptions,
+			grpc.StatsHandler(middleware.NewStatsHandler(
+				metrics.ReceivedMessageSize,
+				metrics.SentMessageSize,
+				metrics.InflightRequests,
+			)),
+		)
+	}
+
+	if cfg.GRPCServerRecvBufferPoolsEnabled {
+		if cfg.GRPCServerStatsTrackingEnabled {
+			return nil, nil, fmt.Errorf("grpc_server_stats_tracking_enabled must be set to false if grpc_server_recv_buffer_pools_enabled is true")
+		}
+		grpcOptions = append(grpcOptions, experimental.RecvBufferPool(grpc.NewSharedBufferPool()))
+	}
 
 	grpcOptions = append(grpcOptions, cfg.GRPCOptions...)
 	grpcServer := grpc.NewServer(grpcOptions...)
@@ -323,6 +302,47 @@ func (s *Server) HTTPListenAddr() net.Addr {
 // GRPCListenAddr exposes `net.Addr` that `Server` is listening to for GRPCServer connections.
 func (s *Server) GRPCListenAddr() net.Addr {
 	return s.grpcListener.Addr()
+}
+
+func BuildHTTPMiddleware(cfg Config, router *mux.Router, metrics *Metrics, logger log.Logger) ([]middleware.Interface, error) {
+	sourceIPs, err := middleware.NewSourceIPs(cfg.LogSourceIPsHeader, cfg.LogSourceIPsRegex, cfg.LogSourceIPsFull)
+	if err != nil {
+		return nil, fmt.Errorf("error setting up source IP extraction: %v", err)
+	}
+
+	logSourceIPs := sourceIPs
+	if !cfg.LogSourceIPs {
+		// We always include the source IPs for traces,
+		// but only want to log them in the middleware if that is enabled.
+		logSourceIPs = nil
+	}
+
+	defaultLogMiddleware := middleware.NewLogMiddleware(logger, cfg.LogRequestHeaders, cfg.LogRequestAtInfoLevel, logSourceIPs, strings.Split(cfg.LogRequestExcludeHeadersList, ","))
+	defaultLogMiddleware.DisableRequestSuccessLog = cfg.DisableRequestSuccessLog
+
+	defaultHTTPMiddleware := []middleware.Interface{
+		middleware.RouteInjector{
+			RouteMatcher: router,
+		},
+		middleware.Tracer{
+			SourceIPs: sourceIPs,
+		},
+		defaultLogMiddleware,
+		middleware.Instrument{
+			Duration:         metrics.RequestDuration,
+			RequestBodySize:  metrics.ReceivedMessageSize,
+			ResponseBodySize: metrics.SentMessageSize,
+			InflightRequests: metrics.InflightRequests,
+		},
+	}
+	var httpMiddleware []middleware.Interface
+	if cfg.DoNotAddDefaultHTTPMiddleware {
+		httpMiddleware = cfg.HTTPMiddleware
+	} else {
+		httpMiddleware = append(defaultHTTPMiddleware, cfg.HTTPMiddleware...)
+	}
+
+	return httpMiddleware, nil
 }
 
 // Run Run the server; blocks until SIGTERM (if signal handling is enabled), an error is received, or Stop() is called.
