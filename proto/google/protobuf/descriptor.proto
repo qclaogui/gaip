@@ -973,15 +973,15 @@ message FeatureSet {
     // TODO Enable this in google3 once protoc rolls out.
     feature_support = {edition_introduced: EDITION_2023},
     edition_defaults = {
-      edition: EDITION_PROTO2,
+      edition: EDITION_PROTO2
       value: "EXPLICIT"
     },
     edition_defaults = {
-      edition: EDITION_PROTO3,
+      edition: EDITION_PROTO3
       value: "IMPLICIT"
     },
     edition_defaults = {
-      edition: EDITION_2023,
+      edition: EDITION_2023
       value: "EXPLICIT"
     }
   ];
@@ -998,11 +998,11 @@ message FeatureSet {
     // TODO Enable this in google3 once protoc rolls out.
     feature_support = {edition_introduced: EDITION_2023},
     edition_defaults = {
-      edition: EDITION_PROTO2,
+      edition: EDITION_PROTO2
       value: "CLOSED"
     },
     edition_defaults = {
-      edition: EDITION_PROTO3,
+      edition: EDITION_PROTO3
       value: "OPEN"
     }
   ];
@@ -1019,11 +1019,11 @@ message FeatureSet {
     // TODO Enable this in google3 once protoc rolls out.
     feature_support = {edition_introduced: EDITION_2023},
     edition_defaults = {
-      edition: EDITION_PROTO2,
+      edition: EDITION_PROTO2
       value: "EXPANDED"
     },
     edition_defaults = {
-      edition: EDITION_PROTO3,
+      edition: EDITION_PROTO3
       value: "PACKED"
     }
   ];
@@ -1041,11 +1041,11 @@ message FeatureSet {
     // TODO Enable this in google3 once protoc rolls out.
     feature_support = {edition_introduced: EDITION_2023},
     edition_defaults = {
-      edition: EDITION_PROTO2,
+      edition: EDITION_PROTO2
       value: "NONE"
     },
     edition_defaults = {
-      edition: EDITION_PROTO3,
+      edition: EDITION_PROTO3
       value: "VERIFY"
     }
   ];
@@ -1062,7 +1062,7 @@ message FeatureSet {
     // TODO Enable this in google3 once protoc rolls out.
     feature_support = {edition_introduced: EDITION_2023},
     edition_defaults = {
-      edition: EDITION_PROTO2,
+      edition: EDITION_PROTO2
       value: "LENGTH_PREFIXED"
     }
   ];
@@ -1080,11 +1080,11 @@ message FeatureSet {
     // TODO Enable this in google3 once protoc rolls out.
     feature_support = {edition_introduced: EDITION_2023},
     edition_defaults = {
-      edition: EDITION_PROTO2,
+      edition: EDITION_PROTO2
       value: "LEGACY_BEST_EFFORT"
     },
     edition_defaults = {
-      edition: EDITION_PROTO3,
+      edition: EDITION_PROTO3
       value: "ALLOW"
     }
   ];
@@ -1093,23 +1093,23 @@ message FeatureSet {
 
   extensions 1000 to 9994 [
     declaration = {
-      number: 1000,
-      full_name: ".pb.cpp",
+      number: 1000
+      full_name: ".pb.cpp"
       type: ".pb.CppFeatures"
     },
     declaration = {
-      number: 1001,
-      full_name: ".pb.java",
+      number: 1001
+      full_name: ".pb.java"
       type: ".pb.JavaFeatures"
     },
     declaration = {
-      number: 1002,
-      full_name: ".pb.go",
+      number: 1002
+      full_name: ".pb.go"
       type: ".pb.GoFeatures"
     },
     declaration = {
-      number: 9990,
-      full_name: ".pb.proto1",
+      number: 9990
+      full_name: ".pb.proto1"
       type: ".pb.Proto1Features"
     }
   ];

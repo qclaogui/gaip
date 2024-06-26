@@ -10,7 +10,7 @@ option go_package = "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb";
 // A Shelf contains a collection of books with a theme.
 message Shelf {
   option (google.api.resource) = {
-    type: "library.qclaogui.com/Shelf",
+    type: "library.qclaogui.com/Shelf"
     pattern: "shelves/{shelf_id}"
   };
 

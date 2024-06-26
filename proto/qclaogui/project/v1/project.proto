@@ -10,7 +10,7 @@ option go_package = "github.com/qclaogui/gaip/genproto/project/apiv1/projectpb";
 // Describes a project.
 message Project {
   option (google.api.resource) = {
-    type: "project.qclaogui.com/Project",
+    type: "project.qclaogui.com/Project"
     pattern: "projects/{project}"
   };
 

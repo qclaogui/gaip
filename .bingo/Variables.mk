@@ -35,11 +35,11 @@ $(BINGO): $(BINGO_DIR)/bingo.mod
 	@echo "(re)installing $(GOBIN)/bingo-v0.9.0"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=bingo.mod -o=$(GOBIN)/bingo-v0.9.0 "github.com/bwplotka/bingo"
 
-BUF := $(GOBIN)/buf-v1.32.2
+BUF := $(GOBIN)/buf-v1.34.0
 $(BUF): $(BINGO_DIR)/buf.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/buf-v1.32.2"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=buf.mod -o=$(GOBIN)/buf-v1.32.2 "github.com/bufbuild/buf/cmd/buf"
+	@echo "(re)installing $(GOBIN)/buf-v1.34.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=buf.mod -o=$(GOBIN)/buf-v1.34.0 "github.com/bufbuild/buf/cmd/buf"
 
 COPYRIGHT := $(GOBIN)/copyright-v0.0.0-20230505153745-6b7392939a60
 $(COPYRIGHT): $(BINGO_DIR)/copyright.mod
@@ -59,11 +59,11 @@ $(GOIMPORTS): $(BINGO_DIR)/goimports.mod
 	@echo "(re)installing $(GOBIN)/goimports-v0.22.0"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=goimports.mod -o=$(GOBIN)/goimports-v0.22.0 "golang.org/x/tools/cmd/goimports"
 
-GOLANGCI_LINT := $(GOBIN)/golangci-lint-v1.59.0
+GOLANGCI_LINT := $(GOBIN)/golangci-lint-v1.59.1
 $(GOLANGCI_LINT): $(BINGO_DIR)/golangci-lint.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/golangci-lint-v1.59.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=golangci-lint.mod -o=$(GOBIN)/golangci-lint-v1.59.0 "github.com/golangci/golangci-lint/cmd/golangci-lint"
+	@echo "(re)installing $(GOBIN)/golangci-lint-v1.59.1"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=golangci-lint.mod -o=$(GOBIN)/golangci-lint-v1.59.1 "github.com/golangci/golangci-lint/cmd/golangci-lint"
 
 GORELEASER := $(GOBIN)/goreleaser-v1.26.2
 $(GORELEASER): $(BINGO_DIR)/goreleaser.mod
@@ -89,17 +89,17 @@ $(PROTOC_GEN_GO_GRPC): $(BINGO_DIR)/protoc-gen-go-grpc.mod
 	@echo "(re)installing $(GOBIN)/protoc-gen-go-grpc-v1.4.0"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go-grpc.mod -o=$(GOBIN)/protoc-gen-go-grpc-v1.4.0 "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
 
-PROTOC_GEN_GO := $(GOBIN)/protoc-gen-go-v1.34.1
+PROTOC_GEN_GO := $(GOBIN)/protoc-gen-go-v1.34.2
 $(PROTOC_GEN_GO): $(BINGO_DIR)/protoc-gen-go.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoc-gen-go-v1.34.1"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go.mod -o=$(GOBIN)/protoc-gen-go-v1.34.1 "google.golang.org/protobuf/cmd/protoc-gen-go"
+	@echo "(re)installing $(GOBIN)/protoc-gen-go-v1.34.2"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go.mod -o=$(GOBIN)/protoc-gen-go-v1.34.2 "google.golang.org/protobuf/cmd/protoc-gen-go"
 
-PROTOC_GEN_GO_GAPIC := $(GOBIN)/protoc-gen-go_gapic-v0.43.1
+PROTOC_GEN_GO_GAPIC := $(GOBIN)/protoc-gen-go_gapic-v0.44.1
 $(PROTOC_GEN_GO_GAPIC): $(BINGO_DIR)/protoc-gen-go_gapic.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoc-gen-go_gapic-v0.43.1"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go_gapic.mod -o=$(GOBIN)/protoc-gen-go_gapic-v0.43.1 "github.com/googleapis/gapic-generator-go/cmd/protoc-gen-go_gapic"
+	@echo "(re)installing $(GOBIN)/protoc-gen-go_gapic-v0.44.1"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go_gapic.mod -o=$(GOBIN)/protoc-gen-go_gapic-v0.44.1 "github.com/googleapis/gapic-generator-go/cmd/protoc-gen-go_gapic"
 
 PROTOC_GEN_GO_REST_HANDLER := $(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240516080558-0052bb7d2276
 $(PROTOC_GEN_GO_REST_HANDLER): $(BINGO_DIR)/protoc-gen-go_rest_handler.mod

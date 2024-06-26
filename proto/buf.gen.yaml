@@ -10,22 +10,22 @@ managed:
 #    #   buf.build/acme/weather: github.com/acme/weather/gen/proto/go
 
 # Usage with local plugins (just run: make install-build-deps to install dependencies)
-# replace path with your {GOBIN}/protoc-gen-go-v1.34.1. Example: /Users/Shared/code/golang/bin/protoc-gen-go-v1.34.1
+# replace path with your {GOBIN}/protoc-gen-go-v1.34.2. Example: /Users/Shared/code/golang/bin/protoc-gen-go-v1.34.2
 plugins:
   - plugin: go
     out: ../genproto
     opt:
     - module=github.com/qclaogui/gaip/genproto
-    path: /Users/Shared/code/golang/bin/protoc-gen-go-v1.34.1
-    protoc_path: /Users/Shared/code/golang/bin/protoc-26.1
+    path: /Users/Shared/code/golang/bin/protoc-gen-go-v1.34.2
+    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
 
   - plugin: go-grpc
     out: ../genproto
     opt:
     - module=github.com/qclaogui/gaip/genproto
     - require_unimplemented_servers=false
-    path: /Users/Shared/code/golang/bin/protoc-gen-go-grpc-v1.3.0
-    protoc_path: /Users/Shared/code/golang/bin/protoc-26.1
+    path: /Users/Shared/code/golang/bin/protoc-gen-go-grpc-v1.4.0
+    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
 
   - plugin: go_gapic
     out: ../genproto
@@ -37,8 +37,8 @@ plugins:
     - release-level=alpha
     - transport=grpc+rest
     - rest-numeric-enums=true
-    path: /Users/Shared/code/golang/bin/protoc-gen-go_gapic-v0.42.0
-    protoc_path: /Users/Shared/code/golang/bin/protoc-26.1
+    path: /Users/Shared/code/golang/bin/protoc-gen-go_gapic-v0.44.1
+    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
 
   - plugin: grpc-gateway
     out: ../genproto
@@ -46,7 +46,7 @@ plugins:
     - module=github.com/qclaogui/gaip/genproto
     - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
     path: /Users/Shared/code/golang/bin/protoc-gen-grpc-gateway-v2.20.0
-    protoc_path: /Users/Shared/code/golang/bin/protoc-26.1
+    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
 
   - plugin: openapiv2
     out: ../third_party/gen/openapiv2
@@ -54,4 +54,4 @@ plugins:
     - logtostderr=true
     - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
     path: /Users/Shared/code/golang/bin/protoc-gen-openapiv2-v2.20.0
-    protoc_path: /Users/Shared/code/golang/bin/protoc-26.1
+    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2

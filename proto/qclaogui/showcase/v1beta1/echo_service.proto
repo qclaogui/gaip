@@ -33,32 +33,32 @@ service EchoService {
       body: "*"
     };
     option (google.api.routing) = {
-      routing_parameters {field: "header"}
-      routing_parameters {
+      routing_parameters: {field: "header"}
+      routing_parameters: {
         field: "header"
         path_template: "{routing_id=**}"
       }
-      routing_parameters {
+      routing_parameters: {
         field: "header"
         path_template: "{table_name=regions/*/zones/*/**}"
       }
-      routing_parameters {
+      routing_parameters: {
         field: "header"
         path_template: "{super_id=projects/*}/**"
       }
-      routing_parameters {
+      routing_parameters: {
         field: "header"
         path_template: "{table_name=projects/*/instances/*/**}"
       }
-      routing_parameters {
+      routing_parameters: {
         field: "header"
         path_template: "projects/*/{instance_id=instances/*}/**"
       }
-      routing_parameters {
+      routing_parameters: {
         field: "other_header"
         path_template: "{baz=**}"
       }
-      routing_parameters {
+      routing_parameters: {
         field: "other_header"
         path_template: "{qux=projects/*}/**"
       }
