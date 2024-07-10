@@ -10,7 +10,7 @@ import (
 	"os"
 
 	"dagger.io/dagger"
-	platformFormat "github.com/containerd/containerd/platforms"
+	platformFormat "github.com/containerd/platforms"
 )
 
 const (
