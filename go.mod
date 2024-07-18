@@ -3,7 +3,7 @@ module github.com/qclaogui/gaip
 go 1.22.5
 
 require (
-	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.34.2-20240508200655-46a4cf4ba109.2
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.34.2-20240717164558-a6c49f84cc0f.2
 	cloud.google.com/go/longrunning v0.5.10
 	dagger.io/dagger v0.12.0
 	entgo.io/ent v0.13.1
