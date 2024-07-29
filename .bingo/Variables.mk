@@ -47,11 +47,11 @@ $(COPYRIGHT): $(BINGO_DIR)/copyright.mod
 	@echo "(re)installing $(GOBIN)/copyright-v0.0.0-20230505153745-6b7392939a60"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=copyright.mod -o=$(GOBIN)/copyright-v0.0.0-20230505153745-6b7392939a60 "github.com/efficientgo/tools/copyright"
 
-ENT := $(GOBIN)/ent-v0.13.1
+ENT := $(GOBIN)/ent-v0.14.0
 $(ENT): $(BINGO_DIR)/ent.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/ent-v0.13.1"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=ent.mod -o=$(GOBIN)/ent-v0.13.1 "entgo.io/ent/cmd/ent"
+	@echo "(re)installing $(GOBIN)/ent-v0.14.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=ent.mod -o=$(GOBIN)/ent-v0.14.0 "entgo.io/ent/cmd/ent"
 
 GOIMPORTS := $(GOBIN)/goimports-v0.23.0
 $(GOIMPORTS): $(BINGO_DIR)/goimports.mod
@@ -83,11 +83,11 @@ $(KUSTOMIZE): $(BINGO_DIR)/kustomize.mod
 	@echo "(re)installing $(GOBIN)/kustomize-v5.4.3"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=kustomize.mod -o=$(GOBIN)/kustomize-v5.4.3 "sigs.k8s.io/kustomize/kustomize/v5"
 
-PROTOC_GEN_GO_GRPC := $(GOBIN)/protoc-gen-go-grpc-v1.4.0
+PROTOC_GEN_GO_GRPC := $(GOBIN)/protoc-gen-go-grpc-v1.5.1
 $(PROTOC_GEN_GO_GRPC): $(BINGO_DIR)/protoc-gen-go-grpc.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoc-gen-go-grpc-v1.4.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go-grpc.mod -o=$(GOBIN)/protoc-gen-go-grpc-v1.4.0 "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
+	@echo "(re)installing $(GOBIN)/protoc-gen-go-grpc-v1.5.1"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go-grpc.mod -o=$(GOBIN)/protoc-gen-go-grpc-v1.5.1 "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
 
 PROTOC_GEN_GO := $(GOBIN)/protoc-gen-go-v1.34.2
 $(PROTOC_GEN_GO): $(BINGO_DIR)/protoc-gen-go.mod
@@ -107,17 +107,17 @@ $(PROTOC_GEN_GO_REST_HANDLER): $(BINGO_DIR)/protoc-gen-go_rest_handler.mod
 	@echo "(re)installing $(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240516080558-0052bb7d2276"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go_rest_handler.mod -o=$(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240516080558-0052bb7d2276 "github.com/qclaogui/gaip/cmd/protoc-gen-go_rest_handler"
 
-PROTOC_GEN_GRPC_GATEWAY := $(GOBIN)/protoc-gen-grpc-gateway-v2.20.0
+PROTOC_GEN_GRPC_GATEWAY := $(GOBIN)/protoc-gen-grpc-gateway-v2.21.0
 $(PROTOC_GEN_GRPC_GATEWAY): $(BINGO_DIR)/protoc-gen-grpc-gateway.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoc-gen-grpc-gateway-v2.20.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-grpc-gateway.mod -o=$(GOBIN)/protoc-gen-grpc-gateway-v2.20.0 "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway"
+	@echo "(re)installing $(GOBIN)/protoc-gen-grpc-gateway-v2.21.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-grpc-gateway.mod -o=$(GOBIN)/protoc-gen-grpc-gateway-v2.21.0 "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway"
 
-PROTOC_GEN_OPENAPIV2 := $(GOBIN)/protoc-gen-openapiv2-v2.20.0
+PROTOC_GEN_OPENAPIV2 := $(GOBIN)/protoc-gen-openapiv2-v2.21.0
 $(PROTOC_GEN_OPENAPIV2): $(BINGO_DIR)/protoc-gen-openapiv2.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoc-gen-openapiv2-v2.20.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-openapiv2.mod -o=$(GOBIN)/protoc-gen-openapiv2-v2.20.0 "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2"
+	@echo "(re)installing $(GOBIN)/protoc-gen-openapiv2-v2.21.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-openapiv2.mod -o=$(GOBIN)/protoc-gen-openapiv2-v2.21.0 "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2"
 
 PROTOVENEER := $(GOBIN)/protoveneer-v0.0.0-20240103183307-be819d1f06fc
 $(PROTOVENEER): $(BINGO_DIR)/protoveneer.mod
