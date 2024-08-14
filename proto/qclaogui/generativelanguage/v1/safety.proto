@@ -28,36 +28,41 @@ enum HarmCategory {
   // Category is unspecified.
   HARM_CATEGORY_UNSPECIFIED = 0;
 
-  // Negative or harmful comments targeting identity and/or protected attribute.
+  // **PaLM** - Negative or harmful comments targeting identity and/or protected
+  // attribute.
   HARM_CATEGORY_DEROGATORY = 1;
 
-  // Content that is rude, disrepspectful, or profane.
+  // **PaLM** - Content that is rude, disrespectful, or profane.
   HARM_CATEGORY_TOXICITY = 2;
 
-  // Describes scenarios depictng violence against an individual or group, or
-  // general descriptions of gore.
+  // **PaLM** - Describes scenarios depicting violence against an individual or
+  // group, or general descriptions of gore.
   HARM_CATEGORY_VIOLENCE = 3;
 
-  // Contains references to sexual acts or other lewd content.
+  // **PaLM** - Contains references to sexual acts or other lewd content.
   HARM_CATEGORY_SEXUAL = 4;
 
-  // Promotes unchecked medical advice.
+  // **PaLM** - Promotes unchecked medical advice.
   HARM_CATEGORY_MEDICAL = 5;
 
-  // Dangerous content that promotes, facilitates, or encourages harmful acts.
+  // **PaLM** - Dangerous content that promotes, facilitates, or encourages
+  // harmful acts.
   HARM_CATEGORY_DANGEROUS = 6;
 
-  // Harasment content.
+  // **Gemini** - Harassment content.
   HARM_CATEGORY_HARASSMENT = 7;
 
-  // Hate speech and content.
+  // **Gemini** - Hate speech and content.
   HARM_CATEGORY_HATE_SPEECH = 8;
 
-  // Sexually explicit content.
+  // **Gemini** - Sexually explicit content.
   HARM_CATEGORY_SEXUALLY_EXPLICIT = 9;
 
-  // Dangerous content.
+  // **Gemini** - Dangerous content.
   HARM_CATEGORY_DANGEROUS_CONTENT = 10;
+
+  // **Gemini** - Content that may be used to harm civic integrity.
+  HARM_CATEGORY_CIVIC_INTEGRITY = 11;
 }
 
 // Safety rating for a piece of content.
@@ -77,16 +82,16 @@ message SafetyRating {
     HARM_PROBABILITY_UNSPECIFIED = 0;
 
     // Content has a negligible chance of being unsafe.
-    HARM_PROBABILITY_NEGLIGIBLE = 1;
+    NEGLIGIBLE = 1;
 
     // Content has a low chance of being unsafe.
-    HARM_PROBABILITY_LOW = 2;
+    LOW = 2;
 
     // Content has a medium chance of being unsafe.
-    HARM_PROBABILITY_MEDIUM = 3;
+    MEDIUM = 3;
 
     // Content has a high chance of being unsafe.
-    HARM_PROBABILITY_HIGH = 4;
+    HIGH = 4;
   }
 
   // Required. The category for this rating.
@@ -101,7 +106,7 @@ message SafetyRating {
 
 // Safety setting, affecting the safety-blocking behavior.
 //
-// Passing a safety setting for a category changes the allowed proability that
+// Passing a safety setting for a category changes the allowed probability that
 // content is blocked.
 message SafetySetting {
   // Block at and beyond a specified harm probability.
@@ -110,16 +115,19 @@ message SafetySetting {
     HARM_BLOCK_THRESHOLD_UNSPECIFIED = 0;
 
     // Content with NEGLIGIBLE will be allowed.
-    HARM_BLOCK_THRESHOLD_BLOCK_LOW_AND_ABOVE = 1;
+    BLOCK_LOW_AND_ABOVE = 1;
 
     // Content with NEGLIGIBLE and LOW will be allowed.
-    HARM_BLOCK_THRESHOLD_BLOCK_MEDIUM_AND_ABOVE = 2;
+    BLOCK_MEDIUM_AND_ABOVE = 2;
 
     // Content with NEGLIGIBLE, LOW, and MEDIUM will be allowed.
-    HARM_BLOCK_THRESHOLD_BLOCK_ONLY_HIGH = 3;
+    BLOCK_ONLY_HIGH = 3;
 
     // All content will be allowed.
-    HARM_BLOCK_THRESHOLD_BLOCK_NONE = 4;
+    BLOCK_NONE = 4;
+
+    // Turn off the safety filter.
+    OFF = 5;
   }
 
   // Required. The category for this setting.

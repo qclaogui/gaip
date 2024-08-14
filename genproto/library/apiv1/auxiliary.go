@@ -41,7 +41,7 @@ type BookIterator struct {
 	InternalFetch func(pageSize int, pageToken string) (results []*librarypb.Book, nextPageToken string, err error)
 }
 
-// PageInfo supports pagination. See the google.golang.org/api/iterator package for details.
+// PageInfo supports pagination. See the [google.golang.org/api/iterator] package for details.
 func (it *BookIterator) PageInfo() *iterator.PageInfo {
 	return it.pageInfo
 }
@@ -88,7 +88,7 @@ type ShelfIterator struct {
 	InternalFetch func(pageSize int, pageToken string) (results []*librarypb.Shelf, nextPageToken string, err error)
 }
 
-// PageInfo supports pagination. See the google.golang.org/api/iterator package for details.
+// PageInfo supports pagination. See the [google.golang.org/api/iterator] package for details.
 func (it *ShelfIterator) PageInfo() *iterator.PageInfo {
 	return it.pageInfo
 }

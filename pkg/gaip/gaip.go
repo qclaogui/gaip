@@ -30,10 +30,6 @@ type Gaip struct {
 	Registerer prometheus.Registerer
 }
 
-func (g *Gaip) RegisterFgprof() {
-	g.RegisterRoute("/debug/fgprof", fgprof.Handler(), false, "GET")
-}
-
 // Bootstrap makes a new Gaip.
 func Bootstrap(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 	if cfg.PrintConfig {
@@ -63,7 +59,7 @@ func Bootstrap(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 
 	//g.Cfg.ServerCfg.GRPCOptions = interceptors.RegisterGRPCServerOption()
 
-	if err := g.initServices(); err != nil {
+	if err := g.registerServices(); err != nil {
 		return nil, err
 	}
 
@@ -72,65 +68,6 @@ func Bootstrap(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 	reflection.Register(g.Server.GRPCServer)
 
 	return g, nil
-}
-
-func (g *Gaip) initServices() error {
-	var err error
-	if g.Server, err = service.NewServer(g.Cfg.ServerCfg); err != nil {
-		return err
-	}
-
-	if err = g.initBookstore(); err != nil {
-		return err
-	}
-
-	if err = g.initGenerativeai(); err != nil {
-		return err
-	}
-
-	if err = g.initLibrary(); err != nil {
-		return err
-	}
-
-	if err = g.initProject(); err != nil {
-		return err
-	}
-
-	if err = g.initRouteGuide(); err != nil {
-		return err
-	}
-
-	if err = g.initShowcase(); err != nil {
-		return err
-	}
-
-	if err = g.initTodo(); err != nil {
-		return err
-	}
-
-	if err = g.initVault(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// Run gRPC server and HTTP gateway
-func (g *Gaip) Run() error {
-
-	// before starting servers, register /healthz handler.
-	//g.Server.Router.Path("/healthz").HandlerFunc(g.healthzHandler())
-	g.RegisterRoute("/healthz", g.healthzHandler(), false, http.MethodGet)
-
-	g.RegisterFgprof()
-
-	//g.API.RegisterServiceMapHandler(http.HandlerFunc(g.servicesHandler))
-
-	//// Initialize tracing and handle the tracer provider shutdown
-	//stopTracing := interceptors.InitTracing()
-	//defer stopTracing()
-
-	return g.Server.Run()
 }
 
 func setUpGoRuntimeMetrics(cfg Config, reg prometheus.Registerer) {
@@ -151,6 +88,24 @@ func setUpGoRuntimeMetrics(cfg Config, reg prometheus.Registerer) {
 	reg.MustRegister(collectors.NewGoCollector(
 		collectors.WithGoCollectorRuntimeMetrics(rules...),
 	))
+}
+
+// Run gRPC server and HTTP gateway
+func (g *Gaip) Run() error {
+
+	// before starting servers, register /healthz handler.
+	//g.Server.Router.Path("/healthz").HandlerFunc(g.healthzHandler())
+	g.RegisterRoute("/healthz", g.healthzHandler(), false, http.MethodGet)
+
+	g.RegisterRoute("/debug/fgprof", fgprof.Handler(), false, http.MethodGet)
+
+	//g.API.RegisterServiceMapHandler(http.HandlerFunc(g.servicesHandler))
+
+	//// Initialize tracing and handle the tracer provider shutdown
+	//stopTracing := interceptors.InitTracing()
+	//defer stopTracing()
+
+	return g.Server.Run()
 }
 
 // healthzHandler for a liveness probe.
@@ -194,4 +149,49 @@ func (g *Gaip) newRoute(path string, handler http.Handler, isPrefix, auth bool, 
 	}
 
 	route.Handler(handler)
+}
+
+func (g *Gaip) registerServices() error {
+	var err error
+	if g.Server, err = service.NewServer(g.Cfg.ServerCfg); err != nil {
+		return err
+	}
+
+	if err = g.initBookstore(); err != nil {
+		return err
+	}
+
+	if err = g.initGenerativeAI(); err != nil {
+		return err
+	}
+
+	if err = g.initLibrary(); err != nil {
+		return err
+	}
+
+	if err = g.initProject(); err != nil {
+		return err
+	}
+
+	if err = g.initRouteGuide(); err != nil {
+		return err
+	}
+
+	if err = g.initShowcase(); err != nil {
+		return err
+	}
+
+	if err = g.initTodo(); err != nil {
+		return err
+	}
+
+	if err = g.initTask(); err != nil {
+		return err
+	}
+
+	if err = g.initVault(); err != nil {
+		return err
+	}
+
+	return nil
 }

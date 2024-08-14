@@ -8,6 +8,8 @@ import (
 	"flag"
 	"strconv"
 
+	"github.com/google/uuid"
+	"github.com/qclaogui/gaip/genproto/task/apiv1/taskpb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -20,10 +22,14 @@ const (
 
 type Config struct {
 	FilePath string `yaml:"file_path"`
+
+	TaskMemDB map[uuid.UUID]*taskpb.Task
 }
 
 func (cfg *Config) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
 	fs.StringVar(&cfg.FilePath, prefix+"memory.file-path", "", "Path of JSON file for loads data")
+
+	cfg.TaskMemDB = make(map[uuid.UUID]*taskpb.Task)
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {

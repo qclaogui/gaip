@@ -16,7 +16,7 @@ linters:
     - unparam
     - govet
     - typecheck
-    - exportloopref
+    - copyloopvar
 
 linters-settings:
   errcheck:

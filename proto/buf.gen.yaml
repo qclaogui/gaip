@@ -1,57 +1,32 @@
-version: v1
+version: v2
 managed:
   enabled: true
-#  go_package_prefix:
-#    default: github.com/qclaogui/gaip/genproto
-#    except:
-#      - buf.build/googleapis/googleapis
-#      - buf.build/grpc-ecosystem/grpc-gateway
-#    # override:
-#    #   buf.build/acme/weather: github.com/acme/weather/gen/proto/go
-
-# Usage with local plugins (just run: make install-build-deps to install dependencies)
-# replace path with your {GOBIN}/protoc-gen-go-v1.34.2. Example: /Users/Shared/code/golang/bin/protoc-gen-go-v1.34.2
 plugins:
-  - plugin: go
+  - local: /Users/Shared/code/golang/bin/protoc-gen-go-v1.35.1
+    out: ../genproto
+    opt: module=github.com/qclaogui/gaip/genproto
+  - local: /Users/Shared/code/golang/bin/protoc-gen-go-grpc-v1.5.1
     out: ../genproto
     opt:
-    - module=github.com/qclaogui/gaip/genproto
-    path: /Users/Shared/code/golang/bin/protoc-gen-go-v1.34.2
-    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
-
-  - plugin: go-grpc
+      - module=github.com/qclaogui/gaip/genproto
+      - require_unimplemented_servers=false
+  - local: /Users/Shared/code/golang/bin/protoc-gen-go_gapic-v0.47.1
     out: ../genproto
     opt:
-    - module=github.com/qclaogui/gaip/genproto
-    - require_unimplemented_servers=false
-    path: /Users/Shared/code/golang/bin/protoc-gen-go-grpc-v1.5.0
-    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
-
-  - plugin: go_gapic
+      - go-gapic-package=github.com/qclaogui/gaip/genproto/library/apiv1;library
+      - metadata=false
+      - module=github.com/qclaogui/gaip/genproto
+      - grpc-service-config=qclaogui/library/v1/grpc_service_config.json
+      - release-level=alpha
+      - transport=grpc+rest
+      - rest-numeric-enums=true
+  - local: /Users/Shared/code/golang/bin/protoc-gen-grpc-gateway-v2.22.0
     out: ../genproto
     opt:
-    - go-gapic-package=github.com/qclaogui/gaip/genproto/library/apiv1;library
-    - metadata=false
-    - module=github.com/qclaogui/gaip/genproto
-    - grpc-service-config=qclaogui/library/v1/grpc_service_config.json
-    - release-level=alpha
-    - transport=grpc+rest
-    - rest-numeric-enums=true
-    path: /Users/Shared/code/golang/bin/protoc-gen-go_gapic-v0.45.0
-    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
-
-  - plugin: grpc-gateway
-    out: ../genproto
-    opt:
-    - module=github.com/qclaogui/gaip/genproto
-    - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
-    path: /Users/Shared/code/golang/bin/protoc-gen-grpc-gateway-v2.21.0
-    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
-
-  - plugin: openapiv2
+      - module=github.com/qclaogui/gaip/genproto
+      - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
+  - local: /Users/Shared/code/golang/bin/protoc-gen-openapiv2-v2.22.0
     out: ../third_party/gen/openapiv2
     opt:
-    - logtostderr=true
-    - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml
-    path: /Users/Shared/code/golang/bin/protoc-gen-openapiv2-v2.21.0
-    protoc_path: /Users/Shared/code/golang/bin/protoc-27.2
+      - logtostderr=true
+      - grpc_api_configuration=qclaogui/todo/v1/api_config_http.yaml

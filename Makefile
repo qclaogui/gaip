@@ -2,8 +2,8 @@ include .bingo/Variables.mk
 
 .DEFAULT_GOAL := help
 
-SWAGGER_UI_VERSION	:=v5.17.14
-PROTOC_VERSION		:=27.2
+SWAGGER_UI_VERSION	:=v5.18.2
+PROTOC_VERSION		:=29.0
 
 # Download the proper protoc version for Darwin (osx) and Linux.
 PROTOC_URL := https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/
@@ -159,10 +159,12 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_opt='module=github.com/qclaogui/gaip/genproto' \
  		proto/qclaogui/bookstore/v1alpha1/*.proto \
  		proto/qclaogui/generativelanguage/v1/*.proto \
+ 		proto/qclaogui/generativelanguage/v1beta1/*.proto \
  		proto/qclaogui/library/v1/*.proto \
  		proto/qclaogui/project/v1/*.proto \
  		proto/qclaogui/showcase/v1beta1/*.proto \
  		proto/qclaogui/routeguide/v1/*.proto \
+ 		proto/qclaogui/task/v1/*.proto \
  		proto/qclaogui/todo/v1/*.proto
 
     # plugin protoc-gen-go-grpc
@@ -173,10 +175,12 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go-grpc_opt='require_unimplemented_servers=false' \
  		proto/qclaogui/bookstore/v1alpha1/*.proto \
  		proto/qclaogui/generativelanguage/v1/*.proto \
+ 		proto/qclaogui/generativelanguage/v1beta1/*.proto \
  		proto/qclaogui/library/v1/*.proto \
  		proto/qclaogui/project/v1/*.proto \
  		proto/qclaogui/showcase/v1beta1/*.proto \
  		proto/qclaogui/routeguide/v1/*.proto \
+ 		proto/qclaogui/task/v1/*.proto \
  		proto/qclaogui/todo/v1/*.proto
 
     # plugin protoc-gen-go_rest_handler
@@ -187,7 +191,6 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_rest_handler_opt='api-service-config=proto/qclaogui/library/v1/library_v1.yaml' \
 		proto/qclaogui/library/v1/*.proto
 
-    # plugin protoc-gen-go_rest_handler
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_rest_handler=$(PROTOC_GEN_GO_REST_HANDLER) \
 		--go_rest_handler_out=genproto \
@@ -195,20 +198,16 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_rest_handler_opt='api-service-config=proto/qclaogui/showcase/v1beta1/showcase_v1beta1.yaml' \
  		proto/qclaogui/showcase/v1beta1/*.proto
 
+#	@$(PROTOC) --proto_path=proto \
+#		--plugin=protoc-gen-go_rest_handler=$(PROTOC_GEN_GO_REST_HANDLER) \
+#		--go_rest_handler_out=genproto \
+#		--go_rest_handler_opt='module=github.com/qclaogui/gaip/genproto' \
+#		--go_rest_handler_opt='api-service-config=proto/qclaogui/generativelanguage/v1beta1/generativelanguage_v1beta1.yaml' \
+# 		proto/qclaogui/generativelanguage/v1beta1/*.proto
+
+
     # plugin protoc-gen-go_gapic
     # https://github.com/googleapis/gapic-generator-go?tab=readme-ov-file#invocation
-	@$(PROTOC) --proto_path=proto \
-		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
-		--go_gapic_out=genproto \
-		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1;bookstore' \
-		--go_gapic_opt='metadata=false' \
-		--go_gapic_opt='omit-snippets' \
-		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
-		--go_gapic_opt='grpc-service-config=proto/qclaogui/bookstore/v1alpha1/grpc_service_config.json' \
-		--go_gapic_opt='release-level=alpha' \
-		--go_gapic_opt='transport=grpc+rest' \
-		--go_gapic_opt='rest-numeric-enums=true' \
- 		proto/qclaogui/bookstore/v1alpha1/*.proto
 
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
@@ -223,6 +222,20 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
  		proto/qclaogui/generativelanguage/v1/*.proto
+
+	@$(PROTOC) --proto_path=proto \
+		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
+		--go_gapic_out=genproto \
+		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta1;generativelanguage' \
+		--go_gapic_opt='metadata=false' \
+		--go_gapic_opt='omit-snippets' \
+		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
+		--go_gapic_opt='grpc-service-config=proto/qclaogui/generativelanguage/v1beta1/grpc_service_config.json' \
+		--go_gapic_opt='api-service-config=proto/qclaogui/generativelanguage/v1beta1/generativelanguage_v1beta1.yaml' \
+		--go_gapic_opt='release-level=alpha' \
+		--go_gapic_opt='transport=grpc+rest' \
+		--go_gapic_opt='rest-numeric-enums=true' \
+ 		proto/qclaogui/generativelanguage/v1beta1/*.proto
 
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
@@ -272,22 +285,25 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_gapic_opt='omit-snippets' \
 		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
 		--go_gapic_opt='grpc-service-config=proto/qclaogui/routeguide/v1/grpc_service_config.json' \
+		--go_gapic_opt='api-service-config=proto/qclaogui/routeguide/v1/routeguide_v1.yaml' \
 		--go_gapic_opt='release-level=alpha' \
-		--go_gapic_opt='transport=grpc' \
+		--go_gapic_opt='transport=grpc+rest' \
+		--go_gapic_opt='rest-numeric-enums=true' \
  		proto/qclaogui/routeguide/v1/*.proto
 
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
 		--go_gapic_out=genproto \
-		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/todo/apiv1;todo' \
+		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/task/apiv1;task' \
 		--go_gapic_opt='metadata=false' \
 		--go_gapic_opt='omit-snippets' \
 		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
-		--go_gapic_opt='grpc-service-config=proto/qclaogui/todo/v1/grpc_service_config.json' \
+		--go_gapic_opt='grpc-service-config=proto/qclaogui/task/v1/grpc_service_config.json' \
 		--go_gapic_opt='release-level=alpha' \
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
- 		proto/qclaogui/todo/v1/*.proto
+ 		proto/qclaogui/task/v1/*.proto
+
 
     # plugin protoc-gen-grpc-gateway
 	@$(PROTOC) --proto_path=proto \
@@ -307,9 +323,9 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
  		proto/qclaogui/todo/v1/*.proto
 
 	@make swagger-ui
-	@make fmt
-	@make lint
-
+#	@make fmt
+#	@make lint
+#
 
 ##@ Testing Lint & Fmt
 

@@ -31,6 +31,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/experimental"
 	"google.golang.org/grpc/keepalive"
+	"google.golang.org/grpc/mem"
 )
 
 // Listen on the named network
@@ -258,7 +259,7 @@ func newEndpointGRPC(cfg Config, router *mux.Router, metrics *Metrics, logger lo
 		if cfg.GRPCServerStatsTrackingEnabled {
 			return nil, nil, fmt.Errorf("grpc_server_stats_tracking_enabled must be set to false if grpc_server_recv_buffer_pools_enabled is true")
 		}
-		grpcOptions = append(grpcOptions, experimental.RecvBufferPool(grpc.NewSharedBufferPool()))
+		grpcOptions = append(grpcOptions, experimental.BufferPool(mem.DefaultBufferPool()))
 	}
 
 	grpcOptions = append(grpcOptions, cfg.GRPCOptions...)

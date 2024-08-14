@@ -5,7 +5,7 @@
 package errorhandling
 
 import (
-	"fmt"
+	"errors"
 	"strings"
 )
 
@@ -33,5 +33,5 @@ func (ea *Accumulator) Error() error {
 	for idx, err := range ea.errors {
 		errorStrings[idx] = err.Error()
 	}
-	return fmt.Errorf(strings.Join(errorStrings, "\n"))
+	return errors.New(strings.Join(errorStrings, "\n"))
 }
