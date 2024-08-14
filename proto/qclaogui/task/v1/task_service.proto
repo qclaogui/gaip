@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package qclaogui.task.v1;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "qclaogui/task/v1/task.proto";
+
+option go_package = "github.com/qclaogui/gaip/genproto/task/apiv1/taskpb";
+
+// TasksWriterService holds the methods to persist, modify and remove Tasks.
+service TasksWriterService {
+  option (google.api.default_host) = "localhost:9095";
+  // See https://github.com/aip-dev/google.aip.dev/pull/1331
+  option (google.api.api_version) = "v1_20240506";
+
+  // CreateTask creates a Task.
+  rpc CreateTask(CreateTaskRequest) returns (Task) {
+    option (google.api.http) = {
+      post: "/v1/tasks"
+      body: "task"
+    };
+    option (google.api.method_signature) = "task";
+  }
+
+  rpc DeleteTask(DeleteTaskRequest) returns (Task) {
+    option (google.api.http) = {delete: "/v1/tasks/{id}"};
+    option (google.api.method_signature) = "id";
+  }
+
+  rpc UndeleteTask(UndeleteTaskRequest) returns (Task) {
+    option (google.api.http) = {
+      post: "/v1/tasks:undelete"
+      body: "*"
+    };
+    option (google.api.method_signature) = "id";
+  }
+
+  rpc UpdateTask(UpdateTaskRequest) returns (Task) {
+    option (google.api.http) = {
+      patch: "/v1/tasks/{task.id}"
+      body: "task"
+    };
+    option (google.api.method_signature) = "id,update_mask";
+  }
+}
+
+// TasksReaderService holds the methods to obtain Tasks.
+service TasksReaderService {
+  option (google.api.default_host) = "localhost:9095";
+  // See https://github.com/aip-dev/google.aip.dev/pull/1331
+  option (google.api.api_version) = "v1_20240506";
+
+  // GetTask returns a Task.
+  rpc GetTask(GetTaskRequest) returns (Task) {
+    option (google.api.http) = {get: "/v1/tasks/{id}"};
+    option (google.api.method_signature) = "task";
+  }
+
+  // ListTasks returns a list of Tasks.
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse) {
+    option (google.api.http) = {get: "/v1/tasks"};
+  }
+}

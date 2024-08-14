@@ -24,7 +24,7 @@ type Config struct {
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
-	fs.BoolVar(&cfg.Enabled, "project.enabled", true, "Enables Server Service Server")
+	fs.BoolVar(&cfg.Enabled, "project.enabled", true, "Enables Project Service Server")
 }
 
 func (cfg *Config) Validate() error {

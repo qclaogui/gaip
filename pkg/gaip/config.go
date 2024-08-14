@@ -17,6 +17,7 @@ import (
 	"github.com/qclaogui/gaip/pkg/service/project"
 	"github.com/qclaogui/gaip/pkg/service/routeguide"
 	"github.com/qclaogui/gaip/pkg/service/showcase"
+	"github.com/qclaogui/gaip/pkg/service/task"
 	"github.com/qclaogui/gaip/pkg/service/todo"
 	"github.com/qclaogui/gaip/pkg/vault"
 )
@@ -36,6 +37,7 @@ type Config struct {
 	RouteGuideCfg routeguide.Config   `yaml:"routeguide"`
 	ShowcaseCfg   showcase.Config     `yaml:"showcase"`
 	TodoCfg       todo.Config         `yaml:"todo"`
+	TaskCfg       task.Config         `yaml:"task"`
 
 	VaultCfg vault.Config `yaml:"vault"`
 }
@@ -64,6 +66,7 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet) {
 	c.RouteGuideCfg.RegisterFlags(fs)
 	c.ShowcaseCfg.RegisterFlags(fs)
 	c.TodoCfg.RegisterFlags(fs)
+	c.TaskCfg.RegisterFlags(fs)
 
 	// Register Vault Config
 	c.VaultCfg.RegisterFlags(fs)

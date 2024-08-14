@@ -29,6 +29,10 @@ Usage of ./bin/gaip_darwin_amd64:
     	user (default "root")
   -dump-yaml
     	Print full config yaml.
+  -genai.api-key string
+    	API key. (default "api-key")
+  -genai.enabled
+    	Enables GenerativeAi Service Server
   -help
     	Print basic help.
   -help-all
@@ -47,8 +51,6 @@ Usage of ./bin/gaip_darwin_amd64:
     	Burst size, i.e., maximum number of messages that can be logged in a second, temporarily exceeding the configured maximum logs per second. (default 25000)
   -print.config
     	Print the config and exit.
-  -project.database.driver string
-    	Driver storage to use. Supported drivers are: memory. (default "memory")
   -project.enabled
     	Enables Project Service Server (default true)
   -routeguide.enabled
@@ -85,6 +87,10 @@ Usage of ./bin/gaip_darwin_amd64:
     	After having pinged for keepalive check, the duration after which an idle connection should be closed, Default: 20s (default 20s)
   -server.grpc.num-workers int
     	If non-zero, configures the amount of GRPC server workers used to serve the requests.
+  -server.grpc.recv-buffer-pools-enabled
+    	If true, gGPC's buffer pools will be used to handle incoming requests. Enabling this feature can reduce memory allocation, but also requires disabling GRPC server stats tracking by setting `server.grpc.stats-tracking-enabled=false`. This is an experimental gRPC feature, so it might be removed in a future version of the gRPC library.
+  -server.grpc.stats-tracking-enabled
+    	If true, the request_message_bytes, response_message_bytes, and inflight_requests metrics will be tracked. Enabling this option prevents the use of memory pools for parsing gRPC request bodies and may lead to more memory allocations. (default true)
   -server.http-conn-limit int
     	Maximum number of simultaneous http connections, <=0 to disable
   -server.http-idle-timeout duration
@@ -94,7 +100,7 @@ Usage of ./bin/gaip_darwin_amd64:
   -server.http-listen-network string
     	Router server listen network, default tcp (default "tcp")
   -server.http-listen-port int
-    	Router server listen port. (default 8080)
+    	Router server listen port. (default 7469)
   -server.http-log-closed-connections-without-response-enabled
     	Log closed connections that did not receive any response, most likely because client didn't send any request within timeout.
   -server.http-read-header-timeout duration
@@ -110,7 +116,9 @@ Usage of ./bin/gaip_darwin_amd64:
   -server.log-request-headers-exclude-list string
     	Comma separated list of headers to exclude from loggin. Only used if server.log-request-headers is true.
   -server.log-source-ips-enabled
-    	Optionally log the source IPs.
+    	Optionally log the source IPs. (default true)
+  -server.log-source-ips-full
+    	Log all source IPs instead of only the originating one. Only used if server.log-source-ips-enabled is true (default true)
   -server.log-source-ips-header string
     	Header field storing the source IPs. Only used if server.log-source-ips-enabled is true. If not set the default Forwarded, X-Real-IP and X-Forwarded-For headers are used
   -server.log-source-ips-regex string
@@ -121,6 +129,10 @@ Usage of ./bin/gaip_darwin_amd64:
     	Register and handlers OpenAPI UI (/openapi). (default true)
   -server.report-grpc-codes-in-instrumentation-label-enabled
     	If set to true, gRPC statuses will be reported in instrumentation labels with their string representations. Otherwise, they will be reported as "error".
+  -showcase.enabled
+    	Enables Showcase Service Server (default true)
+  -task.enabled
+    	Enables Task Service Server (default true)
   -todo.enabled
     	Enables Todo Service Server (default true)
   -vault.enabled

@@ -53,7 +53,7 @@ func NewTodoWithSQLDB(db *sql.DB) (todopb.ToDoServiceServer, error) {
 func (m *todoImpl) connect(ctx context.Context) (*sql.Conn, error) {
 	c, err := m.sqlDB.Conn(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to database-> " + err.Error())
+		return nil, fmt.Errorf("failed to connect to database-> %w", err)
 	}
 	return c, nil
 }
@@ -69,20 +69,20 @@ func (m *todoImpl) GetTodo(ctx context.Context, req *todopb.GetTodoRequest) (*to
 	id := req.GetId()
 	rows, err := c.QueryContext(ctx, "SELECT `ID`, `Title`, `Description`, `Reminder` FROM ToDo WHERE `ID`=?", id)
 	if err != nil {
-		return nil, status.Error(codes.Unknown, "failed to select from ToDo-> "+err.Error())
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to select from ToDo-> %s", err.Error()))
 	}
 	defer func() { _ = rows.Close() }()
 
 	if !rows.Next() {
 		if err = rows.Err(); err != nil {
-			return nil, status.Error(codes.Unknown, "failed to select from ToDo-> "+err.Error())
+			return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to select from ToDo-> %s", err.Error()))
 		}
 	}
 
 	todo := &todopb.ToDo{}
 	var reminder time.Time
 	if err = rows.Scan(&todo.Id, &todo.Title, &todo.Description, &reminder); err != nil {
-		return nil, fmt.Errorf("failed to retrieve field values from ToDo row-> " + err.Error())
+		return nil, fmt.Errorf("failed to retrieve field values from ToDo row-> %w", err)
 	}
 
 	todo.CreateTime = timestamppb.New(reminder)
@@ -105,7 +105,7 @@ func (m *todoImpl) CreateTodo(ctx context.Context, req *todopb.CreateTodoRequest
 	_, err = c.ExecContext(ctx, "INSERT INTO ToDo(`ID`, `Title`, `Description`, `Reminder`) VALUES(?, ?, ?, ?)",
 		todo.GetId(), todo.GetTitle(), todo.GetDescription(), todo.GetCreateTime().AsTime())
 	if err != nil {
-		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to insert into ToDo-> "+err.Error()))
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to insert into ToDo-> %s", err.Error()))
 	}
 	return &todopb.CreateTodoResponse{Api: "v1", Id: todo.GetId()}, nil
 }
@@ -123,12 +123,12 @@ func (m *todoImpl) UpdateTodo(ctx context.Context, req *todopb.UpdateTodoRequest
 	res, err := c.ExecContext(ctx, "UPDATE ToDo SET `Title`=?, `Description`=?, `Reminder`=? WHERE `ID`=?",
 		todo.Title, todo.Description, todo.GetCreateTime().AsTime(), todo.Id)
 	if err != nil {
-		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to update ToDo-> "+err.Error()))
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to update ToDo-> %s", err.Error()))
 	}
 
 	rows, err := res.RowsAffected()
 	if err != nil {
-		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve rows affected value-> "+err.Error()))
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve rows affected value-> %s", err.Error()))
 	}
 	if rows == 0 {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("ToDo with ID='%s' is not found", todo.Id))
@@ -148,12 +148,12 @@ func (m *todoImpl) DeleteTodo(ctx context.Context, req *todopb.DeleteTodoRequest
 	id := req.GetId()
 	res, err := c.ExecContext(ctx, "DELETE FROM ToDo WHERE `ID`=?", id)
 	if err != nil {
-		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to delete ToDo-> "+err.Error()))
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to delete ToDo-> %s", err.Error()))
 	}
 
 	rows, err := res.RowsAffected()
 	if err != nil {
-		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve rows affected value-> "+err.Error()))
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve rows affected value-> %s", err.Error()))
 	}
 	if rows == 0 {
 		return nil, status.Error(codes.Unknown, fmt.Sprintf("ToDo with ID='%s' is not found", id))
@@ -171,7 +171,7 @@ func (m *todoImpl) ListTodo(ctx context.Context, _ *todopb.ListTodoRequest) (*to
 
 	rows, err := c.QueryContext(ctx, "SELECT `ID`, `Title`, `Description`, `Reminder` FROM ToDo")
 	if err != nil {
-		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to select from ToDo-> "+err.Error()))
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to select from ToDo-> %s", err.Error()))
 	}
 	defer func() { _ = rows.Close() }()
 
@@ -180,14 +180,14 @@ func (m *todoImpl) ListTodo(ctx context.Context, _ *todopb.ListTodoRequest) (*to
 		var todo = &todopb.ToDo{}
 		var reminder time.Time
 		if err = rows.Scan(&todo.Id, &todo.Title, &todo.Description, &reminder); err != nil {
-			return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve field values from ToDo row-> "+err.Error()))
+			return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve field values from ToDo row-> %s", err.Error()))
 		}
 		todo.CreateTime = timestamppb.New(reminder)
 		todos = append(todos, todo)
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve data from ToDo-> "+err.Error()))
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve data from ToDo-> %s", err.Error()))
 	}
 
 	return &todopb.ListTodoResponse{Api: "v1", Items: todos}, nil

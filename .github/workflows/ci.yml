@@ -3,7 +3,7 @@
 name: ci
 
 env:
-  GOLANGCI_LINT_VERSION: '1.59.1'
+  GOLANGCI_LINT_VERSION: '1.61.0'
   GORELEASER_VERSION: '1.26.2'
 
 on:
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.23'
       
       - name: Install golangci-lint
         run: |
@@ -56,7 +56,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.23'
       
       - name: Run test
         run: make test

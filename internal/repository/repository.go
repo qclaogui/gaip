@@ -12,6 +12,7 @@ import (
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
 	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+	"github.com/qclaogui/gaip/genproto/task/apiv1/taskpb"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
 	"github.com/qclaogui/gaip/internal/repository/external"
 	"github.com/qclaogui/gaip/internal/repository/memory"
@@ -33,8 +34,8 @@ func NewBookstore(cfg Config) (bookstorepb.BookstoreServiceServer, error) {
 	}
 }
 
-func NewGenerativeai(cfg generativeai.Config) (generativelanguagepb.GenerativeServiceServer, error) {
-	return external.NewGenerativeai(cfg.APIKey)
+func NewGenerativeAI(cfg generativeai.Config) (generativelanguagepb.GenerativeServiceServer, error) {
+	return external.NewGenerativeAI(cfg.APIKey)
 }
 
 func NewLibrary(cfg Config) (librarypb.LibraryServiceServer, error) {
@@ -104,6 +105,28 @@ func NewTodo(cfg Config) (todopb.ToDoServiceServer, error) {
 		return memory.NewTodo()
 	case DriverMysql:
 		return mysql.NewTodo(cfg.MysqlCfg)
+	default:
+		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
+	}
+}
+
+func NewTasksWriter(cfg Config) (taskpb.TasksWriterServiceServer, error) {
+	switch cfg.Driver {
+	case "":
+		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
+	case DriverMemory:
+		return memory.NewTasksWriter(cfg.MemoryCfg)
+	default:
+		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
+	}
+}
+
+func NewTasksReader(cfg Config) (taskpb.TasksReaderServiceServer, error) {
+	switch cfg.Driver {
+	case "":
+		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
+	case DriverMemory:
+		return memory.NewTasksReader(cfg.MemoryCfg)
 	default:
 		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
 	}

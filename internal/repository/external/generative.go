@@ -13,7 +13,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-func NewGenerativeai(APIKey string) (generativelanguagepb.GenerativeServiceServer, error) {
+func NewGenerativeAI(APIKey string) (generativelanguagepb.GenerativeServiceServer, error) {
 	//client, err := genai.NewClient(context.Background(), option.WithAPIKey(os.Getenv("API_KEY")))
 	client, err := genai.NewClient(context.Background(), option.WithAPIKey(APIKey))
 	if err != nil {

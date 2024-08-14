@@ -51,7 +51,7 @@ func NewBookstoreWithSQLDB(db *sql.DB) (bookstorepb.BookstoreServiceServer, erro
 func (r *bookstoreImpl) connect(ctx context.Context) (*sql.Conn, error) {
 	c, err := r.sqlDB.Conn(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to database-> " + err.Error())
+		return nil, fmt.Errorf("failed to connect to database-> %w", err)
 	}
 	return c, nil
 }
@@ -80,7 +80,7 @@ func (r *bookstoreImpl) GetShelf(ctx context.Context, req *bookstorepb.GetShelfR
 
 	shelf := &bookstorepb.Shelf{}
 	if err = rows.Scan(&shelf.Id, &shelf.Theme); err != nil {
-		return nil, fmt.Errorf("failed to retrieve field values from Shelf row-> " + err.Error())
+		return nil, fmt.Errorf("failed to retrieve field values from Shelf row-> %w", err)
 	}
 
 	return shelf, nil

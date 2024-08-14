@@ -56,6 +56,10 @@ github.com/googleapis/gapic-generator-go v0.44.1 h1:Q8wCFaodk2o5OPz/1hZJpNP2zWPH
 github.com/googleapis/gapic-generator-go v0.44.1/go.mod h1:0jLwJVuK0Nn+eEnH2N/AzTj3V2f+JkAilQ2A5C6U0uE=
 github.com/googleapis/gapic-generator-go v0.45.0 h1:+1uMCFd80QbySHqGW2JjJnyRcvFNjMkxktRJlQFUjnw=
 github.com/googleapis/gapic-generator-go v0.45.0/go.mod h1:2OWEQYWZplrZ9TSxAswrjStCeTLYi9H5hiSOS5kIrU0=
+github.com/googleapis/gapic-generator-go v0.47.1 h1:KLkjKUFsdjHv7Yl5mh2XZ/KJ59BSu0geiqx0EXzuOHE=
+github.com/googleapis/gapic-generator-go v0.47.1/go.mod h1:ETw3Hmr++KPSXv2rHV7KKTa0WVTHUItOu/ZXA/PW6LU=
+github.com/googleapis/gapic-generator-go v0.48.1 h1:zR2ENXUxnZKx2VLRrNfFGAHoqmZSvdFBIOGaEaJZn+I=
+github.com/googleapis/gapic-generator-go v0.48.1/go.mod h1:ETw3Hmr++KPSXv2rHV7KKTa0WVTHUItOu/ZXA/PW6LU=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 gitlab.com/golang-commonmark/html v0.0.0-20191124015941-a22733972181 h1:K+bMSIx9A7mLES1rtG+qKduLIXq40DAzYHtb0XuCukA=
 gitlab.com/golang-commonmark/html v0.0.0-20191124015941-a22733972181/go.mod h1:dzYhVIwWCtzPAa4QP98wfB9+mzt33MSmM8wsKiMi2ow=

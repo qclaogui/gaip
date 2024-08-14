@@ -1,0 +1,25 @@
+{
+  "methodConfig": [{
+    "name": [
+      { "service": "qclaogui.task.v1.TasksWriterService" },
+      { "service": "qclaogui.task.v1.TasksReaderService" }
+    ],
+    "waitForReady": true,
+    "timeout": "60s",
+    "retryPolicy": {
+      "maxAttempts": 3,
+      "initialBackoff": "0.01s",
+      "maxBackoff": "60s",
+      "backoffMultiplier": 1.3,
+      "retryableStatusCodes": ["UNAVAILABLE"]
+    }
+  },
+    {
+      "name": [
+        { "service": "qclaogui.task.v1.TasksWriterService", "method": "CreateTaskRequest" }
+      ],
+      "waitForReady": true,
+      "timeout": "60s"
+    }
+  ]
+}
