@@ -10,7 +10,7 @@ require (
 	entgo.io/ent v0.14.1
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/bufbuild/protovalidate-go v0.7.3
-	github.com/dave/jennifer v1.7.0
+	github.com/dave/jennifer v1.7.1
 	github.com/felixge/fgprof v0.9.5
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-kit/log v0.2.1
