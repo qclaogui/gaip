@@ -71,12 +71,6 @@ $(GOLANGCI_LINT): $(BINGO_DIR)/golangci-lint.mod
 	@echo "(re)installing $(GOBIN)/golangci-lint-v1.62.2"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=golangci-lint.mod -o=$(GOBIN)/golangci-lint-v1.62.2 "github.com/golangci/golangci-lint/cmd/golangci-lint"
 
-GOOGLE_API_GO_GENERATOR := $(GOBIN)/google-api-go-generator-v0.209.0
-$(GOOGLE_API_GO_GENERATOR): $(BINGO_DIR)/google-api-go-generator.mod
-	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/google-api-go-generator-v0.209.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=google-api-go-generator.mod -o=$(GOBIN)/google-api-go-generator-v0.209.0 "google.golang.org/api/google-api-go-generator"
-
 GORELEASER := $(GOBIN)/goreleaser-v1.26.2
 $(GORELEASER): $(BINGO_DIR)/goreleaser.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
@@ -130,10 +124,4 @@ $(PROTOC_GEN_OPENAPIV2): $(BINGO_DIR)/protoc-gen-openapiv2.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
 	@echo "(re)installing $(GOBIN)/protoc-gen-openapiv2-v2.24.0"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-openapiv2.mod -o=$(GOBIN)/protoc-gen-openapiv2-v2.24.0 "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2"
-
-PROTOVENEER := $(GOBIN)/protoveneer-v0.0.0-20240103183307-be819d1f06fc
-$(PROTOVENEER): $(BINGO_DIR)/protoveneer.mod
-	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoveneer-v0.0.0-20240103183307-be819d1f06fc"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoveneer.mod -o=$(GOBIN)/protoveneer-v0.0.0-20240103183307-be819d1f06fc "golang.org/x/exp/protoveneer/cmd/protoveneer"
 

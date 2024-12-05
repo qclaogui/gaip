@@ -327,6 +327,15 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 #	@make lint
 #
 
+
+# For the following protoveneer-gen line to work, install the protoveener tool:
+#    git clone https://github.com/googleapis/google-cloud-go
+#    cd google-cloud-go
+#    go install ./internal/protoveneer/cmd/protoveneer
+#
+protoveneer-gen: $(PROTOVENEER)
+	protoveneer -license LICENSE -outdir genproto/generativelanguage/apiv1beta1 proto/qclaogui/generativelanguage/v1beta1/protoveneer_v1beta1.yaml genproto/generativelanguage/apiv1beta1/generativelanguagepb
+
 ##@ Testing Lint & Fmt
 
 test: ## Run tests.
