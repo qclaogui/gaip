@@ -23,43 +23,16 @@ import (
 
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	generativelanguage "github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta1"
-	generativelanguagepb "github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta1/generativelanguagepb"
 )
 
-func ExampleCacheClient_ListCachedContents_all() {
+func ExampleGenerativeClient_ListOperations_all() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
 	// - It may require correct/in-range values for request initialization.
 	// - It may require specifying regional endpoints when creating the service client as shown in:
 	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := generativelanguage.NewCacheClient(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	defer c.Close()
-
-	req := &generativelanguagepb.ListCachedContentsRequest{
-		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta1/generativelanguagepb#ListCachedContentsRequest.
-	}
-	for resp, err := range c.ListCachedContents(ctx, req).All() {
-		if err != nil {
-			// TODO: Handle error.
-		}
-		// TODO: Use resp.
-		_ = resp
-	}
-}
-
-func ExampleCacheClient_ListOperations_all() {
-	ctx := context.Background()
-	// This snippet has been automatically generated and should be regarded as a code template only.
-	// It will require modifications to work:
-	// - It may require correct/in-range values for request initialization.
-	// - It may require specifying regional endpoints when creating the service client as shown in:
-	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := generativelanguage.NewCacheClient(ctx)
+	c, err := generativelanguage.NewGenerativeClient(ctx)
 	if err != nil {
 		// TODO: Handle error.
 	}

@@ -21,6 +21,7 @@ package generativelanguage
 import (
 	"iter"
 
+	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	"github.com/googleapis/gax-go/v2/iterator"
 	generativelanguagepb "github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta1/generativelanguagepb"
 )
@@ -58,6 +59,12 @@ func (it *FileIterator) All() iter.Seq2[*generativelanguagepb.File, error] {
 // All returns an iterator. If an error is returned by the iterator, the
 // iterator will stop after that iteration.
 func (it *ModelIterator) All() iter.Seq2[*generativelanguagepb.Model, error] {
+	return iterator.RangeAdapter(it.Next)
+}
+
+// All returns an iterator. If an error is returned by the iterator, the
+// iterator will stop after that iteration.
+func (it *OperationIterator) All() iter.Seq2[*longrunningpb.Operation, error] {
 	return iterator.RangeAdapter(it.Next)
 }
 
