@@ -24,14 +24,14 @@ import (
 	"google.golang.org/api/iterator"
 )
 
-func ExampleNewTasksReaderClient() {
+func ExampleNewTasksClient() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
 	// - It may require correct/in-range values for request initialization.
 	// - It may require specifying regional endpoints when creating the service client as shown in:
 	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := task.NewTasksReaderClient(ctx)
+	c, err := task.NewTasksClient(ctx)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -41,14 +41,14 @@ func ExampleNewTasksReaderClient() {
 	_ = c
 }
 
-func ExampleNewTasksReaderRESTClient() {
+func ExampleNewTasksRESTClient() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
 	// - It may require correct/in-range values for request initialization.
 	// - It may require specifying regional endpoints when creating the service client as shown in:
 	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := task.NewTasksReaderRESTClient(ctx)
+	c, err := task.NewTasksRESTClient(ctx)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -58,14 +58,64 @@ func ExampleNewTasksReaderRESTClient() {
 	_ = c
 }
 
-func ExampleTasksReaderClient_GetTask() {
+func ExampleTasksClient_CreateTask() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
 	// - It may require correct/in-range values for request initialization.
 	// - It may require specifying regional endpoints when creating the service client as shown in:
 	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := task.NewTasksReaderClient(ctx)
+	c, err := task.NewTasksClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &taskpb.CreateTaskRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/task/apiv1/taskpb#CreateTaskRequest.
+	}
+	resp, err := c.CreateTask(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleTasksClient_DeleteTask() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := task.NewTasksClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &taskpb.DeleteTaskRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/task/apiv1/taskpb#DeleteTaskRequest.
+	}
+	resp, err := c.DeleteTask(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleTasksClient_GetTask() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := task.NewTasksClient(ctx)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -83,14 +133,14 @@ func ExampleTasksReaderClient_GetTask() {
 	_ = resp
 }
 
-func ExampleTasksReaderClient_ListTasks() {
+func ExampleTasksClient_ListTasks() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
 	// - It may require correct/in-range values for request initialization.
 	// - It may require specifying regional endpoints when creating the service client as shown in:
 	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-	c, err := task.NewTasksReaderClient(ctx)
+	c, err := task.NewTasksClient(ctx)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -118,4 +168,54 @@ func ExampleTasksReaderClient_ListTasks() {
 		// first call to Next(). Not safe for concurrent access.
 		_ = it.Response.(*taskpb.ListTasksResponse)
 	}
+}
+
+func ExampleTasksClient_UndeleteTask() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := task.NewTasksClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &taskpb.UndeleteTaskRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/task/apiv1/taskpb#UndeleteTaskRequest.
+	}
+	resp, err := c.UndeleteTask(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleTasksClient_UpdateTask() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := task.NewTasksClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &taskpb.UpdateTaskRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/task/apiv1/taskpb#UpdateTaskRequest.
+	}
+	resp, err := c.UpdateTask(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
 }

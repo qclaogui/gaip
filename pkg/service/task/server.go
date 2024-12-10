@@ -18,8 +18,7 @@ type Config struct {
 	Log        log.Logger            `yaml:"-"`
 	Registerer prometheus.Registerer `yaml:"-"`
 
-	RepoTasksWriter pb.TasksWriterServiceServer `yaml:"-"`
-	RepoTasksReader pb.TasksReaderServiceServer `yaml:"-"`
+	Repo pb.TasksServiceServer `yaml:"-"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
@@ -32,8 +31,7 @@ func (cfg *Config) Validate() error {
 
 // The Server type implements a pb server.
 type Server struct {
-	pb.UnimplementedTasksWriterServiceServer
-	pb.UnimplementedTasksReaderServiceServer
+	pb.UnimplementedTasksServiceServer
 
 	Cfg        Config
 	logger     log.Logger
@@ -41,8 +39,7 @@ type Server struct {
 
 	metrics taskMetrics
 
-	repoTaskWriter pb.TasksWriterServiceServer `yaml:"-"`
-	repoTaskReader pb.TasksReaderServiceServer `yaml:"-"`
+	repo pb.TasksServiceServer `yaml:"-"`
 }
 
 func NewServer(cfg Config) (*Server, error) {
@@ -53,8 +50,7 @@ func NewServer(cfg Config) (*Server, error) {
 
 		metrics: newTaskMetrics(cfg.Registerer),
 
-		repoTaskWriter: cfg.RepoTasksWriter,
-		repoTaskReader: cfg.RepoTasksReader,
+		repo: cfg.Repo,
 	}
 	return srv, nil
 }

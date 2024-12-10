@@ -98,23 +98,12 @@ func NewTodo(cfg Config) (todopb.ToDoServiceServer, error) {
 	}
 }
 
-func NewTasksWriter(cfg Config) (taskpb.TasksWriterServiceServer, error) {
+func NewTasks(cfg Config) (taskpb.TasksServiceServer, error) {
 	switch cfg.Driver {
 	case "":
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
 	case DriverMemory:
-		return memory.NewTasksWriter(cfg.MemoryCfg)
-	default:
-		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
-	}
-}
-
-func NewTasksReader(cfg Config) (taskpb.TasksReaderServiceServer, error) {
-	switch cfg.Driver {
-	case "":
-		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
-	case DriverMemory:
-		return memory.NewTasksReader(cfg.MemoryCfg)
+		return memory.NewTasks(cfg.MemoryCfg)
 	default:
 		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
 	}

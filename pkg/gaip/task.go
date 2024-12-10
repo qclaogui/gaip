@@ -20,25 +20,18 @@ func (g *Gaip) initTask() error {
 	g.Cfg.TaskCfg.Log = g.Server.Log
 	g.Cfg.TaskCfg.Registerer = g.Registerer
 
-	repoWriter, err := repository.NewTasksWriter(g.Cfg.RepoCfg)
+	repo, err := repository.NewTasks(g.Cfg.RepoCfg)
 	if err != nil {
 		return err
 	}
-	g.Cfg.TaskCfg.RepoTasksWriter = repoWriter
-
-	repoReader, err := repository.NewTasksReader(g.Cfg.RepoCfg)
-	if err != nil {
-		return err
-	}
-	g.Cfg.TaskCfg.RepoTasksReader = repoReader
+	g.Cfg.TaskCfg.Repo = repo
 
 	srv, err := task.NewServer(g.Cfg.TaskCfg)
 	if err != nil {
 		return err
 	}
 
-	taskpb.RegisterTasksWriterServiceServer(g.Server.GRPCServer, srv)
-	taskpb.RegisterTasksReaderServiceServer(g.Server.GRPCServer, srv)
+	taskpb.RegisterTasksServiceServer(g.Server.GRPCServer, srv)
 
 	return nil
 }
