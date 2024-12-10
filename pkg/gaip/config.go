@@ -15,7 +15,6 @@ import (
 	"github.com/qclaogui/gaip/pkg/service/generativeai"
 	"github.com/qclaogui/gaip/pkg/service/library"
 	"github.com/qclaogui/gaip/pkg/service/project"
-	"github.com/qclaogui/gaip/pkg/service/routeguide"
 	"github.com/qclaogui/gaip/pkg/service/showcase"
 	"github.com/qclaogui/gaip/pkg/service/task"
 	"github.com/qclaogui/gaip/pkg/service/todo"
@@ -30,14 +29,13 @@ type Config struct {
 	ServerCfg service.Config    `yaml:"server"`
 	RepoCfg   repository.Config `yaml:"database"`
 
-	BookstoreCfg  bookstore.Config    `yaml:"bookstore"`
-	GenaiCfg      generativeai.Config `yaml:"genai"`
-	LibraryCfg    library.Config      `yaml:"library"`
-	ProjectCfg    project.Config      `yaml:"project"`
-	RouteGuideCfg routeguide.Config   `yaml:"routeguide"`
-	ShowcaseCfg   showcase.Config     `yaml:"showcase"`
-	TodoCfg       todo.Config         `yaml:"todo"`
-	TaskCfg       task.Config         `yaml:"task"`
+	BookstoreCfg bookstore.Config    `yaml:"bookstore"`
+	GenaiCfg     generativeai.Config `yaml:"genai"`
+	LibraryCfg   library.Config      `yaml:"library"`
+	ProjectCfg   project.Config      `yaml:"project"`
+	ShowcaseCfg  showcase.Config     `yaml:"showcase"`
+	TodoCfg      todo.Config         `yaml:"todo"`
+	TaskCfg      task.Config         `yaml:"task"`
 
 	VaultCfg vault.Config `yaml:"vault"`
 }
@@ -63,7 +61,6 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet) {
 	c.GenaiCfg.RegisterFlags(fs)
 	c.LibraryCfg.RegisterFlags(fs)
 	c.ProjectCfg.RegisterFlags(fs)
-	c.RouteGuideCfg.RegisterFlags(fs)
 	c.ShowcaseCfg.RegisterFlags(fs)
 	c.TodoCfg.RegisterFlags(fs)
 	c.TaskCfg.RegisterFlags(fs)
@@ -84,10 +81,6 @@ func (c *Config) Validate() error {
 
 	if err := c.ProjectCfg.Validate(); err != nil {
 		return errors.Wrap(err, "invalid Project config")
-	}
-
-	if err := c.RouteGuideCfg.Validate(); err != nil {
-		return errors.Wrap(err, "invalid RouteGuide config")
 	}
 
 	if err := c.ShowcaseCfg.Validate(); err != nil {

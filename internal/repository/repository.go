@@ -10,7 +10,6 @@ import (
 	"github.com/qclaogui/gaip/genproto/generativelanguage/apiv1/generativelanguagepb"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
 	"github.com/qclaogui/gaip/genproto/project/apiv1/projectpb"
-	"github.com/qclaogui/gaip/genproto/routeguide/apiv1/routeguidepb"
 	"github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/qclaogui/gaip/genproto/task/apiv1/taskpb"
 	"github.com/qclaogui/gaip/genproto/todo/apiv1/todopb"
@@ -81,17 +80,6 @@ func NewMessaging(cfg Config) (showcasepb.MessagingServiceServer, error) {
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
 	case DriverMemory:
 		return memory.NewMessaging()
-	default:
-		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
-	}
-}
-
-func NewRouteGuide(cfg Config) (routeguidepb.RouteGuideServiceServer, error) {
-	switch cfg.Driver {
-	case "":
-		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
-	case DriverMemory:
-		return memory.NewRouteNote(cfg.MemoryCfg)
 	default:
 		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
 	}
