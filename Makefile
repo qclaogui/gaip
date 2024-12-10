@@ -415,6 +415,9 @@ reference-help: build
 	@(./bin/gaip_$(GOOS)_$(GOARCH) -help || true) > cmd/gaip/help.txt.tmpl
 	@(./bin/gaip_$(GOOS)_$(GOARCH) -help-all || true) > cmd/gaip/help-all.txt.tmpl
 
+skaffold-fix: $(SKAFFOLD) ## Update "skaffold.yaml" in the current folder in-place
+	@$(SKAFFOLD) fix --overwrite
+
 help:  ## Display this help. Thanks to https://www.thapaliya.com/en/writings/well-documented-makefiles/
 ifeq ($(OS),Windows_NT)
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  %-40s %s\n", $$1, $$2 } /^##@/ { printf "\n%s\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
