@@ -14,24 +14,18 @@ import (
 
 // Clients are initialized in main_test.go.
 var (
-	taskWriterGRPC *task.TasksWriterClient
-	taskWriterREST *task.TasksWriterClient
-
-	taskReaderGRPC *task.TasksReaderClient
-	taskReaderREST *task.TasksReaderClient
+	tasksGRPC *task.TasksClient
+	tasksREST *task.TasksClient
 )
 
 func TestTaskCRUD(t *testing.T) {
 	t.Skip()
 
-	_ = taskReaderGRPC
-	_ = taskReaderREST
-
 	ctx := context.Background()
 
-	for _, client := range map[string]*task.TasksWriterClient{
-		"grpc": taskWriterGRPC,
-		"rest": taskWriterREST,
+	for _, client := range map[string]*task.TasksClient{
+		"grpc": tasksGRPC,
+		"rest": tasksREST,
 	} {
 
 		item := &pb.Task{

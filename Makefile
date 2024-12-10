@@ -307,8 +307,8 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
  		proto/qclaogui/todo/v1/*.proto
 
 	@make swagger-ui
-#	@make fmt
-#	@make lint
+	@make fmt
+	@make lint
 #
 
 

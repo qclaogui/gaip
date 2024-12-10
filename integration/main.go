@@ -11,12 +11,13 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/spf13/cobra"
 )
 
-const binaryPath = "../../../bin/gaip_darwin_amd64"
+var binaryPath = fmt.Sprintf("../../../bin/gaip_%s_%s", runtime.GOOS, runtime.GOARCH)
 
 var logChan chan TestLog
 

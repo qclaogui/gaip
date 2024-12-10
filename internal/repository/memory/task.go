@@ -12,15 +12,7 @@ import (
 	"github.com/qclaogui/gaip/genproto/task/apiv1/taskpb"
 )
 
-func NewTasksWriter(cfg Config) (taskpb.TasksWriterServiceServer, error) {
-	m := &taskImpl{
-		mem: cfg.TaskMemDB,
-	}
-
-	return m, nil
-}
-
-func NewTasksReader(cfg Config) (taskpb.TasksReaderServiceServer, error) {
+func NewTasks(cfg Config) (taskpb.TasksServiceServer, error) {
 	m := &taskImpl{
 		mem: cfg.TaskMemDB,
 	}
@@ -31,11 +23,9 @@ func NewTasksReader(cfg Config) (taskpb.TasksReaderServiceServer, error) {
 // taskImpl fulfills the Repository taskImpl interface
 // All objects are managed in an in-memory non-persistent store.
 //
-// taskImpl is used to implement taskpb.TasksWriterServiceServer, taskpb.TasksReaderServiceServer.
+// taskImpl is used to implement taskpb.TasksServiceServer, taskpb.TasksReaderServiceServer.
 type taskImpl struct {
-	taskpb.UnimplementedTasksWriterServiceServer
-	taskpb.UnimplementedTasksReaderServiceServer
-
+	taskpb.UnimplementedTasksServiceServer
 	mem map[uuid.UUID]*taskpb.Task
 	mu  sync.Mutex
 }

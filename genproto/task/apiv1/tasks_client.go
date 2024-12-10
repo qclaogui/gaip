@@ -29,6 +29,7 @@ import (
 	gax "github.com/googleapis/gax-go/v2"
 	taskpb "github.com/qclaogui/gaip/genproto/task/apiv1/taskpb"
 	"google.golang.org/api/googleapi"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
 	gtransport "google.golang.org/api/transport/grpc"
@@ -36,19 +37,22 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
-var newTasksWriterClientHook clientHook
+var newTasksClientHook clientHook
 
-// TasksWriterCallOptions contains the retry settings for each method of TasksWriterClient.
-type TasksWriterCallOptions struct {
+// TasksCallOptions contains the retry settings for each method of TasksClient.
+type TasksCallOptions struct {
 	CreateTask   []gax.CallOption
 	DeleteTask   []gax.CallOption
 	UndeleteTask []gax.CallOption
 	UpdateTask   []gax.CallOption
+	GetTask      []gax.CallOption
+	ListTasks    []gax.CallOption
 }
 
-func defaultTasksWriterGRPCClientOptions() []option.ClientOption {
+func defaultTasksGRPCClientOptions() []option.ClientOption {
 	return []option.ClientOption{
 		internaloption.WithDefaultEndpoint("localhost:9095"),
 		internaloption.WithDefaultEndpointTemplate("localhost:9095"),
@@ -63,8 +67,8 @@ func defaultTasksWriterGRPCClientOptions() []option.ClientOption {
 	}
 }
 
-func defaultTasksWriterCallOptions() *TasksWriterCallOptions {
-	return &TasksWriterCallOptions{
+func defaultTasksCallOptions() *TasksCallOptions {
+	return &TasksCallOptions{
 		CreateTask: []gax.CallOption{
 			gax.WithTimeout(60000 * time.Millisecond),
 			gax.WithRetry(func() gax.Retryer {
@@ -113,11 +117,35 @@ func defaultTasksWriterCallOptions() *TasksWriterCallOptions {
 				})
 			}),
 		},
+		GetTask: []gax.CallOption{
+			gax.WithTimeout(60000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
+					codes.Unavailable,
+				}, gax.Backoff{
+					Initial:    10 * time.Millisecond,
+					Max:        60000 * time.Millisecond,
+					Multiplier: 1.30,
+				})
+			}),
+		},
+		ListTasks: []gax.CallOption{
+			gax.WithTimeout(60000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
+					codes.Unavailable,
+				}, gax.Backoff{
+					Initial:    10 * time.Millisecond,
+					Max:        60000 * time.Millisecond,
+					Multiplier: 1.30,
+				})
+			}),
+		},
 	}
 }
 
-func defaultTasksWriterRESTCallOptions() *TasksWriterCallOptions {
-	return &TasksWriterCallOptions{
+func defaultTasksRESTCallOptions() *TasksCallOptions {
+	return &TasksCallOptions{
 		CreateTask: []gax.CallOption{
 			gax.WithTimeout(60000 * time.Millisecond),
 			gax.WithRetry(func() gax.Retryer {
@@ -162,11 +190,33 @@ func defaultTasksWriterRESTCallOptions() *TasksWriterCallOptions {
 					http.StatusServiceUnavailable)
 			}),
 		},
+		GetTask: []gax.CallOption{
+			gax.WithTimeout(60000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnHTTPCodes(gax.Backoff{
+					Initial:    10 * time.Millisecond,
+					Max:        60000 * time.Millisecond,
+					Multiplier: 1.30,
+				},
+					http.StatusServiceUnavailable)
+			}),
+		},
+		ListTasks: []gax.CallOption{
+			gax.WithTimeout(60000 * time.Millisecond),
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnHTTPCodes(gax.Backoff{
+					Initial:    10 * time.Millisecond,
+					Max:        60000 * time.Millisecond,
+					Multiplier: 1.30,
+				},
+					http.StatusServiceUnavailable)
+			}),
+		},
 	}
 }
 
-// internalTasksWriterClient is an interface that defines the methods available from .
-type internalTasksWriterClient interface {
+// internalTasksClient is an interface that defines the methods available from .
+type internalTasksClient interface {
 	Close() error
 	setGoogleClientInfo(...string)
 	Connection() *grpc.ClientConn
@@ -174,32 +224,34 @@ type internalTasksWriterClient interface {
 	DeleteTask(context.Context, *taskpb.DeleteTaskRequest, ...gax.CallOption) (*taskpb.Task, error)
 	UndeleteTask(context.Context, *taskpb.UndeleteTaskRequest, ...gax.CallOption) (*taskpb.Task, error)
 	UpdateTask(context.Context, *taskpb.UpdateTaskRequest, ...gax.CallOption) (*taskpb.Task, error)
+	GetTask(context.Context, *taskpb.GetTaskRequest, ...gax.CallOption) (*taskpb.Task, error)
+	ListTasks(context.Context, *taskpb.ListTasksRequest, ...gax.CallOption) *TaskIterator
 }
 
-// TasksWriterClient is a client for interacting with .
+// TasksClient is a client for interacting with .
 // Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 //
-// TasksWriterService holds the methods to persist, modify and remove Tasks.
-type TasksWriterClient struct {
+// TasksService holds the methods to persist, modify and remove Tasks.
+type TasksClient struct {
 	// The internal transport-dependent client.
-	internalClient internalTasksWriterClient
+	internalClient internalTasksClient
 
 	// The call options for this service.
-	CallOptions *TasksWriterCallOptions
+	CallOptions *TasksCallOptions
 }
 
 // Wrapper methods routed to the internal client.
 
 // Close closes the connection to the API service. The user should invoke this when
 // the client is no longer required.
-func (c *TasksWriterClient) Close() error {
+func (c *TasksClient) Close() error {
 	return c.internalClient.Close()
 }
 
 // setGoogleClientInfo sets the name and version of the application in
 // the `x-goog-api-client` header passed on each request. Intended for
 // use by Google-written clients.
-func (c *TasksWriterClient) setGoogleClientInfo(keyval ...string) {
+func (c *TasksClient) setGoogleClientInfo(keyval ...string) {
 	c.internalClient.setGoogleClientInfo(keyval...)
 }
 
@@ -207,52 +259,62 @@ func (c *TasksWriterClient) setGoogleClientInfo(keyval ...string) {
 //
 // Deprecated: Connections are now pooled so this method does not always
 // return the same resource.
-func (c *TasksWriterClient) Connection() *grpc.ClientConn {
+func (c *TasksClient) Connection() *grpc.ClientConn {
 	return c.internalClient.Connection()
 }
 
 // CreateTask createTask creates a Task.
-func (c *TasksWriterClient) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *TasksClient) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	return c.internalClient.CreateTask(ctx, req, opts...)
 }
 
-func (c *TasksWriterClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *TasksClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	return c.internalClient.DeleteTask(ctx, req, opts...)
 }
 
-func (c *TasksWriterClient) UndeleteTask(ctx context.Context, req *taskpb.UndeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *TasksClient) UndeleteTask(ctx context.Context, req *taskpb.UndeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	return c.internalClient.UndeleteTask(ctx, req, opts...)
 }
 
-func (c *TasksWriterClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *TasksClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	return c.internalClient.UpdateTask(ctx, req, opts...)
 }
 
-// tasksWriterGRPCClient is a client for interacting with  over gRPC transport.
+// GetTask getTask returns a Task.
+func (c *TasksClient) GetTask(ctx context.Context, req *taskpb.GetTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+	return c.internalClient.GetTask(ctx, req, opts...)
+}
+
+// ListTasks listTasks returns a list of Tasks.
+func (c *TasksClient) ListTasks(ctx context.Context, req *taskpb.ListTasksRequest, opts ...gax.CallOption) *TaskIterator {
+	return c.internalClient.ListTasks(ctx, req, opts...)
+}
+
+// tasksGRPCClient is a client for interacting with  over gRPC transport.
 //
 // Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
-type tasksWriterGRPCClient struct {
+type tasksGRPCClient struct {
 	// Connection pool of gRPC connections to the service.
 	connPool gtransport.ConnPool
 
-	// Points back to the CallOptions field of the containing TasksWriterClient
-	CallOptions **TasksWriterCallOptions
+	// Points back to the CallOptions field of the containing TasksClient
+	CallOptions **TasksCallOptions
 
 	// The gRPC API client.
-	tasksWriterClient taskpb.TasksWriterServiceClient
+	tasksClient taskpb.TasksServiceClient
 
 	// The x-goog-* metadata to be sent with each request.
 	xGoogHeaders []string
 }
 
-// NewTasksWriterClient creates a new tasks writer service client based on gRPC.
+// NewTasksClient creates a new tasks service client based on gRPC.
 // The returned client must be Closed when it is done being used to clean up its underlying connections.
 //
-// TasksWriterService holds the methods to persist, modify and remove Tasks.
-func NewTasksWriterClient(ctx context.Context, opts ...option.ClientOption) (*TasksWriterClient, error) {
-	clientOpts := defaultTasksWriterGRPCClientOptions()
-	if newTasksWriterClientHook != nil {
-		hookOpts, err := newTasksWriterClientHook(ctx, clientHookParams{})
+// TasksService holds the methods to persist, modify and remove Tasks.
+func NewTasksClient(ctx context.Context, opts ...option.ClientOption) (*TasksClient, error) {
+	clientOpts := defaultTasksGRPCClientOptions()
+	if newTasksClientHook != nil {
+		hookOpts, err := newTasksClientHook(ctx, clientHookParams{})
 		if err != nil {
 			return nil, err
 		}
@@ -263,12 +325,12 @@ func NewTasksWriterClient(ctx context.Context, opts ...option.ClientOption) (*Ta
 	if err != nil {
 		return nil, err
 	}
-	client := TasksWriterClient{CallOptions: defaultTasksWriterCallOptions()}
+	client := TasksClient{CallOptions: defaultTasksCallOptions()}
 
-	c := &tasksWriterGRPCClient{
-		connPool:          connPool,
-		tasksWriterClient: taskpb.NewTasksWriterServiceClient(connPool),
-		CallOptions:       &client.CallOptions,
+	c := &tasksGRPCClient{
+		connPool:    connPool,
+		tasksClient: taskpb.NewTasksServiceClient(connPool),
+		CallOptions: &client.CallOptions,
 	}
 	c.setGoogleClientInfo()
 
@@ -281,14 +343,14 @@ func NewTasksWriterClient(ctx context.Context, opts ...option.ClientOption) (*Ta
 //
 // Deprecated: Connections are now pooled so this method does not always
 // return the same resource.
-func (c *tasksWriterGRPCClient) Connection() *grpc.ClientConn {
+func (c *tasksGRPCClient) Connection() *grpc.ClientConn {
 	return c.connPool.Conn()
 }
 
 // setGoogleClientInfo sets the name and version of the application in
 // the `x-goog-api-client` header passed on each request. Intended for
 // use by Google-written clients.
-func (c *tasksWriterGRPCClient) setGoogleClientInfo(keyval ...string) {
+func (c *tasksGRPCClient) setGoogleClientInfo(keyval ...string) {
 	kv := append([]string{"gl-go", gax.GoVersion}, keyval...)
 	kv = append(kv, "gapic", getVersionClient(), "gax", gax.Version, "grpc", grpc.Version)
 	c.xGoogHeaders = []string{
@@ -299,12 +361,12 @@ func (c *tasksWriterGRPCClient) setGoogleClientInfo(keyval ...string) {
 
 // Close closes the connection to the API service. The user should invoke this when
 // the client is no longer required.
-func (c *tasksWriterGRPCClient) Close() error {
+func (c *tasksGRPCClient) Close() error {
 	return c.connPool.Close()
 }
 
 // Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
-type tasksWriterRESTClient struct {
+type tasksRESTClient struct {
 	// The http endpoint to connect to.
 	endpoint string
 
@@ -314,32 +376,32 @@ type tasksWriterRESTClient struct {
 	// The x-goog-* headers to be sent with each request.
 	xGoogHeaders []string
 
-	// Points back to the CallOptions field of the containing TasksWriterClient
-	CallOptions **TasksWriterCallOptions
+	// Points back to the CallOptions field of the containing TasksClient
+	CallOptions **TasksCallOptions
 }
 
-// NewTasksWriterRESTClient creates a new tasks writer service rest client.
+// NewTasksRESTClient creates a new tasks service rest client.
 //
-// TasksWriterService holds the methods to persist, modify and remove Tasks.
-func NewTasksWriterRESTClient(ctx context.Context, opts ...option.ClientOption) (*TasksWriterClient, error) {
-	clientOpts := append(defaultTasksWriterRESTClientOptions(), opts...)
+// TasksService holds the methods to persist, modify and remove Tasks.
+func NewTasksRESTClient(ctx context.Context, opts ...option.ClientOption) (*TasksClient, error) {
+	clientOpts := append(defaultTasksRESTClientOptions(), opts...)
 	httpClient, endpoint, err := httptransport.NewClient(ctx, clientOpts...)
 	if err != nil {
 		return nil, err
 	}
 
-	callOpts := defaultTasksWriterRESTCallOptions()
-	c := &tasksWriterRESTClient{
+	callOpts := defaultTasksRESTCallOptions()
+	c := &tasksRESTClient{
 		endpoint:    endpoint,
 		httpClient:  httpClient,
 		CallOptions: &callOpts,
 	}
 	c.setGoogleClientInfo()
 
-	return &TasksWriterClient{internalClient: c, CallOptions: callOpts}, nil
+	return &TasksClient{internalClient: c, CallOptions: callOpts}, nil
 }
 
-func defaultTasksWriterRESTClientOptions() []option.ClientOption {
+func defaultTasksRESTClientOptions() []option.ClientOption {
 	return []option.ClientOption{
 		internaloption.WithDefaultEndpoint("https://localhost:9095"),
 		internaloption.WithDefaultEndpointTemplate("https://localhost:9095"),
@@ -354,7 +416,7 @@ func defaultTasksWriterRESTClientOptions() []option.ClientOption {
 // setGoogleClientInfo sets the name and version of the application in
 // the `x-goog-api-client` header passed on each request. Intended for
 // use by Google-written clients.
-func (c *tasksWriterRESTClient) setGoogleClientInfo(keyval ...string) {
+func (c *tasksRESTClient) setGoogleClientInfo(keyval ...string) {
 	kv := append([]string{"gl-go", gax.GoVersion}, keyval...)
 	kv = append(kv, "gapic", getVersionClient(), "gax", gax.Version, "rest", "UNKNOWN")
 	c.xGoogHeaders = []string{
@@ -365,7 +427,7 @@ func (c *tasksWriterRESTClient) setGoogleClientInfo(keyval ...string) {
 
 // Close closes the connection to the API service. The user should invoke this when
 // the client is no longer required.
-func (c *tasksWriterRESTClient) Close() error {
+func (c *tasksRESTClient) Close() error {
 	// Replace httpClient with nil to force cleanup.
 	c.httpClient = nil
 	return nil
@@ -374,17 +436,17 @@ func (c *tasksWriterRESTClient) Close() error {
 // Connection returns a connection to the API service.
 //
 // Deprecated: This method always returns nil.
-func (c *tasksWriterRESTClient) Connection() *grpc.ClientConn {
+func (c *tasksRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
 
-func (c *tasksWriterGRPCClient) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *tasksGRPCClient) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).CreateTask[0:len((*c.CallOptions).CreateTask):len((*c.CallOptions).CreateTask)], opts...)
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksWriterClient.CreateTask(ctx, req, settings.GRPC...)
+		resp, err = c.tasksClient.CreateTask(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -393,7 +455,7 @@ func (c *tasksWriterGRPCClient) CreateTask(ctx context.Context, req *taskpb.Crea
 	return resp, nil
 }
 
-func (c *tasksWriterGRPCClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *tasksGRPCClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "id", req.GetId())}
 
 	hds = append(c.xGoogHeaders, hds...)
@@ -402,7 +464,7 @@ func (c *tasksWriterGRPCClient) DeleteTask(ctx context.Context, req *taskpb.Dele
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksWriterClient.DeleteTask(ctx, req, settings.GRPC...)
+		resp, err = c.tasksClient.DeleteTask(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -411,13 +473,13 @@ func (c *tasksWriterGRPCClient) DeleteTask(ctx context.Context, req *taskpb.Dele
 	return resp, nil
 }
 
-func (c *tasksWriterGRPCClient) UndeleteTask(ctx context.Context, req *taskpb.UndeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *tasksGRPCClient) UndeleteTask(ctx context.Context, req *taskpb.UndeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).UndeleteTask[0:len((*c.CallOptions).UndeleteTask):len((*c.CallOptions).UndeleteTask)], opts...)
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksWriterClient.UndeleteTask(ctx, req, settings.GRPC...)
+		resp, err = c.tasksClient.UndeleteTask(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -426,7 +488,7 @@ func (c *tasksWriterGRPCClient) UndeleteTask(ctx context.Context, req *taskpb.Un
 	return resp, nil
 }
 
-func (c *tasksWriterGRPCClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *tasksGRPCClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "task.id", req.GetTask().GetId())}
 
 	hds = append(c.xGoogHeaders, hds...)
@@ -435,7 +497,7 @@ func (c *tasksWriterGRPCClient) UpdateTask(ctx context.Context, req *taskpb.Upda
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksWriterClient.UpdateTask(ctx, req, settings.GRPC...)
+		resp, err = c.tasksClient.UpdateTask(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -444,8 +506,69 @@ func (c *tasksWriterGRPCClient) UpdateTask(ctx context.Context, req *taskpb.Upda
 	return resp, nil
 }
 
+func (c *tasksGRPCClient) GetTask(ctx context.Context, req *taskpb.GetTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "id", req.GetId())}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).GetTask[0:len((*c.CallOptions).GetTask):len((*c.CallOptions).GetTask)], opts...)
+	var resp *taskpb.Task
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.tasksClient.GetTask(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *tasksGRPCClient) ListTasks(ctx context.Context, req *taskpb.ListTasksRequest, opts ...gax.CallOption) *TaskIterator {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).ListTasks[0:len((*c.CallOptions).ListTasks):len((*c.CallOptions).ListTasks)], opts...)
+	it := &TaskIterator{}
+	req = proto.Clone(req).(*taskpb.ListTasksRequest)
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*taskpb.Task, string, error) {
+		resp := &taskpb.ListTasksResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			var err error
+			resp, err = c.tasksClient.ListTasks(ctx, req, settings.GRPC...)
+			return err
+		}, opts...)
+		if err != nil {
+			return nil, "", err
+		}
+
+		it.Response = resp
+		return resp.GetTasks(), resp.GetNextPageToken(), nil
+	}
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
+}
+
 // CreateTask createTask creates a Task.
-func (c *tasksWriterRESTClient) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *tasksRESTClient) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
 	body := req.GetTask()
 	jsonReq, err := m.Marshal(body)
@@ -503,7 +626,7 @@ func (c *tasksWriterRESTClient) CreateTask(ctx context.Context, req *taskpb.Crea
 	return resp, nil
 }
 
-func (c *tasksWriterRESTClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *tasksRESTClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	baseUrl, err := url.Parse(c.endpoint)
 	if err != nil {
 		return nil, err
@@ -557,7 +680,7 @@ func (c *tasksWriterRESTClient) DeleteTask(ctx context.Context, req *taskpb.Dele
 	return resp, nil
 }
 
-func (c *tasksWriterRESTClient) UndeleteTask(ctx context.Context, req *taskpb.UndeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *tasksRESTClient) UndeleteTask(ctx context.Context, req *taskpb.UndeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
 	jsonReq, err := m.Marshal(req)
 	if err != nil {
@@ -614,7 +737,7 @@ func (c *tasksWriterRESTClient) UndeleteTask(ctx context.Context, req *taskpb.Un
 	return resp, nil
 }
 
-func (c *tasksWriterRESTClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+func (c *tasksRESTClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
 	body := req.GetTask()
 	jsonReq, err := m.Marshal(body)
@@ -684,4 +807,147 @@ func (c *tasksWriterRESTClient) UpdateTask(ctx context.Context, req *taskpb.Upda
 		return nil, e
 	}
 	return resp, nil
+}
+
+// GetTask getTask returns a Task.
+func (c *tasksRESTClient) GetTask(ctx context.Context, req *taskpb.GetTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1/tasks/%v", req.GetId())
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "id", req.GetId())}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).GetTask[0:len((*c.CallOptions).GetTask):len((*c.CallOptions).GetTask)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &taskpb.Task{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("GET", baseUrl.String(), nil)
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := io.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
+}
+
+// ListTasks listTasks returns a list of Tasks.
+func (c *tasksRESTClient) ListTasks(ctx context.Context, req *taskpb.ListTasksRequest, opts ...gax.CallOption) *TaskIterator {
+	it := &TaskIterator{}
+	req = proto.Clone(req).(*taskpb.ListTasksRequest)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	it.InternalFetch = func(pageSize int, pageToken string) ([]*taskpb.Task, string, error) {
+		resp := &taskpb.ListTasksResponse{}
+		if pageToken != "" {
+			req.PageToken = pageToken
+		}
+		if pageSize > math.MaxInt32 {
+			req.PageSize = math.MaxInt32
+		} else if pageSize != 0 {
+			req.PageSize = int32(pageSize)
+		}
+		baseUrl, err := url.Parse(c.endpoint)
+		if err != nil {
+			return nil, "", err
+		}
+		baseUrl.Path += fmt.Sprintf("/v1/tasks")
+
+		params := url.Values{}
+		if req.GetPageSize() != 0 {
+			params.Add("pageSize", fmt.Sprintf("%v", req.GetPageSize()))
+		}
+		if req.GetPageToken() != "" {
+			params.Add("pageToken", fmt.Sprintf("%v", req.GetPageToken()))
+		}
+
+		baseUrl.RawQuery = params.Encode()
+
+		// Build HTTP headers from client and context metadata.
+		hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+		headers := gax.BuildHeaders(ctx, hds...)
+		e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+			if settings.Path != "" {
+				baseUrl.Path = settings.Path
+			}
+			httpReq, err := http.NewRequest("GET", baseUrl.String(), nil)
+			if err != nil {
+				return err
+			}
+			httpReq.Header = headers
+
+			httpRsp, err := c.httpClient.Do(httpReq)
+			if err != nil {
+				return err
+			}
+			defer httpRsp.Body.Close()
+
+			if err = googleapi.CheckResponse(httpRsp); err != nil {
+				return err
+			}
+
+			buf, err := io.ReadAll(httpRsp.Body)
+			if err != nil {
+				return err
+			}
+
+			if err := unm.Unmarshal(buf, resp); err != nil {
+				return err
+			}
+
+			return nil
+		}, opts...)
+		if e != nil {
+			return nil, "", e
+		}
+		it.Response = resp
+		return resp.GetTasks(), resp.GetNextPageToken(), nil
+	}
+
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		items, nextPageToken, err := it.InternalFetch(pageSize, pageToken)
+		if err != nil {
+			return "", err
+		}
+		it.items = append(it.items, items...)
+		return nextPageToken, nil
+	}
+
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.GetPageSize())
+	it.pageInfo.Token = req.GetPageToken()
+
+	return it
 }

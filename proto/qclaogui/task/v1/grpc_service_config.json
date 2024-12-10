@@ -1,8 +1,7 @@
 {
   "methodConfig": [{
     "name": [
-      { "service": "qclaogui.task.v1.TasksWriterService" },
-      { "service": "qclaogui.task.v1.TasksReaderService" }
+      { "service": "qclaogui.task.v1.TasksService" }
     ],
     "waitForReady": true,
     "timeout": "60s",
@@ -16,7 +15,7 @@
   },
     {
       "name": [
-        { "service": "qclaogui.task.v1.TasksWriterService", "method": "CreateTaskRequest" }
+        { "service": "qclaogui.task.v1.TasksService", "method": "CreateTaskRequest" }
       ],
       "waitForReady": true,
       "timeout": "60s"

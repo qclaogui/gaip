@@ -8,8 +8,8 @@ import "qclaogui/task/v1/task.proto";
 
 option go_package = "github.com/qclaogui/gaip/genproto/task/apiv1/taskpb";
 
-// TasksWriterService holds the methods to persist, modify and remove Tasks.
-service TasksWriterService {
+// TasksService holds the methods to persist, modify and remove Tasks.
+service TasksService {
   option (google.api.default_host) = "localhost:9095";
   // See https://github.com/aip-dev/google.aip.dev/pull/1331
   option (google.api.api_version) = "v1_20240506";
@@ -43,13 +43,6 @@ service TasksWriterService {
     };
     option (google.api.method_signature) = "id,update_mask";
   }
-}
-
-// TasksReaderService holds the methods to obtain Tasks.
-service TasksReaderService {
-  option (google.api.default_host) = "localhost:9095";
-  // See https://github.com/aip-dev/google.aip.dev/pull/1331
-  option (google.api.api_version) = "v1_20240506";
 
   // GetTask returns a Task.
   rpc GetTask(GetTaskRequest) returns (Task) {

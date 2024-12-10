@@ -35,29 +35,17 @@ func TestMain(m *testing.M) {
 	opt := option.WithGRPCConn(conn)
 	ctx := context.Background()
 
-	taskWriterGRPC, err = task.NewTasksWriterClient(ctx, opt)
+	tasksGRPC, err = task.NewTasksClient(ctx, opt)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer func() { _ = taskWriterGRPC.Close() }()
+	defer func() { _ = tasksGRPC.Close() }()
 
-	taskWriterREST, err = task.NewTasksWriterRESTClient(ctx, restClientOpts...)
+	tasksREST, err = task.NewTasksRESTClient(ctx, restClientOpts...)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer func() { _ = taskWriterREST.Close() }()
-
-	taskReaderGRPC, err = task.NewTasksReaderClient(ctx, opt)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func() { _ = taskReaderGRPC.Close() }()
-
-	taskReaderREST, err = task.NewTasksReaderRESTClient(ctx, restClientOpts...)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func() { _ = taskReaderREST.Close() }()
+	defer func() { _ = tasksREST.Close() }()
 
 	os.Exit(m.Run())
 }
