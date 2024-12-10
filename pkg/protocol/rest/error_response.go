@@ -72,7 +72,7 @@ func ErrorResponse(w http.ResponseWriter, status int, message string, details ..
 
 func Error(w http.ResponseWriter, httpStatus int, format string, args ...interface{}) {
 	message := fmt.Sprintf(format, args...)
-	//Print(message)
+	// Print(message)
 	ErrorResponse(w, httpStatus, message)
 }
 

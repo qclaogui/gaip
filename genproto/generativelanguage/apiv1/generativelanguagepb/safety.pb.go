@@ -487,15 +487,18 @@ func file_qclaogui_generativelanguage_v1_safety_proto_rawDescGZIP() []byte {
 	return file_qclaogui_generativelanguage_v1_safety_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1_safety_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_qclaogui_generativelanguage_v1_safety_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_qclaogui_generativelanguage_v1_safety_proto_goTypes = []any{
-	(HarmCategory)(0),                     // 0: qclaogui.generativelanguage.v1.HarmCategory
-	(SafetyRating_HarmProbability)(0),     // 1: qclaogui.generativelanguage.v1.SafetyRating.HarmProbability
-	(SafetySetting_HarmBlockThreshold)(0), // 2: qclaogui.generativelanguage.v1.SafetySetting.HarmBlockThreshold
-	(*SafetyRating)(nil),                  // 3: qclaogui.generativelanguage.v1.SafetyRating
-	(*SafetySetting)(nil),                 // 4: qclaogui.generativelanguage.v1.SafetySetting
-}
+var (
+	file_qclaogui_generativelanguage_v1_safety_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+	file_qclaogui_generativelanguage_v1_safety_proto_msgTypes  = make([]protoimpl.MessageInfo, 2)
+	file_qclaogui_generativelanguage_v1_safety_proto_goTypes   = []any{
+		(HarmCategory)(0),                     // 0: qclaogui.generativelanguage.v1.HarmCategory
+		(SafetyRating_HarmProbability)(0),     // 1: qclaogui.generativelanguage.v1.SafetyRating.HarmProbability
+		(SafetySetting_HarmBlockThreshold)(0), // 2: qclaogui.generativelanguage.v1.SafetySetting.HarmBlockThreshold
+		(*SafetyRating)(nil),                  // 3: qclaogui.generativelanguage.v1.SafetyRating
+		(*SafetySetting)(nil),                 // 4: qclaogui.generativelanguage.v1.SafetySetting
+	}
+)
+
 var file_qclaogui_generativelanguage_v1_safety_proto_depIdxs = []int32{
 	0, // 0: qclaogui.generativelanguage.v1.SafetyRating.category:type_name -> qclaogui.generativelanguage.v1.HarmCategory
 	1, // 1: qclaogui.generativelanguage.v1.SafetyRating.probability:type_name -> qclaogui.generativelanguage.v1.SafetyRating.HarmProbability

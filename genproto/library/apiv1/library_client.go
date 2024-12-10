@@ -599,6 +599,7 @@ func (c *restClient) Close() error {
 func (c *restClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *gRPCClient) CreateShelf(ctx context.Context, req *librarypb.CreateShelfRequest, opts ...gax.CallOption) (*librarypb.Shelf, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).CreateShelf[0:len((*c.CallOptions).CreateShelf):len((*c.CallOptions).CreateShelf)], opts...)

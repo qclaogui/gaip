@@ -16,7 +16,6 @@ import (
 )
 
 func Test_CreateShelf(t *testing.T) {
-
 	opts := []enttest.Option{
 		enttest.WithOptions(ent.Log(t.Log)),
 		enttest.WithMigrateOptions(migrate.WithGlobalUniqueID(true)),
@@ -25,5 +24,4 @@ func Test_CreateShelf(t *testing.T) {
 	// Create an ent.Client with in-memory SQLite database.
 	client := enttest.Open(t, "sqlite3", "file:ent?mode=memory&_fk=1", opts...)
 	defer func() { _ = client.Close() }()
-
 }

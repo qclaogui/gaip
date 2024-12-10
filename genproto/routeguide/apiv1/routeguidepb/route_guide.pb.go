@@ -833,22 +833,25 @@ func file_qclaogui_routeguide_v1_route_guide_proto_rawDescGZIP() []byte {
 	return file_qclaogui_routeguide_v1_route_guide_proto_rawDescData
 }
 
-var file_qclaogui_routeguide_v1_route_guide_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
-var file_qclaogui_routeguide_v1_route_guide_proto_goTypes = []any{
-	(*GetFeatureRequest)(nil),    // 0: qclaogui.routeguide.v1.GetFeatureRequest
-	(*GetFeatureResponse)(nil),   // 1: qclaogui.routeguide.v1.GetFeatureResponse
-	(*ListFeaturesRequest)(nil),  // 2: qclaogui.routeguide.v1.ListFeaturesRequest
-	(*ListFeaturesResponse)(nil), // 3: qclaogui.routeguide.v1.ListFeaturesResponse
-	(*RecordRouteRequest)(nil),   // 4: qclaogui.routeguide.v1.RecordRouteRequest
-	(*RecordRouteResponse)(nil),  // 5: qclaogui.routeguide.v1.RecordRouteResponse
-	(*RouteChatRequest)(nil),     // 6: qclaogui.routeguide.v1.RouteChatRequest
-	(*RouteChatResponse)(nil),    // 7: qclaogui.routeguide.v1.RouteChatResponse
-	(*Point)(nil),                // 8: qclaogui.routeguide.v1.Point
-	(*Rectangle)(nil),            // 9: qclaogui.routeguide.v1.Rectangle
-	(*Feature)(nil),              // 10: qclaogui.routeguide.v1.Feature
-	(*RouteNote)(nil),            // 11: qclaogui.routeguide.v1.RouteNote
-	(*RouteSummary)(nil),         // 12: qclaogui.routeguide.v1.RouteSummary
-}
+var (
+	file_qclaogui_routeguide_v1_route_guide_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+	file_qclaogui_routeguide_v1_route_guide_proto_goTypes  = []any{
+		(*GetFeatureRequest)(nil),    // 0: qclaogui.routeguide.v1.GetFeatureRequest
+		(*GetFeatureResponse)(nil),   // 1: qclaogui.routeguide.v1.GetFeatureResponse
+		(*ListFeaturesRequest)(nil),  // 2: qclaogui.routeguide.v1.ListFeaturesRequest
+		(*ListFeaturesResponse)(nil), // 3: qclaogui.routeguide.v1.ListFeaturesResponse
+		(*RecordRouteRequest)(nil),   // 4: qclaogui.routeguide.v1.RecordRouteRequest
+		(*RecordRouteResponse)(nil),  // 5: qclaogui.routeguide.v1.RecordRouteResponse
+		(*RouteChatRequest)(nil),     // 6: qclaogui.routeguide.v1.RouteChatRequest
+		(*RouteChatResponse)(nil),    // 7: qclaogui.routeguide.v1.RouteChatResponse
+		(*Point)(nil),                // 8: qclaogui.routeguide.v1.Point
+		(*Rectangle)(nil),            // 9: qclaogui.routeguide.v1.Rectangle
+		(*Feature)(nil),              // 10: qclaogui.routeguide.v1.Feature
+		(*RouteNote)(nil),            // 11: qclaogui.routeguide.v1.RouteNote
+		(*RouteSummary)(nil),         // 12: qclaogui.routeguide.v1.RouteSummary
+	}
+)
+
 var file_qclaogui_routeguide_v1_route_guide_proto_depIdxs = []int32{
 	8,  // 0: qclaogui.routeguide.v1.GetFeatureRequest.point:type_name -> qclaogui.routeguide.v1.Point
 	10, // 1: qclaogui.routeguide.v1.GetFeatureResponse.feature:type_name -> qclaogui.routeguide.v1.Feature

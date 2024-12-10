@@ -90,6 +90,7 @@ func (m *bookstoreImpl) CreateShelf(_ context.Context, req *bookstorepb.CreateSh
 
 	return shelf, nil
 }
+
 func (m *bookstoreImpl) GetShelf(_ context.Context, req *bookstorepb.GetShelfRequest) (*bookstorepb.Shelf, error) {
 	sid := req.Shelf
 
@@ -104,6 +105,7 @@ func (m *bookstoreImpl) GetShelf(_ context.Context, req *bookstorepb.GetShelfReq
 
 	return shelf, nil
 }
+
 func (m *bookstoreImpl) DeleteShelf(_ context.Context, req *bookstorepb.DeleteShelfRequest) (*emptypb.Empty, error) {
 	sid := req.Shelf
 
@@ -116,6 +118,7 @@ func (m *bookstoreImpl) DeleteShelf(_ context.Context, req *bookstorepb.DeleteSh
 
 	return nil, nil
 }
+
 func (m *bookstoreImpl) ListBooks(_ context.Context, req *bookstorepb.ListBooksRequest) (*bookstorepb.ListBooksResponse, error) {
 	sid := req.Shelf
 
@@ -141,6 +144,7 @@ func (m *bookstoreImpl) ListBooks(_ context.Context, req *bookstorepb.ListBooksR
 
 	return response, nil
 }
+
 func (m *bookstoreImpl) CreateBook(_ context.Context, req *bookstorepb.CreateBookRequest) (*bookstorepb.Book, error) {
 	sid := req.Shelf
 
@@ -165,6 +169,7 @@ func (m *bookstoreImpl) CreateBook(_ context.Context, req *bookstorepb.CreateBoo
 
 	return book, nil
 }
+
 func (m *bookstoreImpl) GetBook(_ context.Context, req *bookstorepb.GetBookRequest) (*bookstorepb.Book, error) {
 	sid, bid := req.Shelf, req.Book
 
@@ -179,6 +184,7 @@ func (m *bookstoreImpl) GetBook(_ context.Context, req *bookstorepb.GetBookReque
 
 	return book, nil
 }
+
 func (m *bookstoreImpl) DeleteBook(_ context.Context, req *bookstorepb.DeleteBookRequest) (*emptypb.Empty, error) {
 	sid, bid := req.Shelf, req.Book
 

@@ -1157,29 +1157,32 @@ func file_qclaogui_showcase_v1beta1_blurb_proto_rawDescGZIP() []byte {
 	return file_qclaogui_showcase_v1beta1_blurb_proto_rawDescData
 }
 
-var file_qclaogui_showcase_v1beta1_blurb_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_qclaogui_showcase_v1beta1_blurb_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
-var file_qclaogui_showcase_v1beta1_blurb_proto_goTypes = []any{
-	(StreamBlurbsResponse_Action)(0),     // 0: qclaogui.showcase.v1beta1.StreamBlurbsResponse.Action
-	(*Blurb)(nil),                        // 1: qclaogui.showcase.v1beta1.Blurb
-	(*CreateBlurbRequest)(nil),           // 2: qclaogui.showcase.v1beta1.CreateBlurbRequest
-	(*GetBlurbRequest)(nil),              // 3: qclaogui.showcase.v1beta1.GetBlurbRequest
-	(*UpdateBlurbRequest)(nil),           // 4: qclaogui.showcase.v1beta1.UpdateBlurbRequest
-	(*DeleteBlurbRequest)(nil),           // 5: qclaogui.showcase.v1beta1.DeleteBlurbRequest
-	(*ListBlurbsRequest)(nil),            // 6: qclaogui.showcase.v1beta1.ListBlurbsRequest
-	(*ListBlurbsResponse)(nil),           // 7: qclaogui.showcase.v1beta1.ListBlurbsResponse
-	(*SearchBlurbsRequest)(nil),          // 8: qclaogui.showcase.v1beta1.SearchBlurbsRequest
-	(*SearchBlurbsResponse)(nil),         // 9: qclaogui.showcase.v1beta1.SearchBlurbsResponse
-	(*SearchBlurbsMetadata)(nil),         // 10: qclaogui.showcase.v1beta1.SearchBlurbsMetadata
-	(*StreamBlurbsRequest)(nil),          // 11: qclaogui.showcase.v1beta1.StreamBlurbsRequest
-	(*StreamBlurbsResponse)(nil),         // 12: qclaogui.showcase.v1beta1.StreamBlurbsResponse
-	(*SendBlurbsResponse)(nil),           // 13: qclaogui.showcase.v1beta1.SendBlurbsResponse
-	(*ConnectRequest)(nil),               // 14: qclaogui.showcase.v1beta1.ConnectRequest
-	(*ConnectRequest_ConnectConfig)(nil), // 15: qclaogui.showcase.v1beta1.ConnectRequest.ConnectConfig
-	(*timestamppb.Timestamp)(nil),        // 16: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),        // 17: google.protobuf.FieldMask
-	(*errdetails.RetryInfo)(nil),         // 18: google.rpc.RetryInfo
-}
+var (
+	file_qclaogui_showcase_v1beta1_blurb_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_qclaogui_showcase_v1beta1_blurb_proto_msgTypes  = make([]protoimpl.MessageInfo, 15)
+	file_qclaogui_showcase_v1beta1_blurb_proto_goTypes   = []any{
+		(StreamBlurbsResponse_Action)(0),     // 0: qclaogui.showcase.v1beta1.StreamBlurbsResponse.Action
+		(*Blurb)(nil),                        // 1: qclaogui.showcase.v1beta1.Blurb
+		(*CreateBlurbRequest)(nil),           // 2: qclaogui.showcase.v1beta1.CreateBlurbRequest
+		(*GetBlurbRequest)(nil),              // 3: qclaogui.showcase.v1beta1.GetBlurbRequest
+		(*UpdateBlurbRequest)(nil),           // 4: qclaogui.showcase.v1beta1.UpdateBlurbRequest
+		(*DeleteBlurbRequest)(nil),           // 5: qclaogui.showcase.v1beta1.DeleteBlurbRequest
+		(*ListBlurbsRequest)(nil),            // 6: qclaogui.showcase.v1beta1.ListBlurbsRequest
+		(*ListBlurbsResponse)(nil),           // 7: qclaogui.showcase.v1beta1.ListBlurbsResponse
+		(*SearchBlurbsRequest)(nil),          // 8: qclaogui.showcase.v1beta1.SearchBlurbsRequest
+		(*SearchBlurbsResponse)(nil),         // 9: qclaogui.showcase.v1beta1.SearchBlurbsResponse
+		(*SearchBlurbsMetadata)(nil),         // 10: qclaogui.showcase.v1beta1.SearchBlurbsMetadata
+		(*StreamBlurbsRequest)(nil),          // 11: qclaogui.showcase.v1beta1.StreamBlurbsRequest
+		(*StreamBlurbsResponse)(nil),         // 12: qclaogui.showcase.v1beta1.StreamBlurbsResponse
+		(*SendBlurbsResponse)(nil),           // 13: qclaogui.showcase.v1beta1.SendBlurbsResponse
+		(*ConnectRequest)(nil),               // 14: qclaogui.showcase.v1beta1.ConnectRequest
+		(*ConnectRequest_ConnectConfig)(nil), // 15: qclaogui.showcase.v1beta1.ConnectRequest.ConnectConfig
+		(*timestamppb.Timestamp)(nil),        // 16: google.protobuf.Timestamp
+		(*fieldmaskpb.FieldMask)(nil),        // 17: google.protobuf.FieldMask
+		(*errdetails.RetryInfo)(nil),         // 18: google.rpc.RetryInfo
+	}
+)
+
 var file_qclaogui_showcase_v1beta1_blurb_proto_depIdxs = []int32{
 	16, // 0: qclaogui.showcase.v1beta1.Blurb.create_time:type_name -> google.protobuf.Timestamp
 	16, // 1: qclaogui.showcase.v1beta1.Blurb.update_time:type_name -> google.protobuf.Timestamp

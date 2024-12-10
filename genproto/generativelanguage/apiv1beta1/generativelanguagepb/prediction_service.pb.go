@@ -223,12 +223,15 @@ func file_qclaogui_generativelanguage_v1beta1_prediction_service_proto_rawDescGZ
 	return file_qclaogui_generativelanguage_v1beta1_prediction_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_prediction_service_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_qclaogui_generativelanguage_v1beta1_prediction_service_proto_goTypes = []any{
-	(*PredictRequest)(nil),  // 0: qclaogui.generativelanguage.v1beta1.PredictRequest
-	(*PredictResponse)(nil), // 1: qclaogui.generativelanguage.v1beta1.PredictResponse
-	(*structpb.Value)(nil),  // 2: google.protobuf.Value
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_prediction_service_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_qclaogui_generativelanguage_v1beta1_prediction_service_proto_goTypes  = []any{
+		(*PredictRequest)(nil),  // 0: qclaogui.generativelanguage.v1beta1.PredictRequest
+		(*PredictResponse)(nil), // 1: qclaogui.generativelanguage.v1beta1.PredictResponse
+		(*structpb.Value)(nil),  // 2: google.protobuf.Value
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_prediction_service_proto_depIdxs = []int32{
 	2, // 0: qclaogui.generativelanguage.v1beta1.PredictRequest.instances:type_name -> google.protobuf.Value
 	2, // 1: qclaogui.generativelanguage.v1beta1.PredictRequest.parameters:type_name -> google.protobuf.Value

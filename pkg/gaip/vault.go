@@ -23,10 +23,10 @@ func (g *Gaip) initVault() error {
 	g.Vault = v
 
 	// Update Configs - KVStore
-	//g.Cfg.MemberlistKV.TCPTransport.TLS.Reader = g.VaultCfg
+	// g.Cfg.MemberlistKV.TCPTransport.TLS.Reader = g.VaultCfg
 
 	// Update Configs - GRPCServer Clients
-	//g.Cfg.Worker.GRPCClientConfig.TLS.Reader = g.VaultCfg
+	// g.Cfg.Worker.GRPCClientConfig.TLS.Reader = g.VaultCfg
 
 	return nil
 }

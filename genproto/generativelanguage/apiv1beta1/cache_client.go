@@ -334,6 +334,7 @@ func (c *cacheRESTClient) Close() error {
 func (c *cacheRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *cacheGRPCClient) ListCachedContents(ctx context.Context, req *generativelanguagepb.ListCachedContentsRequest, opts ...gax.CallOption) *CachedContentIterator {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).ListCachedContents[0:len((*c.CallOptions).ListCachedContents):len((*c.CallOptions).ListCachedContents)], opts...)

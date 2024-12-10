@@ -59,5 +59,4 @@ func applyFieldMask(src, dst protoreflect.Message, paths []string) {
 			dst.Set(setOneof, src.Get(setOneof))
 		}
 	}
-
 }

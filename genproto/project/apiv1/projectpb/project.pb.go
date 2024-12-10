@@ -398,15 +398,18 @@ func file_qclaogui_project_v1_project_proto_rawDescGZIP() []byte {
 	return file_qclaogui_project_v1_project_proto_rawDescData
 }
 
-var file_qclaogui_project_v1_project_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_qclaogui_project_v1_project_proto_goTypes = []any{
-	(*Project)(nil),              // 0: qclaogui.project.v1.Project
-	(*CreateProjectRequest)(nil), // 1: qclaogui.project.v1.CreateProjectRequest
-	(*GetProjectRequest)(nil),    // 2: qclaogui.project.v1.GetProjectRequest
-	(*ListProjectsRequest)(nil),  // 3: qclaogui.project.v1.ListProjectsRequest
-	(*ListProjectsResponse)(nil), // 4: qclaogui.project.v1.ListProjectsResponse
-	(*DeleteProjectRequest)(nil), // 5: qclaogui.project.v1.DeleteProjectRequest
-}
+var (
+	file_qclaogui_project_v1_project_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+	file_qclaogui_project_v1_project_proto_goTypes  = []any{
+		(*Project)(nil),              // 0: qclaogui.project.v1.Project
+		(*CreateProjectRequest)(nil), // 1: qclaogui.project.v1.CreateProjectRequest
+		(*GetProjectRequest)(nil),    // 2: qclaogui.project.v1.GetProjectRequest
+		(*ListProjectsRequest)(nil),  // 3: qclaogui.project.v1.ListProjectsRequest
+		(*ListProjectsResponse)(nil), // 4: qclaogui.project.v1.ListProjectsResponse
+		(*DeleteProjectRequest)(nil), // 5: qclaogui.project.v1.DeleteProjectRequest
+	}
+)
+
 var file_qclaogui_project_v1_project_proto_depIdxs = []int32{
 	0, // 0: qclaogui.project.v1.CreateProjectRequest.project:type_name -> qclaogui.project.v1.Project
 	0, // 1: qclaogui.project.v1.ListProjectsResponse.projects:type_name -> qclaogui.project.v1.Project

@@ -155,6 +155,7 @@ var file_qclaogui_library_v1_service_proto_goTypes = []any{
 	(*Book)(nil),                // 14: qclaogui.library.v1.Book
 	(*ListBooksResponse)(nil),   // 15: qclaogui.library.v1.ListBooksResponse
 }
+
 var file_qclaogui_library_v1_service_proto_depIdxs = []int32{
 	0,  // 0: qclaogui.library.v1.LibraryService.CreateShelf:input_type -> qclaogui.library.v1.CreateShelfRequest
 	1,  // 1: qclaogui.library.v1.LibraryService.GetShelf:input_type -> qclaogui.library.v1.GetShelfRequest

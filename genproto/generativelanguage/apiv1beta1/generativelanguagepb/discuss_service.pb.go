@@ -746,18 +746,21 @@ func file_qclaogui_generativelanguage_v1beta1_discuss_service_proto_rawDescGZIP(
 	return file_qclaogui_generativelanguage_v1beta1_discuss_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_discuss_service_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_qclaogui_generativelanguage_v1beta1_discuss_service_proto_goTypes = []any{
-	(*GenerateMessageRequest)(nil),     // 0: qclaogui.generativelanguage.v1beta1.GenerateMessageRequest
-	(*GenerateMessageResponse)(nil),    // 1: qclaogui.generativelanguage.v1beta1.GenerateMessageResponse
-	(*Message)(nil),                    // 2: qclaogui.generativelanguage.v1beta1.Message
-	(*MessagePrompt)(nil),              // 3: qclaogui.generativelanguage.v1beta1.MessagePrompt
-	(*Example)(nil),                    // 4: qclaogui.generativelanguage.v1beta1.Example
-	(*CountMessageTokensRequest)(nil),  // 5: qclaogui.generativelanguage.v1beta1.CountMessageTokensRequest
-	(*CountMessageTokensResponse)(nil), // 6: qclaogui.generativelanguage.v1beta1.CountMessageTokensResponse
-	(*ContentFilter)(nil),              // 7: qclaogui.generativelanguage.v1beta1.ContentFilter
-	(*CitationMetadata)(nil),           // 8: qclaogui.generativelanguage.v1beta1.CitationMetadata
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_discuss_service_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+	file_qclaogui_generativelanguage_v1beta1_discuss_service_proto_goTypes  = []any{
+		(*GenerateMessageRequest)(nil),     // 0: qclaogui.generativelanguage.v1beta1.GenerateMessageRequest
+		(*GenerateMessageResponse)(nil),    // 1: qclaogui.generativelanguage.v1beta1.GenerateMessageResponse
+		(*Message)(nil),                    // 2: qclaogui.generativelanguage.v1beta1.Message
+		(*MessagePrompt)(nil),              // 3: qclaogui.generativelanguage.v1beta1.MessagePrompt
+		(*Example)(nil),                    // 4: qclaogui.generativelanguage.v1beta1.Example
+		(*CountMessageTokensRequest)(nil),  // 5: qclaogui.generativelanguage.v1beta1.CountMessageTokensRequest
+		(*CountMessageTokensResponse)(nil), // 6: qclaogui.generativelanguage.v1beta1.CountMessageTokensResponse
+		(*ContentFilter)(nil),              // 7: qclaogui.generativelanguage.v1beta1.ContentFilter
+		(*CitationMetadata)(nil),           // 8: qclaogui.generativelanguage.v1beta1.CitationMetadata
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_discuss_service_proto_depIdxs = []int32{
 	3,  // 0: qclaogui.generativelanguage.v1beta1.GenerateMessageRequest.prompt:type_name -> qclaogui.generativelanguage.v1beta1.MessagePrompt
 	2,  // 1: qclaogui.generativelanguage.v1beta1.GenerateMessageResponse.candidates:type_name -> qclaogui.generativelanguage.v1beta1.Message

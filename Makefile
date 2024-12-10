@@ -355,12 +355,9 @@ fmt: ## Runs fmt code (automatically fix lint errors)
 fmt: fix-lint go-fmt buf-fmt
 
 .PHONY: go-fmt
-go-fmt: $(GOIMPORTS)
+go-fmt: $(GOIMPORTS) $(GOFUMPT)
 	@echo ">> formatting go code"
-	@gofmt -s -w $(GO_FILES_TO_FMT)
-	@for file in $(GO_FILES_TO_FMT) ; do \
-		tools/scripts/goimports.sh "$${file}"; \
-	done
+	@$(GOFUMPT) -w $(GO_FILES_TO_FMT)
 	@$(GOIMPORTS) -w $(GO_FILES_TO_FMT)
 
 buf-fmt: $(BUF)

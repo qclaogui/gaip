@@ -110,5 +110,4 @@ func TestCalculateRequestChecksum(t *testing.T) {
 			}
 		})
 	}
-
 }

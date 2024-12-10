@@ -457,17 +457,20 @@ func file_qclaogui_generativelanguage_v1beta1_file_service_proto_rawDescGZIP() [
 	return file_qclaogui_generativelanguage_v1beta1_file_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_qclaogui_generativelanguage_v1beta1_file_service_proto_goTypes = []any{
-	(*CreateFileRequest)(nil),  // 0: qclaogui.generativelanguage.v1beta1.CreateFileRequest
-	(*CreateFileResponse)(nil), // 1: qclaogui.generativelanguage.v1beta1.CreateFileResponse
-	(*ListFilesRequest)(nil),   // 2: qclaogui.generativelanguage.v1beta1.ListFilesRequest
-	(*ListFilesResponse)(nil),  // 3: qclaogui.generativelanguage.v1beta1.ListFilesResponse
-	(*GetFileRequest)(nil),     // 4: qclaogui.generativelanguage.v1beta1.GetFileRequest
-	(*DeleteFileRequest)(nil),  // 5: qclaogui.generativelanguage.v1beta1.DeleteFileRequest
-	(*File)(nil),               // 6: qclaogui.generativelanguage.v1beta1.File
-	(*emptypb.Empty)(nil),      // 7: google.protobuf.Empty
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+	file_qclaogui_generativelanguage_v1beta1_file_service_proto_goTypes  = []any{
+		(*CreateFileRequest)(nil),  // 0: qclaogui.generativelanguage.v1beta1.CreateFileRequest
+		(*CreateFileResponse)(nil), // 1: qclaogui.generativelanguage.v1beta1.CreateFileResponse
+		(*ListFilesRequest)(nil),   // 2: qclaogui.generativelanguage.v1beta1.ListFilesRequest
+		(*ListFilesResponse)(nil),  // 3: qclaogui.generativelanguage.v1beta1.ListFilesResponse
+		(*GetFileRequest)(nil),     // 4: qclaogui.generativelanguage.v1beta1.GetFileRequest
+		(*DeleteFileRequest)(nil),  // 5: qclaogui.generativelanguage.v1beta1.DeleteFileRequest
+		(*File)(nil),               // 6: qclaogui.generativelanguage.v1beta1.File
+		(*emptypb.Empty)(nil),      // 7: google.protobuf.Empty
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_file_service_proto_depIdxs = []int32{
 	6, // 0: qclaogui.generativelanguage.v1beta1.CreateFileRequest.file:type_name -> qclaogui.generativelanguage.v1beta1.File
 	6, // 1: qclaogui.generativelanguage.v1beta1.CreateFileResponse.file:type_name -> qclaogui.generativelanguage.v1beta1.File

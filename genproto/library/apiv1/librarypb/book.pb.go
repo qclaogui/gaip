@@ -595,18 +595,21 @@ func file_qclaogui_library_v1_book_proto_rawDescGZIP() []byte {
 	return file_qclaogui_library_v1_book_proto_rawDescData
 }
 
-var file_qclaogui_library_v1_book_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-var file_qclaogui_library_v1_book_proto_goTypes = []any{
-	(*Book)(nil),                  // 0: qclaogui.library.v1.Book
-	(*CreateBookRequest)(nil),     // 1: qclaogui.library.v1.CreateBookRequest
-	(*GetBookRequest)(nil),        // 2: qclaogui.library.v1.GetBookRequest
-	(*ListBooksRequest)(nil),      // 3: qclaogui.library.v1.ListBooksRequest
-	(*ListBooksResponse)(nil),     // 4: qclaogui.library.v1.ListBooksResponse
-	(*DeleteBookRequest)(nil),     // 5: qclaogui.library.v1.DeleteBookRequest
-	(*UpdateBookRequest)(nil),     // 6: qclaogui.library.v1.UpdateBookRequest
-	(*MoveBookRequest)(nil),       // 7: qclaogui.library.v1.MoveBookRequest
-	(*fieldmaskpb.FieldMask)(nil), // 8: google.protobuf.FieldMask
-}
+var (
+	file_qclaogui_library_v1_book_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+	file_qclaogui_library_v1_book_proto_goTypes  = []any{
+		(*Book)(nil),                  // 0: qclaogui.library.v1.Book
+		(*CreateBookRequest)(nil),     // 1: qclaogui.library.v1.CreateBookRequest
+		(*GetBookRequest)(nil),        // 2: qclaogui.library.v1.GetBookRequest
+		(*ListBooksRequest)(nil),      // 3: qclaogui.library.v1.ListBooksRequest
+		(*ListBooksResponse)(nil),     // 4: qclaogui.library.v1.ListBooksResponse
+		(*DeleteBookRequest)(nil),     // 5: qclaogui.library.v1.DeleteBookRequest
+		(*UpdateBookRequest)(nil),     // 6: qclaogui.library.v1.UpdateBookRequest
+		(*MoveBookRequest)(nil),       // 7: qclaogui.library.v1.MoveBookRequest
+		(*fieldmaskpb.FieldMask)(nil), // 8: google.protobuf.FieldMask
+	}
+)
+
 var file_qclaogui_library_v1_book_proto_depIdxs = []int32{
 	0, // 0: qclaogui.library.v1.CreateBookRequest.book:type_name -> qclaogui.library.v1.Book
 	0, // 1: qclaogui.library.v1.ListBooksResponse.books:type_name -> qclaogui.library.v1.Book

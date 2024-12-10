@@ -744,21 +744,24 @@ func file_qclaogui_todo_v1_todo_proto_rawDescGZIP() []byte {
 	return file_qclaogui_todo_v1_todo_proto_rawDescData
 }
 
-var file_qclaogui_todo_v1_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_qclaogui_todo_v1_todo_proto_goTypes = []any{
-	(*ToDo)(nil),                  // 0: qclaogui.todo.v1.ToDo
-	(*CreateTodoRequest)(nil),     // 1: qclaogui.todo.v1.CreateTodoRequest
-	(*CreateTodoResponse)(nil),    // 2: qclaogui.todo.v1.CreateTodoResponse
-	(*GetTodoRequest)(nil),        // 3: qclaogui.todo.v1.GetTodoRequest
-	(*GetTodoResponse)(nil),       // 4: qclaogui.todo.v1.GetTodoResponse
-	(*UpdateTodoRequest)(nil),     // 5: qclaogui.todo.v1.UpdateTodoRequest
-	(*UpdateTodoResponse)(nil),    // 6: qclaogui.todo.v1.UpdateTodoResponse
-	(*DeleteTodoRequest)(nil),     // 7: qclaogui.todo.v1.DeleteTodoRequest
-	(*DeleteTodoResponse)(nil),    // 8: qclaogui.todo.v1.DeleteTodoResponse
-	(*ListTodoRequest)(nil),       // 9: qclaogui.todo.v1.ListTodoRequest
-	(*ListTodoResponse)(nil),      // 10: qclaogui.todo.v1.ListTodoResponse
-	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
-}
+var (
+	file_qclaogui_todo_v1_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+	file_qclaogui_todo_v1_todo_proto_goTypes  = []any{
+		(*ToDo)(nil),                  // 0: qclaogui.todo.v1.ToDo
+		(*CreateTodoRequest)(nil),     // 1: qclaogui.todo.v1.CreateTodoRequest
+		(*CreateTodoResponse)(nil),    // 2: qclaogui.todo.v1.CreateTodoResponse
+		(*GetTodoRequest)(nil),        // 3: qclaogui.todo.v1.GetTodoRequest
+		(*GetTodoResponse)(nil),       // 4: qclaogui.todo.v1.GetTodoResponse
+		(*UpdateTodoRequest)(nil),     // 5: qclaogui.todo.v1.UpdateTodoRequest
+		(*UpdateTodoResponse)(nil),    // 6: qclaogui.todo.v1.UpdateTodoResponse
+		(*DeleteTodoRequest)(nil),     // 7: qclaogui.todo.v1.DeleteTodoRequest
+		(*DeleteTodoResponse)(nil),    // 8: qclaogui.todo.v1.DeleteTodoResponse
+		(*ListTodoRequest)(nil),       // 9: qclaogui.todo.v1.ListTodoRequest
+		(*ListTodoResponse)(nil),      // 10: qclaogui.todo.v1.ListTodoResponse
+		(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
+	}
+)
+
 var file_qclaogui_todo_v1_todo_proto_depIdxs = []int32{
 	11, // 0: qclaogui.todo.v1.ToDo.create_time:type_name -> google.protobuf.Timestamp
 	11, // 1: qclaogui.todo.v1.ToDo.update_time:type_name -> google.protobuf.Timestamp

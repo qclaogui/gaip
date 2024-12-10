@@ -20,7 +20,6 @@ func NewLibrary() (librarypb.LibraryServiceServer, error) {
 		Books:   map[int64]map[int64]*librarypb.Book{},
 	}
 	return m, nil
-
 }
 
 // libraryImpl fulfills the Repository libraryImpl interface
@@ -40,7 +39,6 @@ type libraryImpl struct {
 }
 
 func (m *libraryImpl) ListShelves(ctx context.Context, req *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
-
 	m.mu.Lock()
 	defer m.mu.Unlock()
 

@@ -2249,43 +2249,46 @@ func file_qclaogui_generativelanguage_v1beta1_retriever_service_proto_rawDescGZI
 	return file_qclaogui_generativelanguage_v1beta1_retriever_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_retriever_service_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
-var file_qclaogui_generativelanguage_v1beta1_retriever_service_proto_goTypes = []any{
-	(*CreateCorpusRequest)(nil),       // 0: qclaogui.generativelanguage.v1beta1.CreateCorpusRequest
-	(*GetCorpusRequest)(nil),          // 1: qclaogui.generativelanguage.v1beta1.GetCorpusRequest
-	(*UpdateCorpusRequest)(nil),       // 2: qclaogui.generativelanguage.v1beta1.UpdateCorpusRequest
-	(*DeleteCorpusRequest)(nil),       // 3: qclaogui.generativelanguage.v1beta1.DeleteCorpusRequest
-	(*ListCorporaRequest)(nil),        // 4: qclaogui.generativelanguage.v1beta1.ListCorporaRequest
-	(*ListCorporaResponse)(nil),       // 5: qclaogui.generativelanguage.v1beta1.ListCorporaResponse
-	(*QueryCorpusRequest)(nil),        // 6: qclaogui.generativelanguage.v1beta1.QueryCorpusRequest
-	(*QueryCorpusResponse)(nil),       // 7: qclaogui.generativelanguage.v1beta1.QueryCorpusResponse
-	(*RelevantChunk)(nil),             // 8: qclaogui.generativelanguage.v1beta1.RelevantChunk
-	(*CreateDocumentRequest)(nil),     // 9: qclaogui.generativelanguage.v1beta1.CreateDocumentRequest
-	(*GetDocumentRequest)(nil),        // 10: qclaogui.generativelanguage.v1beta1.GetDocumentRequest
-	(*UpdateDocumentRequest)(nil),     // 11: qclaogui.generativelanguage.v1beta1.UpdateDocumentRequest
-	(*DeleteDocumentRequest)(nil),     // 12: qclaogui.generativelanguage.v1beta1.DeleteDocumentRequest
-	(*ListDocumentsRequest)(nil),      // 13: qclaogui.generativelanguage.v1beta1.ListDocumentsRequest
-	(*ListDocumentsResponse)(nil),     // 14: qclaogui.generativelanguage.v1beta1.ListDocumentsResponse
-	(*QueryDocumentRequest)(nil),      // 15: qclaogui.generativelanguage.v1beta1.QueryDocumentRequest
-	(*QueryDocumentResponse)(nil),     // 16: qclaogui.generativelanguage.v1beta1.QueryDocumentResponse
-	(*CreateChunkRequest)(nil),        // 17: qclaogui.generativelanguage.v1beta1.CreateChunkRequest
-	(*BatchCreateChunksRequest)(nil),  // 18: qclaogui.generativelanguage.v1beta1.BatchCreateChunksRequest
-	(*BatchCreateChunksResponse)(nil), // 19: qclaogui.generativelanguage.v1beta1.BatchCreateChunksResponse
-	(*GetChunkRequest)(nil),           // 20: qclaogui.generativelanguage.v1beta1.GetChunkRequest
-	(*UpdateChunkRequest)(nil),        // 21: qclaogui.generativelanguage.v1beta1.UpdateChunkRequest
-	(*BatchUpdateChunksRequest)(nil),  // 22: qclaogui.generativelanguage.v1beta1.BatchUpdateChunksRequest
-	(*BatchUpdateChunksResponse)(nil), // 23: qclaogui.generativelanguage.v1beta1.BatchUpdateChunksResponse
-	(*DeleteChunkRequest)(nil),        // 24: qclaogui.generativelanguage.v1beta1.DeleteChunkRequest
-	(*BatchDeleteChunksRequest)(nil),  // 25: qclaogui.generativelanguage.v1beta1.BatchDeleteChunksRequest
-	(*ListChunksRequest)(nil),         // 26: qclaogui.generativelanguage.v1beta1.ListChunksRequest
-	(*ListChunksResponse)(nil),        // 27: qclaogui.generativelanguage.v1beta1.ListChunksResponse
-	(*Corpus)(nil),                    // 28: qclaogui.generativelanguage.v1beta1.Corpus
-	(*fieldmaskpb.FieldMask)(nil),     // 29: google.protobuf.FieldMask
-	(*MetadataFilter)(nil),            // 30: qclaogui.generativelanguage.v1beta1.MetadataFilter
-	(*Chunk)(nil),                     // 31: qclaogui.generativelanguage.v1beta1.Chunk
-	(*Document)(nil),                  // 32: qclaogui.generativelanguage.v1beta1.Document
-	(*emptypb.Empty)(nil),             // 33: google.protobuf.Empty
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_retriever_service_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
+	file_qclaogui_generativelanguage_v1beta1_retriever_service_proto_goTypes  = []any{
+		(*CreateCorpusRequest)(nil),       // 0: qclaogui.generativelanguage.v1beta1.CreateCorpusRequest
+		(*GetCorpusRequest)(nil),          // 1: qclaogui.generativelanguage.v1beta1.GetCorpusRequest
+		(*UpdateCorpusRequest)(nil),       // 2: qclaogui.generativelanguage.v1beta1.UpdateCorpusRequest
+		(*DeleteCorpusRequest)(nil),       // 3: qclaogui.generativelanguage.v1beta1.DeleteCorpusRequest
+		(*ListCorporaRequest)(nil),        // 4: qclaogui.generativelanguage.v1beta1.ListCorporaRequest
+		(*ListCorporaResponse)(nil),       // 5: qclaogui.generativelanguage.v1beta1.ListCorporaResponse
+		(*QueryCorpusRequest)(nil),        // 6: qclaogui.generativelanguage.v1beta1.QueryCorpusRequest
+		(*QueryCorpusResponse)(nil),       // 7: qclaogui.generativelanguage.v1beta1.QueryCorpusResponse
+		(*RelevantChunk)(nil),             // 8: qclaogui.generativelanguage.v1beta1.RelevantChunk
+		(*CreateDocumentRequest)(nil),     // 9: qclaogui.generativelanguage.v1beta1.CreateDocumentRequest
+		(*GetDocumentRequest)(nil),        // 10: qclaogui.generativelanguage.v1beta1.GetDocumentRequest
+		(*UpdateDocumentRequest)(nil),     // 11: qclaogui.generativelanguage.v1beta1.UpdateDocumentRequest
+		(*DeleteDocumentRequest)(nil),     // 12: qclaogui.generativelanguage.v1beta1.DeleteDocumentRequest
+		(*ListDocumentsRequest)(nil),      // 13: qclaogui.generativelanguage.v1beta1.ListDocumentsRequest
+		(*ListDocumentsResponse)(nil),     // 14: qclaogui.generativelanguage.v1beta1.ListDocumentsResponse
+		(*QueryDocumentRequest)(nil),      // 15: qclaogui.generativelanguage.v1beta1.QueryDocumentRequest
+		(*QueryDocumentResponse)(nil),     // 16: qclaogui.generativelanguage.v1beta1.QueryDocumentResponse
+		(*CreateChunkRequest)(nil),        // 17: qclaogui.generativelanguage.v1beta1.CreateChunkRequest
+		(*BatchCreateChunksRequest)(nil),  // 18: qclaogui.generativelanguage.v1beta1.BatchCreateChunksRequest
+		(*BatchCreateChunksResponse)(nil), // 19: qclaogui.generativelanguage.v1beta1.BatchCreateChunksResponse
+		(*GetChunkRequest)(nil),           // 20: qclaogui.generativelanguage.v1beta1.GetChunkRequest
+		(*UpdateChunkRequest)(nil),        // 21: qclaogui.generativelanguage.v1beta1.UpdateChunkRequest
+		(*BatchUpdateChunksRequest)(nil),  // 22: qclaogui.generativelanguage.v1beta1.BatchUpdateChunksRequest
+		(*BatchUpdateChunksResponse)(nil), // 23: qclaogui.generativelanguage.v1beta1.BatchUpdateChunksResponse
+		(*DeleteChunkRequest)(nil),        // 24: qclaogui.generativelanguage.v1beta1.DeleteChunkRequest
+		(*BatchDeleteChunksRequest)(nil),  // 25: qclaogui.generativelanguage.v1beta1.BatchDeleteChunksRequest
+		(*ListChunksRequest)(nil),         // 26: qclaogui.generativelanguage.v1beta1.ListChunksRequest
+		(*ListChunksResponse)(nil),        // 27: qclaogui.generativelanguage.v1beta1.ListChunksResponse
+		(*Corpus)(nil),                    // 28: qclaogui.generativelanguage.v1beta1.Corpus
+		(*fieldmaskpb.FieldMask)(nil),     // 29: google.protobuf.FieldMask
+		(*MetadataFilter)(nil),            // 30: qclaogui.generativelanguage.v1beta1.MetadataFilter
+		(*Chunk)(nil),                     // 31: qclaogui.generativelanguage.v1beta1.Chunk
+		(*Document)(nil),                  // 32: qclaogui.generativelanguage.v1beta1.Document
+		(*emptypb.Empty)(nil),             // 33: google.protobuf.Empty
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_retriever_service_proto_depIdxs = []int32{
 	28, // 0: qclaogui.generativelanguage.v1beta1.CreateCorpusRequest.corpus:type_name -> qclaogui.generativelanguage.v1beta1.Corpus
 	28, // 1: qclaogui.generativelanguage.v1beta1.UpdateCorpusRequest.corpus:type_name -> qclaogui.generativelanguage.v1beta1.Corpus

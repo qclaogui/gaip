@@ -371,60 +371,79 @@ type UnimplementedRetrieverServiceServer struct{}
 func (UnimplementedRetrieverServiceServer) CreateCorpus(context.Context, *CreateCorpusRequest) (*Corpus, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCorpus not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) GetCorpus(context.Context, *GetCorpusRequest) (*Corpus, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCorpus not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) UpdateCorpus(context.Context, *UpdateCorpusRequest) (*Corpus, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCorpus not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) DeleteCorpus(context.Context, *DeleteCorpusRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCorpus not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) ListCorpora(context.Context, *ListCorporaRequest) (*ListCorporaResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCorpora not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) QueryCorpus(context.Context, *QueryCorpusRequest) (*QueryCorpusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryCorpus not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) CreateDocument(context.Context, *CreateDocumentRequest) (*Document, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateDocument not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) GetDocument(context.Context, *GetDocumentRequest) (*Document, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDocument not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) UpdateDocument(context.Context, *UpdateDocumentRequest) (*Document, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDocument not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) DeleteDocument(context.Context, *DeleteDocumentRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDocument not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) ListDocuments(context.Context, *ListDocumentsRequest) (*ListDocumentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListDocuments not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) QueryDocument(context.Context, *QueryDocumentRequest) (*QueryDocumentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryDocument not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) CreateChunk(context.Context, *CreateChunkRequest) (*Chunk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateChunk not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) BatchCreateChunks(context.Context, *BatchCreateChunksRequest) (*BatchCreateChunksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BatchCreateChunks not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) GetChunk(context.Context, *GetChunkRequest) (*Chunk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChunk not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) UpdateChunk(context.Context, *UpdateChunkRequest) (*Chunk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateChunk not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) BatchUpdateChunks(context.Context, *BatchUpdateChunksRequest) (*BatchUpdateChunksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BatchUpdateChunks not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) DeleteChunk(context.Context, *DeleteChunkRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteChunk not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) BatchDeleteChunks(context.Context, *BatchDeleteChunksRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BatchDeleteChunks not implemented")
 }
+
 func (UnimplementedRetrieverServiceServer) ListChunks(context.Context, *ListChunksRequest) (*ListChunksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListChunks not implemented")
 }

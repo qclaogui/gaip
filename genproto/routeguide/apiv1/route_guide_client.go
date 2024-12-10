@@ -399,6 +399,7 @@ func (c *restClient) Close() error {
 func (c *restClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *gRPCClient) GetFeature(ctx context.Context, req *routeguidepb.GetFeatureRequest, opts ...gax.CallOption) (*routeguidepb.GetFeatureResponse, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).GetFeature[0:len((*c.CallOptions).GetFeature):len((*c.CallOptions).GetFeature)], opts...)

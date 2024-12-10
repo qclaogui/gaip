@@ -46,7 +46,7 @@ func main() {
 func runIntegrationTests(*cobra.Command, []string) {
 	defer reportResults()
 
-	//build Binary
+	// build Binary
 	executeCommand("make", []string{"-C", "..", "build"}, "Building")
 
 	if specificTest != "" {

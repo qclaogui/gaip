@@ -260,33 +260,43 @@ type UnimplementedLibraryServiceServer struct{}
 func (UnimplementedLibraryServiceServer) CreateShelf(context.Context, *CreateShelfRequest) (*Shelf, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateShelf not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) GetShelf(context.Context, *GetShelfRequest) (*Shelf, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetShelf not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) ListShelves(context.Context, *ListShelvesRequest) (*ListShelvesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListShelves not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) DeleteShelf(context.Context, *DeleteShelfRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteShelf not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) MergeShelves(context.Context, *MergeShelvesRequest) (*Shelf, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MergeShelves not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) CreateBook(context.Context, *CreateBookRequest) (*Book, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBook not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) GetBook(context.Context, *GetBookRequest) (*Book, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBook not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) ListBooks(context.Context, *ListBooksRequest) (*ListBooksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListBooks not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) DeleteBook(context.Context, *DeleteBookRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBook not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) UpdateBook(context.Context, *UpdateBookRequest) (*Book, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateBook not implemented")
 }
+
 func (UnimplementedLibraryServiceServer) MoveBook(context.Context, *MoveBookRequest) (*Book, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MoveBook not implemented")
 }

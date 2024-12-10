@@ -391,6 +391,7 @@ func (c *identityRESTClient) Close() error {
 func (c *identityRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *identityGRPCClient) CreateUser(ctx context.Context, req *showcasepb.CreateUserRequest, opts ...gax.CallOption) (*showcasepb.User, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).CreateUser[0:len((*c.CallOptions).CreateUser):len((*c.CallOptions).CreateUser)], opts...)

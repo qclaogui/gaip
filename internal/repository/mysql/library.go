@@ -43,56 +43,56 @@ type libraryImpl struct {
 }
 
 func (l *libraryImpl) CreateShelf(_ context.Context, _ *librarypb.CreateShelfRequest) (*librarypb.Shelf, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) GetShelf(_ context.Context, _ *librarypb.GetShelfRequest) (*librarypb.Shelf, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) ListShelves(_ context.Context, _ *librarypb.ListShelvesRequest) (*librarypb.ListShelvesResponse, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) DeleteShelf(_ context.Context, _ *librarypb.DeleteShelfRequest) (*emptypb.Empty, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) MergeShelves(_ context.Context, _ *librarypb.MergeShelvesRequest) (*librarypb.Shelf, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) CreateBook(_ context.Context, _ *librarypb.CreateBookRequest) (*librarypb.Book, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) GetBook(_ context.Context, _ *librarypb.GetBookRequest) (*librarypb.Book, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) ListBooks(_ context.Context, _ *librarypb.ListBooksRequest) (*librarypb.ListBooksResponse, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) DeleteBook(_ context.Context, _ *librarypb.DeleteBookRequest) (*emptypb.Empty, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) UpdateBook(_ context.Context, _ *librarypb.UpdateBookRequest) (*librarypb.Book, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l *libraryImpl) MoveBook(_ context.Context, _ *librarypb.MoveBookRequest) (*librarypb.Book, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

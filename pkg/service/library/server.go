@@ -21,7 +21,7 @@ type Config struct {
 	Repo pb.LibraryServiceServer `yaml:"-"`
 
 	// CacheCfg holds the configuration used for the cache.
-	//CacheCfg cache.BackendConfig `yaml:"cache"`
+	// CacheCfg cache.BackendConfig `yaml:"cache"`
 }
 
 func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {

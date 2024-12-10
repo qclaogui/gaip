@@ -443,6 +443,7 @@ func (c *permissionRESTClient) Close() error {
 func (c *permissionRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *permissionGRPCClient) CreatePermission(ctx context.Context, req *generativelanguagepb.CreatePermissionRequest, opts ...gax.CallOption) (*generativelanguagepb.Permission, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent()))}
 

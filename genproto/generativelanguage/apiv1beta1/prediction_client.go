@@ -289,6 +289,7 @@ func (c *predictionRESTClient) Close() error {
 func (c *predictionRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *predictionGRPCClient) Predict(ctx context.Context, req *generativelanguagepb.PredictRequest, opts ...gax.CallOption) (*generativelanguagepb.PredictResponse, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "model", url.QueryEscape(req.GetModel()))}
 

@@ -18,7 +18,6 @@ func TestCancelOperation(t *testing.T) {
 	_, err := srv.CancelOperation(context.Background(), &longrunningpb.CancelOperationRequest{
 		Name: "a/thing",
 	})
-
 	if err != nil {
 		t.Error("CancelOperation should have been successful")
 	}

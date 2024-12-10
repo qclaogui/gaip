@@ -15,6 +15,7 @@ import (
 	context "context"
 
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -314,42 +315,55 @@ type UnimplementedMessagingServiceServer struct{}
 func (UnimplementedMessagingServiceServer) CreateRoom(context.Context, *CreateRoomRequest) (*Room, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRoom not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) GetRoom(context.Context, *GetRoomRequest) (*Room, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRoom not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) UpdateRoom(context.Context, *UpdateRoomRequest) (*Room, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateRoom not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) DeleteRoom(context.Context, *DeleteRoomRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteRoom not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) ListRooms(context.Context, *ListRoomsRequest) (*ListRoomsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRooms not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) CreateBlurb(context.Context, *CreateBlurbRequest) (*Blurb, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBlurb not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) GetBlurb(context.Context, *GetBlurbRequest) (*Blurb, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBlurb not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) UpdateBlurb(context.Context, *UpdateBlurbRequest) (*Blurb, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateBlurb not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) DeleteBlurb(context.Context, *DeleteBlurbRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBlurb not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) ListBlurbs(context.Context, *ListBlurbsRequest) (*ListBlurbsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListBlurbs not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) SearchBlurbs(context.Context, *SearchBlurbsRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchBlurbs not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) StreamBlurbs(*StreamBlurbsRequest, grpc.ServerStreamingServer[StreamBlurbsResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method StreamBlurbs not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) SendBlurbs(grpc.ClientStreamingServer[CreateBlurbRequest, SendBlurbsResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SendBlurbs not implemented")
 }
+
 func (UnimplementedMessagingServiceServer) Connect(grpc.BidiStreamingServer[ConnectRequest, StreamBlurbsResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Connect not implemented")
 }

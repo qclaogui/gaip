@@ -382,16 +382,19 @@ func file_qclaogui_generativelanguage_v1beta1_cached_content_proto_rawDescGZIP()
 	return file_qclaogui_generativelanguage_v1beta1_cached_content_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_cached_content_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_qclaogui_generativelanguage_v1beta1_cached_content_proto_goTypes = []any{
-	(*CachedContent)(nil),               // 0: qclaogui.generativelanguage.v1beta1.CachedContent
-	(*CachedContent_UsageMetadata)(nil), // 1: qclaogui.generativelanguage.v1beta1.CachedContent.UsageMetadata
-	(*timestamppb.Timestamp)(nil),       // 2: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),         // 3: google.protobuf.Duration
-	(*Content)(nil),                     // 4: qclaogui.generativelanguage.v1beta1.Content
-	(*Tool)(nil),                        // 5: qclaogui.generativelanguage.v1beta1.Tool
-	(*ToolConfig)(nil),                  // 6: qclaogui.generativelanguage.v1beta1.ToolConfig
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_cached_content_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_qclaogui_generativelanguage_v1beta1_cached_content_proto_goTypes  = []any{
+		(*CachedContent)(nil),               // 0: qclaogui.generativelanguage.v1beta1.CachedContent
+		(*CachedContent_UsageMetadata)(nil), // 1: qclaogui.generativelanguage.v1beta1.CachedContent.UsageMetadata
+		(*timestamppb.Timestamp)(nil),       // 2: google.protobuf.Timestamp
+		(*durationpb.Duration)(nil),         // 3: google.protobuf.Duration
+		(*Content)(nil),                     // 4: qclaogui.generativelanguage.v1beta1.Content
+		(*Tool)(nil),                        // 5: qclaogui.generativelanguage.v1beta1.Tool
+		(*ToolConfig)(nil),                  // 6: qclaogui.generativelanguage.v1beta1.ToolConfig
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_cached_content_proto_depIdxs = []int32{
 	2, // 0: qclaogui.generativelanguage.v1beta1.CachedContent.expire_time:type_name -> google.protobuf.Timestamp
 	3, // 1: qclaogui.generativelanguage.v1beta1.CachedContent.ttl:type_name -> google.protobuf.Duration

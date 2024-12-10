@@ -340,6 +340,7 @@ func (c *restClient) Close() error {
 func (c *restClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *gRPCClient) CreateProject(ctx context.Context, req *projectpb.CreateProjectRequest, opts ...gax.CallOption) (*projectpb.Project, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).CreateProject[0:len((*c.CallOptions).CreateProject):len((*c.CallOptions).CreateProject)], opts...)

@@ -153,7 +153,8 @@ func Test_Blurb_lifecycle(t *testing.T) {
 					Blurb: &pb.Blurb{
 						User:    usr.GetName(),
 						Content: &pb.Blurb_Text{Text: "hello world"},
-					}})
+					},
+				})
 			if err != nil {
 				t.Errorf("Create: unexpected err %+v", err)
 			}
@@ -165,7 +166,8 @@ func Test_Blurb_lifecycle(t *testing.T) {
 					Blurb: &pb.Blurb{
 						User:    usr.GetName(),
 						Content: &pb.Blurb_Text{Text: "bark"},
-					}})
+					},
+				})
 			if err != nil {
 				t.Errorf("Create: unexpected err %+v", err)
 			}
@@ -243,7 +245,6 @@ func Test_Blurb_lifecycle(t *testing.T) {
 				t.Errorf("client.ListBlurbs() got=-, want=+:%s", diff)
 			}
 		})
-
 	}
 }
 

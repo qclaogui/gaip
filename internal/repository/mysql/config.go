@@ -33,10 +33,10 @@ func (cfg *Config) RegisterFlagsWithPrefix(prefix string, fs *flag.FlagSet) {
 func (cfg *Config) Validate() error {
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
-	//param := "parseTime=true"
+	// param := "parseTime=true"
 
-	//dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s", cfg.User, cfg.Password, cfg.Host, cfg.Schema, param)
-	//toDoSrv, err := todov1.NewServiceServer(todov1.WithMysqlRepository(dsn))
+	// dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s", cfg.User, cfg.Password, cfg.Host, cfg.Schema, param)
+	// toDoSrv, err := todov1.NewServiceServer(todov1.WithMysqlRepository(dsn))
 
 	return nil
 }

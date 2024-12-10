@@ -883,25 +883,28 @@ func file_qclaogui_generativelanguage_v1beta1_model_service_proto_rawDescGZIP() 
 	return file_qclaogui_generativelanguage_v1beta1_model_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_model_service_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
-var file_qclaogui_generativelanguage_v1beta1_model_service_proto_goTypes = []any{
-	(*GetModelRequest)(nil),          // 0: qclaogui.generativelanguage.v1beta1.GetModelRequest
-	(*ListModelsRequest)(nil),        // 1: qclaogui.generativelanguage.v1beta1.ListModelsRequest
-	(*ListModelsResponse)(nil),       // 2: qclaogui.generativelanguage.v1beta1.ListModelsResponse
-	(*GetTunedModelRequest)(nil),     // 3: qclaogui.generativelanguage.v1beta1.GetTunedModelRequest
-	(*ListTunedModelsRequest)(nil),   // 4: qclaogui.generativelanguage.v1beta1.ListTunedModelsRequest
-	(*ListTunedModelsResponse)(nil),  // 5: qclaogui.generativelanguage.v1beta1.ListTunedModelsResponse
-	(*CreateTunedModelRequest)(nil),  // 6: qclaogui.generativelanguage.v1beta1.CreateTunedModelRequest
-	(*CreateTunedModelMetadata)(nil), // 7: qclaogui.generativelanguage.v1beta1.CreateTunedModelMetadata
-	(*UpdateTunedModelRequest)(nil),  // 8: qclaogui.generativelanguage.v1beta1.UpdateTunedModelRequest
-	(*DeleteTunedModelRequest)(nil),  // 9: qclaogui.generativelanguage.v1beta1.DeleteTunedModelRequest
-	(*Model)(nil),                    // 10: qclaogui.generativelanguage.v1beta1.Model
-	(*TunedModel)(nil),               // 11: qclaogui.generativelanguage.v1beta1.TunedModel
-	(*TuningSnapshot)(nil),           // 12: qclaogui.generativelanguage.v1beta1.TuningSnapshot
-	(*fieldmaskpb.FieldMask)(nil),    // 13: google.protobuf.FieldMask
-	(*longrunningpb.Operation)(nil),  // 14: google.longrunning.Operation
-	(*emptypb.Empty)(nil),            // 15: google.protobuf.Empty
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_model_service_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+	file_qclaogui_generativelanguage_v1beta1_model_service_proto_goTypes  = []any{
+		(*GetModelRequest)(nil),          // 0: qclaogui.generativelanguage.v1beta1.GetModelRequest
+		(*ListModelsRequest)(nil),        // 1: qclaogui.generativelanguage.v1beta1.ListModelsRequest
+		(*ListModelsResponse)(nil),       // 2: qclaogui.generativelanguage.v1beta1.ListModelsResponse
+		(*GetTunedModelRequest)(nil),     // 3: qclaogui.generativelanguage.v1beta1.GetTunedModelRequest
+		(*ListTunedModelsRequest)(nil),   // 4: qclaogui.generativelanguage.v1beta1.ListTunedModelsRequest
+		(*ListTunedModelsResponse)(nil),  // 5: qclaogui.generativelanguage.v1beta1.ListTunedModelsResponse
+		(*CreateTunedModelRequest)(nil),  // 6: qclaogui.generativelanguage.v1beta1.CreateTunedModelRequest
+		(*CreateTunedModelMetadata)(nil), // 7: qclaogui.generativelanguage.v1beta1.CreateTunedModelMetadata
+		(*UpdateTunedModelRequest)(nil),  // 8: qclaogui.generativelanguage.v1beta1.UpdateTunedModelRequest
+		(*DeleteTunedModelRequest)(nil),  // 9: qclaogui.generativelanguage.v1beta1.DeleteTunedModelRequest
+		(*Model)(nil),                    // 10: qclaogui.generativelanguage.v1beta1.Model
+		(*TunedModel)(nil),               // 11: qclaogui.generativelanguage.v1beta1.TunedModel
+		(*TuningSnapshot)(nil),           // 12: qclaogui.generativelanguage.v1beta1.TuningSnapshot
+		(*fieldmaskpb.FieldMask)(nil),    // 13: google.protobuf.FieldMask
+		(*longrunningpb.Operation)(nil),  // 14: google.longrunning.Operation
+		(*emptypb.Empty)(nil),            // 15: google.protobuf.Empty
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_model_service_proto_depIdxs = []int32{
 	10, // 0: qclaogui.generativelanguage.v1beta1.ListModelsResponse.models:type_name -> qclaogui.generativelanguage.v1beta1.Model
 	11, // 1: qclaogui.generativelanguage.v1beta1.ListTunedModelsResponse.tuned_models:type_name -> qclaogui.generativelanguage.v1beta1.TunedModel

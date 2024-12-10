@@ -798,6 +798,7 @@ func (c *retrieverRESTClient) Close() error {
 func (c *retrieverRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *retrieverGRPCClient) CreateCorpus(ctx context.Context, req *generativelanguagepb.CreateCorpusRequest, opts ...gax.CallOption) (*generativelanguagepb.Corpus, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).CreateCorpus[0:len((*c.CallOptions).CreateCorpus):len((*c.CallOptions).CreateCorpus)], opts...)

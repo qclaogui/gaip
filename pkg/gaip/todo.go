@@ -42,7 +42,7 @@ func (g *Gaip) initTodo() error {
 
 	// Register HTTP/REST gateway
 	var opts []grpc.DialOption
-	//opts = interceptors.RegisterGRPCDailOption()
+	// opts = interceptors.RegisterGRPCDailOption()
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	ctx := context.Background()
@@ -53,7 +53,7 @@ func (g *Gaip) initTodo() error {
 
 	_ = opts
 	// Note: Make sure the gRPC server is running properly and accessible
-	//err = todopb.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, g.Server.GRPCListenAddr().String(), opts)
+	// err = todopb.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, g.Server.GRPCListenAddr().String(), opts)
 	if err != nil {
 		return err
 	}

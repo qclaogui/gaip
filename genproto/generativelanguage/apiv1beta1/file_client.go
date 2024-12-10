@@ -316,6 +316,7 @@ func (c *fileRESTClient) Close() error {
 func (c *fileRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *fileGRPCClient) CreateFile(ctx context.Context, req *generativelanguagepb.CreateFileRequest, opts ...gax.CallOption) (*generativelanguagepb.CreateFileResponse, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).CreateFile[0:len((*c.CallOptions).CreateFile):len((*c.CallOptions).CreateFile)], opts...)

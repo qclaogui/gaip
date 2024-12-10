@@ -22,6 +22,7 @@ func (s *Server) ListFeatures(req *routeguidepb.ListFeaturesRequest, stream rout
 func (s *Server) RecordRoute(req routeguidepb.RouteGuideService_RecordRouteServer) error {
 	return s.repo.RecordRoute(req)
 }
+
 func (s *Server) RouteChat(req routeguidepb.RouteGuideService_RouteChatServer) error {
 	return s.repo.RouteChat(req)
 }

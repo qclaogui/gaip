@@ -165,18 +165,23 @@ type UnimplementedPermissionServiceServer struct{}
 func (UnimplementedPermissionServiceServer) CreatePermission(context.Context, *CreatePermissionRequest) (*Permission, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePermission not implemented")
 }
+
 func (UnimplementedPermissionServiceServer) GetPermission(context.Context, *GetPermissionRequest) (*Permission, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPermission not implemented")
 }
+
 func (UnimplementedPermissionServiceServer) ListPermissions(context.Context, *ListPermissionsRequest) (*ListPermissionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPermissions not implemented")
 }
+
 func (UnimplementedPermissionServiceServer) UpdatePermission(context.Context, *UpdatePermissionRequest) (*Permission, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePermission not implemented")
 }
+
 func (UnimplementedPermissionServiceServer) DeletePermission(context.Context, *DeletePermissionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePermission not implemented")
 }
+
 func (UnimplementedPermissionServiceServer) TransferOwnership(context.Context, *TransferOwnershipRequest) (*TransferOwnershipResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TransferOwnership not implemented")
 }

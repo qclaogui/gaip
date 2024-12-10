@@ -351,6 +351,7 @@ func (c *discussRESTClient) Close() error {
 func (c *discussRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *discussGRPCClient) GenerateMessage(ctx context.Context, req *generativelanguagepb.GenerateMessageRequest, opts ...gax.CallOption) (*generativelanguagepb.GenerateMessageResponse, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "model", url.QueryEscape(req.GetModel()))}
 

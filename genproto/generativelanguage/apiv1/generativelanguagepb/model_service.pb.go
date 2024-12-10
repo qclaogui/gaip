@@ -290,13 +290,16 @@ func file_qclaogui_generativelanguage_v1_model_service_proto_rawDescGZIP() []byt
 	return file_qclaogui_generativelanguage_v1_model_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1_model_service_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_qclaogui_generativelanguage_v1_model_service_proto_goTypes = []any{
-	(*GetModelRequest)(nil),    // 0: qclaogui.generativelanguage.v1.GetModelRequest
-	(*ListModelsRequest)(nil),  // 1: qclaogui.generativelanguage.v1.ListModelsRequest
-	(*ListModelsResponse)(nil), // 2: qclaogui.generativelanguage.v1.ListModelsResponse
-	(*Model)(nil),              // 3: qclaogui.generativelanguage.v1.Model
-}
+var (
+	file_qclaogui_generativelanguage_v1_model_service_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+	file_qclaogui_generativelanguage_v1_model_service_proto_goTypes  = []any{
+		(*GetModelRequest)(nil),    // 0: qclaogui.generativelanguage.v1.GetModelRequest
+		(*ListModelsRequest)(nil),  // 1: qclaogui.generativelanguage.v1.ListModelsRequest
+		(*ListModelsResponse)(nil), // 2: qclaogui.generativelanguage.v1.ListModelsResponse
+		(*Model)(nil),              // 3: qclaogui.generativelanguage.v1.Model
+	}
+)
+
 var file_qclaogui_generativelanguage_v1_model_service_proto_depIdxs = []int32{
 	3, // 0: qclaogui.generativelanguage.v1.ListModelsResponse.models:type_name -> qclaogui.generativelanguage.v1.Model
 	0, // 1: qclaogui.generativelanguage.v1.ModelService.GetModel:input_type -> qclaogui.generativelanguage.v1.GetModelRequest

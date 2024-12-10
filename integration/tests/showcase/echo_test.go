@@ -60,7 +60,6 @@ func TestEcho(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func TestEcho_error(t *testing.T) {
@@ -97,7 +96,6 @@ func TestEcho_error(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 // Test dynamic routing header generation. We cannot guarantee the order that headers are sent, so we check that the header sent contains the correct elements as opposed to checking

@@ -197,24 +197,31 @@ type UnimplementedBookstoreServiceServer struct{}
 func (UnimplementedBookstoreServiceServer) ListShelves(context.Context, *emptypb.Empty) (*ListShelvesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListShelves not implemented")
 }
+
 func (UnimplementedBookstoreServiceServer) CreateShelf(context.Context, *CreateShelfRequest) (*Shelf, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateShelf not implemented")
 }
+
 func (UnimplementedBookstoreServiceServer) GetShelf(context.Context, *GetShelfRequest) (*Shelf, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetShelf not implemented")
 }
+
 func (UnimplementedBookstoreServiceServer) DeleteShelf(context.Context, *DeleteShelfRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteShelf not implemented")
 }
+
 func (UnimplementedBookstoreServiceServer) ListBooks(context.Context, *ListBooksRequest) (*ListBooksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListBooks not implemented")
 }
+
 func (UnimplementedBookstoreServiceServer) CreateBook(context.Context, *CreateBookRequest) (*Book, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBook not implemented")
 }
+
 func (UnimplementedBookstoreServiceServer) GetBook(context.Context, *GetBookRequest) (*Book, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBook not implemented")
 }
+
 func (UnimplementedBookstoreServiceServer) DeleteBook(context.Context, *DeleteBookRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBook not implemented")
 }

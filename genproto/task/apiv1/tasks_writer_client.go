@@ -377,6 +377,7 @@ func (c *tasksWriterRESTClient) Close() error {
 func (c *tasksWriterRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *tasksWriterGRPCClient) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).CreateTask[0:len((*c.CallOptions).CreateTask):len((*c.CallOptions).CreateTask)], opts...)
@@ -501,6 +502,7 @@ func (c *tasksWriterRESTClient) CreateTask(ctx context.Context, req *taskpb.Crea
 	}
 	return resp, nil
 }
+
 func (c *tasksWriterRESTClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	baseUrl, err := url.Parse(c.endpoint)
 	if err != nil {
@@ -554,6 +556,7 @@ func (c *tasksWriterRESTClient) DeleteTask(ctx context.Context, req *taskpb.Dele
 	}
 	return resp, nil
 }
+
 func (c *tasksWriterRESTClient) UndeleteTask(ctx context.Context, req *taskpb.UndeleteTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
 	jsonReq, err := m.Marshal(req)
@@ -610,6 +613,7 @@ func (c *tasksWriterRESTClient) UndeleteTask(ctx context.Context, req *taskpb.Un
 	}
 	return resp, nil
 }
+
 func (c *tasksWriterRESTClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
 	body := req.GetTask()

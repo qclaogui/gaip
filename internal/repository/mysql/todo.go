@@ -177,7 +177,7 @@ func (m *todoImpl) ListTodo(ctx context.Context, _ *todopb.ListTodoRequest) (*to
 
 	var todos []*todopb.ToDo
 	for rows.Next() {
-		var todo = &todopb.ToDo{}
+		todo := &todopb.ToDo{}
 		var reminder time.Time
 		if err = rows.Scan(&todo.Id, &todo.Title, &todo.Description, &reminder); err != nil {
 			return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to retrieve field values from ToDo row-> %s", err.Error()))

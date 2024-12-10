@@ -481,6 +481,7 @@ func (c *generativeRESTClient) Close() error {
 func (c *generativeRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *generativeGRPCClient) GenerateContent(ctx context.Context, req *generativelanguagepb.GenerateContentRequest, opts ...gax.CallOption) (*generativelanguagepb.GenerateContentResponse, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "model", url.QueryEscape(req.GetModel()))}
 

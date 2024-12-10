@@ -58,7 +58,8 @@ func (srv *Server) EchoErrorDetails(ctx context.Context, req *pb.EchoErrorDetail
 		}
 
 		singleDetailError = &pb.EchoErrorDetailsResponse_SingleDetail{
-			Error: &pb.ErrorWithSingleDetail{Details: singleMarshalledError}}
+			Error: &pb.ErrorWithSingleDetail{Details: singleMarshalledError},
+		}
 	}
 
 	var multipleDetailsError *pb.EchoErrorDetailsResponse_MultipleDetails

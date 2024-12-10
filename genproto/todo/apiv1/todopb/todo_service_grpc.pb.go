@@ -117,15 +117,19 @@ type UnimplementedToDoServiceServer struct{}
 func (UnimplementedToDoServiceServer) CreateTodo(context.Context, *CreateTodoRequest) (*CreateTodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTodo not implemented")
 }
+
 func (UnimplementedToDoServiceServer) GetTodo(context.Context, *GetTodoRequest) (*GetTodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTodo not implemented")
 }
+
 func (UnimplementedToDoServiceServer) UpdateTodo(context.Context, *UpdateTodoRequest) (*UpdateTodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTodo not implemented")
 }
+
 func (UnimplementedToDoServiceServer) ListTodo(context.Context, *ListTodoRequest) (*ListTodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTodo not implemented")
 }
+
 func (UnimplementedToDoServiceServer) DeleteTodo(context.Context, *DeleteTodoRequest) (*DeleteTodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTodo not implemented")
 }

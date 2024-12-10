@@ -131,12 +131,15 @@ type UnimplementedFileServiceServer struct{}
 func (UnimplementedFileServiceServer) CreateFile(context.Context, *CreateFileRequest) (*CreateFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateFile not implemented")
 }
+
 func (UnimplementedFileServiceServer) ListFiles(context.Context, *ListFilesRequest) (*ListFilesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListFiles not implemented")
 }
+
 func (UnimplementedFileServiceServer) GetFile(context.Context, *GetFileRequest) (*File, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFile not implemented")
 }
+
 func (UnimplementedFileServiceServer) DeleteFile(context.Context, *DeleteFileRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFile not implemented")
 }

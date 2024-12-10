@@ -112,6 +112,7 @@ type UnimplementedModelServiceServer struct{}
 func (UnimplementedModelServiceServer) GetModel(context.Context, *GetModelRequest) (*Model, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetModel not implemented")
 }
+
 func (UnimplementedModelServiceServer) ListModels(context.Context, *ListModelsRequest) (*ListModelsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListModels not implemented")
 }

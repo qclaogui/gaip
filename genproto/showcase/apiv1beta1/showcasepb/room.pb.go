@@ -506,18 +506,21 @@ func file_qclaogui_showcase_v1beta1_room_proto_rawDescGZIP() []byte {
 	return file_qclaogui_showcase_v1beta1_room_proto_rawDescData
 }
 
-var file_qclaogui_showcase_v1beta1_room_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_qclaogui_showcase_v1beta1_room_proto_goTypes = []any{
-	(*Room)(nil),                  // 0: qclaogui.showcase.v1beta1.Room
-	(*CreateRoomRequest)(nil),     // 1: qclaogui.showcase.v1beta1.CreateRoomRequest
-	(*GetRoomRequest)(nil),        // 2: qclaogui.showcase.v1beta1.GetRoomRequest
-	(*UpdateRoomRequest)(nil),     // 3: qclaogui.showcase.v1beta1.UpdateRoomRequest
-	(*DeleteRoomRequest)(nil),     // 4: qclaogui.showcase.v1beta1.DeleteRoomRequest
-	(*ListRoomsRequest)(nil),      // 5: qclaogui.showcase.v1beta1.ListRoomsRequest
-	(*ListRoomsResponse)(nil),     // 6: qclaogui.showcase.v1beta1.ListRoomsResponse
-	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil), // 8: google.protobuf.FieldMask
-}
+var (
+	file_qclaogui_showcase_v1beta1_room_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+	file_qclaogui_showcase_v1beta1_room_proto_goTypes  = []any{
+		(*Room)(nil),                  // 0: qclaogui.showcase.v1beta1.Room
+		(*CreateRoomRequest)(nil),     // 1: qclaogui.showcase.v1beta1.CreateRoomRequest
+		(*GetRoomRequest)(nil),        // 2: qclaogui.showcase.v1beta1.GetRoomRequest
+		(*UpdateRoomRequest)(nil),     // 3: qclaogui.showcase.v1beta1.UpdateRoomRequest
+		(*DeleteRoomRequest)(nil),     // 4: qclaogui.showcase.v1beta1.DeleteRoomRequest
+		(*ListRoomsRequest)(nil),      // 5: qclaogui.showcase.v1beta1.ListRoomsRequest
+		(*ListRoomsResponse)(nil),     // 6: qclaogui.showcase.v1beta1.ListRoomsResponse
+		(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
+		(*fieldmaskpb.FieldMask)(nil), // 8: google.protobuf.FieldMask
+	}
+)
+
 var file_qclaogui_showcase_v1beta1_room_proto_depIdxs = []int32{
 	7, // 0: qclaogui.showcase.v1beta1.Room.create_time:type_name -> google.protobuf.Timestamp
 	7, // 1: qclaogui.showcase.v1beta1.Room.update_time:type_name -> google.protobuf.Timestamp

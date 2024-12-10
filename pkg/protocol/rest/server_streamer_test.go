@@ -127,7 +127,6 @@ func TestServerStreamer(t *testing.T) {
 func streamWithChunkSize(t *testing.T, label string, chunkSize int, messages, expectedChunks []string) {
 	wire := &wireBuffer{}
 	streamer, err := NewServerStreamer(wire, chunkSize)
-
 	if err != nil {
 		t.Fatalf("%s: could not construct ServerStreamer: %s", label, err)
 	}

@@ -279,7 +279,6 @@ func RegisterInstrumentationWithGatherer(router *mux.Router, gatherer prometheus
 // RegisterOpenAPI on the given router.
 func RegisterOpenAPI(router *mux.Router) {
 	router.Handle("/openapi", getOpenAPIHandler())
-
 }
 
 // getOpenAPIHandler serves an OpenAPI UI.
@@ -297,7 +296,6 @@ func getOpenAPIHandler() http.Handler {
 // HTTPListenAddr exposes `net.Addr` that `Server` is listening to for Router connections.
 func (s *Server) HTTPListenAddr() net.Addr {
 	return s.httpListener.Addr()
-
 }
 
 // GRPCListenAddr exposes `net.Addr` that `Server` is listening to for GRPCServer connections.

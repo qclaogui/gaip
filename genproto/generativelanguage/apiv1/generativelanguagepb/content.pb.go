@@ -300,12 +300,15 @@ func file_qclaogui_generativelanguage_v1_content_proto_rawDescGZIP() []byte {
 	return file_qclaogui_generativelanguage_v1_content_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1_content_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_qclaogui_generativelanguage_v1_content_proto_goTypes = []any{
-	(*Content)(nil), // 0: qclaogui.generativelanguage.v1.Content
-	(*Part)(nil),    // 1: qclaogui.generativelanguage.v1.Part
-	(*Blob)(nil),    // 2: qclaogui.generativelanguage.v1.Blob
-}
+var (
+	file_qclaogui_generativelanguage_v1_content_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+	file_qclaogui_generativelanguage_v1_content_proto_goTypes  = []any{
+		(*Content)(nil), // 0: qclaogui.generativelanguage.v1.Content
+		(*Part)(nil),    // 1: qclaogui.generativelanguage.v1.Part
+		(*Blob)(nil),    // 2: qclaogui.generativelanguage.v1.Blob
+	}
+)
+
 var file_qclaogui_generativelanguage_v1_content_proto_depIdxs = []int32{
 	1, // 0: qclaogui.generativelanguage.v1.Content.parts:type_name -> qclaogui.generativelanguage.v1.Part
 	2, // 1: qclaogui.generativelanguage.v1.Part.inline_data:type_name -> qclaogui.generativelanguage.v1.Blob

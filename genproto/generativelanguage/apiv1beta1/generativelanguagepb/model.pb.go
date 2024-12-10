@@ -291,10 +291,13 @@ func file_qclaogui_generativelanguage_v1beta1_model_proto_rawDescGZIP() []byte {
 	return file_qclaogui_generativelanguage_v1beta1_model_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_model_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_qclaogui_generativelanguage_v1beta1_model_proto_goTypes = []any{
-	(*Model)(nil), // 0: qclaogui.generativelanguage.v1beta1.Model
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_model_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+	file_qclaogui_generativelanguage_v1beta1_model_proto_goTypes  = []any{
+		(*Model)(nil), // 0: qclaogui.generativelanguage.v1beta1.Model
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_model_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type

@@ -1018,20 +1018,23 @@ func file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_rawDescGZIP() []
 	return file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-var file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_goTypes = []any{
-	(TunedModel_State)(0),         // 0: qclaogui.generativelanguage.v1beta1.TunedModel.State
-	(*TunedModel)(nil),            // 1: qclaogui.generativelanguage.v1beta1.TunedModel
-	(*TunedModelSource)(nil),      // 2: qclaogui.generativelanguage.v1beta1.TunedModelSource
-	(*TuningTask)(nil),            // 3: qclaogui.generativelanguage.v1beta1.TuningTask
-	(*Hyperparameters)(nil),       // 4: qclaogui.generativelanguage.v1beta1.Hyperparameters
-	(*Dataset)(nil),               // 5: qclaogui.generativelanguage.v1beta1.Dataset
-	(*TuningExamples)(nil),        // 6: qclaogui.generativelanguage.v1beta1.TuningExamples
-	(*TuningExample)(nil),         // 7: qclaogui.generativelanguage.v1beta1.TuningExample
-	(*TuningSnapshot)(nil),        // 8: qclaogui.generativelanguage.v1beta1.TuningSnapshot
-	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_msgTypes  = make([]protoimpl.MessageInfo, 8)
+	file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_goTypes   = []any{
+		(TunedModel_State)(0),         // 0: qclaogui.generativelanguage.v1beta1.TunedModel.State
+		(*TunedModel)(nil),            // 1: qclaogui.generativelanguage.v1beta1.TunedModel
+		(*TunedModelSource)(nil),      // 2: qclaogui.generativelanguage.v1beta1.TunedModelSource
+		(*TuningTask)(nil),            // 3: qclaogui.generativelanguage.v1beta1.TuningTask
+		(*Hyperparameters)(nil),       // 4: qclaogui.generativelanguage.v1beta1.Hyperparameters
+		(*Dataset)(nil),               // 5: qclaogui.generativelanguage.v1beta1.Dataset
+		(*TuningExamples)(nil),        // 6: qclaogui.generativelanguage.v1beta1.TuningExamples
+		(*TuningExample)(nil),         // 7: qclaogui.generativelanguage.v1beta1.TuningExample
+		(*TuningSnapshot)(nil),        // 8: qclaogui.generativelanguage.v1beta1.TuningSnapshot
+		(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_tuned_model_proto_depIdxs = []int32{
 	2,  // 0: qclaogui.generativelanguage.v1beta1.TunedModel.tuned_model_source:type_name -> qclaogui.generativelanguage.v1beta1.TunedModelSource
 	0,  // 1: qclaogui.generativelanguage.v1beta1.TunedModel.state:type_name -> qclaogui.generativelanguage.v1beta1.TunedModel.State

@@ -146,7 +146,7 @@ func (sk SegmentKind) Valid() bool {
 
 // String returns a string representation of this SegmentKind.
 func (sk SegmentKind) String() string {
-	var names = []string{"(UNDEFINED)", "LITERAL", "VARIABLE", "SINGLEVAL", "MULTIVAL", "(END)"}
+	names := []string{"(UNDEFINED)", "LITERAL", "VARIABLE", "SINGLEVAL", "MULTIVAL", "(END)"}
 	if !sk.Valid() {
 		return "INVALID"
 	}
@@ -156,6 +156,6 @@ func (sk SegmentKind) String() string {
 // asGoLiteral returns a Go-syntax representation of this SegmentKind. This is useful for
 // constructing and debugging tests.
 func (sk SegmentKind) asGoLiteral() string {
-	var names = []string{"KindUndefined", "Literal", "Variable", "SingleValue", "MultipleValue", "KindEnd"}
+	names := []string{"KindUndefined", "Literal", "Variable", "SingleValue", "MultipleValue", "KindEnd"}
 	return names[sk]
 }

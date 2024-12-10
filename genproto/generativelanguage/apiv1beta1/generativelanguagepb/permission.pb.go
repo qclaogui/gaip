@@ -319,13 +319,16 @@ func file_qclaogui_generativelanguage_v1beta1_permission_proto_rawDescGZIP() []b
 	return file_qclaogui_generativelanguage_v1beta1_permission_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_permission_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_qclaogui_generativelanguage_v1beta1_permission_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_qclaogui_generativelanguage_v1beta1_permission_proto_goTypes = []any{
-	(Permission_GranteeType)(0), // 0: qclaogui.generativelanguage.v1beta1.Permission.GranteeType
-	(Permission_Role)(0),        // 1: qclaogui.generativelanguage.v1beta1.Permission.Role
-	(*Permission)(nil),          // 2: qclaogui.generativelanguage.v1beta1.Permission
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_permission_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+	file_qclaogui_generativelanguage_v1beta1_permission_proto_msgTypes  = make([]protoimpl.MessageInfo, 1)
+	file_qclaogui_generativelanguage_v1beta1_permission_proto_goTypes   = []any{
+		(Permission_GranteeType)(0), // 0: qclaogui.generativelanguage.v1beta1.Permission.GranteeType
+		(Permission_Role)(0),        // 1: qclaogui.generativelanguage.v1beta1.Permission.Role
+		(*Permission)(nil),          // 2: qclaogui.generativelanguage.v1beta1.Permission
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_permission_proto_depIdxs = []int32{
 	0, // 0: qclaogui.generativelanguage.v1beta1.Permission.grantee_type:type_name -> qclaogui.generativelanguage.v1beta1.Permission.GranteeType
 	1, // 1: qclaogui.generativelanguage.v1beta1.Permission.role:type_name -> qclaogui.generativelanguage.v1beta1.Permission.Role

@@ -54,7 +54,6 @@ func (gm *Model) CheckConsistency() {
 
 	for first, firstHandler := range allHandlers {
 		if len(firstHandler.RequestBodyFieldProtoName) > 0 && firstHandler.RequestBodyFieldProtoName != "*" {
-
 			// The body field name refers to a top-level field.
 			if reBodyField.FindStringIndex(firstHandler.RequestBodyFieldProtoName) == nil {
 				gm.AccumulateError(fmt.Errorf("bad syntax in body field spec %q", firstHandler.RequestBodyFieldProtoName))

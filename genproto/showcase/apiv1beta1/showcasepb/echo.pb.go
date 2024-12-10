@@ -1282,31 +1282,34 @@ func file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP() []byte {
 	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescData
 }
 
-var file_qclaogui_showcase_v1beta1_echo_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_qclaogui_showcase_v1beta1_echo_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
-var file_qclaogui_showcase_v1beta1_echo_proto_goTypes = []any{
-	(Severity)(0),                                    // 0: qclaogui.showcase.v1beta1.Severity
-	(*EchoRequest)(nil),                              // 1: qclaogui.showcase.v1beta1.EchoRequest
-	(*EchoResponse)(nil),                             // 2: qclaogui.showcase.v1beta1.EchoResponse
-	(*EchoErrorDetailsRequest)(nil),                  // 3: qclaogui.showcase.v1beta1.EchoErrorDetailsRequest
-	(*EchoErrorDetailsResponse)(nil),                 // 4: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse
-	(*ErrorWithSingleDetail)(nil),                    // 5: qclaogui.showcase.v1beta1.ErrorWithSingleDetail
-	(*ErrorWithMultipleDetails)(nil),                 // 6: qclaogui.showcase.v1beta1.ErrorWithMultipleDetails
-	(*ExpandRequest)(nil),                            // 7: qclaogui.showcase.v1beta1.ExpandRequest
-	(*PagedExpandRequest)(nil),                       // 8: qclaogui.showcase.v1beta1.PagedExpandRequest
-	(*PagedExpandResponse)(nil),                      // 9: qclaogui.showcase.v1beta1.PagedExpandResponse
-	(*WaitRequest)(nil),                              // 10: qclaogui.showcase.v1beta1.WaitRequest
-	(*WaitResponse)(nil),                             // 11: qclaogui.showcase.v1beta1.WaitResponse
-	(*WaitMetadata)(nil),                             // 12: qclaogui.showcase.v1beta1.WaitMetadata
-	(*BlockRequest)(nil),                             // 13: qclaogui.showcase.v1beta1.BlockRequest
-	(*BlockResponse)(nil),                            // 14: qclaogui.showcase.v1beta1.BlockResponse
-	(*EchoErrorDetailsResponse_SingleDetail)(nil),    // 15: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.SingleDetail
-	(*EchoErrorDetailsResponse_MultipleDetails)(nil), // 16: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.MultipleDetails
-	(*status.Status)(nil),                            // 17: google.rpc.Status
-	(*anypb.Any)(nil),                                // 18: google.protobuf.Any
-	(*durationpb.Duration)(nil),                      // 19: google.protobuf.Duration
-	(*timestamppb.Timestamp)(nil),                    // 20: google.protobuf.Timestamp
-}
+var (
+	file_qclaogui_showcase_v1beta1_echo_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_qclaogui_showcase_v1beta1_echo_proto_msgTypes  = make([]protoimpl.MessageInfo, 16)
+	file_qclaogui_showcase_v1beta1_echo_proto_goTypes   = []any{
+		(Severity)(0),                                    // 0: qclaogui.showcase.v1beta1.Severity
+		(*EchoRequest)(nil),                              // 1: qclaogui.showcase.v1beta1.EchoRequest
+		(*EchoResponse)(nil),                             // 2: qclaogui.showcase.v1beta1.EchoResponse
+		(*EchoErrorDetailsRequest)(nil),                  // 3: qclaogui.showcase.v1beta1.EchoErrorDetailsRequest
+		(*EchoErrorDetailsResponse)(nil),                 // 4: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse
+		(*ErrorWithSingleDetail)(nil),                    // 5: qclaogui.showcase.v1beta1.ErrorWithSingleDetail
+		(*ErrorWithMultipleDetails)(nil),                 // 6: qclaogui.showcase.v1beta1.ErrorWithMultipleDetails
+		(*ExpandRequest)(nil),                            // 7: qclaogui.showcase.v1beta1.ExpandRequest
+		(*PagedExpandRequest)(nil),                       // 8: qclaogui.showcase.v1beta1.PagedExpandRequest
+		(*PagedExpandResponse)(nil),                      // 9: qclaogui.showcase.v1beta1.PagedExpandResponse
+		(*WaitRequest)(nil),                              // 10: qclaogui.showcase.v1beta1.WaitRequest
+		(*WaitResponse)(nil),                             // 11: qclaogui.showcase.v1beta1.WaitResponse
+		(*WaitMetadata)(nil),                             // 12: qclaogui.showcase.v1beta1.WaitMetadata
+		(*BlockRequest)(nil),                             // 13: qclaogui.showcase.v1beta1.BlockRequest
+		(*BlockResponse)(nil),                            // 14: qclaogui.showcase.v1beta1.BlockResponse
+		(*EchoErrorDetailsResponse_SingleDetail)(nil),    // 15: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.SingleDetail
+		(*EchoErrorDetailsResponse_MultipleDetails)(nil), // 16: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.MultipleDetails
+		(*status.Status)(nil),                            // 17: google.rpc.Status
+		(*anypb.Any)(nil),                                // 18: google.protobuf.Any
+		(*durationpb.Duration)(nil),                      // 19: google.protobuf.Duration
+		(*timestamppb.Timestamp)(nil),                    // 20: google.protobuf.Timestamp
+	}
+)
+
 var file_qclaogui_showcase_v1beta1_echo_proto_depIdxs = []int32{
 	17, // 0: qclaogui.showcase.v1beta1.EchoRequest.error:type_name -> google.rpc.Status
 	0,  // 1: qclaogui.showcase.v1beta1.EchoRequest.severity:type_name -> qclaogui.showcase.v1beta1.Severity

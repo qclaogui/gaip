@@ -321,6 +321,7 @@ func (c *tasksReaderRESTClient) Close() error {
 func (c *tasksReaderRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *tasksReaderGRPCClient) GetTask(ctx context.Context, req *taskpb.GetTaskRequest, opts ...gax.CallOption) (*taskpb.Task, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "id", req.GetId())}
 

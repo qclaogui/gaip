@@ -138,12 +138,15 @@ type UnimplementedTextServiceServer struct{}
 func (UnimplementedTextServiceServer) GenerateText(context.Context, *GenerateTextRequest) (*GenerateTextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateText not implemented")
 }
+
 func (UnimplementedTextServiceServer) EmbedText(context.Context, *EmbedTextRequest) (*EmbedTextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EmbedText not implemented")
 }
+
 func (UnimplementedTextServiceServer) BatchEmbedText(context.Context, *BatchEmbedTextRequest) (*BatchEmbedTextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BatchEmbedText not implemented")
 }
+
 func (UnimplementedTextServiceServer) CountTextTokens(context.Context, *CountTextTokensRequest) (*CountTextTokensResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CountTextTokens not implemented")
 }

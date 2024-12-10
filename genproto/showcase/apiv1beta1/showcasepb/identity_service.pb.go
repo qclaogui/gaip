@@ -108,6 +108,7 @@ var file_qclaogui_showcase_v1beta1_identity_service_proto_goTypes = []any{
 	(*ListUsersResponse)(nil), // 6: qclaogui.showcase.v1beta1.ListUsersResponse
 	(*emptypb.Empty)(nil),     // 7: google.protobuf.Empty
 }
+
 var file_qclaogui_showcase_v1beta1_identity_service_proto_depIdxs = []int32{
 	0, // 0: qclaogui.showcase.v1beta1.IdentityService.CreateUser:input_type -> qclaogui.showcase.v1beta1.CreateUserRequest
 	1, // 1: qclaogui.showcase.v1beta1.IdentityService.GetUser:input_type -> qclaogui.showcase.v1beta1.GetUserRequest

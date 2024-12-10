@@ -584,6 +584,7 @@ func (c *messagingRESTClient) Close() error {
 func (c *messagingRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *messagingGRPCClient) CreateRoom(ctx context.Context, req *showcasepb.CreateRoomRequest, opts ...gax.CallOption) (*showcasepb.Room, error) {
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
 	opts = append((*c.CallOptions).CreateRoom[0:len((*c.CallOptions).CreateRoom):len((*c.CallOptions).CreateRoom)], opts...)

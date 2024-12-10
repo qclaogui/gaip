@@ -118,14 +118,13 @@ func (s *identityImpl) GetUser(_ context.Context, req *showcasepb.GetUserRequest
 
 // ListUsers List Users
 func (s *identityImpl) ListUsers(_ context.Context, req *showcasepb.ListUsersRequest) (*showcasepb.ListUsersResponse, error) {
-
 	pageToken, err := pagination.ParsePageToken(req)
 	if err != nil {
 		return nil, err
 	}
 
 	startPos := pageToken.Offset
-	//endPos := startPos + int64(req.GetPageSize())
+	// endPos := startPos + int64(req.GetPageSize())
 
 	start, err := s.token.GetIndex(req.GetPageToken())
 	if err != nil {

@@ -110,12 +110,15 @@ type UnimplementedTasksWriterServiceServer struct{}
 func (UnimplementedTasksWriterServiceServer) CreateTask(context.Context, *CreateTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
 }
+
 func (UnimplementedTasksWriterServiceServer) DeleteTask(context.Context, *DeleteTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTask not implemented")
 }
+
 func (UnimplementedTasksWriterServiceServer) UndeleteTask(context.Context, *UndeleteTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UndeleteTask not implemented")
 }
+
 func (UnimplementedTasksWriterServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
 }
@@ -306,6 +309,7 @@ type UnimplementedTasksReaderServiceServer struct{}
 func (UnimplementedTasksReaderServiceServer) GetTask(context.Context, *GetTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTask not implemented")
 }
+
 func (UnimplementedTasksReaderServiceServer) ListTasks(context.Context, *ListTasksRequest) (*ListTasksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTasks not implemented")
 }

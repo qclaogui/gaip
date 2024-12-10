@@ -43,8 +43,10 @@ func Test_ServiceServer_GetFeature(t *testing.T) {
 				ctx: ctx,
 				req: &routeguidepb.GetFeatureRequest{Point: &routeguidepb.Point{Latitude: 409146138, Longitude: -746188906}},
 			},
-			want: &routeguidepb.GetFeatureResponse{Feature: &routeguidepb.Feature{Name: "Berkshire Valley Management Area Trail, Jefferson, NJ, USA",
-				Location: &routeguidepb.Point{Latitude: 409146138, Longitude: -746188906}}},
+			want: &routeguidepb.GetFeatureResponse{Feature: &routeguidepb.Feature{
+				Name:     "Berkshire Valley Management Area Trail, Jefferson, NJ, USA",
+				Location: &routeguidepb.Point{Latitude: 409146138, Longitude: -746188906},
+			}},
 		},
 		{
 			name: "Feature missing",
@@ -73,5 +75,4 @@ func Test_ServiceServer_GetFeature(t *testing.T) {
 			}
 		})
 	}
-
 }

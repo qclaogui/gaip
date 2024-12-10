@@ -24,6 +24,7 @@ import (
 	context "context"
 
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -203,21 +204,27 @@ type UnimplementedModelServiceServer struct{}
 func (UnimplementedModelServiceServer) GetModel(context.Context, *GetModelRequest) (*Model, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetModel not implemented")
 }
+
 func (UnimplementedModelServiceServer) ListModels(context.Context, *ListModelsRequest) (*ListModelsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListModels not implemented")
 }
+
 func (UnimplementedModelServiceServer) GetTunedModel(context.Context, *GetTunedModelRequest) (*TunedModel, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTunedModel not implemented")
 }
+
 func (UnimplementedModelServiceServer) ListTunedModels(context.Context, *ListTunedModelsRequest) (*ListTunedModelsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTunedModels not implemented")
 }
+
 func (UnimplementedModelServiceServer) CreateTunedModel(context.Context, *CreateTunedModelRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTunedModel not implemented")
 }
+
 func (UnimplementedModelServiceServer) UpdateTunedModel(context.Context, *UpdateTunedModelRequest) (*TunedModel, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTunedModel not implemented")
 }
+
 func (UnimplementedModelServiceServer) DeleteTunedModel(context.Context, *DeleteTunedModelRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTunedModel not implemented")
 }

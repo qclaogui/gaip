@@ -238,6 +238,7 @@ var file_qclaogui_showcase_v1beta1_messaging_service_proto_goTypes = []any{
 	(*StreamBlurbsResponse)(nil),    // 19: qclaogui.showcase.v1beta1.StreamBlurbsResponse
 	(*SendBlurbsResponse)(nil),      // 20: qclaogui.showcase.v1beta1.SendBlurbsResponse
 }
+
 var file_qclaogui_showcase_v1beta1_messaging_service_proto_depIdxs = []int32{
 	0,  // 0: qclaogui.showcase.v1beta1.MessagingService.CreateRoom:input_type -> qclaogui.showcase.v1beta1.CreateRoomRequest
 	1,  // 1: qclaogui.showcase.v1beta1.MessagingService.GetRoom:input_type -> qclaogui.showcase.v1beta1.GetRoomRequest

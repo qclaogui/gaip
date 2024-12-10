@@ -98,6 +98,7 @@ var file_qclaogui_task_v1_task_service_proto_goTypes = []any{
 	(*Task)(nil),                // 6: qclaogui.task.v1.Task
 	(*ListTasksResponse)(nil),   // 7: qclaogui.task.v1.ListTasksResponse
 }
+
 var file_qclaogui_task_v1_task_service_proto_depIdxs = []int32{
 	0, // 0: qclaogui.task.v1.TasksWriterService.CreateTask:input_type -> qclaogui.task.v1.CreateTaskRequest
 	1, // 1: qclaogui.task.v1.TasksWriterService.DeleteTask:input_type -> qclaogui.task.v1.DeleteTaskRequest

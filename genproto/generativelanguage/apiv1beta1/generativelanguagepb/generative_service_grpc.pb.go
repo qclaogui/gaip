@@ -201,18 +201,23 @@ type UnimplementedGenerativeServiceServer struct{}
 func (UnimplementedGenerativeServiceServer) GenerateContent(context.Context, *GenerateContentRequest) (*GenerateContentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateContent not implemented")
 }
+
 func (UnimplementedGenerativeServiceServer) GenerateAnswer(context.Context, *GenerateAnswerRequest) (*GenerateAnswerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateAnswer not implemented")
 }
+
 func (UnimplementedGenerativeServiceServer) StreamGenerateContent(*GenerateContentRequest, grpc.ServerStreamingServer[GenerateContentResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method StreamGenerateContent not implemented")
 }
+
 func (UnimplementedGenerativeServiceServer) EmbedContent(context.Context, *EmbedContentRequest) (*EmbedContentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EmbedContent not implemented")
 }
+
 func (UnimplementedGenerativeServiceServer) BatchEmbedContents(context.Context, *BatchEmbedContentsRequest) (*BatchEmbedContentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BatchEmbedContents not implemented")
 }
+
 func (UnimplementedGenerativeServiceServer) CountTokens(context.Context, *CountTokensRequest) (*CountTokensResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CountTokens not implemented")
 }

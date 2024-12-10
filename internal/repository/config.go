@@ -21,9 +21,7 @@ const (
 	DriverPostgres = "postgres"
 )
 
-var (
-	supportedDatabaseBackends = []string{DriverMemory, DriverMysql, DriverPostgres}
-)
+var supportedDatabaseBackends = []string{DriverMemory, DriverMysql, DriverPostgres}
 
 type Config struct {
 	Driver string `yaml:"driver"`

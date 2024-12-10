@@ -86,7 +86,6 @@ func (parser *Parser) parse() (pt PathTemplate, err error) {
 	}
 
 	return pt, nil
-
 }
 
 // parseSegments parses a sequence of slash-delimited segments.

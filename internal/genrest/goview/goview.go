@@ -44,7 +44,6 @@ func NewFile(directory, name string) *SourceFile {
 // Contents returns the stringifies contents this SourceFile.
 func (sf *SourceFile) Contents() string {
 	return sf.source.Contents()
-
 }
 
 // Append appends the lines in Source to the lines in SourceFile.

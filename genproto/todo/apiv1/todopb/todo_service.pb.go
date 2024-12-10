@@ -78,6 +78,7 @@ var file_qclaogui_todo_v1_todo_service_proto_goTypes = []any{
 	(*ListTodoResponse)(nil),   // 8: qclaogui.todo.v1.ListTodoResponse
 	(*DeleteTodoResponse)(nil), // 9: qclaogui.todo.v1.DeleteTodoResponse
 }
+
 var file_qclaogui_todo_v1_todo_service_proto_depIdxs = []int32{
 	0, // 0: qclaogui.todo.v1.ToDoService.CreateTodo:input_type -> qclaogui.todo.v1.CreateTodoRequest
 	1, // 1: qclaogui.todo.v1.ToDoService.GetTodo:input_type -> qclaogui.todo.v1.GetTodoRequest

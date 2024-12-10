@@ -169,6 +169,7 @@ func TestRouteChat(t *testing.T) {
 		}
 	}
 }
+
 func randomPoint(r *rand.Rand) *pb.Point {
 	lat := (r.Int31n(180) - 90) * 1e7
 	long := (r.Int31n(360) - 180) * 1e7

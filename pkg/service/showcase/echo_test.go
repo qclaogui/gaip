@@ -113,8 +113,8 @@ func (m *mockExpandStream) verify(expectHeadersAndTrailers bool) {
 }
 
 func serverSetup(t *testing.T) pb.EchoServiceServer {
-	//s, err := NewEchoService()
-	//require.NoError(t, err)
+	// s, err := NewEchoService()
+	// require.NoError(t, err)
 
 	cfg := Config{}
 	s, err := NewServer(cfg)
@@ -142,12 +142,11 @@ func TestExpand(t *testing.T) {
 			stream.verify(e == nil)
 		}
 	}
-
 }
 
 func TestExpandWithWaitTime(t *testing.T) {
 	s := serverSetup(t)
-	//This stream should take at least 300ms to complete because there are 7 messages, and we wait 50ms between sending each message.
+	// This stream should take at least 300ms to complete because there are 7 messages, and we wait 50ms between sending each message.
 	content := "This stream should take 300ms to complete"
 	stream := &mockExpandStream{exp: strings.Fields(content), t: t}
 	streamWaitTime := durationpb.New(time.Duration(50) * time.Millisecond)
@@ -214,6 +213,7 @@ func (m *mockCollectStream) Recv() (*pb.EchoRequest, error) {
 	}
 	return nil, io.EOF
 }
+
 func (m *mockCollectStream) Context() context.Context {
 	return appendTestOutgoingMetadata(context.Background(), &mockSTS{stream: m, t: m.t})
 }
@@ -427,6 +427,7 @@ func TestPagedExpand_invalidArgs(t *testing.T) {
 		}
 	}
 }
+
 func TestPagedExpand(t *testing.T) {
 	tests := []struct {
 		req  *pb.PagedExpandRequest
@@ -460,7 +461,8 @@ func TestPagedExpand(t *testing.T) {
 				},
 				NextPageToken: "3",
 			},
-		}, {
+		},
+		{
 			req: &pb.PagedExpandRequest{
 				PageSize:  3,
 				PageToken: "3",
@@ -493,7 +495,6 @@ func TestPagedExpand(t *testing.T) {
 
 		stream.verify(err == nil)
 	}
-
 }
 
 func TestBlockSuccess(t *testing.T) {

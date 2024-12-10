@@ -1868,33 +1868,36 @@ func file_qclaogui_generativelanguage_v1_generative_service_proto_rawDescGZIP() 
 	return file_qclaogui_generativelanguage_v1_generative_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1_generative_service_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_qclaogui_generativelanguage_v1_generative_service_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
-var file_qclaogui_generativelanguage_v1_generative_service_proto_goTypes = []any{
-	(TaskType)(0), // 0: qclaogui.generativelanguage.v1.TaskType
-	(GenerateContentResponse_PromptFeedback_BlockReason)(0), // 1: qclaogui.generativelanguage.v1.GenerateContentResponse.PromptFeedback.BlockReason
-	(Candidate_FinishReason)(0),                             // 2: qclaogui.generativelanguage.v1.Candidate.FinishReason
-	(*GenerateContentRequest)(nil),                          // 3: qclaogui.generativelanguage.v1.GenerateContentRequest
-	(*GenerationConfig)(nil),                                // 4: qclaogui.generativelanguage.v1.GenerationConfig
-	(*GenerateContentResponse)(nil),                         // 5: qclaogui.generativelanguage.v1.GenerateContentResponse
-	(*Candidate)(nil),                                       // 6: qclaogui.generativelanguage.v1.Candidate
-	(*LogprobsResult)(nil),                                  // 7: qclaogui.generativelanguage.v1.LogprobsResult
-	(*EmbedContentRequest)(nil),                             // 8: qclaogui.generativelanguage.v1.EmbedContentRequest
-	(*ContentEmbedding)(nil),                                // 9: qclaogui.generativelanguage.v1.ContentEmbedding
-	(*EmbedContentResponse)(nil),                            // 10: qclaogui.generativelanguage.v1.EmbedContentResponse
-	(*BatchEmbedContentsRequest)(nil),                       // 11: qclaogui.generativelanguage.v1.BatchEmbedContentsRequest
-	(*BatchEmbedContentsResponse)(nil),                      // 12: qclaogui.generativelanguage.v1.BatchEmbedContentsResponse
-	(*CountTokensRequest)(nil),                              // 13: qclaogui.generativelanguage.v1.CountTokensRequest
-	(*CountTokensResponse)(nil),                             // 14: qclaogui.generativelanguage.v1.CountTokensResponse
-	(*GenerateContentResponse_PromptFeedback)(nil),          // 15: qclaogui.generativelanguage.v1.GenerateContentResponse.PromptFeedback
-	(*GenerateContentResponse_UsageMetadata)(nil),           // 16: qclaogui.generativelanguage.v1.GenerateContentResponse.UsageMetadata
-	(*LogprobsResult_Candidate)(nil),                        // 17: qclaogui.generativelanguage.v1.LogprobsResult.Candidate
-	(*LogprobsResult_TopCandidates)(nil),                    // 18: qclaogui.generativelanguage.v1.LogprobsResult.TopCandidates
-	(*Content)(nil),                                         // 19: qclaogui.generativelanguage.v1.Content
-	(*SafetySetting)(nil),                                   // 20: qclaogui.generativelanguage.v1.SafetySetting
-	(*SafetyRating)(nil),                                    // 21: qclaogui.generativelanguage.v1.SafetyRating
-	(*CitationMetadata)(nil),                                // 22: qclaogui.generativelanguage.v1.CitationMetadata
-}
+var (
+	file_qclaogui_generativelanguage_v1_generative_service_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+	file_qclaogui_generativelanguage_v1_generative_service_proto_msgTypes  = make([]protoimpl.MessageInfo, 16)
+	file_qclaogui_generativelanguage_v1_generative_service_proto_goTypes   = []any{
+		(TaskType)(0), // 0: qclaogui.generativelanguage.v1.TaskType
+		(GenerateContentResponse_PromptFeedback_BlockReason)(0), // 1: qclaogui.generativelanguage.v1.GenerateContentResponse.PromptFeedback.BlockReason
+		(Candidate_FinishReason)(0),                             // 2: qclaogui.generativelanguage.v1.Candidate.FinishReason
+		(*GenerateContentRequest)(nil),                          // 3: qclaogui.generativelanguage.v1.GenerateContentRequest
+		(*GenerationConfig)(nil),                                // 4: qclaogui.generativelanguage.v1.GenerationConfig
+		(*GenerateContentResponse)(nil),                         // 5: qclaogui.generativelanguage.v1.GenerateContentResponse
+		(*Candidate)(nil),                                       // 6: qclaogui.generativelanguage.v1.Candidate
+		(*LogprobsResult)(nil),                                  // 7: qclaogui.generativelanguage.v1.LogprobsResult
+		(*EmbedContentRequest)(nil),                             // 8: qclaogui.generativelanguage.v1.EmbedContentRequest
+		(*ContentEmbedding)(nil),                                // 9: qclaogui.generativelanguage.v1.ContentEmbedding
+		(*EmbedContentResponse)(nil),                            // 10: qclaogui.generativelanguage.v1.EmbedContentResponse
+		(*BatchEmbedContentsRequest)(nil),                       // 11: qclaogui.generativelanguage.v1.BatchEmbedContentsRequest
+		(*BatchEmbedContentsResponse)(nil),                      // 12: qclaogui.generativelanguage.v1.BatchEmbedContentsResponse
+		(*CountTokensRequest)(nil),                              // 13: qclaogui.generativelanguage.v1.CountTokensRequest
+		(*CountTokensResponse)(nil),                             // 14: qclaogui.generativelanguage.v1.CountTokensResponse
+		(*GenerateContentResponse_PromptFeedback)(nil),          // 15: qclaogui.generativelanguage.v1.GenerateContentResponse.PromptFeedback
+		(*GenerateContentResponse_UsageMetadata)(nil),           // 16: qclaogui.generativelanguage.v1.GenerateContentResponse.UsageMetadata
+		(*LogprobsResult_Candidate)(nil),                        // 17: qclaogui.generativelanguage.v1.LogprobsResult.Candidate
+		(*LogprobsResult_TopCandidates)(nil),                    // 18: qclaogui.generativelanguage.v1.LogprobsResult.TopCandidates
+		(*Content)(nil),                                         // 19: qclaogui.generativelanguage.v1.Content
+		(*SafetySetting)(nil),                                   // 20: qclaogui.generativelanguage.v1.SafetySetting
+		(*SafetyRating)(nil),                                    // 21: qclaogui.generativelanguage.v1.SafetyRating
+		(*CitationMetadata)(nil),                                // 22: qclaogui.generativelanguage.v1.CitationMetadata
+	}
+)
+
 var file_qclaogui_generativelanguage_v1_generative_service_proto_depIdxs = []int32{
 	19, // 0: qclaogui.generativelanguage.v1.GenerateContentRequest.contents:type_name -> qclaogui.generativelanguage.v1.Content
 	20, // 1: qclaogui.generativelanguage.v1.GenerateContentRequest.safety_settings:type_name -> qclaogui.generativelanguage.v1.SafetySetting

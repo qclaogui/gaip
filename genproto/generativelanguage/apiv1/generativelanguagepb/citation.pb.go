@@ -214,11 +214,14 @@ func file_qclaogui_generativelanguage_v1_citation_proto_rawDescGZIP() []byte {
 	return file_qclaogui_generativelanguage_v1_citation_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1_citation_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_qclaogui_generativelanguage_v1_citation_proto_goTypes = []any{
-	(*CitationMetadata)(nil), // 0: qclaogui.generativelanguage.v1.CitationMetadata
-	(*CitationSource)(nil),   // 1: qclaogui.generativelanguage.v1.CitationSource
-}
+var (
+	file_qclaogui_generativelanguage_v1_citation_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_qclaogui_generativelanguage_v1_citation_proto_goTypes  = []any{
+		(*CitationMetadata)(nil), // 0: qclaogui.generativelanguage.v1.CitationMetadata
+		(*CitationSource)(nil),   // 1: qclaogui.generativelanguage.v1.CitationSource
+	}
+)
+
 var file_qclaogui_generativelanguage_v1_citation_proto_depIdxs = []int32{
 	1, // 0: qclaogui.generativelanguage.v1.CitationMetadata.citation_sources:type_name -> qclaogui.generativelanguage.v1.CitationSource
 	1, // [1:1] is the sub-list for method output_type

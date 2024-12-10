@@ -27,6 +27,7 @@ import (
 func (srv *Server) CreateRoom(ctx context.Context, in *pb.CreateRoomRequest) (*pb.Room, error) {
 	return srv.repoMessaging.CreateRoom(ctx, in)
 }
+
 func (srv *Server) GetRoom(ctx context.Context, in *pb.GetRoomRequest) (*pb.Room, error) {
 	return srv.repoMessaging.GetRoom(ctx, in)
 }

@@ -28,8 +28,10 @@ const RequestIDKey ctxKeyRequestID = 0
 // Exported so that it can be changed by developers
 var RequestIDHeader = "X-Request-Id"
 
-var prefix string
-var reqID uint64
+var (
+	prefix string
+	reqID  uint64
+)
 
 // A quick note on the statistics here: we're trying to calculate the chance that
 // two randomly generated base62 prefixes will collide. We use the formula from

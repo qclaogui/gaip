@@ -1842,35 +1842,38 @@ func file_qclaogui_generativelanguage_v1beta1_content_proto_rawDescGZIP() []byte
 	return file_qclaogui_generativelanguage_v1beta1_content_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_content_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_qclaogui_generativelanguage_v1beta1_content_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
-var file_qclaogui_generativelanguage_v1beta1_content_proto_goTypes = []any{
-	(Type)(0),                        // 0: qclaogui.generativelanguage.v1beta1.Type
-	(ExecutableCode_Language)(0),     // 1: qclaogui.generativelanguage.v1beta1.ExecutableCode.Language
-	(CodeExecutionResult_Outcome)(0), // 2: qclaogui.generativelanguage.v1beta1.CodeExecutionResult.Outcome
-	(DynamicRetrievalConfig_Mode)(0), // 3: qclaogui.generativelanguage.v1beta1.DynamicRetrievalConfig.Mode
-	(FunctionCallingConfig_Mode)(0),  // 4: qclaogui.generativelanguage.v1beta1.FunctionCallingConfig.Mode
-	(*Content)(nil),                  // 5: qclaogui.generativelanguage.v1beta1.Content
-	(*Part)(nil),                     // 6: qclaogui.generativelanguage.v1beta1.Part
-	(*Blob)(nil),                     // 7: qclaogui.generativelanguage.v1beta1.Blob
-	(*FileData)(nil),                 // 8: qclaogui.generativelanguage.v1beta1.FileData
-	(*ExecutableCode)(nil),           // 9: qclaogui.generativelanguage.v1beta1.ExecutableCode
-	(*CodeExecutionResult)(nil),      // 10: qclaogui.generativelanguage.v1beta1.CodeExecutionResult
-	(*Tool)(nil),                     // 11: qclaogui.generativelanguage.v1beta1.Tool
-	(*GoogleSearchRetrieval)(nil),    // 12: qclaogui.generativelanguage.v1beta1.GoogleSearchRetrieval
-	(*DynamicRetrievalConfig)(nil),   // 13: qclaogui.generativelanguage.v1beta1.DynamicRetrievalConfig
-	(*CodeExecution)(nil),            // 14: qclaogui.generativelanguage.v1beta1.CodeExecution
-	(*ToolConfig)(nil),               // 15: qclaogui.generativelanguage.v1beta1.ToolConfig
-	(*FunctionCallingConfig)(nil),    // 16: qclaogui.generativelanguage.v1beta1.FunctionCallingConfig
-	(*FunctionDeclaration)(nil),      // 17: qclaogui.generativelanguage.v1beta1.FunctionDeclaration
-	(*FunctionCall)(nil),             // 18: qclaogui.generativelanguage.v1beta1.FunctionCall
-	(*FunctionResponse)(nil),         // 19: qclaogui.generativelanguage.v1beta1.FunctionResponse
-	(*Schema)(nil),                   // 20: qclaogui.generativelanguage.v1beta1.Schema
-	(*GroundingPassage)(nil),         // 21: qclaogui.generativelanguage.v1beta1.GroundingPassage
-	(*GroundingPassages)(nil),        // 22: qclaogui.generativelanguage.v1beta1.GroundingPassages
-	nil,                              // 23: qclaogui.generativelanguage.v1beta1.Schema.PropertiesEntry
-	(*structpb.Struct)(nil),          // 24: google.protobuf.Struct
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_content_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
+	file_qclaogui_generativelanguage_v1beta1_content_proto_msgTypes  = make([]protoimpl.MessageInfo, 19)
+	file_qclaogui_generativelanguage_v1beta1_content_proto_goTypes   = []any{
+		(Type)(0),                        // 0: qclaogui.generativelanguage.v1beta1.Type
+		(ExecutableCode_Language)(0),     // 1: qclaogui.generativelanguage.v1beta1.ExecutableCode.Language
+		(CodeExecutionResult_Outcome)(0), // 2: qclaogui.generativelanguage.v1beta1.CodeExecutionResult.Outcome
+		(DynamicRetrievalConfig_Mode)(0), // 3: qclaogui.generativelanguage.v1beta1.DynamicRetrievalConfig.Mode
+		(FunctionCallingConfig_Mode)(0),  // 4: qclaogui.generativelanguage.v1beta1.FunctionCallingConfig.Mode
+		(*Content)(nil),                  // 5: qclaogui.generativelanguage.v1beta1.Content
+		(*Part)(nil),                     // 6: qclaogui.generativelanguage.v1beta1.Part
+		(*Blob)(nil),                     // 7: qclaogui.generativelanguage.v1beta1.Blob
+		(*FileData)(nil),                 // 8: qclaogui.generativelanguage.v1beta1.FileData
+		(*ExecutableCode)(nil),           // 9: qclaogui.generativelanguage.v1beta1.ExecutableCode
+		(*CodeExecutionResult)(nil),      // 10: qclaogui.generativelanguage.v1beta1.CodeExecutionResult
+		(*Tool)(nil),                     // 11: qclaogui.generativelanguage.v1beta1.Tool
+		(*GoogleSearchRetrieval)(nil),    // 12: qclaogui.generativelanguage.v1beta1.GoogleSearchRetrieval
+		(*DynamicRetrievalConfig)(nil),   // 13: qclaogui.generativelanguage.v1beta1.DynamicRetrievalConfig
+		(*CodeExecution)(nil),            // 14: qclaogui.generativelanguage.v1beta1.CodeExecution
+		(*ToolConfig)(nil),               // 15: qclaogui.generativelanguage.v1beta1.ToolConfig
+		(*FunctionCallingConfig)(nil),    // 16: qclaogui.generativelanguage.v1beta1.FunctionCallingConfig
+		(*FunctionDeclaration)(nil),      // 17: qclaogui.generativelanguage.v1beta1.FunctionDeclaration
+		(*FunctionCall)(nil),             // 18: qclaogui.generativelanguage.v1beta1.FunctionCall
+		(*FunctionResponse)(nil),         // 19: qclaogui.generativelanguage.v1beta1.FunctionResponse
+		(*Schema)(nil),                   // 20: qclaogui.generativelanguage.v1beta1.Schema
+		(*GroundingPassage)(nil),         // 21: qclaogui.generativelanguage.v1beta1.GroundingPassage
+		(*GroundingPassages)(nil),        // 22: qclaogui.generativelanguage.v1beta1.GroundingPassages
+		nil,                              // 23: qclaogui.generativelanguage.v1beta1.Schema.PropertiesEntry
+		(*structpb.Struct)(nil),          // 24: google.protobuf.Struct
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_content_proto_depIdxs = []int32{
 	6,  // 0: qclaogui.generativelanguage.v1beta1.Content.parts:type_name -> qclaogui.generativelanguage.v1beta1.Part
 	7,  // 1: qclaogui.generativelanguage.v1beta1.Part.inline_data:type_name -> qclaogui.generativelanguage.v1beta1.Blob

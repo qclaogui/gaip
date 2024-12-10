@@ -7,7 +7,6 @@ package third_party
 import "testing"
 
 func TestOpenAPIFS(t *testing.T) {
-
 	for _, f := range []string{
 		"gen/openapiv2/index.css",
 		"gen/openapiv2/index.html",

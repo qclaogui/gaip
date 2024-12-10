@@ -34,7 +34,6 @@ func GetSystemParameters(request *http.Request) (systemParams *SystemParameters,
 // - the semicolon in "json;enum-encoding=int" must be URL escaped as "%3B" or "%3b"
 // - the equal sign in "json;enum-encoding=int" may or may not be URL-escaped
 func processQueryString(queryString string) (systemParams *SystemParameters, queryParams map[string][]string, err error) {
-
 	// We parse the raw query string manually rather than relying on request.URL.Query() so that
 	// we can error out in the case of malformed strings (e.g. unencoded ampersands), rather
 	// than having them ignored with potentially incorrect results.

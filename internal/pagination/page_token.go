@@ -25,7 +25,6 @@ const pageTokenChecksumMask uint32 = 0x9acb0442
 //
 // If the request does not have a page token, a page token with offset 0 will be returned.
 func ParsePageToken(request Request) (_ PageToken, err error) {
-
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("parse page token: %w", err)

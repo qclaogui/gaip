@@ -18,7 +18,6 @@ import (
 
 // ServerOptionTracing Use the OpenTelemetry gRPC server interceptor for tracing
 func ServerOptionTracing(serverOpts []grpc.ServerOption) []grpc.ServerOption {
-
 	serverOpts = append(serverOpts, grpc.StatsHandler(otelgrpc.NewServerHandler()))
 
 	return serverOpts
@@ -26,7 +25,6 @@ func ServerOptionTracing(serverOpts []grpc.ServerOption) []grpc.ServerOption {
 
 // WithDailOptionTracing Use the OpenTelemetry gRPC client interceptor for tracing
 func WithDailOptionTracing(dialOpts []grpc.DialOption) []grpc.DialOption {
-
 	dialOpts = append(dialOpts, grpc.WithStatsHandler(otelgrpc.NewClientHandler()))
 
 	return dialOpts

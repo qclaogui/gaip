@@ -62,7 +62,7 @@ func (m *todoImpl) GetTodo(_ context.Context, req *todopb.GetTodoRequest) (*todo
 
 	id, _ := uuid.Parse(req.GetId())
 
-	//slog.Warn("Get todo from todoImpl", "req_id", req.GetId(), "id", id, "mem", m.mem)
+	// slog.Warn("Get todo from todoImpl", "req_id", req.GetId(), "id", id, "mem", m.mem)
 	todo, ok := m.mem[id]
 	if !ok {
 		return nil, status.Error(codes.Unknown, ErrNotFound.Error())

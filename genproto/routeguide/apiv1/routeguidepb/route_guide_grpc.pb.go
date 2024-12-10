@@ -163,12 +163,15 @@ type UnimplementedRouteGuideServiceServer struct{}
 func (UnimplementedRouteGuideServiceServer) GetFeature(context.Context, *GetFeatureRequest) (*GetFeatureResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFeature not implemented")
 }
+
 func (UnimplementedRouteGuideServiceServer) ListFeatures(*ListFeaturesRequest, grpc.ServerStreamingServer[ListFeaturesResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method ListFeatures not implemented")
 }
+
 func (UnimplementedRouteGuideServiceServer) RecordRoute(grpc.ClientStreamingServer[RecordRouteRequest, RecordRouteResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method RecordRoute not implemented")
 }
+
 func (UnimplementedRouteGuideServiceServer) RouteChat(grpc.BidiStreamingServer[RouteChatRequest, RouteChatResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method RouteChat not implemented")
 }

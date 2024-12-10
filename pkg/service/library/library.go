@@ -49,7 +49,6 @@ func (s *Server) DeleteBook(ctx context.Context, req *pb.DeleteBookRequest) (*em
 
 func (s *Server) UpdateBook(ctx context.Context, req *pb.UpdateBookRequest) (*pb.Book, error) {
 	return s.repo.UpdateBook(ctx, req)
-
 }
 
 func (s *Server) MoveBook(ctx context.Context, req *pb.MoveBookRequest) (*pb.Book, error) {

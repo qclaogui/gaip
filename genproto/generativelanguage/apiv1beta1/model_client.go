@@ -549,6 +549,7 @@ func (c *modelRESTClient) Close() error {
 func (c *modelRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *modelGRPCClient) GetModel(ctx context.Context, req *generativelanguagepb.GetModelRequest, opts ...gax.CallOption) (*generativelanguagepb.Model, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
 

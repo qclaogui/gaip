@@ -114,7 +114,6 @@ func (p *projectImpl) ListProjects(_ context.Context, req *projectpb.ListProject
 	}
 
 	return &resp, nil
-
 }
 
 func (p *projectImpl) DeleteProject(_ context.Context, req *projectpb.DeleteProjectRequest) (*emptypb.Empty, error) {

@@ -91,6 +91,7 @@ var file_qclaogui_project_v1_project_service_proto_goTypes = []any{
 	(*ListProjectsResponse)(nil), // 5: qclaogui.project.v1.ListProjectsResponse
 	(*emptypb.Empty)(nil),        // 6: google.protobuf.Empty
 }
+
 var file_qclaogui_project_v1_project_service_proto_depIdxs = []int32{
 	0, // 0: qclaogui.project.v1.ProjectService.CreateProject:input_type -> qclaogui.project.v1.CreateProjectRequest
 	1, // 1: qclaogui.project.v1.ProjectService.GetProject:input_type -> qclaogui.project.v1.GetProjectRequest

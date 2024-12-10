@@ -739,21 +739,24 @@ func file_qclaogui_bookstore_v1alpha1_bookstore_proto_rawDescGZIP() []byte {
 	return file_qclaogui_bookstore_v1alpha1_bookstore_proto_rawDescData
 }
 
-var file_qclaogui_bookstore_v1alpha1_bookstore_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_qclaogui_bookstore_v1alpha1_bookstore_proto_goTypes = []any{
-	(*Shelf)(nil),               // 0: qclaogui.bookstore.v1alpha1.Shelf
-	(*Book)(nil),                // 1: qclaogui.bookstore.v1alpha1.Book
-	(*ListShelvesResponse)(nil), // 2: qclaogui.bookstore.v1alpha1.ListShelvesResponse
-	(*CreateShelfRequest)(nil),  // 3: qclaogui.bookstore.v1alpha1.CreateShelfRequest
-	(*GetShelfRequest)(nil),     // 4: qclaogui.bookstore.v1alpha1.GetShelfRequest
-	(*DeleteShelfRequest)(nil),  // 5: qclaogui.bookstore.v1alpha1.DeleteShelfRequest
-	(*ListBooksRequest)(nil),    // 6: qclaogui.bookstore.v1alpha1.ListBooksRequest
-	(*ListBooksResponse)(nil),   // 7: qclaogui.bookstore.v1alpha1.ListBooksResponse
-	(*CreateBookRequest)(nil),   // 8: qclaogui.bookstore.v1alpha1.CreateBookRequest
-	(*GetBookRequest)(nil),      // 9: qclaogui.bookstore.v1alpha1.GetBookRequest
-	(*DeleteBookRequest)(nil),   // 10: qclaogui.bookstore.v1alpha1.DeleteBookRequest
-	(*emptypb.Empty)(nil),       // 11: google.protobuf.Empty
-}
+var (
+	file_qclaogui_bookstore_v1alpha1_bookstore_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+	file_qclaogui_bookstore_v1alpha1_bookstore_proto_goTypes  = []any{
+		(*Shelf)(nil),               // 0: qclaogui.bookstore.v1alpha1.Shelf
+		(*Book)(nil),                // 1: qclaogui.bookstore.v1alpha1.Book
+		(*ListShelvesResponse)(nil), // 2: qclaogui.bookstore.v1alpha1.ListShelvesResponse
+		(*CreateShelfRequest)(nil),  // 3: qclaogui.bookstore.v1alpha1.CreateShelfRequest
+		(*GetShelfRequest)(nil),     // 4: qclaogui.bookstore.v1alpha1.GetShelfRequest
+		(*DeleteShelfRequest)(nil),  // 5: qclaogui.bookstore.v1alpha1.DeleteShelfRequest
+		(*ListBooksRequest)(nil),    // 6: qclaogui.bookstore.v1alpha1.ListBooksRequest
+		(*ListBooksResponse)(nil),   // 7: qclaogui.bookstore.v1alpha1.ListBooksResponse
+		(*CreateBookRequest)(nil),   // 8: qclaogui.bookstore.v1alpha1.CreateBookRequest
+		(*GetBookRequest)(nil),      // 9: qclaogui.bookstore.v1alpha1.GetBookRequest
+		(*DeleteBookRequest)(nil),   // 10: qclaogui.bookstore.v1alpha1.DeleteBookRequest
+		(*emptypb.Empty)(nil),       // 11: google.protobuf.Empty
+	}
+)
+
 var file_qclaogui_bookstore_v1alpha1_bookstore_proto_depIdxs = []int32{
 	0,  // 0: qclaogui.bookstore.v1alpha1.ListShelvesResponse.shelves:type_name -> qclaogui.bookstore.v1alpha1.Shelf
 	0,  // 1: qclaogui.bookstore.v1alpha1.CreateShelfRequest.shelf:type_name -> qclaogui.bookstore.v1alpha1.Shelf

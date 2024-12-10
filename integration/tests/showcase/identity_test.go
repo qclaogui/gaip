@@ -165,5 +165,4 @@ func TestUserCRUD(t *testing.T) {
 			t.Errorf("client.ListUsers() = %q, want %q", err, iterator.Done)
 		}
 	}
-
 }

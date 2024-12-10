@@ -688,18 +688,21 @@ func file_qclaogui_generativelanguage_v1beta1_safety_proto_rawDescGZIP() []byte 
 	return file_qclaogui_generativelanguage_v1beta1_safety_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_safety_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_qclaogui_generativelanguage_v1beta1_safety_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_qclaogui_generativelanguage_v1beta1_safety_proto_goTypes = []any{
-	(HarmCategory)(0),                     // 0: qclaogui.generativelanguage.v1beta1.HarmCategory
-	(ContentFilter_BlockedReason)(0),      // 1: qclaogui.generativelanguage.v1beta1.ContentFilter.BlockedReason
-	(SafetyRating_HarmProbability)(0),     // 2: qclaogui.generativelanguage.v1beta1.SafetyRating.HarmProbability
-	(SafetySetting_HarmBlockThreshold)(0), // 3: qclaogui.generativelanguage.v1beta1.SafetySetting.HarmBlockThreshold
-	(*ContentFilter)(nil),                 // 4: qclaogui.generativelanguage.v1beta1.ContentFilter
-	(*SafetyFeedback)(nil),                // 5: qclaogui.generativelanguage.v1beta1.SafetyFeedback
-	(*SafetyRating)(nil),                  // 6: qclaogui.generativelanguage.v1beta1.SafetyRating
-	(*SafetySetting)(nil),                 // 7: qclaogui.generativelanguage.v1beta1.SafetySetting
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_safety_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+	file_qclaogui_generativelanguage_v1beta1_safety_proto_msgTypes  = make([]protoimpl.MessageInfo, 4)
+	file_qclaogui_generativelanguage_v1beta1_safety_proto_goTypes   = []any{
+		(HarmCategory)(0),                     // 0: qclaogui.generativelanguage.v1beta1.HarmCategory
+		(ContentFilter_BlockedReason)(0),      // 1: qclaogui.generativelanguage.v1beta1.ContentFilter.BlockedReason
+		(SafetyRating_HarmProbability)(0),     // 2: qclaogui.generativelanguage.v1beta1.SafetyRating.HarmProbability
+		(SafetySetting_HarmBlockThreshold)(0), // 3: qclaogui.generativelanguage.v1beta1.SafetySetting.HarmBlockThreshold
+		(*ContentFilter)(nil),                 // 4: qclaogui.generativelanguage.v1beta1.ContentFilter
+		(*SafetyFeedback)(nil),                // 5: qclaogui.generativelanguage.v1beta1.SafetyFeedback
+		(*SafetyRating)(nil),                  // 6: qclaogui.generativelanguage.v1beta1.SafetyRating
+		(*SafetySetting)(nil),                 // 7: qclaogui.generativelanguage.v1beta1.SafetySetting
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_safety_proto_depIdxs = []int32{
 	1, // 0: qclaogui.generativelanguage.v1beta1.ContentFilter.reason:type_name -> qclaogui.generativelanguage.v1beta1.ContentFilter.BlockedReason
 	6, // 1: qclaogui.generativelanguage.v1beta1.SafetyFeedback.rating:type_name -> qclaogui.generativelanguage.v1beta1.SafetyRating

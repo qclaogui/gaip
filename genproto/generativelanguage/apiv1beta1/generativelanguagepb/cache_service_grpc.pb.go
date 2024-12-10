@@ -152,15 +152,19 @@ type UnimplementedCacheServiceServer struct{}
 func (UnimplementedCacheServiceServer) ListCachedContents(context.Context, *ListCachedContentsRequest) (*ListCachedContentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCachedContents not implemented")
 }
+
 func (UnimplementedCacheServiceServer) CreateCachedContent(context.Context, *CreateCachedContentRequest) (*CachedContent, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCachedContent not implemented")
 }
+
 func (UnimplementedCacheServiceServer) GetCachedContent(context.Context, *GetCachedContentRequest) (*CachedContent, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCachedContent not implemented")
 }
+
 func (UnimplementedCacheServiceServer) UpdateCachedContent(context.Context, *UpdateCachedContentRequest) (*CachedContent, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCachedContent not implemented")
 }
+
 func (UnimplementedCacheServiceServer) DeleteCachedContent(context.Context, *DeleteCachedContentRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCachedContent not implemented")
 }

@@ -15,6 +15,7 @@ import (
 	context "context"
 
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -237,24 +238,31 @@ type UnimplementedEchoServiceServer struct{}
 func (UnimplementedEchoServiceServer) Echo(context.Context, *EchoRequest) (*EchoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Echo not implemented")
 }
+
 func (UnimplementedEchoServiceServer) EchoErrorDetails(context.Context, *EchoErrorDetailsRequest) (*EchoErrorDetailsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EchoErrorDetails not implemented")
 }
+
 func (UnimplementedEchoServiceServer) Expand(*ExpandRequest, grpc.ServerStreamingServer[EchoResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Expand not implemented")
 }
+
 func (UnimplementedEchoServiceServer) Collect(grpc.ClientStreamingServer[EchoRequest, EchoResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Collect not implemented")
 }
+
 func (UnimplementedEchoServiceServer) Chat(grpc.BidiStreamingServer[EchoRequest, EchoResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Chat not implemented")
 }
+
 func (UnimplementedEchoServiceServer) PagedExpand(context.Context, *PagedExpandRequest) (*PagedExpandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PagedExpand not implemented")
 }
+
 func (UnimplementedEchoServiceServer) Wait(context.Context, *WaitRequest) (*longrunningpb.Operation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Wait not implemented")
 }
+
 func (UnimplementedEchoServiceServer) Block(context.Context, *BlockRequest) (*BlockResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Block not implemented")
 }

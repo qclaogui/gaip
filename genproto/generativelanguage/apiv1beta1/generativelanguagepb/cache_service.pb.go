@@ -515,18 +515,21 @@ func file_qclaogui_generativelanguage_v1beta1_cache_service_proto_rawDescGZIP() 
 	return file_qclaogui_generativelanguage_v1beta1_cache_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_cache_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_qclaogui_generativelanguage_v1beta1_cache_service_proto_goTypes = []any{
-	(*ListCachedContentsRequest)(nil),  // 0: qclaogui.generativelanguage.v1beta1.ListCachedContentsRequest
-	(*ListCachedContentsResponse)(nil), // 1: qclaogui.generativelanguage.v1beta1.ListCachedContentsResponse
-	(*CreateCachedContentRequest)(nil), // 2: qclaogui.generativelanguage.v1beta1.CreateCachedContentRequest
-	(*GetCachedContentRequest)(nil),    // 3: qclaogui.generativelanguage.v1beta1.GetCachedContentRequest
-	(*UpdateCachedContentRequest)(nil), // 4: qclaogui.generativelanguage.v1beta1.UpdateCachedContentRequest
-	(*DeleteCachedContentRequest)(nil), // 5: qclaogui.generativelanguage.v1beta1.DeleteCachedContentRequest
-	(*CachedContent)(nil),              // 6: qclaogui.generativelanguage.v1beta1.CachedContent
-	(*fieldmaskpb.FieldMask)(nil),      // 7: google.protobuf.FieldMask
-	(*emptypb.Empty)(nil),              // 8: google.protobuf.Empty
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_cache_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+	file_qclaogui_generativelanguage_v1beta1_cache_service_proto_goTypes  = []any{
+		(*ListCachedContentsRequest)(nil),  // 0: qclaogui.generativelanguage.v1beta1.ListCachedContentsRequest
+		(*ListCachedContentsResponse)(nil), // 1: qclaogui.generativelanguage.v1beta1.ListCachedContentsResponse
+		(*CreateCachedContentRequest)(nil), // 2: qclaogui.generativelanguage.v1beta1.CreateCachedContentRequest
+		(*GetCachedContentRequest)(nil),    // 3: qclaogui.generativelanguage.v1beta1.GetCachedContentRequest
+		(*UpdateCachedContentRequest)(nil), // 4: qclaogui.generativelanguage.v1beta1.UpdateCachedContentRequest
+		(*DeleteCachedContentRequest)(nil), // 5: qclaogui.generativelanguage.v1beta1.DeleteCachedContentRequest
+		(*CachedContent)(nil),              // 6: qclaogui.generativelanguage.v1beta1.CachedContent
+		(*fieldmaskpb.FieldMask)(nil),      // 7: google.protobuf.FieldMask
+		(*emptypb.Empty)(nil),              // 8: google.protobuf.Empty
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_cache_service_proto_depIdxs = []int32{
 	6, // 0: qclaogui.generativelanguage.v1beta1.ListCachedContentsResponse.cached_contents:type_name -> qclaogui.generativelanguage.v1beta1.CachedContent
 	6, // 1: qclaogui.generativelanguage.v1beta1.CreateCachedContentRequest.cached_content:type_name -> qclaogui.generativelanguage.v1beta1.CachedContent

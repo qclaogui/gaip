@@ -469,16 +469,19 @@ func file_qclaogui_library_v1_shelf_proto_rawDescGZIP() []byte {
 	return file_qclaogui_library_v1_shelf_proto_rawDescData
 }
 
-var file_qclaogui_library_v1_shelf_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_qclaogui_library_v1_shelf_proto_goTypes = []any{
-	(*Shelf)(nil),               // 0: qclaogui.library.v1.Shelf
-	(*CreateShelfRequest)(nil),  // 1: qclaogui.library.v1.CreateShelfRequest
-	(*GetShelfRequest)(nil),     // 2: qclaogui.library.v1.GetShelfRequest
-	(*ListShelvesRequest)(nil),  // 3: qclaogui.library.v1.ListShelvesRequest
-	(*ListShelvesResponse)(nil), // 4: qclaogui.library.v1.ListShelvesResponse
-	(*DeleteShelfRequest)(nil),  // 5: qclaogui.library.v1.DeleteShelfRequest
-	(*MergeShelvesRequest)(nil), // 6: qclaogui.library.v1.MergeShelvesRequest
-}
+var (
+	file_qclaogui_library_v1_shelf_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+	file_qclaogui_library_v1_shelf_proto_goTypes  = []any{
+		(*Shelf)(nil),               // 0: qclaogui.library.v1.Shelf
+		(*CreateShelfRequest)(nil),  // 1: qclaogui.library.v1.CreateShelfRequest
+		(*GetShelfRequest)(nil),     // 2: qclaogui.library.v1.GetShelfRequest
+		(*ListShelvesRequest)(nil),  // 3: qclaogui.library.v1.ListShelvesRequest
+		(*ListShelvesResponse)(nil), // 4: qclaogui.library.v1.ListShelvesResponse
+		(*DeleteShelfRequest)(nil),  // 5: qclaogui.library.v1.DeleteShelfRequest
+		(*MergeShelvesRequest)(nil), // 6: qclaogui.library.v1.MergeShelvesRequest
+	}
+)
+
 var file_qclaogui_library_v1_shelf_proto_depIdxs = []int32{
 	0, // 0: qclaogui.library.v1.CreateShelfRequest.shelf:type_name -> qclaogui.library.v1.Shelf
 	0, // 1: qclaogui.library.v1.ListShelvesResponse.shelves:type_name -> qclaogui.library.v1.Shelf

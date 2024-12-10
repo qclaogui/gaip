@@ -1001,21 +1001,24 @@ func file_qclaogui_generativelanguage_v1beta1_retriever_proto_rawDescGZIP() []by
 	return file_qclaogui_generativelanguage_v1beta1_retriever_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_retriever_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_qclaogui_generativelanguage_v1beta1_retriever_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-var file_qclaogui_generativelanguage_v1beta1_retriever_proto_goTypes = []any{
-	(Condition_Operator)(0),       // 0: qclaogui.generativelanguage.v1beta1.Condition.Operator
-	(Chunk_State)(0),              // 1: qclaogui.generativelanguage.v1beta1.Chunk.State
-	(*Corpus)(nil),                // 2: qclaogui.generativelanguage.v1beta1.Corpus
-	(*Document)(nil),              // 3: qclaogui.generativelanguage.v1beta1.Document
-	(*StringList)(nil),            // 4: qclaogui.generativelanguage.v1beta1.StringList
-	(*CustomMetadata)(nil),        // 5: qclaogui.generativelanguage.v1beta1.CustomMetadata
-	(*MetadataFilter)(nil),        // 6: qclaogui.generativelanguage.v1beta1.MetadataFilter
-	(*Condition)(nil),             // 7: qclaogui.generativelanguage.v1beta1.Condition
-	(*Chunk)(nil),                 // 8: qclaogui.generativelanguage.v1beta1.Chunk
-	(*ChunkData)(nil),             // 9: qclaogui.generativelanguage.v1beta1.ChunkData
-	(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_retriever_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+	file_qclaogui_generativelanguage_v1beta1_retriever_proto_msgTypes  = make([]protoimpl.MessageInfo, 8)
+	file_qclaogui_generativelanguage_v1beta1_retriever_proto_goTypes   = []any{
+		(Condition_Operator)(0),       // 0: qclaogui.generativelanguage.v1beta1.Condition.Operator
+		(Chunk_State)(0),              // 1: qclaogui.generativelanguage.v1beta1.Chunk.State
+		(*Corpus)(nil),                // 2: qclaogui.generativelanguage.v1beta1.Corpus
+		(*Document)(nil),              // 3: qclaogui.generativelanguage.v1beta1.Document
+		(*StringList)(nil),            // 4: qclaogui.generativelanguage.v1beta1.StringList
+		(*CustomMetadata)(nil),        // 5: qclaogui.generativelanguage.v1beta1.CustomMetadata
+		(*MetadataFilter)(nil),        // 6: qclaogui.generativelanguage.v1beta1.MetadataFilter
+		(*Condition)(nil),             // 7: qclaogui.generativelanguage.v1beta1.Condition
+		(*Chunk)(nil),                 // 8: qclaogui.generativelanguage.v1beta1.Chunk
+		(*ChunkData)(nil),             // 9: qclaogui.generativelanguage.v1beta1.ChunkData
+		(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_retriever_proto_depIdxs = []int32{
 	10, // 0: qclaogui.generativelanguage.v1beta1.Corpus.create_time:type_name -> google.protobuf.Timestamp
 	10, // 1: qclaogui.generativelanguage.v1beta1.Corpus.update_time:type_name -> google.protobuf.Timestamp

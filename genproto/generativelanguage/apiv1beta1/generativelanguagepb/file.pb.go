@@ -411,16 +411,19 @@ func file_qclaogui_generativelanguage_v1beta1_file_proto_rawDescGZIP() []byte {
 	return file_qclaogui_generativelanguage_v1beta1_file_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_file_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_qclaogui_generativelanguage_v1beta1_file_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_qclaogui_generativelanguage_v1beta1_file_proto_goTypes = []any{
-	(File_State)(0),               // 0: qclaogui.generativelanguage.v1beta1.File.State
-	(*File)(nil),                  // 1: qclaogui.generativelanguage.v1beta1.File
-	(*VideoMetadata)(nil),         // 2: qclaogui.generativelanguage.v1beta1.VideoMetadata
-	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
-	(*status.Status)(nil),         // 4: google.rpc.Status
-	(*durationpb.Duration)(nil),   // 5: google.protobuf.Duration
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_file_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_qclaogui_generativelanguage_v1beta1_file_proto_msgTypes  = make([]protoimpl.MessageInfo, 2)
+	file_qclaogui_generativelanguage_v1beta1_file_proto_goTypes   = []any{
+		(File_State)(0),               // 0: qclaogui.generativelanguage.v1beta1.File.State
+		(*File)(nil),                  // 1: qclaogui.generativelanguage.v1beta1.File
+		(*VideoMetadata)(nil),         // 2: qclaogui.generativelanguage.v1beta1.VideoMetadata
+		(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+		(*status.Status)(nil),         // 4: google.rpc.Status
+		(*durationpb.Duration)(nil),   // 5: google.protobuf.Duration
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_file_proto_depIdxs = []int32{
 	2, // 0: qclaogui.generativelanguage.v1beta1.File.video_metadata:type_name -> qclaogui.generativelanguage.v1beta1.VideoMetadata
 	3, // 1: qclaogui.generativelanguage.v1beta1.File.create_time:type_name -> google.protobuf.Timestamp

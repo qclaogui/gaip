@@ -81,5 +81,4 @@ func init() {
 		EmitUnpopulated: true,
 		UseProtoNames:   false, // we want lower-camel-cased field names
 	}
-
 }

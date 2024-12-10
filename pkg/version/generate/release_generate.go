@@ -65,7 +65,6 @@ func main() {
 	default:
 		log.Fatalf("unknown option %q. Expected one of %v", command, strings.Join([]string{"development", "next-pre-release-id", "full-version", "print-version", "print-major-minor-version"}, ", "))
 	}
-
 }
 
 func nextPreReleaseID(latestPreReleaseVersion string) (string, error) {
@@ -98,7 +97,6 @@ func nextPreReleaseID(latestPreReleaseVersion string) (string, error) {
 	}
 
 	return fmt.Sprintf("rc.%d", id.VersionNum+1), nil
-
 }
 
 func printMajorMinor() string {

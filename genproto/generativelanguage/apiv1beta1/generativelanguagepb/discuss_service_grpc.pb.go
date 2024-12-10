@@ -106,6 +106,7 @@ type UnimplementedDiscussServiceServer struct{}
 func (UnimplementedDiscussServiceServer) GenerateMessage(context.Context, *GenerateMessageRequest) (*GenerateMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateMessage not implemented")
 }
+
 func (UnimplementedDiscussServiceServer) CountMessageTokens(context.Context, *CountMessageTokensRequest) (*CountMessageTokensResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CountMessageTokens not implemented")
 }

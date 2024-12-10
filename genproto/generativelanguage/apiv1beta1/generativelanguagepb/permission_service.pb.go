@@ -698,20 +698,23 @@ func file_qclaogui_generativelanguage_v1beta1_permission_service_proto_rawDescGZ
 	return file_qclaogui_generativelanguage_v1beta1_permission_service_proto_rawDescData
 }
 
-var file_qclaogui_generativelanguage_v1beta1_permission_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-var file_qclaogui_generativelanguage_v1beta1_permission_service_proto_goTypes = []any{
-	(*CreatePermissionRequest)(nil),   // 0: qclaogui.generativelanguage.v1beta1.CreatePermissionRequest
-	(*GetPermissionRequest)(nil),      // 1: qclaogui.generativelanguage.v1beta1.GetPermissionRequest
-	(*ListPermissionsRequest)(nil),    // 2: qclaogui.generativelanguage.v1beta1.ListPermissionsRequest
-	(*ListPermissionsResponse)(nil),   // 3: qclaogui.generativelanguage.v1beta1.ListPermissionsResponse
-	(*UpdatePermissionRequest)(nil),   // 4: qclaogui.generativelanguage.v1beta1.UpdatePermissionRequest
-	(*DeletePermissionRequest)(nil),   // 5: qclaogui.generativelanguage.v1beta1.DeletePermissionRequest
-	(*TransferOwnershipRequest)(nil),  // 6: qclaogui.generativelanguage.v1beta1.TransferOwnershipRequest
-	(*TransferOwnershipResponse)(nil), // 7: qclaogui.generativelanguage.v1beta1.TransferOwnershipResponse
-	(*Permission)(nil),                // 8: qclaogui.generativelanguage.v1beta1.Permission
-	(*fieldmaskpb.FieldMask)(nil),     // 9: google.protobuf.FieldMask
-	(*emptypb.Empty)(nil),             // 10: google.protobuf.Empty
-}
+var (
+	file_qclaogui_generativelanguage_v1beta1_permission_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+	file_qclaogui_generativelanguage_v1beta1_permission_service_proto_goTypes  = []any{
+		(*CreatePermissionRequest)(nil),   // 0: qclaogui.generativelanguage.v1beta1.CreatePermissionRequest
+		(*GetPermissionRequest)(nil),      // 1: qclaogui.generativelanguage.v1beta1.GetPermissionRequest
+		(*ListPermissionsRequest)(nil),    // 2: qclaogui.generativelanguage.v1beta1.ListPermissionsRequest
+		(*ListPermissionsResponse)(nil),   // 3: qclaogui.generativelanguage.v1beta1.ListPermissionsResponse
+		(*UpdatePermissionRequest)(nil),   // 4: qclaogui.generativelanguage.v1beta1.UpdatePermissionRequest
+		(*DeletePermissionRequest)(nil),   // 5: qclaogui.generativelanguage.v1beta1.DeletePermissionRequest
+		(*TransferOwnershipRequest)(nil),  // 6: qclaogui.generativelanguage.v1beta1.TransferOwnershipRequest
+		(*TransferOwnershipResponse)(nil), // 7: qclaogui.generativelanguage.v1beta1.TransferOwnershipResponse
+		(*Permission)(nil),                // 8: qclaogui.generativelanguage.v1beta1.Permission
+		(*fieldmaskpb.FieldMask)(nil),     // 9: google.protobuf.FieldMask
+		(*emptypb.Empty)(nil),             // 10: google.protobuf.Empty
+	}
+)
+
 var file_qclaogui_generativelanguage_v1beta1_permission_service_proto_depIdxs = []int32{
 	8,  // 0: qclaogui.generativelanguage.v1beta1.CreatePermissionRequest.permission:type_name -> qclaogui.generativelanguage.v1beta1.Permission
 	8,  // 1: qclaogui.generativelanguage.v1beta1.ListPermissionsResponse.permissions:type_name -> qclaogui.generativelanguage.v1beta1.Permission

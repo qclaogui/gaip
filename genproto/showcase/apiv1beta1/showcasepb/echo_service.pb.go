@@ -153,6 +153,7 @@ var file_qclaogui_showcase_v1beta1_echo_service_proto_goTypes = []any{
 	(*longrunningpb.Operation)(nil),  // 9: google.longrunning.Operation
 	(*BlockResponse)(nil),            // 10: qclaogui.showcase.v1beta1.BlockResponse
 }
+
 var file_qclaogui_showcase_v1beta1_echo_service_proto_depIdxs = []int32{
 	0,  // 0: qclaogui.showcase.v1beta1.EchoService.Echo:input_type -> qclaogui.showcase.v1beta1.EchoRequest
 	1,  // 1: qclaogui.showcase.v1beta1.EchoService.EchoErrorDetails:input_type -> qclaogui.showcase.v1beta1.EchoErrorDetailsRequest

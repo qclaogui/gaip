@@ -596,7 +596,7 @@ func Test_toDoServiceServer_ListTodo(t *testing.T) {
 	tm2 := time.Now().UTC().Add(2 * time.Minute)
 	reminder2 := timestamppb.New(tm2)
 
-	var ID2 = "e75b6f83-e5fc-488c-8f75-ad1437be3d3a"
+	ID2 := "e75b6f83-e5fc-488c-8f75-ad1437be3d3a"
 
 	type args struct {
 		ctx context.Context

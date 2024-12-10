@@ -559,19 +559,22 @@ func file_qclaogui_task_v1_task_proto_rawDescGZIP() []byte {
 	return file_qclaogui_task_v1_task_proto_rawDescData
 }
 
-var file_qclaogui_task_v1_task_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-var file_qclaogui_task_v1_task_proto_goTypes = []any{
-	(*Task)(nil),                  // 0: qclaogui.task.v1.Task
-	(*CreateTaskRequest)(nil),     // 1: qclaogui.task.v1.CreateTaskRequest
-	(*UpdateTaskRequest)(nil),     // 2: qclaogui.task.v1.UpdateTaskRequest
-	(*DeleteTaskRequest)(nil),     // 3: qclaogui.task.v1.DeleteTaskRequest
-	(*UndeleteTaskRequest)(nil),   // 4: qclaogui.task.v1.UndeleteTaskRequest
-	(*GetTaskRequest)(nil),        // 5: qclaogui.task.v1.GetTaskRequest
-	(*ListTasksRequest)(nil),      // 6: qclaogui.task.v1.ListTasksRequest
-	(*ListTasksResponse)(nil),     // 7: qclaogui.task.v1.ListTasksResponse
-	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil), // 9: google.protobuf.FieldMask
-}
+var (
+	file_qclaogui_task_v1_task_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+	file_qclaogui_task_v1_task_proto_goTypes  = []any{
+		(*Task)(nil),                  // 0: qclaogui.task.v1.Task
+		(*CreateTaskRequest)(nil),     // 1: qclaogui.task.v1.CreateTaskRequest
+		(*UpdateTaskRequest)(nil),     // 2: qclaogui.task.v1.UpdateTaskRequest
+		(*DeleteTaskRequest)(nil),     // 3: qclaogui.task.v1.DeleteTaskRequest
+		(*UndeleteTaskRequest)(nil),   // 4: qclaogui.task.v1.UndeleteTaskRequest
+		(*GetTaskRequest)(nil),        // 5: qclaogui.task.v1.GetTaskRequest
+		(*ListTasksRequest)(nil),      // 6: qclaogui.task.v1.ListTasksRequest
+		(*ListTasksResponse)(nil),     // 7: qclaogui.task.v1.ListTasksResponse
+		(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
+		(*fieldmaskpb.FieldMask)(nil), // 9: google.protobuf.FieldMask
+	}
+)
+
 var file_qclaogui_task_v1_task_proto_depIdxs = []int32{
 	8, // 0: qclaogui.task.v1.Task.deadline:type_name -> google.protobuf.Timestamp
 	8, // 1: qclaogui.task.v1.Task.completed_at:type_name -> google.protobuf.Timestamp

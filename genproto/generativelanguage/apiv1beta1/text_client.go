@@ -412,6 +412,7 @@ func (c *textRESTClient) Close() error {
 func (c *textRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *textGRPCClient) GenerateText(ctx context.Context, req *generativelanguagepb.GenerateTextRequest, opts ...gax.CallOption) (*generativelanguagepb.GenerateTextResponse, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "model", url.QueryEscape(req.GetModel()))}
 

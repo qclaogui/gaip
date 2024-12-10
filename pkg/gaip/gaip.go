@@ -52,12 +52,12 @@ func Bootstrap(cfg Config, reg prometheus.Registerer) (*Gaip, error) {
 	g.Cfg.ServerCfg.Router = mux.NewRouter()
 
 	// TODO(qc) config gRPC and REST
-	//g.Cfg.ServerCfg.HTTPMiddleware = nil
+	// g.Cfg.ServerCfg.HTTPMiddleware = nil
 
-	//g.Cfg.ServerCfg.GRPCMiddleware=nil
-	//g.Cfg.ServerCfg.GRPCStreamMiddleware=nil
+	// g.Cfg.ServerCfg.GRPCMiddleware=nil
+	// g.Cfg.ServerCfg.GRPCStreamMiddleware=nil
 
-	//g.Cfg.ServerCfg.GRPCOptions = interceptors.RegisterGRPCServerOption()
+	// g.Cfg.ServerCfg.GRPCOptions = interceptors.RegisterGRPCServerOption()
 
 	if err := g.registerServices(); err != nil {
 		return nil, err
@@ -92,14 +92,13 @@ func setUpGoRuntimeMetrics(cfg Config, reg prometheus.Registerer) {
 
 // Run gRPC server and HTTP gateway
 func (g *Gaip) Run() error {
-
 	// before starting servers, register /healthz handler.
-	//g.Server.Router.Path("/healthz").HandlerFunc(g.healthzHandler())
+	// g.Server.Router.Path("/healthz").HandlerFunc(g.healthzHandler())
 	g.RegisterRoute("/healthz", g.healthzHandler(), false, http.MethodGet)
 
 	g.RegisterRoute("/debug/fgprof", fgprof.Handler(), false, http.MethodGet)
 
-	//g.API.RegisterServiceMapHandler(http.HandlerFunc(g.servicesHandler))
+	// g.API.RegisterServiceMapHandler(http.HandlerFunc(g.servicesHandler))
 
 	//// Initialize tracing and handle the tracer provider shutdown
 	//stopTracing := interceptors.InitTracing()

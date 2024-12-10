@@ -544,6 +544,7 @@ func (c *echoRESTClient) Close() error {
 func (c *echoRESTClient) Connection() *grpc.ClientConn {
 	return nil
 }
+
 func (c *echoGRPCClient) Echo(ctx context.Context, req *showcasepb.EchoRequest, opts ...gax.CallOption) (*showcasepb.EchoResponse, error) {
 	routingHeaders := ""
 	routingHeadersMap := make(map[string]string)

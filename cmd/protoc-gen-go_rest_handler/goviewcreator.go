@@ -108,7 +108,7 @@ func NewView(model *gomodel.Model) (*goview.View, error) {
 			source.P("")
 			source.P("  %s := &%s.%s{}", handler.RequestVariable, handler.RequestTypePackage, handler.RequestType)
 			fileImports[handler.RequestTypeImport] = handler.RequestTypePackage
-			//fileImports[handler.RequestTypeImport] = "pb"
+			// fileImports[handler.RequestTypeImport] = "pb"
 			switch handler.RequestBodyFieldSpec {
 			case gomodel.BodyFieldAll:
 				fileImports["bytes"] = ""
@@ -336,7 +336,6 @@ func extractPath(template gomodel.PathTemplate, insideVariable bool) (string, []
 			subParts, _, err := extractPath(seg.Subsegments, true)
 			if err != nil {
 				return "", nil, err
-
 			}
 
 			// Here we convert the proto-cased (snake-cased) field path to be JSON-cased
@@ -375,7 +374,7 @@ func (namer *Namer) Get(newName string) string {
 			return newName
 		}
 
-		//newName = fmt.Sprintf("%s_%d", newName, numSeen)
+		// newName = fmt.Sprintf("%s_%d", newName, numSeen)
 		newName = fmt.Sprintf("%s%d", newName, numSeen)
 		// run through the loop again to ensure the new name hasn't been previously registered either.
 	}

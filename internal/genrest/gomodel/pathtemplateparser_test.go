@@ -59,19 +59,23 @@ func TestParseTemplate(t *testing.T) {
 					&Segment{Literal, "/", nil},
 					&Segment{Literal, "gg", nil},
 					&Segment{Literal, "/", nil},
-					&Segment{Variable, "hh", PathTemplate{
-						&Segment{Literal, "ii", nil},
-						&Segment{Literal, "/", nil},
-						&Segment{Literal, "jj", nil},
-						&Segment{Literal, "/", nil},
-						&Segment{SingleValue, "*", nil},
-						&Segment{Literal, "/", nil},
-						&Segment{Literal, "kk", nil}},
+					&Segment{
+						Variable, "hh", PathTemplate{
+							&Segment{Literal, "ii", nil},
+							&Segment{Literal, "/", nil},
+							&Segment{Literal, "jj", nil},
+							&Segment{Literal, "/", nil},
+							&Segment{SingleValue, "*", nil},
+							&Segment{Literal, "/", nil},
+							&Segment{Literal, "kk", nil},
+						},
 					},
 					&Segment{Literal, "/", nil},
-					&Segment{MultipleValue, "**", nil}}},
+					&Segment{MultipleValue, "**", nil},
+				}},
 				&Segment{Literal, ":", nil},
-				&Segment{Literal, "ll", nil}},
+				&Segment{Literal, "ll", nil},
+			},
 		},
 		{
 			stringTemplate: "/aa/{bb}/cc/{dd=ee/*/gg/{hh=ii/jj/*/kk}/**}",
@@ -80,8 +84,10 @@ func TestParseTemplate(t *testing.T) {
 				&Segment{Literal, "/", nil},
 				&Segment{Literal, "aa", nil},
 				&Segment{Literal, "/", nil},
-				&Segment{Variable, "bb", PathTemplate{
-					&Segment{SingleValue, "", nil}},
+				&Segment{
+					Variable, "bb", PathTemplate{
+						&Segment{SingleValue, "", nil},
+					},
 				},
 				&Segment{Literal, "/", nil},
 				&Segment{Literal, "cc", nil},
@@ -93,14 +99,16 @@ func TestParseTemplate(t *testing.T) {
 					&Segment{Literal, "/", nil},
 					&Segment{Literal, "gg", nil},
 					&Segment{Literal, "/", nil},
-					&Segment{Variable, "hh", PathTemplate{
-						&Segment{Literal, "ii", nil},
-						&Segment{Literal, "/", nil},
-						&Segment{Literal, "jj", nil},
-						&Segment{Literal, "/", nil},
-						&Segment{SingleValue, "*", nil},
-						&Segment{Literal, "/", nil},
-						&Segment{Literal, "kk", nil}},
+					&Segment{
+						Variable, "hh", PathTemplate{
+							&Segment{Literal, "ii", nil},
+							&Segment{Literal, "/", nil},
+							&Segment{Literal, "jj", nil},
+							&Segment{Literal, "/", nil},
+							&Segment{SingleValue, "*", nil},
+							&Segment{Literal, "/", nil},
+							&Segment{Literal, "kk", nil},
+						},
 					},
 					&Segment{Literal, "/", nil},
 					&Segment{MultipleValue, "**", nil},
@@ -114,7 +122,6 @@ func TestParseTemplate(t *testing.T) {
 		}
 		if !testCase.expectSuccess {
 			continue
-
 		}
 		if got, want := parsed, testCase.expectParsedTemplate; !reflect.DeepEqual(got, want) {
 			t.Errorf("parsed template incorrect:\n    got: %s\n   want: %s", got.asGoLiteral(), want.asGoLiteral())
