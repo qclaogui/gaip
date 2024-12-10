@@ -172,10 +172,6 @@ func (g *Gaip) registerServices() error {
 		return err
 	}
 
-	if err = g.initRouteGuide(); err != nil {
-		return err
-	}
-
 	if err = g.initShowcase(); err != nil {
 		return err
 	}
