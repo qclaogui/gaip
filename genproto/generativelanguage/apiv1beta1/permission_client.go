@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io"
+	"log/slog"
 	"math"
 	"net/http"
 	"net/url"
@@ -29,7 +29,6 @@ import (
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	gax "github.com/googleapis/gax-go/v2"
 	generativelanguagepb "github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta1/generativelanguagepb"
-	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
@@ -310,6 +309,8 @@ type permissionGRPCClient struct {
 
 	// The x-goog-* metadata to be sent with each request.
 	xGoogHeaders []string
+
+	logger *slog.Logger
 }
 
 // NewPermissionClient creates a new permission service client based on gRPC.
@@ -336,6 +337,7 @@ func NewPermissionClient(ctx context.Context, opts ...option.ClientOption) (*Per
 		connPool:         connPool,
 		permissionClient: generativelanguagepb.NewPermissionServiceClient(connPool),
 		CallOptions:      &client.CallOptions,
+		logger:           internaloption.GetLogger(opts),
 		operationsClient: longrunningpb.NewOperationsClient(connPool),
 	}
 	c.setGoogleClientInfo()
@@ -383,6 +385,8 @@ type permissionRESTClient struct {
 
 	// Points back to the CallOptions field of the containing PermissionClient
 	CallOptions **PermissionCallOptions
+
+	logger *slog.Logger
 }
 
 // NewPermissionRESTClient creates a new permission service rest client.
@@ -400,6 +404,7 @@ func NewPermissionRESTClient(ctx context.Context, opts ...option.ClientOption) (
 		endpoint:    endpoint,
 		httpClient:  httpClient,
 		CallOptions: &callOpts,
+		logger:      internaloption.GetLogger(opts),
 	}
 	c.setGoogleClientInfo()
 
@@ -453,7 +458,7 @@ func (c *permissionGRPCClient) CreatePermission(ctx context.Context, req *genera
 	var resp *generativelanguagepb.Permission
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.permissionClient.CreatePermission(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.permissionClient.CreatePermission, req, settings.GRPC, c.logger, "CreatePermission")
 		return err
 	}, opts...)
 	if err != nil {
@@ -471,7 +476,7 @@ func (c *permissionGRPCClient) GetPermission(ctx context.Context, req *generativ
 	var resp *generativelanguagepb.Permission
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.permissionClient.GetPermission(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.permissionClient.GetPermission, req, settings.GRPC, c.logger, "GetPermission")
 		return err
 	}, opts...)
 	if err != nil {
@@ -500,7 +505,7 @@ func (c *permissionGRPCClient) ListPermissions(ctx context.Context, req *generat
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = c.permissionClient.ListPermissions(ctx, req, settings.GRPC...)
+			resp, err = executeRPC(ctx, c.permissionClient.ListPermissions, req, settings.GRPC, c.logger, "ListPermissions")
 			return err
 		}, opts...)
 		if err != nil {
@@ -535,7 +540,7 @@ func (c *permissionGRPCClient) UpdatePermission(ctx context.Context, req *genera
 	var resp *generativelanguagepb.Permission
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.permissionClient.UpdatePermission(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.permissionClient.UpdatePermission, req, settings.GRPC, c.logger, "UpdatePermission")
 		return err
 	}, opts...)
 	if err != nil {
@@ -552,7 +557,7 @@ func (c *permissionGRPCClient) DeletePermission(ctx context.Context, req *genera
 	opts = append((*c.CallOptions).DeletePermission[0:len((*c.CallOptions).DeletePermission):len((*c.CallOptions).DeletePermission)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		_, err = c.permissionClient.DeletePermission(ctx, req, settings.GRPC...)
+		_, err = executeRPC(ctx, c.permissionClient.DeletePermission, req, settings.GRPC, c.logger, "DeletePermission")
 		return err
 	}, opts...)
 	return err
@@ -567,7 +572,7 @@ func (c *permissionGRPCClient) TransferOwnership(ctx context.Context, req *gener
 	var resp *generativelanguagepb.TransferOwnershipResponse
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.permissionClient.TransferOwnership(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.permissionClient.TransferOwnership, req, settings.GRPC, c.logger, "TransferOwnership")
 		return err
 	}, opts...)
 	if err != nil {
@@ -585,7 +590,7 @@ func (c *permissionGRPCClient) GetOperation(ctx context.Context, req *longrunnin
 	var resp *longrunningpb.Operation
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.operationsClient.GetOperation(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.operationsClient.GetOperation, req, settings.GRPC, c.logger, "GetOperation")
 		return err
 	}, opts...)
 	if err != nil {
@@ -614,7 +619,7 @@ func (c *permissionGRPCClient) ListOperations(ctx context.Context, req *longrunn
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = c.operationsClient.ListOperations(ctx, req, settings.GRPC...)
+			resp, err = executeRPC(ctx, c.operationsClient.ListOperations, req, settings.GRPC, c.logger, "ListOperations")
 			return err
 		}, opts...)
 		if err != nil {
@@ -675,17 +680,7 @@ func (c *permissionRESTClient) CreatePermission(ctx context.Context, req *genera
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "CreatePermission")
 		if err != nil {
 			return err
 		}
@@ -730,17 +725,7 @@ func (c *permissionRESTClient) GetPermission(ctx context.Context, req *generativ
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetPermission")
 		if err != nil {
 			return err
 		}
@@ -801,21 +786,10 @@ func (c *permissionRESTClient) ListPermissions(ctx context.Context, req *generat
 			}
 			httpReq.Header = headers
 
-			httpRsp, err := c.httpClient.Do(httpReq)
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListPermissions")
 			if err != nil {
 				return err
 			}
-			defer httpRsp.Body.Close()
-
-			if err = googleapi.CheckResponse(httpRsp); err != nil {
-				return err
-			}
-
-			buf, err := io.ReadAll(httpRsp.Body)
-			if err != nil {
-				return err
-			}
-
 			if err := unm.Unmarshal(buf, resp); err != nil {
 				return err
 			}
@@ -891,17 +865,7 @@ func (c *permissionRESTClient) UpdatePermission(ctx context.Context, req *genera
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "UpdatePermission")
 		if err != nil {
 			return err
 		}
@@ -943,15 +907,8 @@ func (c *permissionRESTClient) DeletePermission(ctx context.Context, req *genera
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		// Returns nil if there is no error, otherwise wraps
-		// the response code and body into a non-nil error
-		return googleapi.CheckResponse(httpRsp)
+		_, err = executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "DeletePermission")
+		return err
 	}, opts...)
 }
 
@@ -991,17 +948,7 @@ func (c *permissionRESTClient) TransferOwnership(ctx context.Context, req *gener
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "TransferOwnership")
 		if err != nil {
 			return err
 		}
@@ -1046,17 +993,7 @@ func (c *permissionRESTClient) GetOperation(ctx context.Context, req *longrunnin
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetOperation")
 		if err != nil {
 			return err
 		}
@@ -1120,21 +1057,10 @@ func (c *permissionRESTClient) ListOperations(ctx context.Context, req *longrunn
 			}
 			httpReq.Header = headers
 
-			httpRsp, err := c.httpClient.Do(httpReq)
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListOperations")
 			if err != nil {
 				return err
 			}
-			defer httpRsp.Body.Close()
-
-			if err = googleapi.CheckResponse(httpRsp); err != nil {
-				return err
-			}
-
-			buf, err := io.ReadAll(httpRsp.Body)
-			if err != nil {
-				return err
-			}
-
 			if err := unm.Unmarshal(buf, resp); err != nil {
 				return err
 			}

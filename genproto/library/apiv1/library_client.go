@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io"
+	"log/slog"
 	"math"
 	"net/http"
 	"net/url"
@@ -28,7 +28,6 @@ import (
 
 	gax "github.com/googleapis/gax-go/v2"
 	librarypb "github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
-	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
@@ -451,6 +450,8 @@ type gRPCClient struct {
 
 	// The x-goog-* metadata to be sent with each request.
 	xGoogHeaders []string
+
+	logger *slog.Logger
 }
 
 // NewClient creates a new library service client based on gRPC.
@@ -485,6 +486,7 @@ func NewClient(ctx context.Context, opts ...option.ClientOption) (*Client, error
 		connPool:    connPool,
 		client:      librarypb.NewLibraryServiceClient(connPool),
 		CallOptions: &client.CallOptions,
+		logger:      internaloption.GetLogger(opts),
 	}
 	c.setGoogleClientInfo()
 
@@ -531,6 +533,8 @@ type restClient struct {
 
 	// Points back to the CallOptions field of the containing Client
 	CallOptions **CallOptions
+
+	logger *slog.Logger
 }
 
 // NewRESTClient creates a new library service rest client.
@@ -556,6 +560,7 @@ func NewRESTClient(ctx context.Context, opts ...option.ClientOption) (*Client, e
 		endpoint:    endpoint,
 		httpClient:  httpClient,
 		CallOptions: &callOpts,
+		logger:      internaloption.GetLogger(opts),
 	}
 	c.setGoogleClientInfo()
 
@@ -606,7 +611,7 @@ func (c *gRPCClient) CreateShelf(ctx context.Context, req *librarypb.CreateShelf
 	var resp *librarypb.Shelf
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.CreateShelf(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.client.CreateShelf, req, settings.GRPC, c.logger, "CreateShelf")
 		return err
 	}, opts...)
 	if err != nil {
@@ -624,7 +629,7 @@ func (c *gRPCClient) GetShelf(ctx context.Context, req *librarypb.GetShelfReques
 	var resp *librarypb.Shelf
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.GetShelf(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.client.GetShelf, req, settings.GRPC, c.logger, "GetShelf")
 		return err
 	}, opts...)
 	if err != nil {
@@ -650,7 +655,7 @@ func (c *gRPCClient) ListShelves(ctx context.Context, req *librarypb.ListShelves
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = c.client.ListShelves(ctx, req, settings.GRPC...)
+			resp, err = executeRPC(ctx, c.client.ListShelves, req, settings.GRPC, c.logger, "ListShelves")
 			return err
 		}, opts...)
 		if err != nil {
@@ -684,7 +689,7 @@ func (c *gRPCClient) DeleteShelf(ctx context.Context, req *librarypb.DeleteShelf
 	opts = append((*c.CallOptions).DeleteShelf[0:len((*c.CallOptions).DeleteShelf):len((*c.CallOptions).DeleteShelf)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		_, err = c.client.DeleteShelf(ctx, req, settings.GRPC...)
+		_, err = executeRPC(ctx, c.client.DeleteShelf, req, settings.GRPC, c.logger, "DeleteShelf")
 		return err
 	}, opts...)
 	return err
@@ -699,7 +704,7 @@ func (c *gRPCClient) MergeShelves(ctx context.Context, req *librarypb.MergeShelv
 	var resp *librarypb.Shelf
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.MergeShelves(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.client.MergeShelves, req, settings.GRPC, c.logger, "MergeShelves")
 		return err
 	}, opts...)
 	if err != nil {
@@ -717,7 +722,7 @@ func (c *gRPCClient) CreateBook(ctx context.Context, req *librarypb.CreateBookRe
 	var resp *librarypb.Book
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.CreateBook(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.client.CreateBook, req, settings.GRPC, c.logger, "CreateBook")
 		return err
 	}, opts...)
 	if err != nil {
@@ -735,7 +740,7 @@ func (c *gRPCClient) GetBook(ctx context.Context, req *librarypb.GetBookRequest,
 	var resp *librarypb.Book
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.GetBook(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.client.GetBook, req, settings.GRPC, c.logger, "GetBook")
 		return err
 	}, opts...)
 	if err != nil {
@@ -764,7 +769,7 @@ func (c *gRPCClient) ListBooks(ctx context.Context, req *librarypb.ListBooksRequ
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = c.client.ListBooks(ctx, req, settings.GRPC...)
+			resp, err = executeRPC(ctx, c.client.ListBooks, req, settings.GRPC, c.logger, "ListBooks")
 			return err
 		}, opts...)
 		if err != nil {
@@ -798,7 +803,7 @@ func (c *gRPCClient) DeleteBook(ctx context.Context, req *librarypb.DeleteBookRe
 	opts = append((*c.CallOptions).DeleteBook[0:len((*c.CallOptions).DeleteBook):len((*c.CallOptions).DeleteBook)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		_, err = c.client.DeleteBook(ctx, req, settings.GRPC...)
+		_, err = executeRPC(ctx, c.client.DeleteBook, req, settings.GRPC, c.logger, "DeleteBook")
 		return err
 	}, opts...)
 	return err
@@ -813,7 +818,7 @@ func (c *gRPCClient) UpdateBook(ctx context.Context, req *librarypb.UpdateBookRe
 	var resp *librarypb.Book
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.UpdateBook(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.client.UpdateBook, req, settings.GRPC, c.logger, "UpdateBook")
 		return err
 	}, opts...)
 	if err != nil {
@@ -831,7 +836,7 @@ func (c *gRPCClient) MoveBook(ctx context.Context, req *librarypb.MoveBookReques
 	var resp *librarypb.Book
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.client.MoveBook(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.client.MoveBook, req, settings.GRPC, c.logger, "MoveBook")
 		return err
 	}, opts...)
 	if err != nil {
@@ -872,17 +877,7 @@ func (c *restClient) CreateShelf(ctx context.Context, req *librarypb.CreateShelf
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "CreateShelf")
 		if err != nil {
 			return err
 		}
@@ -927,17 +922,7 @@ func (c *restClient) GetShelf(ctx context.Context, req *librarypb.GetShelfReques
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetShelf")
 		if err != nil {
 			return err
 		}
@@ -999,21 +984,10 @@ func (c *restClient) ListShelves(ctx context.Context, req *librarypb.ListShelves
 			}
 			httpReq.Header = headers
 
-			httpRsp, err := c.httpClient.Do(httpReq)
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListShelves")
 			if err != nil {
 				return err
 			}
-			defer httpRsp.Body.Close()
-
-			if err = googleapi.CheckResponse(httpRsp); err != nil {
-				return err
-			}
-
-			buf, err := io.ReadAll(httpRsp.Body)
-			if err != nil {
-				return err
-			}
-
 			if err := unm.Unmarshal(buf, resp); err != nil {
 				return err
 			}
@@ -1068,15 +1042,8 @@ func (c *restClient) DeleteShelf(ctx context.Context, req *librarypb.DeleteShelf
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		// Returns nil if there is no error, otherwise wraps
-		// the response code and body into a non-nil error
-		return googleapi.CheckResponse(httpRsp)
+		_, err = executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "DeleteShelf")
+		return err
 	}, opts...)
 }
 
@@ -1120,17 +1087,7 @@ func (c *restClient) MergeShelves(ctx context.Context, req *librarypb.MergeShelv
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "MergeShelves")
 		if err != nil {
 			return err
 		}
@@ -1182,17 +1139,7 @@ func (c *restClient) CreateBook(ctx context.Context, req *librarypb.CreateBookRe
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "CreateBook")
 		if err != nil {
 			return err
 		}
@@ -1237,17 +1184,7 @@ func (c *restClient) GetBook(ctx context.Context, req *librarypb.GetBookRequest,
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetBook")
 		if err != nil {
 			return err
 		}
@@ -1313,21 +1250,10 @@ func (c *restClient) ListBooks(ctx context.Context, req *librarypb.ListBooksRequ
 			}
 			httpReq.Header = headers
 
-			httpRsp, err := c.httpClient.Do(httpReq)
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListBooks")
 			if err != nil {
 				return err
 			}
-			defer httpRsp.Body.Close()
-
-			if err = googleapi.CheckResponse(httpRsp); err != nil {
-				return err
-			}
-
-			buf, err := io.ReadAll(httpRsp.Body)
-			if err != nil {
-				return err
-			}
-
 			if err := unm.Unmarshal(buf, resp); err != nil {
 				return err
 			}
@@ -1382,15 +1308,8 @@ func (c *restClient) DeleteBook(ctx context.Context, req *librarypb.DeleteBookRe
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		// Returns nil if there is no error, otherwise wraps
-		// the response code and body into a non-nil error
-		return googleapi.CheckResponse(httpRsp)
+		_, err = executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "DeleteBook")
+		return err
 	}, opts...)
 }
 
@@ -1429,17 +1348,7 @@ func (c *restClient) UpdateBook(ctx context.Context, req *librarypb.UpdateBookRe
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "UpdateBook")
 		if err != nil {
 			return err
 		}
@@ -1491,17 +1400,7 @@ func (c *restClient) MoveBook(ctx context.Context, req *librarypb.MoveBookReques
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "MoveBook")
 		if err != nil {
 			return err
 		}

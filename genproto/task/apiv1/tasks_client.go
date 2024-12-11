@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io"
+	"log/slog"
 	"math"
 	"net/http"
 	"net/url"
@@ -28,7 +28,6 @@ import (
 
 	gax "github.com/googleapis/gax-go/v2"
 	taskpb "github.com/qclaogui/gaip/genproto/task/apiv1/taskpb"
-	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
@@ -305,6 +304,8 @@ type tasksGRPCClient struct {
 
 	// The x-goog-* metadata to be sent with each request.
 	xGoogHeaders []string
+
+	logger *slog.Logger
 }
 
 // NewTasksClient creates a new tasks service client based on gRPC.
@@ -331,6 +332,7 @@ func NewTasksClient(ctx context.Context, opts ...option.ClientOption) (*TasksCli
 		connPool:    connPool,
 		tasksClient: taskpb.NewTasksServiceClient(connPool),
 		CallOptions: &client.CallOptions,
+		logger:      internaloption.GetLogger(opts),
 	}
 	c.setGoogleClientInfo()
 
@@ -378,6 +380,8 @@ type tasksRESTClient struct {
 
 	// Points back to the CallOptions field of the containing TasksClient
 	CallOptions **TasksCallOptions
+
+	logger *slog.Logger
 }
 
 // NewTasksRESTClient creates a new tasks service rest client.
@@ -395,6 +399,7 @@ func NewTasksRESTClient(ctx context.Context, opts ...option.ClientOption) (*Task
 		endpoint:    endpoint,
 		httpClient:  httpClient,
 		CallOptions: &callOpts,
+		logger:      internaloption.GetLogger(opts),
 	}
 	c.setGoogleClientInfo()
 
@@ -446,7 +451,7 @@ func (c *tasksGRPCClient) CreateTask(ctx context.Context, req *taskpb.CreateTask
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksClient.CreateTask(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.tasksClient.CreateTask, req, settings.GRPC, c.logger, "CreateTask")
 		return err
 	}, opts...)
 	if err != nil {
@@ -464,7 +469,7 @@ func (c *tasksGRPCClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTask
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksClient.DeleteTask(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.tasksClient.DeleteTask, req, settings.GRPC, c.logger, "DeleteTask")
 		return err
 	}, opts...)
 	if err != nil {
@@ -479,7 +484,7 @@ func (c *tasksGRPCClient) UndeleteTask(ctx context.Context, req *taskpb.Undelete
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksClient.UndeleteTask(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.tasksClient.UndeleteTask, req, settings.GRPC, c.logger, "UndeleteTask")
 		return err
 	}, opts...)
 	if err != nil {
@@ -497,7 +502,7 @@ func (c *tasksGRPCClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTask
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksClient.UpdateTask(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.tasksClient.UpdateTask, req, settings.GRPC, c.logger, "UpdateTask")
 		return err
 	}, opts...)
 	if err != nil {
@@ -515,7 +520,7 @@ func (c *tasksGRPCClient) GetTask(ctx context.Context, req *taskpb.GetTaskReques
 	var resp *taskpb.Task
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.tasksClient.GetTask(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.tasksClient.GetTask, req, settings.GRPC, c.logger, "GetTask")
 		return err
 	}, opts...)
 	if err != nil {
@@ -541,7 +546,7 @@ func (c *tasksGRPCClient) ListTasks(ctx context.Context, req *taskpb.ListTasksRe
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = c.tasksClient.ListTasks(ctx, req, settings.GRPC...)
+			resp, err = executeRPC(ctx, c.tasksClient.ListTasks, req, settings.GRPC, c.logger, "ListTasks")
 			return err
 		}, opts...)
 		if err != nil {
@@ -599,17 +604,7 @@ func (c *tasksRESTClient) CreateTask(ctx context.Context, req *taskpb.CreateTask
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "CreateTask")
 		if err != nil {
 			return err
 		}
@@ -653,17 +648,7 @@ func (c *tasksRESTClient) DeleteTask(ctx context.Context, req *taskpb.DeleteTask
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "DeleteTask")
 		if err != nil {
 			return err
 		}
@@ -710,17 +695,7 @@ func (c *tasksRESTClient) UndeleteTask(ctx context.Context, req *taskpb.Undelete
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "UndeleteTask")
 		if err != nil {
 			return err
 		}
@@ -782,17 +757,7 @@ func (c *tasksRESTClient) UpdateTask(ctx context.Context, req *taskpb.UpdateTask
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "UpdateTask")
 		if err != nil {
 			return err
 		}
@@ -837,17 +802,7 @@ func (c *tasksRESTClient) GetTask(ctx context.Context, req *taskpb.GetTaskReques
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetTask")
 		if err != nil {
 			return err
 		}
@@ -908,21 +863,10 @@ func (c *tasksRESTClient) ListTasks(ctx context.Context, req *taskpb.ListTasksRe
 			}
 			httpReq.Header = headers
 
-			httpRsp, err := c.httpClient.Do(httpReq)
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListTasks")
 			if err != nil {
 				return err
 			}
-			defer httpRsp.Body.Close()
-
-			if err = googleapi.CheckResponse(httpRsp); err != nil {
-				return err
-			}
-
-			buf, err := io.ReadAll(httpRsp.Body)
-			if err != nil {
-				return err
-			}
-
 			if err := unm.Unmarshal(buf, resp); err != nil {
 				return err
 			}

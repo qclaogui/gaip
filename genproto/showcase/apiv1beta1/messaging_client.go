@@ -21,7 +21,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
+	"log/slog"
 	"math"
 	"net/http"
 	"net/url"
@@ -32,7 +32,6 @@ import (
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	gax "github.com/googleapis/gax-go/v2"
 	showcasepb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
-	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/api/option/internaloption"
@@ -419,6 +418,8 @@ type messagingGRPCClient struct {
 
 	// The x-goog-* metadata to be sent with each request.
 	xGoogHeaders []string
+
+	logger *slog.Logger
 }
 
 // NewMessagingClient creates a new messaging service client based on gRPC.
@@ -448,6 +449,7 @@ func NewMessagingClient(ctx context.Context, opts ...option.ClientOption) (*Mess
 		connPool:         connPool,
 		messagingClient:  showcasepb.NewMessagingServiceClient(connPool),
 		CallOptions:      &client.CallOptions,
+		logger:           internaloption.GetLogger(opts),
 		operationsClient: longrunningpb.NewOperationsClient(connPool),
 	}
 	c.setGoogleClientInfo()
@@ -511,6 +513,8 @@ type messagingRESTClient struct {
 
 	// Points back to the CallOptions field of the containing MessagingClient
 	CallOptions **MessagingCallOptions
+
+	logger *slog.Logger
 }
 
 // NewMessagingRESTClient creates a new messaging service rest client.
@@ -531,6 +535,7 @@ func NewMessagingRESTClient(ctx context.Context, opts ...option.ClientOption) (*
 		endpoint:    endpoint,
 		httpClient:  httpClient,
 		CallOptions: &callOpts,
+		logger:      internaloption.GetLogger(opts),
 	}
 	c.setGoogleClientInfo()
 
@@ -591,7 +596,7 @@ func (c *messagingGRPCClient) CreateRoom(ctx context.Context, req *showcasepb.Cr
 	var resp *showcasepb.Room
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.messagingClient.CreateRoom(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.messagingClient.CreateRoom, req, settings.GRPC, c.logger, "CreateRoom")
 		return err
 	}, opts...)
 	if err != nil {
@@ -609,7 +614,7 @@ func (c *messagingGRPCClient) GetRoom(ctx context.Context, req *showcasepb.GetRo
 	var resp *showcasepb.Room
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.messagingClient.GetRoom(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.messagingClient.GetRoom, req, settings.GRPC, c.logger, "GetRoom")
 		return err
 	}, opts...)
 	if err != nil {
@@ -627,7 +632,7 @@ func (c *messagingGRPCClient) UpdateRoom(ctx context.Context, req *showcasepb.Up
 	var resp *showcasepb.Room
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.messagingClient.UpdateRoom(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.messagingClient.UpdateRoom, req, settings.GRPC, c.logger, "UpdateRoom")
 		return err
 	}, opts...)
 	if err != nil {
@@ -644,7 +649,7 @@ func (c *messagingGRPCClient) DeleteRoom(ctx context.Context, req *showcasepb.De
 	opts = append((*c.CallOptions).DeleteRoom[0:len((*c.CallOptions).DeleteRoom):len((*c.CallOptions).DeleteRoom)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		_, err = c.messagingClient.DeleteRoom(ctx, req, settings.GRPC...)
+		_, err = executeRPC(ctx, c.messagingClient.DeleteRoom, req, settings.GRPC, c.logger, "DeleteRoom")
 		return err
 	}, opts...)
 	return err
@@ -667,7 +672,7 @@ func (c *messagingGRPCClient) ListRooms(ctx context.Context, req *showcasepb.Lis
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = c.messagingClient.ListRooms(ctx, req, settings.GRPC...)
+			resp, err = executeRPC(ctx, c.messagingClient.ListRooms, req, settings.GRPC, c.logger, "ListRooms")
 			return err
 		}, opts...)
 		if err != nil {
@@ -702,7 +707,7 @@ func (c *messagingGRPCClient) CreateBlurb(ctx context.Context, req *showcasepb.C
 	var resp *showcasepb.Blurb
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.messagingClient.CreateBlurb(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.messagingClient.CreateBlurb, req, settings.GRPC, c.logger, "CreateBlurb")
 		return err
 	}, opts...)
 	if err != nil {
@@ -720,7 +725,7 @@ func (c *messagingGRPCClient) GetBlurb(ctx context.Context, req *showcasepb.GetB
 	var resp *showcasepb.Blurb
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.messagingClient.GetBlurb(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.messagingClient.GetBlurb, req, settings.GRPC, c.logger, "GetBlurb")
 		return err
 	}, opts...)
 	if err != nil {
@@ -738,7 +743,7 @@ func (c *messagingGRPCClient) UpdateBlurb(ctx context.Context, req *showcasepb.U
 	var resp *showcasepb.Blurb
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.messagingClient.UpdateBlurb(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.messagingClient.UpdateBlurb, req, settings.GRPC, c.logger, "UpdateBlurb")
 		return err
 	}, opts...)
 	if err != nil {
@@ -755,7 +760,7 @@ func (c *messagingGRPCClient) DeleteBlurb(ctx context.Context, req *showcasepb.D
 	opts = append((*c.CallOptions).DeleteBlurb[0:len((*c.CallOptions).DeleteBlurb):len((*c.CallOptions).DeleteBlurb)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		_, err = c.messagingClient.DeleteBlurb(ctx, req, settings.GRPC...)
+		_, err = executeRPC(ctx, c.messagingClient.DeleteBlurb, req, settings.GRPC, c.logger, "DeleteBlurb")
 		return err
 	}, opts...)
 	return err
@@ -781,7 +786,7 @@ func (c *messagingGRPCClient) ListBlurbs(ctx context.Context, req *showcasepb.Li
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = c.messagingClient.ListBlurbs(ctx, req, settings.GRPC...)
+			resp, err = executeRPC(ctx, c.messagingClient.ListBlurbs, req, settings.GRPC, c.logger, "ListBlurbs")
 			return err
 		}, opts...)
 		if err != nil {
@@ -816,7 +821,7 @@ func (c *messagingGRPCClient) SearchBlurbs(ctx context.Context, req *showcasepb.
 	var resp *longrunningpb.Operation
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.messagingClient.SearchBlurbs(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.messagingClient.SearchBlurbs, req, settings.GRPC, c.logger, "SearchBlurbs")
 		return err
 	}, opts...)
 	if err != nil {
@@ -836,7 +841,9 @@ func (c *messagingGRPCClient) StreamBlurbs(ctx context.Context, req *showcasepb.
 	var resp showcasepb.MessagingService_StreamBlurbsClient
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
+		c.logger.DebugContext(ctx, "api streaming client request", "serviceName", serviceName, "rpcName", "StreamBlurbs")
 		resp, err = c.messagingClient.StreamBlurbs(ctx, req, settings.GRPC...)
+		c.logger.DebugContext(ctx, "api streaming client response", "serviceName", serviceName, "rpcName", "StreamBlurbs")
 		return err
 	}, opts...)
 	if err != nil {
@@ -851,7 +858,9 @@ func (c *messagingGRPCClient) SendBlurbs(ctx context.Context, opts ...gax.CallOp
 	opts = append((*c.CallOptions).SendBlurbs[0:len((*c.CallOptions).SendBlurbs):len((*c.CallOptions).SendBlurbs)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
+		c.logger.DebugContext(ctx, "api streaming client request", "serviceName", serviceName, "rpcName", "SendBlurbs")
 		resp, err = c.messagingClient.SendBlurbs(ctx, settings.GRPC...)
+		c.logger.DebugContext(ctx, "api streaming client response", "serviceName", serviceName, "rpcName", "SendBlurbs")
 		return err
 	}, opts...)
 	if err != nil {
@@ -866,7 +875,9 @@ func (c *messagingGRPCClient) Connect(ctx context.Context, opts ...gax.CallOptio
 	opts = append((*c.CallOptions).Connect[0:len((*c.CallOptions).Connect):len((*c.CallOptions).Connect)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
+		c.logger.DebugContext(ctx, "api streaming client request", "serviceName", serviceName, "rpcName", "Connect")
 		resp, err = c.messagingClient.Connect(ctx, settings.GRPC...)
+		c.logger.DebugContext(ctx, "api streaming client response", "serviceName", serviceName, "rpcName", "Connect")
 		return err
 	}, opts...)
 	if err != nil {
@@ -892,7 +903,7 @@ func (c *messagingGRPCClient) ListOperations(ctx context.Context, req *longrunni
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = c.operationsClient.ListOperations(ctx, req, settings.GRPC...)
+			resp, err = executeRPC(ctx, c.operationsClient.ListOperations, req, settings.GRPC, c.logger, "ListOperations")
 			return err
 		}, opts...)
 		if err != nil {
@@ -927,7 +938,7 @@ func (c *messagingGRPCClient) GetOperation(ctx context.Context, req *longrunning
 	var resp *longrunningpb.Operation
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = c.operationsClient.GetOperation(ctx, req, settings.GRPC...)
+		resp, err = executeRPC(ctx, c.operationsClient.GetOperation, req, settings.GRPC, c.logger, "GetOperation")
 		return err
 	}, opts...)
 	if err != nil {
@@ -944,7 +955,7 @@ func (c *messagingGRPCClient) DeleteOperation(ctx context.Context, req *longrunn
 	opts = append((*c.CallOptions).DeleteOperation[0:len((*c.CallOptions).DeleteOperation):len((*c.CallOptions).DeleteOperation)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		_, err = c.operationsClient.DeleteOperation(ctx, req, settings.GRPC...)
+		_, err = executeRPC(ctx, c.operationsClient.DeleteOperation, req, settings.GRPC, c.logger, "DeleteOperation")
 		return err
 	}, opts...)
 	return err
@@ -958,7 +969,7 @@ func (c *messagingGRPCClient) CancelOperation(ctx context.Context, req *longrunn
 	opts = append((*c.CallOptions).CancelOperation[0:len((*c.CallOptions).CancelOperation):len((*c.CallOptions).CancelOperation)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		_, err = c.operationsClient.CancelOperation(ctx, req, settings.GRPC...)
+		_, err = executeRPC(ctx, c.operationsClient.CancelOperation, req, settings.GRPC, c.logger, "CancelOperation")
 		return err
 	}, opts...)
 	return err
@@ -995,17 +1006,7 @@ func (c *messagingRESTClient) CreateRoom(ctx context.Context, req *showcasepb.Cr
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "CreateRoom")
 		if err != nil {
 			return err
 		}
@@ -1050,17 +1051,7 @@ func (c *messagingRESTClient) GetRoom(ctx context.Context, req *showcasepb.GetRo
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetRoom")
 		if err != nil {
 			return err
 		}
@@ -1123,17 +1114,7 @@ func (c *messagingRESTClient) UpdateRoom(ctx context.Context, req *showcasepb.Up
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "UpdateRoom")
 		if err != nil {
 			return err
 		}
@@ -1175,15 +1156,8 @@ func (c *messagingRESTClient) DeleteRoom(ctx context.Context, req *showcasepb.De
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		// Returns nil if there is no error, otherwise wraps
-		// the response code and body into a non-nil error
-		return googleapi.CheckResponse(httpRsp)
+		_, err = executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "DeleteRoom")
+		return err
 	}, opts...)
 }
 
@@ -1231,21 +1205,10 @@ func (c *messagingRESTClient) ListRooms(ctx context.Context, req *showcasepb.Lis
 			}
 			httpReq.Header = headers
 
-			httpRsp, err := c.httpClient.Do(httpReq)
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListRooms")
 			if err != nil {
 				return err
 			}
-			defer httpRsp.Body.Close()
-
-			if err = googleapi.CheckResponse(httpRsp); err != nil {
-				return err
-			}
-
-			buf, err := io.ReadAll(httpRsp.Body)
-			if err != nil {
-				return err
-			}
-
 			if err := unm.Unmarshal(buf, resp); err != nil {
 				return err
 			}
@@ -1311,17 +1274,7 @@ func (c *messagingRESTClient) CreateBlurb(ctx context.Context, req *showcasepb.C
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "CreateBlurb")
 		if err != nil {
 			return err
 		}
@@ -1366,17 +1319,7 @@ func (c *messagingRESTClient) GetBlurb(ctx context.Context, req *showcasepb.GetB
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetBlurb")
 		if err != nil {
 			return err
 		}
@@ -1439,17 +1382,7 @@ func (c *messagingRESTClient) UpdateBlurb(ctx context.Context, req *showcasepb.U
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "UpdateBlurb")
 		if err != nil {
 			return err
 		}
@@ -1491,15 +1424,8 @@ func (c *messagingRESTClient) DeleteBlurb(ctx context.Context, req *showcasepb.D
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		// Returns nil if there is no error, otherwise wraps
-		// the response code and body into a non-nil error
-		return googleapi.CheckResponse(httpRsp)
+		_, err = executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "DeleteBlurb")
+		return err
 	}, opts...)
 }
 
@@ -1548,21 +1474,10 @@ func (c *messagingRESTClient) ListBlurbs(ctx context.Context, req *showcasepb.Li
 			}
 			httpReq.Header = headers
 
-			httpRsp, err := c.httpClient.Do(httpReq)
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListBlurbs")
 			if err != nil {
 				return err
 			}
-			defer httpRsp.Body.Close()
-
-			if err = googleapi.CheckResponse(httpRsp); err != nil {
-				return err
-			}
-
-			buf, err := io.ReadAll(httpRsp.Body)
-			if err != nil {
-				return err
-			}
-
 			if err := unm.Unmarshal(buf, resp); err != nil {
 				return err
 			}
@@ -1627,21 +1542,10 @@ func (c *messagingRESTClient) SearchBlurbs(ctx context.Context, req *showcasepb.
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "SearchBlurbs")
 		if err != nil {
 			return err
 		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
-		if err != nil {
-			return err
-		}
-
 		if err := unm.Unmarshal(buf, resp); err != nil {
 			return err
 		}
@@ -1692,12 +1596,8 @@ func (c *messagingRESTClient) StreamBlurbs(ctx context.Context, req *showcasepb.
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
+		httpRsp, err := executeStreamingHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "StreamBlurbs")
 		if err != nil {
-			return err
-		}
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
 			return err
 		}
 
@@ -1829,21 +1729,10 @@ func (c *messagingRESTClient) ListOperations(ctx context.Context, req *longrunni
 			}
 			httpReq.Header = headers
 
-			httpRsp, err := c.httpClient.Do(httpReq)
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListOperations")
 			if err != nil {
 				return err
 			}
-			defer httpRsp.Body.Close()
-
-			if err = googleapi.CheckResponse(httpRsp); err != nil {
-				return err
-			}
-
-			buf, err := io.ReadAll(httpRsp.Body)
-			if err != nil {
-				return err
-			}
-
 			if err := unm.Unmarshal(buf, resp); err != nil {
 				return err
 			}
@@ -1901,17 +1790,7 @@ func (c *messagingRESTClient) GetOperation(ctx context.Context, req *longrunning
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		if err = googleapi.CheckResponse(httpRsp); err != nil {
-			return err
-		}
-
-		buf, err := io.ReadAll(httpRsp.Body)
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetOperation")
 		if err != nil {
 			return err
 		}
@@ -1953,15 +1832,8 @@ func (c *messagingRESTClient) DeleteOperation(ctx context.Context, req *longrunn
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		// Returns nil if there is no error, otherwise wraps
-		// the response code and body into a non-nil error
-		return googleapi.CheckResponse(httpRsp)
+		_, err = executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "DeleteOperation")
+		return err
 	}, opts...)
 }
 
@@ -1990,15 +1862,8 @@ func (c *messagingRESTClient) CancelOperation(ctx context.Context, req *longrunn
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		httpRsp, err := c.httpClient.Do(httpReq)
-		if err != nil {
-			return err
-		}
-		defer httpRsp.Body.Close()
-
-		// Returns nil if there is no error, otherwise wraps
-		// the response code and body into a non-nil error
-		return googleapi.CheckResponse(httpRsp)
+		_, err = executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "CancelOperation")
+		return err
 	}, opts...)
 }
 
