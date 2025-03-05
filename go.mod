@@ -1,8 +1,6 @@
 module github.com/qclaogui/gaip
 
-go 1.23.0
-
-toolchain go1.23.2
+go 1.24
 
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.35.2-20241127180247-a33202765966.1
