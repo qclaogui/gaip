@@ -4,4 +4,4 @@ go 1.22.0
 
 toolchain go1.23.2
 
-require golang.org/x/tools v0.28.0 // cmd/goimports
+require golang.org/x/tools v0.30.0 // cmd/goimports
