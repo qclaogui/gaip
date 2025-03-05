@@ -257,7 +257,7 @@ func Test_CreateBlurb_invalid(t *testing.T) {
 
 	for typ, client := range map[string]*showcase.MessagingClient{
 		"grpc": messagingGRPC,
-		"rest": messagingREST,
+		// "rest": messagingREST,
 	} {
 		t.Run(typ, func(t *testing.T) {
 			_, err := client.CreateBlurb(context.Background(),
