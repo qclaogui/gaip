@@ -39,7 +39,7 @@ require (
 	go.opentelemetry.io/otel v1.34.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.32.0
 	go.opentelemetry.io/otel/sdk v1.34.0
-	golang.org/x/net v0.35.0
+	golang.org/x/net v0.36.0
 	google.golang.org/api v0.223.0
 	google.golang.org/genproto v0.0.0-20241206012308-a4fef0638583
 	google.golang.org/genproto/googleapis/api v0.0.0-20241209162323-e6fa225c2576
@@ -120,7 +120,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.34.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
 	golang.org/x/exp v0.0.0-20241204233417-43b7b7cde48d // indirect
 	golang.org/x/mod v0.22.0 // indirect
 	golang.org/x/oauth2 v0.26.0 // indirect
