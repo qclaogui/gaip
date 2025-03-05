@@ -12,7 +12,7 @@ require (
 	github.com/felixge/fgprof v0.9.5
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-kit/log v0.2.1
-	github.com/go-sql-driver/mysql v1.8.1
+	github.com/go-sql-driver/mysql v1.9.0
 	github.com/golang/protobuf v1.5.4
 	github.com/google/generative-ai-go v0.19.0
 	github.com/google/go-cmp v0.7.0
