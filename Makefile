@@ -2,8 +2,8 @@ include .bingo/Variables.mk
 
 .DEFAULT_GOAL := help
 
-SWAGGER_UI_VERSION	:=v5.20.0
-PROTOC_VERSION		:=30.0
+SWAGGER_UI_VERSION	:=v5.20.1
+PROTOC_VERSION		:=30.1
 
 # Download the proper protoc version for Darwin (osx) and Linux.
 PROTOC_URL := https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/
