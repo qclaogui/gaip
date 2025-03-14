@@ -7,7 +7,7 @@ agents: 1
 kubeAPI:
   hostIP: "127.0.0.1"
   hostPort: "6556"
-image: rancher/k3s:v1.29.4-k3s1
+image: rancher/k3s:v1.32.2-k3s1
 ports:
 # mapping the ingress port 80 to localhost:5080
 - port: 5080:80
@@ -19,7 +19,7 @@ ports:
 registries:
   create:
     name: k3d-reg-docker-io
-    hostPort: "5000"
+    hostPort: "5001"
     proxy:
       remoteURL: https://registry-1.docker.io # proxy DockerHub
     volumes:
@@ -28,5 +28,5 @@ registries:
     mirrors:
       "docker.io":
         endpoint:
-        - http://host.k3d.internal:5000
-        - http://k3d-reg-docker-io:5000
+        - http://host.k3d.internal:5001
+        - http://k3d-reg-docker-io:5001
