@@ -2,7 +2,7 @@
 //
 // Licensed under the Apache License 2.0.
 
-package third_party
+package thirdparty
 
 import "testing"
 

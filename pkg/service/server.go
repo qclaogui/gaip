@@ -26,7 +26,7 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/qclaogui/gaip/third_party"
+	"github.com/qclaogui/gaip/thirdparty"
 	"golang.org/x/net/netutil"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/experimental"
@@ -286,7 +286,7 @@ func RegisterOpenAPI(router *mux.Router) {
 func getOpenAPIHandler() http.Handler {
 	_ = mime.AddExtensionType(".svg", "image/svg+xml")
 	// Use subdirectory in embedded files
-	subFS, err := fs.Sub(third_party.OpenAPI, "gen/openapiv2")
+	subFS, err := fs.Sub(thirdparty.OpenAPI, "gen/openapiv2")
 	if err != nil {
 		panic("couldn't create sub filesystem: " + err.Error())
 	}

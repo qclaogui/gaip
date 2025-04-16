@@ -20,7 +20,7 @@ func FindValuesMatching(first, second PathTemplate) (fullMatch bool, longestMatc
 		longestMatch = strings.Join(values, "")
 	}()
 
-	for !(one.Done() || two.Done()) {
+	for !one.Done() && !two.Done() {
 		matches, matching := segmentsMatch(one, two)
 		if !matches {
 			return false, "", nil
@@ -37,7 +37,7 @@ func FindValuesMatching(first, second PathTemplate) (fullMatch bool, longestMatc
 		return true, "", nil
 	}
 
-	if !(one.ConsumedAll() || two.ConsumedAll()) {
+	if !one.ConsumedAll() && !two.ConsumedAll() {
 		return false, "", fmt.Errorf("did not traverse either full pattern one: %v    two: %v", *one, *two)
 	}
 

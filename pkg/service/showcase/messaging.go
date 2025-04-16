@@ -112,10 +112,7 @@ func (srv *Server) StreamBlurbs(in *pb.StreamBlurbsRequest, stream pb.MessagingS
 		return status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	for {
-		if srv.nowF().After(expireTime.AsTime()) {
-			break
-		}
+	for !srv.nowF().After(expireTime.AsTime()) {
 		if err := srv.validateParent(stream.Context(), parent); err != nil {
 			return err
 		}
