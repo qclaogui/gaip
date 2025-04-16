@@ -3,11 +3,11 @@ module github.com/qclaogui/gaip
 go 1.24
 
 require (
-	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.5-20250307204501-0409229c3780.1
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250307204501-0409229c3780.1
 	cloud.google.com/go/longrunning v0.6.6
 	entgo.io/ent v0.14.3
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/bufbuild/protovalidate-go v0.9.2
+	github.com/bufbuild/protovalidate-go v0.9.3
 	github.com/dave/jennifer v1.7.1
 	github.com/felixge/fgprof v0.9.5
 	github.com/ghodss/yaml v1.0.0
