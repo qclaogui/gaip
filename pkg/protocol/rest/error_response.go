@@ -5,17 +5,21 @@
 package rest
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"google.golang.org/api/googleapi"
+	pb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
+	anypb "google.golang.org/protobuf/types/known/anypb"
+
+	code "google.golang.org/genproto/googleapis/rpc/code"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-// gRPCToHTTP status code mapping derived from internal source:
-// go/http-canonical-mapping.
+// gRPCToHTTP is the status code mapping derived from the internal source go/http-canonical-mapping.
 var gRPCToHTTP = map[codes.Code]int{
 	codes.OK:                 http.StatusOK,
 	codes.Canceled:           499, // There isn't a Go constant ClientClosedConnection
@@ -36,11 +40,22 @@ var gRPCToHTTP = map[codes.Code]int{
 	codes.DataLoss:           http.StatusInternalServerError,
 }
 
-// Google API Errors, as defined by https://cloud.google.com/apis/design/errors
-// will consist of a googleapi.Error nested as the key `error` in a JSON object.
-// So we must create such a structure to wrap our googleapi.Error in.
-type googleAPIError struct {
-	Error *googleapi.Error `json:"error"`
+// httpToGRPC is the status code mapping derived from the internal source go/http-canonical-mapping.
+// This is not merely the inverse of gRPCToHTTP (which, at any rate, is not injective). The
+// canonical mapping also specifies codes for some HTTP status ranges, so it is imperative to use
+// HTTPToGRPC().
+var httpToGRPC = map[int]codes.Code{
+	http.StatusBadRequest:                   codes.InvalidArgument,
+	http.StatusUnauthorized:                 codes.Unauthenticated,
+	http.StatusForbidden:                    codes.PermissionDenied,
+	http.StatusNotFound:                     codes.NotFound,
+	http.StatusConflict:                     codes.Aborted,
+	http.StatusRequestedRangeNotSatisfiable: codes.OutOfRange,
+	http.StatusTooManyRequests:              codes.ResourceExhausted,
+	499:                                     codes.Canceled, // There isn't a Go constant ClientClosedConnection
+	http.StatusNotImplemented:               codes.Unimplemented,
+	http.StatusServiceUnavailable:           codes.Unavailable,
+	http.StatusGatewayTimeout:               codes.DeadlineExceeded,
 }
 
 // GRPCToHTTP maps the given gRPC Code to the canonical HTTP Status code as
@@ -54,26 +69,85 @@ func GRPCToHTTP(c codes.Code) int {
 	return httpStatus
 }
 
-// ErrorResponse is a helper that formats the given response information,
-// including the HTTP Status code, a message, and any error detail types, into
-// a googleAPIError and writes the response as JSON.
-func ErrorResponse(w http.ResponseWriter, status int, message string, details ...interface{}) {
-	apiError := &googleAPIError{
-		Error: &googleapi.Error{
-			Code:    status,
+// HTTPToGRPC maps the given HTTP status code to the canonical gRPC
+// Code as defined by the internal source go/http-canonical-mapping.
+func HTTPToGRPC(httpStatus int) codes.Code {
+	var gRPCCode codes.Code
+	switch {
+	case httpStatus >= 200 && httpStatus < 300:
+		gRPCCode = codes.OK
+	case httpStatus >= 300 && httpStatus < 400:
+		gRPCCode = codes.Unknown
+	case httpStatus >= 400 && httpStatus < 500:
+		gRPCCode = codes.FailedPrecondition
+	case httpStatus >= 500 && httpStatus < 600:
+		gRPCCode = codes.Internal
+	default:
+		gRPCCode = codes.Unknown
+	}
+
+	if codeOverride, ok := httpToGRPC[httpStatus]; ok {
+		gRPCCode = codeOverride
+	}
+	return gRPCCode
+}
+
+// Constants to make it obvious when we're not supplying either a gRPC or HTTP status code to
+// ErrorResponse(). The code we're not supplying will be obtained from the one we do supply.
+const (
+	// NoCodeGRPC is an explicit indication when calling ErrorResponse() that we don't know the
+	// gRPC status code and it must be derived from the HTTP response code.
+	NoCodeGRPC codes.Code = 9999
+
+	// NoCodeHTTP is an explicit indication when calling ErrorResponse() that we don't know the
+	// HTTP response code and it must be derived from the gRPC status code.
+	NoCodeHTTP int = -1
+)
+
+// ErrorResponse is a helper that formats the given response information, including the HTTP or gRPC
+// status code, a message, and any error detail types, into a RestError proto message and writes the
+// response as JSON.
+func ErrorResponse(w http.ResponseWriter, httpResponseCode int, grpcStatus codes.Code, message string, details ...interface{}) {
+	if httpResponseCode == NoCodeHTTP && grpcStatus == NoCodeGRPC {
+		WriteShowcaseRESTImplementationError(w, "neither HTTP code or gRPC status are provided for ErrorResponse. Exactly one must be provided.")
+		return
+	}
+	if httpResponseCode != NoCodeHTTP && grpcStatus != NoCodeGRPC {
+		WriteShowcaseRESTImplementationError(w, "both HTTP code and gRPC status are provided for ErrorResponse. Exactly one must be provided.")
+		return
+	}
+
+	if httpResponseCode == NoCodeHTTP {
+		httpResponseCode = GRPCToHTTP(grpcStatus)
+	} else {
+		grpcStatus = HTTPToGRPC(httpResponseCode)
+	}
+
+	jsonError := &pb.RestError{
+		Error: &pb.RestError_Status{
+			Code:    int32(httpResponseCode),
 			Message: message,
-			Details: details,
+			Status:  code.Code(grpcStatus),
 		},
 	}
-	w.WriteHeader(status)
-	data, _ := json.Marshal(apiError)
+
+	for _, oneDetail := range details {
+		detailAsAny, err := anypb.New(oneDetail.(proto.Message))
+		if err != nil {
+			WriteShowcaseRESTImplementationError(w, fmt.Sprintf("could not interpret error detail as a protobuf Any: %+v", oneDetail))
+			return
+		}
+		jsonError.Error.Details = append(jsonError.Error.Details, detailAsAny)
+	}
+
+	w.WriteHeader(httpResponseCode)
+	data, _ := protojson.Marshal(jsonError)
 	_, _ = w.Write(data)
 }
 
 func Error(w http.ResponseWriter, httpStatus int, format string, args ...interface{}) {
 	message := fmt.Sprintf(format, args...)
-	// Print(message)
-	ErrorResponse(w, httpStatus, message)
+	ErrorResponse(w, httpStatus, NoCodeGRPC, message)
 }
 
 func ReportGRPCError(w http.ResponseWriter, err error) {
@@ -83,6 +157,9 @@ func ReportGRPCError(w http.ResponseWriter, err error) {
 		return
 	}
 
-	code := GRPCToHTTP(st.Code())
-	ErrorResponse(w, code, st.Message(), st.Details()...)
+	ErrorResponse(w, NoCodeHTTP, st.Code(), st.Message(), st.Details()...)
+}
+
+func WriteShowcaseRESTImplementationError(w http.ResponseWriter, message string) {
+	ErrorResponse(w, 500, NoCodeGRPC, fmt.Sprintf("Showcase consistency error: %s", message))
 }

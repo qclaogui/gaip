@@ -406,7 +406,7 @@ func (x *DeleteBlurbRequest) GetName() string {
 
 type ListBlurbsRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// The resource name of the requested room or profile who's blurbs to list.
+	// The resource name of the requested room or profile who blurbs to list.
 	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
 	// The maximum number of blurbs to return. Server may return fewer
 	// blurbs than requested. If unspecified, server will pick an appropriate

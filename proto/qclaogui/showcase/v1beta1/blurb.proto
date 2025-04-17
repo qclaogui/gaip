@@ -81,7 +81,7 @@ message DeleteBlurbRequest {
 }
 
 message ListBlurbsRequest {
-  // The resource name of the requested room or profile who's blurbs to list.
+  // The resource name of the requested room or profile who blurbs to list.
   string parent = 1 [
     (google.api.resource_reference).child_type = "showcase.qclaogui.com/Blurb",
     (google.api.field_behavior) = REQUIRED
