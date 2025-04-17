@@ -6,7 +6,7 @@ set -e
 
 SWAGGER_UI_GIT="https://github.com/swagger-api/swagger-ui.git"
 CACHE_DIR="./.cache/swagger-ui/$SWAGGER_UI_VERSION"
-GEN_DIR="./third_party/gen/openapiv2"
+GEN_DIR="./thirdparty/gen/openapiv2"
 
 escape_str() {
   echo "$1" | sed -e 's/[]\/$*.^[]/\\&/g'

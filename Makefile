@@ -138,7 +138,7 @@ endif
 
 # buf-gen: ## Regenerate proto by buf https://buf.build/
 # buf-gen: $(BUF) $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2)
-# #	@rm -Rf genproto third_party/gen
+# #	@rm -Rf genproto thirdparty/gen
 # 	@cd proto/ && $(BUF) generate \
 # 		--path qclaogui/library/v1
 # 	@make swagger-ui
@@ -151,8 +151,8 @@ swagger-ui:
 
 protoc-gen: ## Regenerate proto by protoc
 protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_GO_GAPIC) $(PROTOC_GEN_GRPC_GATEWAY) $(PROTOC_GEN_OPENAPIV2) $(PROTOC_GEN_GO_REST_HANDLER)
-	@rm -Rf genproto third_party/gen
-	@mkdir -p genproto third_party/gen/openapiv2
+	@rm -Rf genproto thirdparty/gen
+	@mkdir -p genproto thirdparty/gen/openapiv2
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go=$(PROTOC_GEN_GO) \
 		--go_out=genproto \
@@ -301,7 +301,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
     # plugin protoc-gen-openapiv2
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-openapiv2=$(PROTOC_GEN_OPENAPIV2) \
- 		--openapiv2_out=third_party/gen/openapiv2 \
+ 		--openapiv2_out=thirdparty/gen/openapiv2 \
  		--openapiv2_opt='logtostderr=true' \
  		--openapiv2_opt='grpc_api_configuration=proto/qclaogui/todo/v1/api_config_http.yaml' \
  		proto/qclaogui/todo/v1/*.proto
