@@ -90,6 +90,24 @@ message ErrorWithMultipleDetails {
   repeated google.protobuf.Any details = 1;
 }
 
+// The custom error detail to be included in the error response from the
+// FailEchoWithDetails method. Client libraries should be able to
+// surface this custom error detail.
+message PoetryError {
+  string poem = 1;
+}
+
+// The request message used for the FailEchoWithDetails method.
+message FailEchoWithDetailsRequest {
+  // Optional message to echo back in the PoetryError. If empty, a value will be
+  // provided.
+  string message = 1;
+}
+
+// The response message declared (but never used) for the FailEchoWithDetails
+// method.
+message FailEchoWithDetailsResponse {}
+
 // The request message for the Expand method.
 message ExpandRequest {
   // The content that will be split into words and returned on the stream.

@@ -51,18 +51,19 @@ var newEchoClientHook clientHook
 
 // EchoCallOptions contains the retry settings for each method of EchoClient.
 type EchoCallOptions struct {
-	Echo             []gax.CallOption
-	EchoErrorDetails []gax.CallOption
-	Expand           []gax.CallOption
-	Collect          []gax.CallOption
-	Chat             []gax.CallOption
-	PagedExpand      []gax.CallOption
-	Wait             []gax.CallOption
-	Block            []gax.CallOption
-	ListOperations   []gax.CallOption
-	GetOperation     []gax.CallOption
-	DeleteOperation  []gax.CallOption
-	CancelOperation  []gax.CallOption
+	Echo                []gax.CallOption
+	EchoErrorDetails    []gax.CallOption
+	FailEchoWithDetails []gax.CallOption
+	Expand              []gax.CallOption
+	Collect             []gax.CallOption
+	Chat                []gax.CallOption
+	PagedExpand         []gax.CallOption
+	Wait                []gax.CallOption
+	Block               []gax.CallOption
+	ListOperations      []gax.CallOption
+	GetOperation        []gax.CallOption
+	DeleteOperation     []gax.CallOption
+	CancelOperation     []gax.CallOption
 }
 
 func defaultEchoGRPCClientOptions() []option.ClientOption {
@@ -96,6 +97,9 @@ func defaultEchoCallOptions() *EchoCallOptions {
 			}),
 		},
 		EchoErrorDetails: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
+		FailEchoWithDetails: []gax.CallOption{
 			gax.WithTimeout(5000 * time.Millisecond),
 		},
 		Expand: []gax.CallOption{
@@ -155,6 +159,9 @@ func defaultEchoRESTCallOptions() *EchoCallOptions {
 		EchoErrorDetails: []gax.CallOption{
 			gax.WithTimeout(5000 * time.Millisecond),
 		},
+		FailEchoWithDetails: []gax.CallOption{
+			gax.WithTimeout(5000 * time.Millisecond),
+		},
 		Expand: []gax.CallOption{
 			gax.WithTimeout(10000 * time.Millisecond),
 			gax.WithRetry(func() gax.Retryer {
@@ -205,6 +212,7 @@ type internalEchoClient interface {
 	Connection() *grpc.ClientConn
 	Echo(context.Context, *showcasepb.EchoRequest, ...gax.CallOption) (*showcasepb.EchoResponse, error)
 	EchoErrorDetails(context.Context, *showcasepb.EchoErrorDetailsRequest, ...gax.CallOption) (*showcasepb.EchoErrorDetailsResponse, error)
+	FailEchoWithDetails(context.Context, *showcasepb.FailEchoWithDetailsRequest, ...gax.CallOption) (*showcasepb.FailEchoWithDetailsResponse, error)
 	Expand(context.Context, *showcasepb.ExpandRequest, ...gax.CallOption) (showcasepb.EchoService_ExpandClient, error)
 	Collect(context.Context, ...gax.CallOption) (showcasepb.EchoService_CollectClient, error)
 	Chat(context.Context, ...gax.CallOption) (showcasepb.EchoService_ChatClient, error)
@@ -277,6 +285,17 @@ func (c *EchoClient) Echo(ctx context.Context, req *showcasepb.EchoRequest, opts
 // google/rpc/error_details.proto.
 func (c *EchoClient) EchoErrorDetails(ctx context.Context, req *showcasepb.EchoErrorDetailsRequest, opts ...gax.CallOption) (*showcasepb.EchoErrorDetailsResponse, error) {
 	return c.internalClient.EchoErrorDetails(ctx, req, opts...)
+}
+
+// FailEchoWithDetails this method always fails with a gRPC “Aborted” error status that contains
+// multiple error details.  These include one instance of each of the standard
+// ones in error_details.proto
+// (https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto (at https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto))
+// plus a custom, Showcase-defined PoetryError. The intent of this RPC is to
+// verify that GAPICs can process these various error details and surface them
+// to the user in an idiomatic form.
+func (c *EchoClient) FailEchoWithDetails(ctx context.Context, req *showcasepb.FailEchoWithDetailsRequest, opts ...gax.CallOption) (*showcasepb.FailEchoWithDetailsResponse, error) {
+	return c.internalClient.FailEchoWithDetails(ctx, req, opts...)
 }
 
 // Expand this method splits the given content into words and will pass each word back
@@ -608,6 +627,21 @@ func (c *echoGRPCClient) EchoErrorDetails(ctx context.Context, req *showcasepb.E
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
 		resp, err = executeRPC(ctx, c.echoClient.EchoErrorDetails, req, settings.GRPC, c.logger, "EchoErrorDetails")
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *echoGRPCClient) FailEchoWithDetails(ctx context.Context, req *showcasepb.FailEchoWithDetailsRequest, opts ...gax.CallOption) (*showcasepb.FailEchoWithDetailsResponse, error) {
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, c.xGoogHeaders...)
+	opts = append((*c.CallOptions).FailEchoWithDetails[0:len((*c.CallOptions).FailEchoWithDetails):len((*c.CallOptions).FailEchoWithDetails)], opts...)
+	var resp *showcasepb.FailEchoWithDetailsResponse
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = executeRPC(ctx, c.echoClient.FailEchoWithDetails, req, settings.GRPC, c.logger, "FailEchoWithDetails")
 		return err
 	}, opts...)
 	if err != nil {
@@ -952,6 +986,60 @@ func (c *echoRESTClient) EchoErrorDetails(ctx context.Context, req *showcasepb.E
 		httpReq.Header = headers
 
 		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "EchoErrorDetails")
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return err
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
+}
+
+// FailEchoWithDetails this method always fails with a gRPC “Aborted” error status that contains
+// multiple error details.  These include one instance of each of the standard
+// ones in error_details.proto
+// (https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto (at https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto))
+// plus a custom, Showcase-defined PoetryError. The intent of this RPC is to
+// verify that GAPICs can process these various error details and surface them
+// to the user in an idiomatic form.
+func (c *echoRESTClient) FailEchoWithDetails(ctx context.Context, req *showcasepb.FailEchoWithDetailsRequest, opts ...gax.CallOption) (*showcasepb.FailEchoWithDetailsResponse, error) {
+	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return nil, err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1beta1/echo:failWithDetails")
+
+	// Build HTTP headers from client and context metadata.
+	hds := append(c.xGoogHeaders, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	opts = append((*c.CallOptions).FailEchoWithDetails[0:len((*c.CallOptions).FailEchoWithDetails):len((*c.CallOptions).FailEchoWithDetails)], opts...)
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &showcasepb.FailEchoWithDetailsResponse{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "FailEchoWithDetails")
 		if err != nil {
 			return err
 		}

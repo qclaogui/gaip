@@ -32,8 +32,7 @@ var File_qclaogui_showcase_v1beta1_echo_service_proto protoreflect.FileDescripto
 
 const file_qclaogui_showcase_v1beta1_echo_service_proto_rawDesc = "" +
 	"\n" +
-	",qclaogui/showcase/v1beta1/echo_service.proto\x12\x19qclaogui.showcase.v1beta1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x18google/api/routing.proto\x1a#google/longrunning/operations.proto\x1a$qclaogui/showcase/v1beta1/echo.proto2\xff\n" +
-	"\n" +
+	",qclaogui/showcase/v1beta1/echo_service.proto\x12\x19qclaogui.showcase.v1beta1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x18google/api/routing.proto\x1a#google/longrunning/operations.proto\x1a$qclaogui/showcase/v1beta1/echo.proto2\xb0\f\n" +
 	"\vEchoService\x12\x98\x03\n" +
 	"\x04Echo\x12&.qclaogui.showcase.v1beta1.EchoRequest\x1a'.qclaogui.showcase.v1beta1.EchoResponse\"\xbe\x02\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1beta1/echo:echo\x8a\xd3\xe4\x93\x02\x9a\x02\x12\b\n" +
 	"\x06header\x12\x19\n" +
@@ -44,7 +43,8 @@ const file_qclaogui_showcase_v1beta1_echo_service_proto_rawDesc = "" +
 	"\x06header\x12'projects/*/{instance_id=instances/*}/**\x12\x18\n" +
 	"\fother_header\x12\b{baz=**}\x12#\n" +
 	"\fother_header\x12\x13{qux=projects/*}/**\x12\xa3\x01\n" +
-	"\x10EchoErrorDetails\x122.qclaogui.showcase.v1beta1.EchoErrorDetailsRequest\x1a3.qclaogui.showcase.v1beta1.EchoErrorDetailsResponse\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1beta1/echo:error-details\x12\x8e\x01\n" +
+	"\x10EchoErrorDetails\x122.qclaogui.showcase.v1beta1.EchoErrorDetailsRequest\x1a3.qclaogui.showcase.v1beta1.EchoErrorDetailsResponse\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1beta1/echo:error-details\x12\xae\x01\n" +
+	"\x13FailEchoWithDetails\x125.qclaogui.showcase.v1beta1.FailEchoWithDetailsRequest\x1a6.qclaogui.showcase.v1beta1.FailEchoWithDetailsResponse\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/v1beta1/echo:failWithDetails\x12\x8e\x01\n" +
 	"\x06Expand\x12(.qclaogui.showcase.v1beta1.ExpandRequest\x1a'.qclaogui.showcase.v1beta1.EchoResponse\"/\xdaA\rcontent,error\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1beta1/echo:expand0\x01\x12~\n" +
 	"\aCollect\x12&.qclaogui.showcase.v1beta1.EchoRequest\x1a'.qclaogui.showcase.v1beta1.EchoResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1beta1/echo:collect(\x01\x12[\n" +
 	"\x04Chat\x12&.qclaogui.showcase.v1beta1.EchoRequest\x1a'.qclaogui.showcase.v1beta1.EchoResponse(\x010\x01\x12\x92\x01\n" +
@@ -54,38 +54,42 @@ const file_qclaogui_showcase_v1beta1_echo_service_proto_rawDesc = "" +
 	"\x05Block\x12'.qclaogui.showcase.v1beta1.BlockRequest\x1a(.qclaogui.showcase.v1beta1.BlockResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1beta1/echo:block\x1a\"\xcaA\x0elocalhost:9095\x8a\xd4\xdb\xd2\x0f\vv1_20240506BBZ@github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepbb\x06proto3"
 
 var file_qclaogui_showcase_v1beta1_echo_service_proto_goTypes = []any{
-	(*EchoRequest)(nil),              // 0: qclaogui.showcase.v1beta1.EchoRequest
-	(*EchoErrorDetailsRequest)(nil),  // 1: qclaogui.showcase.v1beta1.EchoErrorDetailsRequest
-	(*ExpandRequest)(nil),            // 2: qclaogui.showcase.v1beta1.ExpandRequest
-	(*PagedExpandRequest)(nil),       // 3: qclaogui.showcase.v1beta1.PagedExpandRequest
-	(*WaitRequest)(nil),              // 4: qclaogui.showcase.v1beta1.WaitRequest
-	(*BlockRequest)(nil),             // 5: qclaogui.showcase.v1beta1.BlockRequest
-	(*EchoResponse)(nil),             // 6: qclaogui.showcase.v1beta1.EchoResponse
-	(*EchoErrorDetailsResponse)(nil), // 7: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse
-	(*PagedExpandResponse)(nil),      // 8: qclaogui.showcase.v1beta1.PagedExpandResponse
-	(*longrunningpb.Operation)(nil),  // 9: google.longrunning.Operation
-	(*BlockResponse)(nil),            // 10: qclaogui.showcase.v1beta1.BlockResponse
+	(*EchoRequest)(nil),                 // 0: qclaogui.showcase.v1beta1.EchoRequest
+	(*EchoErrorDetailsRequest)(nil),     // 1: qclaogui.showcase.v1beta1.EchoErrorDetailsRequest
+	(*FailEchoWithDetailsRequest)(nil),  // 2: qclaogui.showcase.v1beta1.FailEchoWithDetailsRequest
+	(*ExpandRequest)(nil),               // 3: qclaogui.showcase.v1beta1.ExpandRequest
+	(*PagedExpandRequest)(nil),          // 4: qclaogui.showcase.v1beta1.PagedExpandRequest
+	(*WaitRequest)(nil),                 // 5: qclaogui.showcase.v1beta1.WaitRequest
+	(*BlockRequest)(nil),                // 6: qclaogui.showcase.v1beta1.BlockRequest
+	(*EchoResponse)(nil),                // 7: qclaogui.showcase.v1beta1.EchoResponse
+	(*EchoErrorDetailsResponse)(nil),    // 8: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse
+	(*FailEchoWithDetailsResponse)(nil), // 9: qclaogui.showcase.v1beta1.FailEchoWithDetailsResponse
+	(*PagedExpandResponse)(nil),         // 10: qclaogui.showcase.v1beta1.PagedExpandResponse
+	(*longrunningpb.Operation)(nil),     // 11: google.longrunning.Operation
+	(*BlockResponse)(nil),               // 12: qclaogui.showcase.v1beta1.BlockResponse
 }
 
 var file_qclaogui_showcase_v1beta1_echo_service_proto_depIdxs = []int32{
 	0,  // 0: qclaogui.showcase.v1beta1.EchoService.Echo:input_type -> qclaogui.showcase.v1beta1.EchoRequest
 	1,  // 1: qclaogui.showcase.v1beta1.EchoService.EchoErrorDetails:input_type -> qclaogui.showcase.v1beta1.EchoErrorDetailsRequest
-	2,  // 2: qclaogui.showcase.v1beta1.EchoService.Expand:input_type -> qclaogui.showcase.v1beta1.ExpandRequest
-	0,  // 3: qclaogui.showcase.v1beta1.EchoService.Collect:input_type -> qclaogui.showcase.v1beta1.EchoRequest
-	0,  // 4: qclaogui.showcase.v1beta1.EchoService.Chat:input_type -> qclaogui.showcase.v1beta1.EchoRequest
-	3,  // 5: qclaogui.showcase.v1beta1.EchoService.PagedExpand:input_type -> qclaogui.showcase.v1beta1.PagedExpandRequest
-	4,  // 6: qclaogui.showcase.v1beta1.EchoService.Wait:input_type -> qclaogui.showcase.v1beta1.WaitRequest
-	5,  // 7: qclaogui.showcase.v1beta1.EchoService.Block:input_type -> qclaogui.showcase.v1beta1.BlockRequest
-	6,  // 8: qclaogui.showcase.v1beta1.EchoService.Echo:output_type -> qclaogui.showcase.v1beta1.EchoResponse
-	7,  // 9: qclaogui.showcase.v1beta1.EchoService.EchoErrorDetails:output_type -> qclaogui.showcase.v1beta1.EchoErrorDetailsResponse
-	6,  // 10: qclaogui.showcase.v1beta1.EchoService.Expand:output_type -> qclaogui.showcase.v1beta1.EchoResponse
-	6,  // 11: qclaogui.showcase.v1beta1.EchoService.Collect:output_type -> qclaogui.showcase.v1beta1.EchoResponse
-	6,  // 12: qclaogui.showcase.v1beta1.EchoService.Chat:output_type -> qclaogui.showcase.v1beta1.EchoResponse
-	8,  // 13: qclaogui.showcase.v1beta1.EchoService.PagedExpand:output_type -> qclaogui.showcase.v1beta1.PagedExpandResponse
-	9,  // 14: qclaogui.showcase.v1beta1.EchoService.Wait:output_type -> google.longrunning.Operation
-	10, // 15: qclaogui.showcase.v1beta1.EchoService.Block:output_type -> qclaogui.showcase.v1beta1.BlockResponse
-	8,  // [8:16] is the sub-list for method output_type
-	0,  // [0:8] is the sub-list for method input_type
+	2,  // 2: qclaogui.showcase.v1beta1.EchoService.FailEchoWithDetails:input_type -> qclaogui.showcase.v1beta1.FailEchoWithDetailsRequest
+	3,  // 3: qclaogui.showcase.v1beta1.EchoService.Expand:input_type -> qclaogui.showcase.v1beta1.ExpandRequest
+	0,  // 4: qclaogui.showcase.v1beta1.EchoService.Collect:input_type -> qclaogui.showcase.v1beta1.EchoRequest
+	0,  // 5: qclaogui.showcase.v1beta1.EchoService.Chat:input_type -> qclaogui.showcase.v1beta1.EchoRequest
+	4,  // 6: qclaogui.showcase.v1beta1.EchoService.PagedExpand:input_type -> qclaogui.showcase.v1beta1.PagedExpandRequest
+	5,  // 7: qclaogui.showcase.v1beta1.EchoService.Wait:input_type -> qclaogui.showcase.v1beta1.WaitRequest
+	6,  // 8: qclaogui.showcase.v1beta1.EchoService.Block:input_type -> qclaogui.showcase.v1beta1.BlockRequest
+	7,  // 9: qclaogui.showcase.v1beta1.EchoService.Echo:output_type -> qclaogui.showcase.v1beta1.EchoResponse
+	8,  // 10: qclaogui.showcase.v1beta1.EchoService.EchoErrorDetails:output_type -> qclaogui.showcase.v1beta1.EchoErrorDetailsResponse
+	9,  // 11: qclaogui.showcase.v1beta1.EchoService.FailEchoWithDetails:output_type -> qclaogui.showcase.v1beta1.FailEchoWithDetailsResponse
+	7,  // 12: qclaogui.showcase.v1beta1.EchoService.Expand:output_type -> qclaogui.showcase.v1beta1.EchoResponse
+	7,  // 13: qclaogui.showcase.v1beta1.EchoService.Collect:output_type -> qclaogui.showcase.v1beta1.EchoResponse
+	7,  // 14: qclaogui.showcase.v1beta1.EchoService.Chat:output_type -> qclaogui.showcase.v1beta1.EchoResponse
+	10, // 15: qclaogui.showcase.v1beta1.EchoService.PagedExpand:output_type -> qclaogui.showcase.v1beta1.PagedExpandResponse
+	11, // 16: qclaogui.showcase.v1beta1.EchoService.Wait:output_type -> google.longrunning.Operation
+	12, // 17: qclaogui.showcase.v1beta1.EchoService.Block:output_type -> qclaogui.showcase.v1beta1.BlockResponse
+	9,  // [9:18] is the sub-list for method output_type
+	0,  // [0:9] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name
