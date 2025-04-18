@@ -27,14 +27,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	EchoService_Echo_FullMethodName             = "/qclaogui.showcase.v1beta1.EchoService/Echo"
-	EchoService_EchoErrorDetails_FullMethodName = "/qclaogui.showcase.v1beta1.EchoService/EchoErrorDetails"
-	EchoService_Expand_FullMethodName           = "/qclaogui.showcase.v1beta1.EchoService/Expand"
-	EchoService_Collect_FullMethodName          = "/qclaogui.showcase.v1beta1.EchoService/Collect"
-	EchoService_Chat_FullMethodName             = "/qclaogui.showcase.v1beta1.EchoService/Chat"
-	EchoService_PagedExpand_FullMethodName      = "/qclaogui.showcase.v1beta1.EchoService/PagedExpand"
-	EchoService_Wait_FullMethodName             = "/qclaogui.showcase.v1beta1.EchoService/Wait"
-	EchoService_Block_FullMethodName            = "/qclaogui.showcase.v1beta1.EchoService/Block"
+	EchoService_Echo_FullMethodName                = "/qclaogui.showcase.v1beta1.EchoService/Echo"
+	EchoService_EchoErrorDetails_FullMethodName    = "/qclaogui.showcase.v1beta1.EchoService/EchoErrorDetails"
+	EchoService_FailEchoWithDetails_FullMethodName = "/qclaogui.showcase.v1beta1.EchoService/FailEchoWithDetails"
+	EchoService_Expand_FullMethodName              = "/qclaogui.showcase.v1beta1.EchoService/Expand"
+	EchoService_Collect_FullMethodName             = "/qclaogui.showcase.v1beta1.EchoService/Collect"
+	EchoService_Chat_FullMethodName                = "/qclaogui.showcase.v1beta1.EchoService/Chat"
+	EchoService_PagedExpand_FullMethodName         = "/qclaogui.showcase.v1beta1.EchoService/PagedExpand"
+	EchoService_Wait_FullMethodName                = "/qclaogui.showcase.v1beta1.EchoService/Wait"
+	EchoService_Block_FullMethodName               = "/qclaogui.showcase.v1beta1.EchoService/Block"
 )
 
 // EchoServiceClient is the client API for EchoService service.
@@ -58,6 +59,14 @@ type EchoServiceClient interface {
 	// run-time, the actual types for these fields must be one of the types in
 	// google/rpc/error_details.proto.
 	EchoErrorDetails(ctx context.Context, in *EchoErrorDetailsRequest, opts ...grpc.CallOption) (*EchoErrorDetailsResponse, error)
+	// This method always fails with a gRPC "Aborted" error status that contains
+	// multiple error details.  These include one instance of each of the standard
+	// ones in error_details.proto
+	// (https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto)
+	// plus a custom, Showcase-defined PoetryError. The intent of this RPC is to
+	// verify that GAPICs can process these various error details and surface them
+	// to the user in an idiomatic form.
+	FailEchoWithDetails(ctx context.Context, in *FailEchoWithDetailsRequest, opts ...grpc.CallOption) (*FailEchoWithDetailsResponse, error)
 	// This method splits the given content into words and will pass each word back
 	// through the stream. This method showcases server-side streaming RPCs.
 	Expand(ctx context.Context, in *ExpandRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[EchoResponse], error)
@@ -103,6 +112,16 @@ func (c *echoServiceClient) EchoErrorDetails(ctx context.Context, in *EchoErrorD
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(EchoErrorDetailsResponse)
 	err := c.cc.Invoke(ctx, EchoService_EchoErrorDetails_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *echoServiceClient) FailEchoWithDetails(ctx context.Context, in *FailEchoWithDetailsRequest, opts ...grpc.CallOption) (*FailEchoWithDetailsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FailEchoWithDetailsResponse)
+	err := c.cc.Invoke(ctx, EchoService_FailEchoWithDetails_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -205,6 +224,14 @@ type EchoServiceServer interface {
 	// run-time, the actual types for these fields must be one of the types in
 	// google/rpc/error_details.proto.
 	EchoErrorDetails(context.Context, *EchoErrorDetailsRequest) (*EchoErrorDetailsResponse, error)
+	// This method always fails with a gRPC "Aborted" error status that contains
+	// multiple error details.  These include one instance of each of the standard
+	// ones in error_details.proto
+	// (https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto)
+	// plus a custom, Showcase-defined PoetryError. The intent of this RPC is to
+	// verify that GAPICs can process these various error details and surface them
+	// to the user in an idiomatic form.
+	FailEchoWithDetails(context.Context, *FailEchoWithDetailsRequest) (*FailEchoWithDetailsResponse, error)
 	// This method splits the given content into words and will pass each word back
 	// through the stream. This method showcases server-side streaming RPCs.
 	Expand(*ExpandRequest, grpc.ServerStreamingServer[EchoResponse]) error
@@ -241,6 +268,10 @@ func (UnimplementedEchoServiceServer) Echo(context.Context, *EchoRequest) (*Echo
 
 func (UnimplementedEchoServiceServer) EchoErrorDetails(context.Context, *EchoErrorDetailsRequest) (*EchoErrorDetailsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EchoErrorDetails not implemented")
+}
+
+func (UnimplementedEchoServiceServer) FailEchoWithDetails(context.Context, *FailEchoWithDetailsRequest) (*FailEchoWithDetailsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FailEchoWithDetails not implemented")
 }
 
 func (UnimplementedEchoServiceServer) Expand(*ExpandRequest, grpc.ServerStreamingServer[EchoResponse]) error {
@@ -318,6 +349,24 @@ func _EchoService_EchoErrorDetails_Handler(srv interface{}, ctx context.Context,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(EchoServiceServer).EchoErrorDetails(ctx, req.(*EchoErrorDetailsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EchoService_FailEchoWithDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FailEchoWithDetailsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EchoServiceServer).FailEchoWithDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EchoService_FailEchoWithDetails_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EchoServiceServer).FailEchoWithDetails(ctx, req.(*FailEchoWithDetailsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -415,6 +464,10 @@ var EchoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EchoErrorDetails",
 			Handler:    _EchoService_EchoErrorDetails_Handler,
+		},
+		{
+			MethodName: "FailEchoWithDetails",
+			Handler:    _EchoService_FailEchoWithDetails_Handler,
 		},
 		{
 			MethodName: "PagedExpand",

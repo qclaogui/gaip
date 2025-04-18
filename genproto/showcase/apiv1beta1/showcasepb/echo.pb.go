@@ -468,6 +468,138 @@ func (x *ErrorWithMultipleDetails) GetDetails() []*anypb.Any {
 	return nil
 }
 
+// The custom error detail to be included in the error response from the
+// FailEchoWithDetails method. Client libraries should be able to
+// surface this custom error detail.
+type PoetryError struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Poem          string                 `protobuf:"bytes,1,opt,name=poem,proto3" json:"poem,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PoetryError) Reset() {
+	*x = PoetryError{}
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PoetryError) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PoetryError) ProtoMessage() {}
+
+func (x *PoetryError) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PoetryError.ProtoReflect.Descriptor instead.
+func (*PoetryError) Descriptor() ([]byte, []int) {
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PoetryError) GetPoem() string {
+	if x != nil {
+		return x.Poem
+	}
+	return ""
+}
+
+// The request message used for the FailEchoWithDetails method.
+type FailEchoWithDetailsRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional message to echo back in the PoetryError. If empty, a value will be
+	// provided.
+	Message       string `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FailEchoWithDetailsRequest) Reset() {
+	*x = FailEchoWithDetailsRequest{}
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FailEchoWithDetailsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FailEchoWithDetailsRequest) ProtoMessage() {}
+
+func (x *FailEchoWithDetailsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FailEchoWithDetailsRequest.ProtoReflect.Descriptor instead.
+func (*FailEchoWithDetailsRequest) Descriptor() ([]byte, []int) {
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *FailEchoWithDetailsRequest) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+// The response message declared (but never used) for the FailEchoWithDetails
+// method.
+type FailEchoWithDetailsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FailEchoWithDetailsResponse) Reset() {
+	*x = FailEchoWithDetailsResponse{}
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FailEchoWithDetailsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FailEchoWithDetailsResponse) ProtoMessage() {}
+
+func (x *FailEchoWithDetailsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FailEchoWithDetailsResponse.ProtoReflect.Descriptor instead.
+func (*FailEchoWithDetailsResponse) Descriptor() ([]byte, []int) {
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{8}
+}
+
 // The request message for the Expand method.
 type ExpandRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -483,7 +615,7 @@ type ExpandRequest struct {
 
 func (x *ExpandRequest) Reset() {
 	*x = ExpandRequest{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[6]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -495,7 +627,7 @@ func (x *ExpandRequest) String() string {
 func (*ExpandRequest) ProtoMessage() {}
 
 func (x *ExpandRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[6]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -508,7 +640,7 @@ func (x *ExpandRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExpandRequest.ProtoReflect.Descriptor instead.
 func (*ExpandRequest) Descriptor() ([]byte, []int) {
-	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{6}
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ExpandRequest) GetContent() string {
@@ -547,7 +679,7 @@ type PagedExpandRequest struct {
 
 func (x *PagedExpandRequest) Reset() {
 	*x = PagedExpandRequest{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[7]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -559,7 +691,7 @@ func (x *PagedExpandRequest) String() string {
 func (*PagedExpandRequest) ProtoMessage() {}
 
 func (x *PagedExpandRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[7]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -572,7 +704,7 @@ func (x *PagedExpandRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PagedExpandRequest.ProtoReflect.Descriptor instead.
 func (*PagedExpandRequest) Descriptor() ([]byte, []int) {
-	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{7}
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *PagedExpandRequest) GetContent() string {
@@ -609,7 +741,7 @@ type PagedExpandResponse struct {
 
 func (x *PagedExpandResponse) Reset() {
 	*x = PagedExpandResponse{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[8]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -621,7 +753,7 @@ func (x *PagedExpandResponse) String() string {
 func (*PagedExpandResponse) ProtoMessage() {}
 
 func (x *PagedExpandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[8]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -634,7 +766,7 @@ func (x *PagedExpandResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PagedExpandResponse.ProtoReflect.Descriptor instead.
 func (*PagedExpandResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{8}
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *PagedExpandResponse) GetResponses() []*EchoResponse {
@@ -670,7 +802,7 @@ type WaitRequest struct {
 
 func (x *WaitRequest) Reset() {
 	*x = WaitRequest{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[9]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -682,7 +814,7 @@ func (x *WaitRequest) String() string {
 func (*WaitRequest) ProtoMessage() {}
 
 func (x *WaitRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[9]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -695,7 +827,7 @@ func (x *WaitRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WaitRequest.ProtoReflect.Descriptor instead.
 func (*WaitRequest) Descriptor() ([]byte, []int) {
-	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{9}
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *WaitRequest) GetEnd() isWaitRequest_End {
@@ -796,7 +928,7 @@ type WaitResponse struct {
 
 func (x *WaitResponse) Reset() {
 	*x = WaitResponse{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[10]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -808,7 +940,7 @@ func (x *WaitResponse) String() string {
 func (*WaitResponse) ProtoMessage() {}
 
 func (x *WaitResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[10]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -821,7 +953,7 @@ func (x *WaitResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WaitResponse.ProtoReflect.Descriptor instead.
 func (*WaitResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{10}
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *WaitResponse) GetContent() string {
@@ -842,7 +974,7 @@ type WaitMetadata struct {
 
 func (x *WaitMetadata) Reset() {
 	*x = WaitMetadata{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[11]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -854,7 +986,7 @@ func (x *WaitMetadata) String() string {
 func (*WaitMetadata) ProtoMessage() {}
 
 func (x *WaitMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[11]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -867,7 +999,7 @@ func (x *WaitMetadata) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WaitMetadata.ProtoReflect.Descriptor instead.
 func (*WaitMetadata) Descriptor() ([]byte, []int) {
-	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{11}
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *WaitMetadata) GetEndTime() *timestamppb.Timestamp {
@@ -892,7 +1024,7 @@ type BlockRequest struct {
 
 func (x *BlockRequest) Reset() {
 	*x = BlockRequest{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[12]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -904,7 +1036,7 @@ func (x *BlockRequest) String() string {
 func (*BlockRequest) ProtoMessage() {}
 
 func (x *BlockRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[12]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -917,7 +1049,7 @@ func (x *BlockRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockRequest.ProtoReflect.Descriptor instead.
 func (*BlockRequest) Descriptor() ([]byte, []int) {
-	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{12}
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *BlockRequest) GetResponseDelay() *durationpb.Duration {
@@ -982,7 +1114,7 @@ type BlockResponse struct {
 
 func (x *BlockResponse) Reset() {
 	*x = BlockResponse{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[13]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -994,7 +1126,7 @@ func (x *BlockResponse) String() string {
 func (*BlockResponse) ProtoMessage() {}
 
 func (x *BlockResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[13]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1007,7 +1139,7 @@ func (x *BlockResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockResponse.ProtoReflect.Descriptor instead.
 func (*BlockResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{13}
+	return file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *BlockResponse) GetContent() string {
@@ -1026,7 +1158,7 @@ type EchoErrorDetailsResponse_SingleDetail struct {
 
 func (x *EchoErrorDetailsResponse_SingleDetail) Reset() {
 	*x = EchoErrorDetailsResponse_SingleDetail{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[14]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1038,7 +1170,7 @@ func (x *EchoErrorDetailsResponse_SingleDetail) String() string {
 func (*EchoErrorDetailsResponse_SingleDetail) ProtoMessage() {}
 
 func (x *EchoErrorDetailsResponse_SingleDetail) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[14]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1070,7 +1202,7 @@ type EchoErrorDetailsResponse_MultipleDetails struct {
 
 func (x *EchoErrorDetailsResponse_MultipleDetails) Reset() {
 	*x = EchoErrorDetailsResponse_MultipleDetails{}
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[15]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1082,7 +1214,7 @@ func (x *EchoErrorDetailsResponse_MultipleDetails) String() string {
 func (*EchoErrorDetailsResponse_MultipleDetails) ProtoMessage() {}
 
 func (x *EchoErrorDetailsResponse_MultipleDetails) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[15]
+	mi := &file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1138,7 +1270,12 @@ const file_qclaogui_showcase_v1beta1_echo_proto_rawDesc = "" +
 	"\x15ErrorWithSingleDetail\x12.\n" +
 	"\adetails\x18\x01 \x01(\v2\x14.google.protobuf.AnyR\adetails\"J\n" +
 	"\x18ErrorWithMultipleDetails\x12.\n" +
-	"\adetails\x18\x01 \x03(\v2\x14.google.protobuf.AnyR\adetails\"\x98\x01\n" +
+	"\adetails\x18\x01 \x03(\v2\x14.google.protobuf.AnyR\adetails\"!\n" +
+	"\vPoetryError\x12\x12\n" +
+	"\x04poem\x18\x01 \x01(\tR\x04poem\"6\n" +
+	"\x1aFailEchoWithDetailsRequest\x12\x18\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"\x1d\n" +
+	"\x1bFailEchoWithDetailsResponse\"\x98\x01\n" +
 	"\rExpandRequest\x12\x18\n" +
 	"\acontent\x18\x01 \x01(\tR\acontent\x12(\n" +
 	"\x05error\x18\x02 \x01(\v2\x12.google.rpc.StatusR\x05error\x12C\n" +
@@ -1192,7 +1329,7 @@ func file_qclaogui_showcase_v1beta1_echo_proto_rawDescGZIP() []byte {
 
 var (
 	file_qclaogui_showcase_v1beta1_echo_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-	file_qclaogui_showcase_v1beta1_echo_proto_msgTypes  = make([]protoimpl.MessageInfo, 16)
+	file_qclaogui_showcase_v1beta1_echo_proto_msgTypes  = make([]protoimpl.MessageInfo, 19)
 	file_qclaogui_showcase_v1beta1_echo_proto_goTypes   = []any{
 		(Severity)(0),                                    // 0: qclaogui.showcase.v1beta1.Severity
 		(*EchoRequest)(nil),                              // 1: qclaogui.showcase.v1beta1.EchoRequest
@@ -1201,42 +1338,45 @@ var (
 		(*EchoErrorDetailsResponse)(nil),                 // 4: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse
 		(*ErrorWithSingleDetail)(nil),                    // 5: qclaogui.showcase.v1beta1.ErrorWithSingleDetail
 		(*ErrorWithMultipleDetails)(nil),                 // 6: qclaogui.showcase.v1beta1.ErrorWithMultipleDetails
-		(*ExpandRequest)(nil),                            // 7: qclaogui.showcase.v1beta1.ExpandRequest
-		(*PagedExpandRequest)(nil),                       // 8: qclaogui.showcase.v1beta1.PagedExpandRequest
-		(*PagedExpandResponse)(nil),                      // 9: qclaogui.showcase.v1beta1.PagedExpandResponse
-		(*WaitRequest)(nil),                              // 10: qclaogui.showcase.v1beta1.WaitRequest
-		(*WaitResponse)(nil),                             // 11: qclaogui.showcase.v1beta1.WaitResponse
-		(*WaitMetadata)(nil),                             // 12: qclaogui.showcase.v1beta1.WaitMetadata
-		(*BlockRequest)(nil),                             // 13: qclaogui.showcase.v1beta1.BlockRequest
-		(*BlockResponse)(nil),                            // 14: qclaogui.showcase.v1beta1.BlockResponse
-		(*EchoErrorDetailsResponse_SingleDetail)(nil),    // 15: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.SingleDetail
-		(*EchoErrorDetailsResponse_MultipleDetails)(nil), // 16: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.MultipleDetails
-		(*status.Status)(nil),                            // 17: google.rpc.Status
-		(*anypb.Any)(nil),                                // 18: google.protobuf.Any
-		(*durationpb.Duration)(nil),                      // 19: google.protobuf.Duration
-		(*timestamppb.Timestamp)(nil),                    // 20: google.protobuf.Timestamp
+		(*PoetryError)(nil),                              // 7: qclaogui.showcase.v1beta1.PoetryError
+		(*FailEchoWithDetailsRequest)(nil),               // 8: qclaogui.showcase.v1beta1.FailEchoWithDetailsRequest
+		(*FailEchoWithDetailsResponse)(nil),              // 9: qclaogui.showcase.v1beta1.FailEchoWithDetailsResponse
+		(*ExpandRequest)(nil),                            // 10: qclaogui.showcase.v1beta1.ExpandRequest
+		(*PagedExpandRequest)(nil),                       // 11: qclaogui.showcase.v1beta1.PagedExpandRequest
+		(*PagedExpandResponse)(nil),                      // 12: qclaogui.showcase.v1beta1.PagedExpandResponse
+		(*WaitRequest)(nil),                              // 13: qclaogui.showcase.v1beta1.WaitRequest
+		(*WaitResponse)(nil),                             // 14: qclaogui.showcase.v1beta1.WaitResponse
+		(*WaitMetadata)(nil),                             // 15: qclaogui.showcase.v1beta1.WaitMetadata
+		(*BlockRequest)(nil),                             // 16: qclaogui.showcase.v1beta1.BlockRequest
+		(*BlockResponse)(nil),                            // 17: qclaogui.showcase.v1beta1.BlockResponse
+		(*EchoErrorDetailsResponse_SingleDetail)(nil),    // 18: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.SingleDetail
+		(*EchoErrorDetailsResponse_MultipleDetails)(nil), // 19: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.MultipleDetails
+		(*status.Status)(nil),                            // 20: google.rpc.Status
+		(*anypb.Any)(nil),                                // 21: google.protobuf.Any
+		(*durationpb.Duration)(nil),                      // 22: google.protobuf.Duration
+		(*timestamppb.Timestamp)(nil),                    // 23: google.protobuf.Timestamp
 	}
 )
 
 var file_qclaogui_showcase_v1beta1_echo_proto_depIdxs = []int32{
-	17, // 0: qclaogui.showcase.v1beta1.EchoRequest.error:type_name -> google.rpc.Status
+	20, // 0: qclaogui.showcase.v1beta1.EchoRequest.error:type_name -> google.rpc.Status
 	0,  // 1: qclaogui.showcase.v1beta1.EchoRequest.severity:type_name -> qclaogui.showcase.v1beta1.Severity
 	0,  // 2: qclaogui.showcase.v1beta1.EchoResponse.severity:type_name -> qclaogui.showcase.v1beta1.Severity
-	15, // 3: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.single_detail:type_name -> qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.SingleDetail
-	16, // 4: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.multiple_details:type_name -> qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.MultipleDetails
-	18, // 5: qclaogui.showcase.v1beta1.ErrorWithSingleDetail.details:type_name -> google.protobuf.Any
-	18, // 6: qclaogui.showcase.v1beta1.ErrorWithMultipleDetails.details:type_name -> google.protobuf.Any
-	17, // 7: qclaogui.showcase.v1beta1.ExpandRequest.error:type_name -> google.rpc.Status
-	19, // 8: qclaogui.showcase.v1beta1.ExpandRequest.stream_wait_time:type_name -> google.protobuf.Duration
+	18, // 3: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.single_detail:type_name -> qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.SingleDetail
+	19, // 4: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.multiple_details:type_name -> qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.MultipleDetails
+	21, // 5: qclaogui.showcase.v1beta1.ErrorWithSingleDetail.details:type_name -> google.protobuf.Any
+	21, // 6: qclaogui.showcase.v1beta1.ErrorWithMultipleDetails.details:type_name -> google.protobuf.Any
+	20, // 7: qclaogui.showcase.v1beta1.ExpandRequest.error:type_name -> google.rpc.Status
+	22, // 8: qclaogui.showcase.v1beta1.ExpandRequest.stream_wait_time:type_name -> google.protobuf.Duration
 	2,  // 9: qclaogui.showcase.v1beta1.PagedExpandResponse.responses:type_name -> qclaogui.showcase.v1beta1.EchoResponse
-	20, // 10: qclaogui.showcase.v1beta1.WaitRequest.end_time:type_name -> google.protobuf.Timestamp
-	19, // 11: qclaogui.showcase.v1beta1.WaitRequest.ttl:type_name -> google.protobuf.Duration
-	17, // 12: qclaogui.showcase.v1beta1.WaitRequest.error:type_name -> google.rpc.Status
-	11, // 13: qclaogui.showcase.v1beta1.WaitRequest.success:type_name -> qclaogui.showcase.v1beta1.WaitResponse
-	20, // 14: qclaogui.showcase.v1beta1.WaitMetadata.end_time:type_name -> google.protobuf.Timestamp
-	19, // 15: qclaogui.showcase.v1beta1.BlockRequest.response_delay:type_name -> google.protobuf.Duration
-	17, // 16: qclaogui.showcase.v1beta1.BlockRequest.error:type_name -> google.rpc.Status
-	14, // 17: qclaogui.showcase.v1beta1.BlockRequest.success:type_name -> qclaogui.showcase.v1beta1.BlockResponse
+	23, // 10: qclaogui.showcase.v1beta1.WaitRequest.end_time:type_name -> google.protobuf.Timestamp
+	22, // 11: qclaogui.showcase.v1beta1.WaitRequest.ttl:type_name -> google.protobuf.Duration
+	20, // 12: qclaogui.showcase.v1beta1.WaitRequest.error:type_name -> google.rpc.Status
+	14, // 13: qclaogui.showcase.v1beta1.WaitRequest.success:type_name -> qclaogui.showcase.v1beta1.WaitResponse
+	23, // 14: qclaogui.showcase.v1beta1.WaitMetadata.end_time:type_name -> google.protobuf.Timestamp
+	22, // 15: qclaogui.showcase.v1beta1.BlockRequest.response_delay:type_name -> google.protobuf.Duration
+	20, // 16: qclaogui.showcase.v1beta1.BlockRequest.error:type_name -> google.rpc.Status
+	17, // 17: qclaogui.showcase.v1beta1.BlockRequest.success:type_name -> qclaogui.showcase.v1beta1.BlockResponse
 	5,  // 18: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.SingleDetail.error:type_name -> qclaogui.showcase.v1beta1.ErrorWithSingleDetail
 	6,  // 19: qclaogui.showcase.v1beta1.EchoErrorDetailsResponse.MultipleDetails.error:type_name -> qclaogui.showcase.v1beta1.ErrorWithMultipleDetails
 	20, // [20:20] is the sub-list for method output_type
@@ -1255,13 +1395,13 @@ func file_qclaogui_showcase_v1beta1_echo_proto_init() {
 		(*EchoRequest_Content)(nil),
 		(*EchoRequest_Error)(nil),
 	}
-	file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[9].OneofWrappers = []any{
+	file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[12].OneofWrappers = []any{
 		(*WaitRequest_EndTime)(nil),
 		(*WaitRequest_Ttl)(nil),
 		(*WaitRequest_Error)(nil),
 		(*WaitRequest_Success)(nil),
 	}
-	file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[12].OneofWrappers = []any{
+	file_qclaogui_showcase_v1beta1_echo_proto_msgTypes[15].OneofWrappers = []any{
 		(*BlockRequest_Error)(nil),
 		(*BlockRequest_Success)(nil),
 	}
@@ -1271,7 +1411,7 @@ func file_qclaogui_showcase_v1beta1_echo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_qclaogui_showcase_v1beta1_echo_proto_rawDesc), len(file_qclaogui_showcase_v1beta1_echo_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   16,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

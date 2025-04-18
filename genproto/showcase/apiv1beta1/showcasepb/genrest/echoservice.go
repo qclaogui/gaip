@@ -174,6 +174,82 @@ func HandleEchoErrorDetails(srv showcasepb.EchoServiceServer, logger log.Logger)
 	}
 }
 
+// HandleFailEchoWithDetails translates REST requests/responses on the wire to internal proto messages for FailEchoWithDetails
+//
+//	Generated for HTTP binding pattern: POST "/v1beta1/echo:failWithDetails"
+func HandleFailEchoWithDetails(srv showcasepb.EchoServiceServer, logger log.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		urlPathParams := mux.Vars(r)
+		numUrlPathParams := len(urlPathParams)
+
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("Received %s request matching '/v1beta1/echo:failWithDetails': %q", r.Method, r.URL))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlPathParams (expect 0, have %d): %q", numUrlPathParams, urlPathParams))
+		_ = level.Debug(logger).Log("msg", fmt.Sprintf("urlRequestHeaders: %s", rest.PrettyPrintHeaders(r, "    ")))
+
+		rest.IncludeRequestHeadersInResponse(w, r)
+
+		if numUrlPathParams != 0 {
+			rest.Error(w, http.StatusBadRequest, "found unexpected number of URL variables: expected 0, have %d: %#v", numUrlPathParams, urlPathParams)
+			return
+		}
+
+		systemParameters, queryParams, err := rest.GetSystemParameters(r)
+		if err != nil {
+			rest.Error(w, http.StatusBadRequest, "error in query string: %s", err)
+			return
+		}
+
+		request := &showcasepb.FailEchoWithDetailsRequest{}
+		// Intentional: Field values in the URL path override those set in the body.
+		var jsonReader bytes.Buffer
+		bodyReader := io.TeeReader(r.Body, &jsonReader)
+		rBytes := make([]byte, r.ContentLength)
+		if _, err = bodyReader.Read(rBytes); err != nil && !errors.Is(err, io.EOF) {
+			rest.Error(w, http.StatusBadRequest, "error reading body content: %s", err)
+			return
+		}
+
+		if err = rest.FromJSON().Unmarshal(rBytes, request); err != nil {
+			rest.Error(w, http.StatusBadRequest, "error reading body params '*': %s", err)
+			return
+		}
+
+		if err = rest.CheckRequestFormat(&jsonReader, r, request.ProtoReflect()); err != nil {
+			rest.Error(w, http.StatusBadRequest, "REST request failed format check: %s", err)
+			return
+		}
+
+		if len(queryParams) > 0 {
+			rest.Error(w, http.StatusBadRequest, "encountered unexpected query params: %v", queryParams)
+			return
+		}
+		if err = rest.PopulateSingularFields(request, urlPathParams); err != nil {
+			rest.Error(w, http.StatusBadRequest, "error reading URL path params: %s", err)
+			return
+		}
+
+		marshaler := rest.ToJSON()
+		marshaler.UseEnumNumbers = systemParameters.EnumEncodingAsInt
+		requestJSON, _ := marshaler.Marshal(request)
+		_ = level.Info(logger).Log("msg", fmt.Sprintf("request: %s", requestJSON))
+
+		ctx := context.WithValue(r.Context(), rest.BindingURIKey, "/v1beta1/echo:failWithDetails")
+		response, err := srv.FailEchoWithDetails(ctx, request)
+		if err != nil {
+			rest.ReportGRPCError(w, err)
+			return
+		}
+
+		json, err := marshaler.Marshal(response)
+		if err != nil {
+			rest.Error(w, http.StatusInternalServerError, "error json-encoding response: %s", err.Error())
+			return
+		}
+
+		_, _ = w.Write(json)
+	}
+}
+
 // HandleExpand translates REST requests/responses on the wire to internal proto messages for Expand
 //
 //	Generated for HTTP binding pattern: POST "/v1beta1/echo:expand"
@@ -500,6 +576,7 @@ func (streamer *EchoServiceExpandServer) Send(response *showcasepb.EchoResponse)
 func RegisterHandlersEchoService(router *mux.Router, srv showcasepb.EchoServiceServer, logger log.Logger) {
 	router.Handle("/v1beta1/echo:echo", HandleEcho(srv, logger)).Methods("POST")
 	router.Handle("/v1beta1/echo:error-details", HandleEchoErrorDetails(srv, logger)).Methods("POST")
+	router.Handle("/v1beta1/echo:failWithDetails", HandleFailEchoWithDetails(srv, logger)).Methods("POST")
 	router.Handle("/v1beta1/echo:expand", HandleExpand(srv, logger)).Methods("POST")
 	router.Handle("/v1beta1/echo:collect", HandleCollect(srv, logger)).Methods("POST")
 	router.Handle("/v1beta1/echo:pagedExpand", HandlePagedExpand(srv, logger)).Methods("POST")

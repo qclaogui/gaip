@@ -18,6 +18,7 @@ import (
 	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	pb "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -112,10 +113,7 @@ func (m *mockExpandStream) verify(expectHeadersAndTrailers bool) {
 	}
 }
 
-func serverSetup(t *testing.T) pb.EchoServiceServer {
-	// s, err := NewEchoService()
-	// require.NoError(t, err)
-
+func newEchoServer(t *testing.T) pb.EchoServiceServer {
 	cfg := Config{}
 	s, err := NewServer(cfg)
 	require.NoError(t, err)
@@ -130,7 +128,7 @@ func TestExpand(t *testing.T) {
 		nil,
 	}
 
-	s := serverSetup(t)
+	s := newEchoServer(t)
 	for _, c := range contentTable {
 		for _, e := range errTable {
 			stream := &mockExpandStream{exp: strings.Fields(c), t: t}
@@ -145,7 +143,7 @@ func TestExpand(t *testing.T) {
 }
 
 func TestExpandWithWaitTime(t *testing.T) {
-	s := serverSetup(t)
+	s := newEchoServer(t)
 	// This stream should take at least 300ms to complete because there are 7 messages, and we wait 50ms between sending each message.
 	content := "This stream should take 300ms to complete"
 	stream := &mockExpandStream{exp: strings.Fields(content), t: t}
@@ -177,7 +175,7 @@ func TestExpand_streamErr(t *testing.T) {
 
 	stream := &errorExpandStream{err: e}
 
-	s := serverSetup(t)
+	s := newEchoServer(t)
 	err := s.Expand(&pb.ExpandRequest{Content: "Hello World"}, stream)
 	if !errors.Is(err, e) {
 		t.Error("Expand expected to pass through stream errors.")
@@ -244,7 +242,7 @@ func TestCollect(t *testing.T) {
 		{[]string{"Hello", "", "World"}, strPtr("Hello World"), nil},
 	}
 
-	s := serverSetup(t)
+	s := newEchoServer(t)
 	for _, test := range tests {
 		var requests []*pb.EchoRequest
 		for _, content := range test.contents {
@@ -281,7 +279,7 @@ func TestCollect_streamErr(t *testing.T) {
 	e := errors.New("test Error")
 	stream := &errorCollectStream{err: e}
 
-	s := serverSetup(t)
+	s := newEchoServer(t)
 	err := s.Collect(stream)
 	if !errors.Is(err, e) {
 		t.Error("Collect expected to pass through stream errors.")
@@ -348,7 +346,7 @@ func TestChat(t *testing.T) {
 		{[]string{}, &spb.Status{Code: int32(codes.InvalidArgument)}},
 	}
 
-	s := serverSetup(t)
+	s := newEchoServer(t)
 
 	for _, test := range tests {
 		var requests []*pb.EchoRequest
@@ -374,6 +372,78 @@ func TestChat(t *testing.T) {
 	}
 }
 
+func TestFailEchoWithDetails(t *testing.T) {
+	// We only check that all RPC calls to FailEchoWithDetails
+	// return the expected sequence of error detail types. We
+	// don't check the contents of the messages, except for the
+	// PoetryError detail.
+	expectedDetailTypes := []reflect.Type{
+		reflect.TypeOf((*errdetails.ErrorInfo)(nil)),
+		reflect.TypeOf((*errdetails.LocalizedMessage)(nil)),
+		reflect.TypeOf((*pb.PoetryError)(nil)),
+		reflect.TypeOf((*errdetails.RetryInfo)(nil)),
+		reflect.TypeOf((*errdetails.DebugInfo)(nil)),
+		reflect.TypeOf((*errdetails.QuotaFailure)(nil)),
+		reflect.TypeOf((*errdetails.PreconditionFailure)(nil)),
+		reflect.TypeOf((*errdetails.BadRequest)(nil)),
+		reflect.TypeOf((*errdetails.RequestInfo)(nil)),
+		reflect.TypeOf((*errdetails.ResourceInfo)(nil)),
+		reflect.TypeOf((*errdetails.Help)(nil)),
+	}
+
+	s := newEchoServer(t)
+
+	for testIdx, oneTest := range []struct{ message string }{
+		{""}, // error response will have a default value
+		{"two paths diverged in a wood"},
+	} {
+		request := &pb.FailEchoWithDetailsRequest{}
+		if oneTest.message != "" {
+			request.Message = oneTest.message
+		}
+
+		response, err := s.FailEchoWithDetails(context.Background(), request)
+		if err == nil {
+			t.Errorf("[%d] expected error upon calling FailEchoWithDetails. Response was: %+v", testIdx, response)
+		}
+
+		status, _ := status.FromError(err)
+		if got, want := status.Code(), codes.Aborted; got != want {
+			t.Errorf("[%d] unexpected gRPC code: want %v, got %v", testIdx, want, got)
+		}
+
+		allDetails := status.Details()
+		if got, want := len(allDetails), len(expectedDetailTypes); got != want {
+			t.Errorf("[%d] detail list length: : want %v, got %v", testIdx, want, got)
+		}
+
+		for detailIdx, oneDetail := range allDetails {
+			if got, want := reflect.TypeOf(oneDetail), expectedDetailTypes[detailIdx]; got != want {
+				t.Errorf("[%d:%d] want detail of type %v, got %v", testIdx, detailIdx, want, got)
+			}
+
+			// In what follows, we check the internals of PoetryError.
+			if detailIdx != 2 {
+				continue
+			}
+			poetryError, ok := oneDetail.(*pb.PoetryError)
+			if !ok {
+				t.Fatalf("[%d:%d] could not convert detail to a PoetryError", testIdx, detailIdx)
+			}
+
+			wantPoem := "roses are red"
+			if oneTest.message != "" {
+				wantPoem = oneTest.message
+			}
+
+			if got, want := poetryError.Poem, wantPoem; got != want {
+				t.Errorf("[%d:%d] PoetryError.poem: want %q, got %q", testIdx, detailIdx, want, got)
+			}
+		}
+
+	}
+}
+
 type errorChatStream struct {
 	err error
 	pb.EchoService_ChatServer
@@ -387,7 +457,7 @@ func TestChat_streamErr(t *testing.T) {
 	e := errors.New("test Error")
 	stream := &errorChatStream{err: e}
 
-	s := serverSetup(t)
+	s := newEchoServer(t)
 	err := s.Chat(stream)
 	if !errors.Is(err, e) {
 		t.Error("Chat expected to pass through stream errors.")
@@ -417,7 +487,7 @@ func TestPagedExpand_invalidArgs(t *testing.T) {
 		{Content: "one", PageToken: "2"},
 	}
 
-	s := serverSetup(t)
+	s := newEchoServer(t)
 	for _, test := range tests {
 		_, err := s.PagedExpand(context.Background(), test)
 		sts, _ := status.FromError(err)
@@ -479,7 +549,7 @@ func TestPagedExpand(t *testing.T) {
 		},
 	}
 
-	s := serverSetup(t)
+	s := newEchoServer(t)
 	for _, test := range tests {
 		stream := &mockUnaryStream{t: t}
 		ctx := appendTestOutgoingMetadata(context.Background(), &mockSTS{t: t, stream: stream})

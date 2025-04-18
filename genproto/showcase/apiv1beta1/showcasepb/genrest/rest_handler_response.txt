@@ -15,6 +15,7 @@ Proto Model:
 EchoService (.qclaogui.showcase.v1beta1.EchoService):
   .qclaogui.showcase.v1beta1.EchoService.Echo[0] : POST: "/v1beta1/echo:echo"
   .qclaogui.showcase.v1beta1.EchoService.EchoErrorDetails[0] : POST: "/v1beta1/echo:error-details"
+  .qclaogui.showcase.v1beta1.EchoService.FailEchoWithDetails[0] : POST: "/v1beta1/echo:failWithDetails"
   .qclaogui.showcase.v1beta1.EchoService.Expand[0] : POST: "/v1beta1/echo:expand"
   .qclaogui.showcase.v1beta1.EchoService.Collect[0] : POST: "/v1beta1/echo:collect"
   .qclaogui.showcase.v1beta1.EchoService.PagedExpand[0] : POST: "/v1beta1/echo:pagedExpand"
@@ -65,7 +66,7 @@ Shim "EchoService" (.qclaogui.showcase.v1beta1.EchoService)
   Imports:
     longrunningpb: "cloud.google.com/go/longrunning/autogen/longrunningpb" "cloud.google.com/go/longrunning/autogen/longrunningpb"
     showcasepb: "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb" "github.com/qclaogui/gaip/genproto/showcase/apiv1beta1/showcasepb"
-  Handlers (7):
+  Handlers (8):
         POST                                 /v1beta1/echo:echo func Echo(request showcasepb.EchoRequest) (response showcasepb.EchoResponse) {}
 ["/" "v1beta1" "/" "echo" ":" "echo"]
 
@@ -86,6 +87,9 @@ Shim "EchoService" (.qclaogui.showcase.v1beta1.EchoService)
 
         POST                        /v1beta1/echo:error-details func EchoErrorDetails(request showcasepb.EchoErrorDetailsRequest) (response showcasepb.EchoErrorDetailsResponse) {}
 ["/" "v1beta1" "/" "echo" ":" "error-details"]
+
+        POST                      /v1beta1/echo:failWithDetails func FailEchoWithDetails(request showcasepb.FailEchoWithDetailsRequest) (response showcasepb.FailEchoWithDetailsResponse) {}
+["/" "v1beta1" "/" "echo" ":" "failWithDetails"]
 
 ----------------------------------------
 Shim "IdentityService" (.qclaogui.showcase.v1beta1.IdentityService)
