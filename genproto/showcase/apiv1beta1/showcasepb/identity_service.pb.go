@@ -32,10 +32,10 @@ var File_qclaogui_showcase_v1beta1_identity_service_proto protoreflect.FileDescr
 
 const file_qclaogui_showcase_v1beta1_identity_service_proto_rawDesc = "" +
 	"\n" +
-	"0qclaogui/showcase/v1beta1/identity_service.proto\x12\x19qclaogui.showcase.v1beta1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a$qclaogui/showcase/v1beta1/user.proto2\x83\x06\n" +
-	"\x0fIdentityService\x12\xd7\x01\n" +
+	"0qclaogui/showcase/v1beta1/identity_service.proto\x12\x19qclaogui.showcase.v1beta1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a$qclaogui/showcase/v1beta1/user.proto2\xa3\x06\n" +
+	"\x0fIdentityService\x12\xf7\x01\n" +
 	"\n" +
-	"CreateUser\x12,.qclaogui.showcase.v1beta1.CreateUserRequest\x1a\x1f.qclaogui.showcase.v1beta1.User\"z\xdaA^user.display_name,user.email,user.age,user.nickname,user.enable_notifications,user.height_feet\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1beta1/users\x12}\n" +
+	"CreateUser\x12,.qclaogui.showcase.v1beta1.CreateUserRequest\x1a\x1f.qclaogui.showcase.v1beta1.User\"\x99\x01\xdaA\x1cuser.display_name,user.email\xdaA^user.display_name,user.email,user.age,user.nickname,user.enable_notifications,user.height_feet\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1beta1/users\x12}\n" +
 	"\aGetUser\x12).qclaogui.showcase.v1beta1.GetUserRequest\x1a\x1f.qclaogui.showcase.v1beta1.User\"&\xdaA\x04name\x82\xd3\xe4\x93\x02\x19\x12\x17/v1beta1/{name=users/*}\x12~\n" +
 	"\tListUsers\x12+.qclaogui.showcase.v1beta1.ListUsersRequest\x1a,.qclaogui.showcase.v1beta1.ListUsersResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1beta1/users\x12\x87\x01\n" +
 	"\n" +
