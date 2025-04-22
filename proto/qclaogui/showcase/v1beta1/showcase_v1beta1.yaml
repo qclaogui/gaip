@@ -53,3 +53,4 @@ publishing:
   - selector: qclaogui.showcase.v1beta1.EchoService.Echo
     auto_populated_fields:
     - request_id
+    - other_request_id

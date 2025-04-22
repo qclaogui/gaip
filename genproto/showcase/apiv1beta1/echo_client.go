@@ -607,6 +607,9 @@ func (c *echoGRPCClient) Echo(ctx context.Context, req *showcasepb.EchoRequest, 
 	if req != nil && req.GetRequestId() == "" {
 		req.RequestId = uuid.NewString()
 	}
+	if req != nil && req.OtherRequestId == nil {
+		req.OtherRequestId = proto.String(uuid.NewString())
+	}
 	opts = append((*c.CallOptions).Echo[0:len((*c.CallOptions).Echo):len((*c.CallOptions).Echo)], opts...)
 	var resp *showcasepb.EchoResponse
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -869,6 +872,9 @@ func (c *echoGRPCClient) CancelOperation(ctx context.Context, req *longrunningpb
 func (c *echoRESTClient) Echo(ctx context.Context, req *showcasepb.EchoRequest, opts ...gax.CallOption) (*showcasepb.EchoResponse, error) {
 	if req != nil && req.GetRequestId() == "" {
 		req.RequestId = uuid.NewString()
+	}
+	if req != nil && req.OtherRequestId == nil {
+		req.OtherRequestId = proto.String(uuid.NewString())
 	}
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
 	jsonReq, err := m.Marshal(req)

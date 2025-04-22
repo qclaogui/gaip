@@ -99,10 +99,13 @@ type EchoRequest struct {
 	// Optional. This field can be set to test the routing annotation on the Echo method.
 	Header string `protobuf:"bytes,4,opt,name=header,proto3" json:"header,omitempty"`
 	// Optional. This field can be set to test the routing annotation on the Echo method.
-	OtherHeader   string `protobuf:"bytes,5,opt,name=other_header,json=otherHeader,proto3" json:"other_header,omitempty"`
-	RequestId     string `protobuf:"bytes,7,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	OtherHeader string `protobuf:"bytes,5,opt,name=other_header,json=otherHeader,proto3" json:"other_header,omitempty"`
+	// To facilitate testing of https://google.aip.dev/client-libraries/4235
+	RequestId string `protobuf:"bytes,7,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// To facilitate testing of https://google.aip.dev/client-libraries/4235
+	OtherRequestId *string `protobuf:"bytes,8,opt,name=other_request_id,json=otherRequestId,proto3,oneof" json:"other_request_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *EchoRequest) Reset() {
@@ -188,6 +191,13 @@ func (x *EchoRequest) GetRequestId() string {
 	return ""
 }
 
+func (x *EchoRequest) GetOtherRequestId() string {
+	if x != nil && x.OtherRequestId != nil {
+		return *x.OtherRequestId
+	}
+	return ""
+}
+
 type isEchoRequest_Response interface {
 	isEchoRequest_Response()
 }
@@ -214,9 +224,11 @@ type EchoResponse struct {
 	// The severity specified in the request.
 	Severity Severity `protobuf:"varint,2,opt,name=severity,proto3,enum=qclaogui.showcase.v1beta1.Severity" json:"severity,omitempty"`
 	// The request ID specified or autopopulated in the request.
-	RequestId     string `protobuf:"bytes,3,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	RequestId string `protobuf:"bytes,3,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// The other request ID specified or autopopulated in the request.
+	OtherRequestId string `protobuf:"bytes,4,opt,name=other_request_id,json=otherRequestId,proto3" json:"other_request_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *EchoResponse) Reset() {
@@ -266,6 +278,13 @@ func (x *EchoResponse) GetSeverity() Severity {
 func (x *EchoResponse) GetRequestId() string {
 	if x != nil {
 		return x.RequestId
+	}
+	return ""
+}
+
+func (x *EchoResponse) GetOtherRequestId() string {
+	if x != nil {
+		return x.OtherRequestId
 	}
 	return ""
 }
@@ -1241,7 +1260,7 @@ var File_qclaogui_showcase_v1beta1_echo_proto protoreflect.FileDescriptor
 
 const file_qclaogui_showcase_v1beta1_echo_proto_rawDesc = "" +
 	"\n" +
-	"$qclaogui/showcase/v1beta1/echo.proto\x12\x19qclaogui.showcase.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/api/field_info.proto\x1a\x19google/protobuf/any.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17google/rpc/status.proto\"\x86\x02\n" +
+	"$qclaogui/showcase/v1beta1/echo.proto\x12\x19qclaogui.showcase.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/api/field_info.proto\x1a\x19google/protobuf/any.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17google/rpc/status.proto\"\xd4\x02\n" +
 	"\vEchoRequest\x12\x1a\n" +
 	"\acontent\x18\x01 \x01(\tH\x00R\acontent\x12*\n" +
 	"\x05error\x18\x02 \x01(\v2\x12.google.rpc.StatusH\x00R\x05error\x12?\n" +
@@ -1249,14 +1268,17 @@ const file_qclaogui_showcase_v1beta1_echo_proto_rawDesc = "" +
 	"\x06header\x18\x04 \x01(\tR\x06header\x12!\n" +
 	"\fother_header\x18\x05 \x01(\tR\votherHeader\x12'\n" +
 	"\n" +
-	"request_id\x18\a \x01(\tB\b\xe2\x8c\xcf\xd7\b\x02\b\x01R\trequestIdB\n" +
+	"request_id\x18\a \x01(\tB\b\xe2\x8c\xcf\xd7\b\x02\b\x01R\trequestId\x127\n" +
+	"\x10other_request_id\x18\b \x01(\tB\b\xe2\x8c\xcf\xd7\b\x02\b\x01H\x01R\x0eotherRequestId\x88\x01\x01B\n" +
 	"\n" +
-	"\bresponse\"\x88\x01\n" +
+	"\bresponseB\x13\n" +
+	"\x11_other_request_id\"\xb2\x01\n" +
 	"\fEchoResponse\x12\x18\n" +
 	"\acontent\x18\x01 \x01(\tR\acontent\x12?\n" +
 	"\bseverity\x18\x02 \x01(\x0e2#.qclaogui.showcase.v1beta1.SeverityR\bseverity\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x03 \x01(\tR\trequestId\"s\n" +
+	"request_id\x18\x03 \x01(\tR\trequestId\x12(\n" +
+	"\x10other_request_id\x18\x04 \x01(\tR\x0eotherRequestId\"s\n" +
 	"\x17EchoErrorDetailsRequest\x12,\n" +
 	"\x12single_detail_text\x18\x01 \x01(\tR\x10singleDetailText\x12*\n" +
 	"\x11multi_detail_text\x18\x02 \x03(\tR\x0fmultiDetailText\"\xa7\x03\n" +

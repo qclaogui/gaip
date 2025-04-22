@@ -39,7 +39,7 @@ func (srv *Server) Echo(ctx context.Context, req *pb.EchoRequest) (*pb.EchoRespo
 	echoHeaders(ctx)
 	echoTrailers(ctx)
 
-	return &pb.EchoResponse{Content: req.GetContent(), Severity: req.GetSeverity(), RequestId: req.GetRequestId()}, nil
+	return &pb.EchoResponse{Content: req.GetContent(), Severity: req.GetSeverity(), RequestId: req.GetRequestId(), OtherRequestId: req.GetOtherRequestId()}, nil
 }
 
 // EchoErrorDetails This method returns error details in a repeated "google.protobuf.Any"
