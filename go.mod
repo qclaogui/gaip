@@ -7,21 +7,21 @@ require (
 	cloud.google.com/go/longrunning v0.6.7
 	entgo.io/ent v0.14.4
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/bufbuild/protovalidate-go v0.10.0
+	github.com/bufbuild/protovalidate-go v0.10.1
 	github.com/dave/jennifer v1.7.1
 	github.com/felixge/fgprof v0.9.5
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-kit/log v0.2.1
 	github.com/go-sql-driver/mysql v1.9.2
 	github.com/golang/protobuf v1.5.4
-	github.com/google/generative-ai-go v0.19.0
+	github.com/google/generative-ai-go v0.20.1
 	github.com/google/go-cmp v0.7.0
 	github.com/google/uuid v1.6.0
 	github.com/googleapis/gax-go/v2 v2.14.1
 	github.com/gorilla/mux v1.8.1
-	github.com/grafana/dskit v0.0.0-20250422145853-90fa6b9a2b76
+	github.com/grafana/dskit v0.0.0-20250506140631-ccd9ffae26bb
 	github.com/grafana/pyroscope-go/godeltaprof v0.1.8
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.1
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
 	github.com/hashicorp/vault/api v1.16.0
 	github.com/iancoleman/strcase v0.3.0
@@ -40,10 +40,10 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.35.0
 	go.opentelemetry.io/otel/sdk v1.35.0
 	golang.org/x/net v0.40.0
-	google.golang.org/api v0.231.0
-	google.golang.org/genproto v0.0.0-20250422160041-2d3770c4ea7f
-	google.golang.org/genproto/googleapis/api v0.0.0-20250422160041-2d3770c4ea7f
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250425173222-7b384671a197
+	google.golang.org/api v0.232.0
+	google.golang.org/genproto v0.0.0-20250505200425-f936aa4a68b2
+	google.golang.org/genproto/googleapis/api v0.0.0-20250505200425-f936aa4a68b2
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250505200425-f936aa4a68b2
 	google.golang.org/grpc v1.72.0
 	google.golang.org/protobuf v1.36.6
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
@@ -53,8 +53,8 @@ require (
 require (
 	ariga.io/atlas v0.32.1 // indirect
 	cel.dev/expr v0.23.1 // indirect
-	cloud.google.com/go v0.120.1 // indirect
-	cloud.google.com/go/ai v0.10.2 // indirect
+	cloud.google.com/go v0.121.0 // indirect
+	cloud.google.com/go/ai v0.11.1 // indirect
 	cloud.google.com/go/auth v0.16.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.6.0 // indirect
@@ -79,10 +79,12 @@ require (
 	github.com/gogo/googleapis v1.4.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/gogo/status v1.1.1 // indirect
+	github.com/google/btree v1.1.3 // indirect
 	github.com/google/cel-go v0.25.0 // indirect
-	github.com/google/pprof v0.0.0-20250423184734-337e5dd93bb4 // indirect
+	github.com/google/pprof v0.0.0-20250501235452-c0086092b71a // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.6 // indirect
+	github.com/grafana/otel-profiling-go v0.5.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -117,18 +119,21 @@ require (
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.60.0 // indirect
+	go.opentelemetry.io/contrib/propagators/jaeger v1.35.0 // indirect
+	go.opentelemetry.io/contrib/samplers/jaegerremote v0.29.0 // indirect
+	go.opentelemetry.io/otel/exporters/jaeger v1.17.0 // indirect
 	go.opentelemetry.io/otel/metric v1.35.0 // indirect
 	go.opentelemetry.io/otel/trace v1.35.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
-	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
+	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
 	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/oauth2 v0.29.0 // indirect
+	golang.org/x/oauth2 v0.30.0 // indirect
 	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
-	golang.org/x/tools v0.32.0 // indirect
+	golang.org/x/tools v0.33.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
