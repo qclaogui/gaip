@@ -18,4 +18,4 @@ replace github.com/buildpacks/lifecycle => github.com/buildpacks/lifecycle v0.20
 
 exclude github.com/karrick/godirwalk v1.17.0
 
-require github.com/GoogleContainerTools/skaffold/v2 v2.15.0 // cmd/skaffold
+require github.com/GoogleContainerTools/skaffold/v2 v2.16.0 // cmd/skaffold

@@ -4,4 +4,4 @@ go 1.23.4
 
 toolchain go1.24.2
 
-require github.com/bufbuild/buf v1.52.1 // cmd/buf
+require github.com/bufbuild/buf v1.53.0 // cmd/buf
