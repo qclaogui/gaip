@@ -91,6 +91,12 @@ type Config struct {
 	Registerer prometheus.Registerer
 	// If not set, default Prometheus Gatherer is used.
 	Gatherer prometheus.Gatherer
+
+	Throughput Throughput `yaml:"-"`
+}
+type Throughput struct {
+	LatencyCutoff time.Duration `yaml:"throughput_latency_cutoff"`
+	Unit          string        `yaml:"throughput_unit"`
 }
 
 var infinity = time.Duration(math.MaxInt64)
@@ -139,7 +145,8 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	fs.BoolVar(&cfg.LogRequestHeaders, "server.log-request-headers", false, "Optionally log request headers.")
 	fs.BoolVar(&cfg.LogRequestAtInfoLevel, "server.log-request-at-info-level-enabled", false, "Optionally log requests at info level instead of debug level. Applies to request headers as well if server.log-request-headers is enabled.")
 	fs.StringVar(&cfg.LogRequestExcludeHeadersList, "server.log-request-headers-exclude-list", "", "Comma separated list of headers to exclude from loggin. Only used if server.log-request-headers is true.")
-
+	fs.DurationVar(&cfg.Throughput.LatencyCutoff, "server.throughput.latency-cutoff", 0, "Requests taking over the cutoff are be observed to measure throughput. Server-Timing header is used with specified unit as the indicator, for example 'Server-Timing: unit;val=8.2'. If set to 0, the throughput is not calculated.")
+	fs.StringVar(&cfg.Throughput.Unit, "server.throughput.unit", "samples_processed", "Unit of the server throughput metric, for example 'processed_bytes' or 'samples_processed'. Observed values are gathered from the 'Server-Timing' header with the 'val' key. If set, it is appended to the request_server_throughput metric name.")
 	fs.DurationVar(&cfg.ServerGracefulShutdownTimeout, "server.graceful-shutdown-timeout", 30*time.Second, "Timeout for graceful shutdowns")
 }
 

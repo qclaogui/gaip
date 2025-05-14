@@ -17,9 +17,9 @@ require (
 	github.com/google/generative-ai-go v0.20.1
 	github.com/google/go-cmp v0.7.0
 	github.com/google/uuid v1.6.0
-	github.com/googleapis/gax-go/v2 v2.14.1
+	github.com/googleapis/gax-go/v2 v2.14.2
 	github.com/gorilla/mux v1.8.1
-	github.com/grafana/dskit v0.0.0-20250506140631-ccd9ffae26bb
+	github.com/grafana/dskit v0.0.0-20250508185919-68d09ac9016e
 	github.com/grafana/pyroscope-go/godeltaprof v0.1.8
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
@@ -40,10 +40,10 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.35.0
 	go.opentelemetry.io/otel/sdk v1.35.0
 	golang.org/x/net v0.40.0
-	google.golang.org/api v0.232.0
-	google.golang.org/genproto v0.0.0-20250505200425-f936aa4a68b2
-	google.golang.org/genproto/googleapis/api v0.0.0-20250505200425-f936aa4a68b2
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250505200425-f936aa4a68b2
+	google.golang.org/api v0.233.0
+	google.golang.org/genproto v0.0.0-20250512202823-5a2f75b736a9
+	google.golang.org/genproto/googleapis/api v0.0.0-20250512202823-5a2f75b736a9
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250512202823-5a2f75b736a9
 	google.golang.org/grpc v1.72.0
 	google.golang.org/protobuf v1.36.6
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
@@ -51,13 +51,13 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.32.1 // indirect
-	cel.dev/expr v0.23.1 // indirect
-	cloud.google.com/go v0.121.0 // indirect
-	cloud.google.com/go/ai v0.11.1 // indirect
+	ariga.io/atlas v0.33.0 // indirect
+	cel.dev/expr v0.24.0 // indirect
+	cloud.google.com/go v0.121.1 // indirect
+	cloud.google.com/go/ai v0.12.0 // indirect
 	cloud.google.com/go/auth v0.16.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
-	cloud.google.com/go/compute/metadata v0.6.0 // indirect
+	cloud.google.com/go/compute/metadata v0.7.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect

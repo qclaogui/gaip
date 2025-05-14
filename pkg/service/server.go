@@ -251,6 +251,7 @@ func newEndpointGRPC(cfg Config, router *mux.Router, metrics *Metrics, logger lo
 				metrics.ReceivedMessageSize,
 				metrics.SentMessageSize,
 				metrics.InflightRequests,
+				metrics.GRPCConcurrentStreamsByConnMax,
 			)),
 		)
 	}
