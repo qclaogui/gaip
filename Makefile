@@ -159,7 +159,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go_opt='module=github.com/qclaogui/gaip/genproto' \
  		proto/qclaogui/bookstore/v1alpha1/*.proto \
  		proto/qclaogui/generativelanguage/v1/*.proto \
- 		proto/qclaogui/generativelanguage/v1beta1/*.proto \
+ 		proto/qclaogui/generativelanguage/v1beta/*.proto \
  		proto/qclaogui/library/v1/*.proto \
  		proto/qclaogui/project/v1/*.proto \
  		proto/qclaogui/showcase/v1beta1/*.proto \
@@ -174,7 +174,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 		--go-grpc_opt='require_unimplemented_servers=false' \
  		proto/qclaogui/bookstore/v1alpha1/*.proto \
  		proto/qclaogui/generativelanguage/v1/*.proto \
- 		proto/qclaogui/generativelanguage/v1beta1/*.proto \
+ 		proto/qclaogui/generativelanguage/v1beta/*.proto \
  		proto/qclaogui/library/v1/*.proto \
  		proto/qclaogui/project/v1/*.proto \
  		proto/qclaogui/showcase/v1beta1/*.proto \
@@ -200,8 +200,8 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 #		--plugin=protoc-gen-go_rest_handler=$(PROTOC_GEN_GO_REST_HANDLER) \
 #		--go_rest_handler_out=genproto \
 #		--go_rest_handler_opt='module=github.com/qclaogui/gaip/genproto' \
-#		--go_rest_handler_opt='api-service-config=proto/qclaogui/generativelanguage/v1beta1/generativelanguage_v1beta1.yaml' \
-# 		proto/qclaogui/generativelanguage/v1beta1/*.proto
+#		--go_rest_handler_opt='api-service-config=proto/qclaogui/generativelanguage/v1beta/generativelanguage_v1beta.yaml' \
+# 		proto/qclaogui/generativelanguage/v1beta/*.proto
 
 
     # plugin protoc-gen-go_gapic
@@ -224,16 +224,16 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
 		--go_gapic_out=genproto \
-		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta1;generativelanguage' \
+		--go_gapic_opt='go-gapic-package=github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta;generativelanguage' \
 		--go_gapic_opt='metadata=false' \
 		--go_gapic_opt='omit-snippets' \
 		--go_gapic_opt='module=github.com/qclaogui/gaip/genproto' \
-		--go_gapic_opt='grpc-service-config=proto/qclaogui/generativelanguage/v1beta1/grpc_service_config.json' \
-		--go_gapic_opt='api-service-config=proto/qclaogui/generativelanguage/v1beta1/generativelanguage_v1beta1.yaml' \
+		--go_gapic_opt='grpc-service-config=proto/qclaogui/generativelanguage/v1beta/grpc_service_config.json' \
+		--go_gapic_opt='api-service-config=proto/qclaogui/generativelanguage/v1beta/generativelanguage_v1beta.yaml' \
 		--go_gapic_opt='release-level=alpha' \
 		--go_gapic_opt='transport=grpc+rest' \
 		--go_gapic_opt='rest-numeric-enums=true' \
- 		proto/qclaogui/generativelanguage/v1beta1/*.proto
+ 		proto/qclaogui/generativelanguage/v1beta/*.proto
 
 	@$(PROTOC) --proto_path=proto \
 		--plugin=protoc-gen-go_gapic=$(PROTOC_GEN_GO_GAPIC) \
@@ -318,7 +318,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 #    go install ./internal/protoveneer/cmd/protoveneer
 #
 protoveneer-gen: $(PROTOVENEER)
-	protoveneer -license LICENSE -outdir genproto/generativelanguage/apiv1beta1 proto/qclaogui/generativelanguage/v1beta1/protoveneer_v1beta1.yaml genproto/generativelanguage/apiv1beta1/generativelanguagepb
+	protoveneer -license LICENSE -outdir genproto/generativelanguage/apiv1beta proto/qclaogui/generativelanguage/v1beta/protoveneer_v1beta.yaml genproto/generativelanguage/apiv1beta/generativelanguagepb
 
 ##@ Testing Lint & Fmt
 

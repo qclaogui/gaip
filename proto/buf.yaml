@@ -22,17 +22,17 @@ lint:
       - qclaogui/showcase/v1beta1/echo_service.proto
       - qclaogui/showcase/v1beta1/messaging_service.proto
       - qclaogui/generativelanguage/v1/generative_service.proto
-      - qclaogui/generativelanguage/v1beta1/generative_service.proto
+      - qclaogui/generativelanguage/v1beta/generative_service.proto
     ENUM_VALUE_PREFIX:
       - qclaogui/generativelanguage/v1/generative_service.proto
       - qclaogui/generativelanguage/v1/safety.proto
-      - qclaogui/generativelanguage/v1beta1/content.proto
-      - qclaogui/generativelanguage/v1beta1/file.proto
-      - qclaogui/generativelanguage/v1beta1/generative_service.proto
-      - qclaogui/generativelanguage/v1beta1/permission.proto
-      - qclaogui/generativelanguage/v1beta1/retriever.proto
-      - qclaogui/generativelanguage/v1beta1/safety.proto
-      - qclaogui/generativelanguage/v1beta1/tuned_model.proto
+      - qclaogui/generativelanguage/v1beta/content.proto
+      - qclaogui/generativelanguage/v1beta/file.proto
+      - qclaogui/generativelanguage/v1beta/generative_service.proto
+      - qclaogui/generativelanguage/v1beta/permission.proto
+      - qclaogui/generativelanguage/v1beta/retriever.proto
+      - qclaogui/generativelanguage/v1beta/safety.proto
+      - qclaogui/generativelanguage/v1beta/tuned_model.proto
   enum_zero_value_suffix: _UNSPECIFIED
   rpc_allow_google_protobuf_empty_requests: true
   rpc_allow_google_protobuf_empty_responses: true
