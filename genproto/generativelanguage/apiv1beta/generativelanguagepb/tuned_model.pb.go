@@ -633,7 +633,7 @@ type isDataset_Dataset interface {
 }
 
 type Dataset_Examples struct {
-	// Optional. Inline examples.
+	// Optional. Inline examples with simple input/output text.
 	Examples *TuningExamples `protobuf:"bytes,1,opt,name=examples,proto3,oneof"`
 }
 
@@ -642,8 +642,8 @@ func (*Dataset_Examples) isDataset_Dataset() {}
 // A set of tuning examples. Can be training or validation data.
 type TuningExamples struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Required. The examples. Example input can be for text or discuss, but all
-	// examples in a set must be of the same type.
+	// The examples. Example input can be for text or discuss, but all examples
+	// in a set must be of the same type.
 	Examples      []*TuningExample `protobuf:"bytes,1,rep,name=examples,proto3" json:"examples,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -904,9 +904,9 @@ const file_qclaogui_generativelanguage_v1beta_tuned_model_proto_rawDesc = "" +
 	"\v_batch_size\"l\n" +
 	"\aDataset\x12V\n" +
 	"\bexamples\x18\x01 \x01(\v22.qclaogui.generativelanguage.v1beta.TuningExamplesB\x04\xe2A\x01\x01H\x00R\bexamplesB\t\n" +
-	"\adataset\"e\n" +
-	"\x0eTuningExamples\x12S\n" +
-	"\bexamples\x18\x01 \x03(\v21.qclaogui.generativelanguage.v1beta.TuningExampleB\x04\xe2A\x01\x02R\bexamples\"c\n" +
+	"\adataset\"_\n" +
+	"\x0eTuningExamples\x12M\n" +
+	"\bexamples\x18\x01 \x03(\v21.qclaogui.generativelanguage.v1beta.TuningExampleR\bexamples\"c\n" +
 	"\rTuningExample\x12%\n" +
 	"\n" +
 	"text_input\x18\x01 \x01(\tB\x04\xe2A\x01\x01H\x00R\ttextInput\x12\x1c\n" +

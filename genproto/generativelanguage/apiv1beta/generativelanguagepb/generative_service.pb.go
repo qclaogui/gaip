@@ -28,6 +28,7 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	durationpb "google.golang.org/protobuf/types/known/durationpb"
 )
 
 const (
@@ -57,6 +58,8 @@ const (
 	TaskType_QUESTION_ANSWERING TaskType = 6
 	// Specifies that the given text will be used for fact verification.
 	TaskType_FACT_VERIFICATION TaskType = 7
+	// Specifies that the given text will be used for code retrieval.
+	TaskType_CODE_RETRIEVAL_QUERY TaskType = 8
 )
 
 // Enum value maps for TaskType.
@@ -70,6 +73,7 @@ var (
 		5: "CLUSTERING",
 		6: "QUESTION_ANSWERING",
 		7: "FACT_VERIFICATION",
+		8: "CODE_RETRIEVAL_QUERY",
 	}
 	TaskType_value = map[string]int32{
 		"TASK_TYPE_UNSPECIFIED": 0,
@@ -80,6 +84,7 @@ var (
 		"CLUSTERING":            5,
 		"QUESTION_ANSWERING":    6,
 		"FACT_VERIFICATION":     7,
+		"CODE_RETRIEVAL_QUERY":  8,
 	}
 )
 
@@ -110,6 +115,120 @@ func (TaskType) EnumDescriptor() ([]byte, []int) {
 	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{0}
 }
 
+// Supported modalities of the response.
+type GenerationConfig_Modality int32
+
+const (
+	// Default value.
+	GenerationConfig_MODALITY_UNSPECIFIED GenerationConfig_Modality = 0
+	// Indicates the model should return text.
+	GenerationConfig_TEXT GenerationConfig_Modality = 1
+	// Indicates the model should return images.
+	GenerationConfig_IMAGE GenerationConfig_Modality = 2
+	// Indicates the model should return audio.
+	GenerationConfig_AUDIO GenerationConfig_Modality = 3
+)
+
+// Enum value maps for GenerationConfig_Modality.
+var (
+	GenerationConfig_Modality_name = map[int32]string{
+		0: "MODALITY_UNSPECIFIED",
+		1: "TEXT",
+		2: "IMAGE",
+		3: "AUDIO",
+	}
+	GenerationConfig_Modality_value = map[string]int32{
+		"MODALITY_UNSPECIFIED": 0,
+		"TEXT":                 1,
+		"IMAGE":                2,
+		"AUDIO":                3,
+	}
+)
+
+func (x GenerationConfig_Modality) Enum() *GenerationConfig_Modality {
+	p := new(GenerationConfig_Modality)
+	*p = x
+	return p
+}
+
+func (x GenerationConfig_Modality) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (GenerationConfig_Modality) Descriptor() protoreflect.EnumDescriptor {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[1].Descriptor()
+}
+
+func (GenerationConfig_Modality) Type() protoreflect.EnumType {
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[1]
+}
+
+func (x GenerationConfig_Modality) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use GenerationConfig_Modality.Descriptor instead.
+func (GenerationConfig_Modality) EnumDescriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{5, 0}
+}
+
+// Media resolution for the input media.
+type GenerationConfig_MediaResolution int32
+
+const (
+	// Media resolution has not been set.
+	GenerationConfig_MEDIA_RESOLUTION_UNSPECIFIED GenerationConfig_MediaResolution = 0
+	// Media resolution set to low (64 tokens).
+	GenerationConfig_MEDIA_RESOLUTION_LOW GenerationConfig_MediaResolution = 1
+	// Media resolution set to medium (256 tokens).
+	GenerationConfig_MEDIA_RESOLUTION_MEDIUM GenerationConfig_MediaResolution = 2
+	// Media resolution set to high (zoomed reframing with 256 tokens).
+	GenerationConfig_MEDIA_RESOLUTION_HIGH GenerationConfig_MediaResolution = 3
+)
+
+// Enum value maps for GenerationConfig_MediaResolution.
+var (
+	GenerationConfig_MediaResolution_name = map[int32]string{
+		0: "MEDIA_RESOLUTION_UNSPECIFIED",
+		1: "MEDIA_RESOLUTION_LOW",
+		2: "MEDIA_RESOLUTION_MEDIUM",
+		3: "MEDIA_RESOLUTION_HIGH",
+	}
+	GenerationConfig_MediaResolution_value = map[string]int32{
+		"MEDIA_RESOLUTION_UNSPECIFIED": 0,
+		"MEDIA_RESOLUTION_LOW":         1,
+		"MEDIA_RESOLUTION_MEDIUM":      2,
+		"MEDIA_RESOLUTION_HIGH":        3,
+	}
+)
+
+func (x GenerationConfig_MediaResolution) Enum() *GenerationConfig_MediaResolution {
+	p := new(GenerationConfig_MediaResolution)
+	*p = x
+	return p
+}
+
+func (x GenerationConfig_MediaResolution) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (GenerationConfig_MediaResolution) Descriptor() protoreflect.EnumDescriptor {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[2].Descriptor()
+}
+
+func (GenerationConfig_MediaResolution) Type() protoreflect.EnumType {
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[2]
+}
+
+func (x GenerationConfig_MediaResolution) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use GenerationConfig_MediaResolution.Descriptor instead.
+func (GenerationConfig_MediaResolution) EnumDescriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{5, 1}
+}
+
 // Specifies the reason why the prompt was blocked.
 type GenerateContentResponse_PromptFeedback_BlockReason int32
 
@@ -126,6 +245,8 @@ const (
 	GenerateContentResponse_PromptFeedback_BLOCKLIST GenerateContentResponse_PromptFeedback_BlockReason = 3
 	// Prompt was blocked due to prohibited content.
 	GenerateContentResponse_PromptFeedback_PROHIBITED_CONTENT GenerateContentResponse_PromptFeedback_BlockReason = 4
+	// Candidates blocked due to unsafe image generation content.
+	GenerateContentResponse_PromptFeedback_IMAGE_SAFETY GenerateContentResponse_PromptFeedback_BlockReason = 5
 )
 
 // Enum value maps for GenerateContentResponse_PromptFeedback_BlockReason.
@@ -136,6 +257,7 @@ var (
 		2: "OTHER",
 		3: "BLOCKLIST",
 		4: "PROHIBITED_CONTENT",
+		5: "IMAGE_SAFETY",
 	}
 	GenerateContentResponse_PromptFeedback_BlockReason_value = map[string]int32{
 		"BLOCK_REASON_UNSPECIFIED": 0,
@@ -143,6 +265,7 @@ var (
 		"OTHER":                    2,
 		"BLOCKLIST":                3,
 		"PROHIBITED_CONTENT":       4,
+		"IMAGE_SAFETY":             5,
 	}
 )
 
@@ -157,11 +280,11 @@ func (x GenerateContentResponse_PromptFeedback_BlockReason) String() string {
 }
 
 func (GenerateContentResponse_PromptFeedback_BlockReason) Descriptor() protoreflect.EnumDescriptor {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[1].Descriptor()
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[3].Descriptor()
 }
 
 func (GenerateContentResponse_PromptFeedback_BlockReason) Type() protoreflect.EnumType {
-	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[1]
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[3]
 }
 
 func (x GenerateContentResponse_PromptFeedback_BlockReason) Number() protoreflect.EnumNumber {
@@ -170,7 +293,7 @@ func (x GenerateContentResponse_PromptFeedback_BlockReason) Number() protoreflec
 
 // Deprecated: Use GenerateContentResponse_PromptFeedback_BlockReason.Descriptor instead.
 func (GenerateContentResponse_PromptFeedback_BlockReason) EnumDescriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{3, 0, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{7, 0, 0}
 }
 
 // Defines the reason why the model stopped generating tokens.
@@ -201,6 +324,9 @@ const (
 	Candidate_SPII Candidate_FinishReason = 9
 	// The function call generated by the model is invalid.
 	Candidate_MALFORMED_FUNCTION_CALL Candidate_FinishReason = 10
+	// Token generation stopped because generated images contain safety
+	// violations.
+	Candidate_IMAGE_SAFETY Candidate_FinishReason = 11
 )
 
 // Enum value maps for Candidate_FinishReason.
@@ -217,6 +343,7 @@ var (
 		8:  "PROHIBITED_CONTENT",
 		9:  "SPII",
 		10: "MALFORMED_FUNCTION_CALL",
+		11: "IMAGE_SAFETY",
 	}
 	Candidate_FinishReason_value = map[string]int32{
 		"FINISH_REASON_UNSPECIFIED": 0,
@@ -230,6 +357,7 @@ var (
 		"PROHIBITED_CONTENT":        8,
 		"SPII":                      9,
 		"MALFORMED_FUNCTION_CALL":   10,
+		"IMAGE_SAFETY":              11,
 	}
 )
 
@@ -244,11 +372,11 @@ func (x Candidate_FinishReason) String() string {
 }
 
 func (Candidate_FinishReason) Descriptor() protoreflect.EnumDescriptor {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[2].Descriptor()
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[4].Descriptor()
 }
 
 func (Candidate_FinishReason) Type() protoreflect.EnumType {
-	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[2]
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[4]
 }
 
 func (x Candidate_FinishReason) Number() protoreflect.EnumNumber {
@@ -257,7 +385,7 @@ func (x Candidate_FinishReason) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Candidate_FinishReason.Descriptor instead.
 func (Candidate_FinishReason) EnumDescriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{4, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{8, 0}
 }
 
 // Style for grounded answers.
@@ -302,11 +430,11 @@ func (x GenerateAnswerRequest_AnswerStyle) String() string {
 }
 
 func (GenerateAnswerRequest_AnswerStyle) Descriptor() protoreflect.EnumDescriptor {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[3].Descriptor()
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[5].Descriptor()
 }
 
 func (GenerateAnswerRequest_AnswerStyle) Type() protoreflect.EnumType {
-	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[3]
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[5]
 }
 
 func (x GenerateAnswerRequest_AnswerStyle) Number() protoreflect.EnumNumber {
@@ -315,7 +443,7 @@ func (x GenerateAnswerRequest_AnswerStyle) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use GenerateAnswerRequest_AnswerStyle.Descriptor instead.
 func (GenerateAnswerRequest_AnswerStyle) EnumDescriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{14, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{18, 0}
 }
 
 // Specifies what was the reason why input was blocked.
@@ -356,11 +484,11 @@ func (x GenerateAnswerResponse_InputFeedback_BlockReason) String() string {
 }
 
 func (GenerateAnswerResponse_InputFeedback_BlockReason) Descriptor() protoreflect.EnumDescriptor {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[4].Descriptor()
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[6].Descriptor()
 }
 
 func (GenerateAnswerResponse_InputFeedback_BlockReason) Type() protoreflect.EnumType {
-	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[4]
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[6]
 }
 
 func (x GenerateAnswerResponse_InputFeedback_BlockReason) Number() protoreflect.EnumNumber {
@@ -369,7 +497,224 @@ func (x GenerateAnswerResponse_InputFeedback_BlockReason) Number() protoreflect.
 
 // Deprecated: Use GenerateAnswerResponse_InputFeedback_BlockReason.Descriptor instead.
 func (GenerateAnswerResponse_InputFeedback_BlockReason) EnumDescriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{15, 0, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{19, 0, 0}
+}
+
+// The different ways of handling user activity.
+type RealtimeInputConfig_ActivityHandling int32
+
+const (
+	// If unspecified, the default behavior is `START_OF_ACTIVITY_INTERRUPTS`.
+	RealtimeInputConfig_ACTIVITY_HANDLING_UNSPECIFIED RealtimeInputConfig_ActivityHandling = 0
+	// If true, start of activity will interrupt the model's response (also
+	// called "barge in"). The model's current response will be cut-off in the
+	// moment of the interruption. This is the default behavior.
+	RealtimeInputConfig_START_OF_ACTIVITY_INTERRUPTS RealtimeInputConfig_ActivityHandling = 1
+	// The model's response will not be interrupted.
+	RealtimeInputConfig_NO_INTERRUPTION RealtimeInputConfig_ActivityHandling = 2
+)
+
+// Enum value maps for RealtimeInputConfig_ActivityHandling.
+var (
+	RealtimeInputConfig_ActivityHandling_name = map[int32]string{
+		0: "ACTIVITY_HANDLING_UNSPECIFIED",
+		1: "START_OF_ACTIVITY_INTERRUPTS",
+		2: "NO_INTERRUPTION",
+	}
+	RealtimeInputConfig_ActivityHandling_value = map[string]int32{
+		"ACTIVITY_HANDLING_UNSPECIFIED": 0,
+		"START_OF_ACTIVITY_INTERRUPTS":  1,
+		"NO_INTERRUPTION":               2,
+	}
+)
+
+func (x RealtimeInputConfig_ActivityHandling) Enum() *RealtimeInputConfig_ActivityHandling {
+	p := new(RealtimeInputConfig_ActivityHandling)
+	*p = x
+	return p
+}
+
+func (x RealtimeInputConfig_ActivityHandling) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RealtimeInputConfig_ActivityHandling) Descriptor() protoreflect.EnumDescriptor {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[7].Descriptor()
+}
+
+func (RealtimeInputConfig_ActivityHandling) Type() protoreflect.EnumType {
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[7]
+}
+
+func (x RealtimeInputConfig_ActivityHandling) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RealtimeInputConfig_ActivityHandling.Descriptor instead.
+func (RealtimeInputConfig_ActivityHandling) EnumDescriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{27, 0}
+}
+
+// Options about which input is included in the user's turn.
+type RealtimeInputConfig_TurnCoverage int32
+
+const (
+	// If unspecified, the default behavior is `TURN_INCLUDES_ONLY_ACTIVITY`.
+	RealtimeInputConfig_TURN_COVERAGE_UNSPECIFIED RealtimeInputConfig_TurnCoverage = 0
+	// The users turn only includes activity since the last turn, excluding
+	// inactivity (e.g. silence on the audio stream). This is the default
+	// behavior.
+	RealtimeInputConfig_TURN_INCLUDES_ONLY_ACTIVITY RealtimeInputConfig_TurnCoverage = 1
+	// The users turn includes all realtime input since the last turn, including
+	// inactivity (e.g. silence on the audio stream).
+	RealtimeInputConfig_TURN_INCLUDES_ALL_INPUT RealtimeInputConfig_TurnCoverage = 2
+)
+
+// Enum value maps for RealtimeInputConfig_TurnCoverage.
+var (
+	RealtimeInputConfig_TurnCoverage_name = map[int32]string{
+		0: "TURN_COVERAGE_UNSPECIFIED",
+		1: "TURN_INCLUDES_ONLY_ACTIVITY",
+		2: "TURN_INCLUDES_ALL_INPUT",
+	}
+	RealtimeInputConfig_TurnCoverage_value = map[string]int32{
+		"TURN_COVERAGE_UNSPECIFIED":   0,
+		"TURN_INCLUDES_ONLY_ACTIVITY": 1,
+		"TURN_INCLUDES_ALL_INPUT":     2,
+	}
+)
+
+func (x RealtimeInputConfig_TurnCoverage) Enum() *RealtimeInputConfig_TurnCoverage {
+	p := new(RealtimeInputConfig_TurnCoverage)
+	*p = x
+	return p
+}
+
+func (x RealtimeInputConfig_TurnCoverage) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RealtimeInputConfig_TurnCoverage) Descriptor() protoreflect.EnumDescriptor {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[8].Descriptor()
+}
+
+func (RealtimeInputConfig_TurnCoverage) Type() protoreflect.EnumType {
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[8]
+}
+
+func (x RealtimeInputConfig_TurnCoverage) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RealtimeInputConfig_TurnCoverage.Descriptor instead.
+func (RealtimeInputConfig_TurnCoverage) EnumDescriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{27, 1}
+}
+
+// Determines how start of speech is detected.
+type RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity int32
+
+const (
+	// The default is START_SENSITIVITY_HIGH.
+	RealtimeInputConfig_AutomaticActivityDetection_START_SENSITIVITY_UNSPECIFIED RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity = 0
+	// Automatic detection will detect the start of speech more often.
+	RealtimeInputConfig_AutomaticActivityDetection_START_SENSITIVITY_HIGH RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity = 1
+	// Automatic detection will detect the start of speech less often.
+	RealtimeInputConfig_AutomaticActivityDetection_START_SENSITIVITY_LOW RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity = 2
+)
+
+// Enum value maps for RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity.
+var (
+	RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity_name = map[int32]string{
+		0: "START_SENSITIVITY_UNSPECIFIED",
+		1: "START_SENSITIVITY_HIGH",
+		2: "START_SENSITIVITY_LOW",
+	}
+	RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity_value = map[string]int32{
+		"START_SENSITIVITY_UNSPECIFIED": 0,
+		"START_SENSITIVITY_HIGH":        1,
+		"START_SENSITIVITY_LOW":         2,
+	}
+)
+
+func (x RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity) Enum() *RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity {
+	p := new(RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity)
+	*p = x
+	return p
+}
+
+func (x RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity) Descriptor() protoreflect.EnumDescriptor {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[9].Descriptor()
+}
+
+func (RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity) Type() protoreflect.EnumType {
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[9]
+}
+
+func (x RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity.Descriptor instead.
+func (RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity) EnumDescriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{27, 0, 0}
+}
+
+// Determines how end of speech is detected.
+type RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity int32
+
+const (
+	// The default is END_SENSITIVITY_HIGH.
+	RealtimeInputConfig_AutomaticActivityDetection_END_SENSITIVITY_UNSPECIFIED RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity = 0
+	// Automatic detection ends speech more often.
+	RealtimeInputConfig_AutomaticActivityDetection_END_SENSITIVITY_HIGH RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity = 1
+	// Automatic detection ends speech less often.
+	RealtimeInputConfig_AutomaticActivityDetection_END_SENSITIVITY_LOW RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity = 2
+)
+
+// Enum value maps for RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.
+var (
+	RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity_name = map[int32]string{
+		0: "END_SENSITIVITY_UNSPECIFIED",
+		1: "END_SENSITIVITY_HIGH",
+		2: "END_SENSITIVITY_LOW",
+	}
+	RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity_value = map[string]int32{
+		"END_SENSITIVITY_UNSPECIFIED": 0,
+		"END_SENSITIVITY_HIGH":        1,
+		"END_SENSITIVITY_LOW":         2,
+	}
+)
+
+func (x RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity) Enum() *RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity {
+	p := new(RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity)
+	*p = x
+	return p
+}
+
+func (x RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity) Descriptor() protoreflect.EnumDescriptor {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[10].Descriptor()
+}
+
+func (RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity) Type() protoreflect.EnumType {
+	return &file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes[10]
+}
+
+func (x RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.Descriptor instead.
+func (RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity) EnumDescriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{27, 0, 1}
 }
 
 // Request to generate a completion from the model.
@@ -377,7 +722,7 @@ type GenerateContentRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Required. The name of the `Model` to use for generating the completion.
 	//
-	// Format: `name=models/{model}`.
+	// Format: `models/{model}`.
 	Model string `protobuf:"bytes,1,opt,name=model,proto3" json:"model,omitempty"`
 	// Optional. Developer set [system
 	// instruction(s)](https://ai.google.dev/gemini-api/docs/system-instructions).
@@ -418,8 +763,8 @@ type GenerateContentRequest struct {
 	// `SafetyCategory` provided in the list, the API will use the default safety
 	// setting for that category. Harm categories HARM_CATEGORY_HATE_SPEECH,
 	// HARM_CATEGORY_SEXUALLY_EXPLICIT, HARM_CATEGORY_DANGEROUS_CONTENT,
-	// HARM_CATEGORY_HARASSMENT are supported. Refer to the
-	// [guide](https://ai.google.dev/gemini-api/docs/safety-settings)
+	// HARM_CATEGORY_HARASSMENT, HARM_CATEGORY_CIVIC_INTEGRITY are supported.
+	// Refer to the [guide](https://ai.google.dev/gemini-api/docs/safety-settings)
 	// for detailed information on available safety settings. Also refer to the
 	// [Safety guidance](https://ai.google.dev/gemini-api/docs/safety-guidance) to
 	// learn how to incorporate safety considerations in your AI applications.
@@ -520,14 +865,246 @@ func (x *GenerateContentRequest) GetCachedContent() string {
 	return ""
 }
 
+// The configuration for the prebuilt speaker to use.
+type PrebuiltVoiceConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The name of the preset voice to use.
+	VoiceName     *string `protobuf:"bytes,1,opt,name=voice_name,json=voiceName,proto3,oneof" json:"voice_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PrebuiltVoiceConfig) Reset() {
+	*x = PrebuiltVoiceConfig{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PrebuiltVoiceConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PrebuiltVoiceConfig) ProtoMessage() {}
+
+func (x *PrebuiltVoiceConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PrebuiltVoiceConfig.ProtoReflect.Descriptor instead.
+func (*PrebuiltVoiceConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *PrebuiltVoiceConfig) GetVoiceName() string {
+	if x != nil && x.VoiceName != nil {
+		return *x.VoiceName
+	}
+	return ""
+}
+
+// The configuration for the voice to use.
+type VoiceConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The configuration for the speaker to use.
+	//
+	// Types that are valid to be assigned to VoiceConfig:
+	//
+	//	*VoiceConfig_PrebuiltVoiceConfig
+	VoiceConfig   isVoiceConfig_VoiceConfig `protobuf_oneof:"voice_config"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VoiceConfig) Reset() {
+	*x = VoiceConfig{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VoiceConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VoiceConfig) ProtoMessage() {}
+
+func (x *VoiceConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VoiceConfig.ProtoReflect.Descriptor instead.
+func (*VoiceConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *VoiceConfig) GetVoiceConfig() isVoiceConfig_VoiceConfig {
+	if x != nil {
+		return x.VoiceConfig
+	}
+	return nil
+}
+
+func (x *VoiceConfig) GetPrebuiltVoiceConfig() *PrebuiltVoiceConfig {
+	if x != nil {
+		if x, ok := x.VoiceConfig.(*VoiceConfig_PrebuiltVoiceConfig); ok {
+			return x.PrebuiltVoiceConfig
+		}
+	}
+	return nil
+}
+
+type isVoiceConfig_VoiceConfig interface {
+	isVoiceConfig_VoiceConfig()
+}
+
+type VoiceConfig_PrebuiltVoiceConfig struct {
+	// The configuration for the prebuilt voice to use.
+	PrebuiltVoiceConfig *PrebuiltVoiceConfig `protobuf:"bytes,1,opt,name=prebuilt_voice_config,json=prebuiltVoiceConfig,proto3,oneof"`
+}
+
+func (*VoiceConfig_PrebuiltVoiceConfig) isVoiceConfig_VoiceConfig() {}
+
+// The speech generation config.
+type SpeechConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The configuration in case of single-voice output.
+	VoiceConfig *VoiceConfig `protobuf:"bytes,1,opt,name=voice_config,json=voiceConfig,proto3" json:"voice_config,omitempty"`
+	// Optional. Language code (in BCP 47 format, e.g. "en-US") for speech
+	// synthesis.
+	//
+	// Valid values are: de-DE, en-AU, en-GB, en-IN, en-US, es-US, fr-FR, hi-IN,
+	// pt-BR, ar-XA, es-ES, fr-CA, id-ID, it-IT, ja-JP, tr-TR, vi-VN, bn-IN,
+	// gu-IN, kn-IN, ml-IN, mr-IN, ta-IN, te-IN, nl-NL, ko-KR, cmn-CN, pl-PL,
+	// ru-RU, and th-TH.
+	LanguageCode  string `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SpeechConfig) Reset() {
+	*x = SpeechConfig{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SpeechConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SpeechConfig) ProtoMessage() {}
+
+func (x *SpeechConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SpeechConfig.ProtoReflect.Descriptor instead.
+func (*SpeechConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SpeechConfig) GetVoiceConfig() *VoiceConfig {
+	if x != nil {
+		return x.VoiceConfig
+	}
+	return nil
+}
+
+func (x *SpeechConfig) GetLanguageCode() string {
+	if x != nil {
+		return x.LanguageCode
+	}
+	return ""
+}
+
+// Config for thinking features.
+type ThinkingConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Indicates whether to include thoughts in the response.
+	// If true, thoughts are returned only when available.
+	IncludeThoughts *bool `protobuf:"varint,1,opt,name=include_thoughts,json=includeThoughts,proto3,oneof" json:"include_thoughts,omitempty"`
+	// The number of thoughts tokens that the model should generate.
+	ThinkingBudget *int32 `protobuf:"varint,2,opt,name=thinking_budget,json=thinkingBudget,proto3,oneof" json:"thinking_budget,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *ThinkingConfig) Reset() {
+	*x = ThinkingConfig{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ThinkingConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ThinkingConfig) ProtoMessage() {}
+
+func (x *ThinkingConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ThinkingConfig.ProtoReflect.Descriptor instead.
+func (*ThinkingConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ThinkingConfig) GetIncludeThoughts() bool {
+	if x != nil && x.IncludeThoughts != nil {
+		return *x.IncludeThoughts
+	}
+	return false
+}
+
+func (x *ThinkingConfig) GetThinkingBudget() int32 {
+	if x != nil && x.ThinkingBudget != nil {
+		return *x.ThinkingBudget
+	}
+	return 0
+}
+
 // Configuration options for model generation and outputs. Not all parameters
 // are configurable for every model.
 type GenerationConfig struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Optional. Number of generated responses to return.
-	//
-	// Currently, this value can only be set to 1. If unset, this will default
-	// to 1.
+	// Optional. Number of generated responses to return. If unset, this will
+	// default to 1. Please note that this doesn't work for previous generation
+	// models (Gemini 1.0 family)
 	CandidateCount *int32 `protobuf:"varint,1,opt,name=candidate_count,json=candidateCount,proto3,oneof" json:"candidate_count,omitempty"`
 	// Optional. The set of character sequences (up to 5) that will stop output
 	// generation. If specified, the API will stop at the first appearance of a
@@ -572,6 +1149,9 @@ type GenerationConfig struct {
 	// `top_k` attribute indicates that the model doesn't apply top-k sampling
 	// and doesn't allow setting `top_k` on requests.
 	TopK *int32 `protobuf:"varint,7,opt,name=top_k,json=topK,proto3,oneof" json:"top_k,omitempty"`
+	// Optional. Seed used in decoding. If not set, the request uses a randomly
+	// generated seed.
+	Seed *int32 `protobuf:"varint,8,opt,name=seed,proto3,oneof" json:"seed,omitempty"`
 	// Optional. MIME type of the generated candidate text.
 	// Supported MIME types are:
 	// `text/plain`: (default) Text output.
@@ -628,14 +1208,35 @@ type GenerationConfig struct {
 	// [response_logprobs=True][qclaogui.generativelanguage.v1beta.GenerationConfig.response_logprobs].
 	// This sets the number of top logprobs to return at each decoding step in the
 	// [Candidate.logprobs_result][qclaogui.generativelanguage.v1beta.Candidate.logprobs_result].
-	Logprobs      *int32 `protobuf:"varint,18,opt,name=logprobs,proto3,oneof" json:"logprobs,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Logprobs *int32 `protobuf:"varint,18,opt,name=logprobs,proto3,oneof" json:"logprobs,omitempty"`
+	// Optional. Enables enhanced civic answers. It may not be available for all
+	// models.
+	EnableEnhancedCivicAnswers *bool `protobuf:"varint,19,opt,name=enable_enhanced_civic_answers,json=enableEnhancedCivicAnswers,proto3,oneof" json:"enable_enhanced_civic_answers,omitempty"`
+	// Optional. The requested modalities of the response. Represents the set of
+	// modalities that the model can return, and should be expected in the
+	// response. This is an exact match to the modalities of the response.
+	//
+	// A model may have multiple combinations of supported modalities. If the
+	// requested modalities do not match any of the supported combinations, an
+	// error will be returned.
+	//
+	// An empty list is equivalent to requesting only text.
+	ResponseModalities []GenerationConfig_Modality `protobuf:"varint,20,rep,packed,name=response_modalities,json=responseModalities,proto3,enum=qclaogui.generativelanguage.v1beta.GenerationConfig_Modality" json:"response_modalities,omitempty"`
+	// Optional. The speech generation config.
+	SpeechConfig *SpeechConfig `protobuf:"bytes,21,opt,name=speech_config,json=speechConfig,proto3,oneof" json:"speech_config,omitempty"`
+	// Optional. Config for thinking features.
+	// An error will be returned if this field is set for models that don't
+	// support thinking.
+	ThinkingConfig *ThinkingConfig `protobuf:"bytes,22,opt,name=thinking_config,json=thinkingConfig,proto3,oneof" json:"thinking_config,omitempty"`
+	// Optional. If specified, the media resolution specified will be used.
+	MediaResolution *GenerationConfig_MediaResolution `protobuf:"varint,23,opt,name=media_resolution,json=mediaResolution,proto3,enum=qclaogui.generativelanguage.v1beta.GenerationConfig_MediaResolution,oneof" json:"media_resolution,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *GenerationConfig) Reset() {
 	*x = GenerationConfig{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[1]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -647,7 +1248,7 @@ func (x *GenerationConfig) String() string {
 func (*GenerationConfig) ProtoMessage() {}
 
 func (x *GenerationConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[1]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -660,7 +1261,7 @@ func (x *GenerationConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerationConfig.ProtoReflect.Descriptor instead.
 func (*GenerationConfig) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{1}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GenerationConfig) GetCandidateCount() int32 {
@@ -701,6 +1302,13 @@ func (x *GenerationConfig) GetTopP() float32 {
 func (x *GenerationConfig) GetTopK() int32 {
 	if x != nil && x.TopK != nil {
 		return *x.TopK
+	}
+	return 0
+}
+
+func (x *GenerationConfig) GetSeed() int32 {
+	if x != nil && x.Seed != nil {
+		return *x.Seed
 	}
 	return 0
 }
@@ -747,6 +1355,41 @@ func (x *GenerationConfig) GetLogprobs() int32 {
 	return 0
 }
 
+func (x *GenerationConfig) GetEnableEnhancedCivicAnswers() bool {
+	if x != nil && x.EnableEnhancedCivicAnswers != nil {
+		return *x.EnableEnhancedCivicAnswers
+	}
+	return false
+}
+
+func (x *GenerationConfig) GetResponseModalities() []GenerationConfig_Modality {
+	if x != nil {
+		return x.ResponseModalities
+	}
+	return nil
+}
+
+func (x *GenerationConfig) GetSpeechConfig() *SpeechConfig {
+	if x != nil {
+		return x.SpeechConfig
+	}
+	return nil
+}
+
+func (x *GenerationConfig) GetThinkingConfig() *ThinkingConfig {
+	if x != nil {
+		return x.ThinkingConfig
+	}
+	return nil
+}
+
+func (x *GenerationConfig) GetMediaResolution() GenerationConfig_MediaResolution {
+	if x != nil && x.MediaResolution != nil {
+		return *x.MediaResolution
+	}
+	return GenerationConfig_MEDIA_RESOLUTION_UNSPECIFIED
+}
+
 // Configuration for retrieving grounding content from a `Corpus` or
 // `Document` created using the Semantic Retriever API.
 type SemanticRetrieverConfig struct {
@@ -770,7 +1413,7 @@ type SemanticRetrieverConfig struct {
 
 func (x *SemanticRetrieverConfig) Reset() {
 	*x = SemanticRetrieverConfig{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[2]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -782,7 +1425,7 @@ func (x *SemanticRetrieverConfig) String() string {
 func (*SemanticRetrieverConfig) ProtoMessage() {}
 
 func (x *SemanticRetrieverConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[2]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -795,7 +1438,7 @@ func (x *SemanticRetrieverConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SemanticRetrieverConfig.ProtoReflect.Descriptor instead.
 func (*SemanticRetrieverConfig) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{2}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *SemanticRetrieverConfig) GetSource() string {
@@ -851,13 +1494,15 @@ type GenerateContentResponse struct {
 	PromptFeedback *GenerateContentResponse_PromptFeedback `protobuf:"bytes,2,opt,name=prompt_feedback,json=promptFeedback,proto3" json:"prompt_feedback,omitempty"`
 	// Output only. Metadata on the generation requests' token usage.
 	UsageMetadata *GenerateContentResponse_UsageMetadata `protobuf:"bytes,3,opt,name=usage_metadata,json=usageMetadata,proto3" json:"usage_metadata,omitempty"`
+	// Output only. The model version used to generate the response.
+	ModelVersion  string `protobuf:"bytes,4,opt,name=model_version,json=modelVersion,proto3" json:"model_version,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GenerateContentResponse) Reset() {
 	*x = GenerateContentResponse{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[3]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -869,7 +1514,7 @@ func (x *GenerateContentResponse) String() string {
 func (*GenerateContentResponse) ProtoMessage() {}
 
 func (x *GenerateContentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[3]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -882,7 +1527,7 @@ func (x *GenerateContentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateContentResponse.ProtoReflect.Descriptor instead.
 func (*GenerateContentResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{3}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GenerateContentResponse) GetCandidates() []*Candidate {
@@ -904,6 +1549,13 @@ func (x *GenerateContentResponse) GetUsageMetadata() *GenerateContentResponse_Us
 		return x.UsageMetadata
 	}
 	return nil
+}
+
+func (x *GenerateContentResponse) GetModelVersion() string {
+	if x != nil {
+		return x.ModelVersion
+	}
+	return ""
 }
 
 // A response candidate generated from the model.
@@ -938,7 +1590,7 @@ type Candidate struct {
 	//
 	// This field is populated for `GenerateContent` calls.
 	GroundingMetadata *GroundingMetadata `protobuf:"bytes,9,opt,name=grounding_metadata,json=groundingMetadata,proto3" json:"grounding_metadata,omitempty"`
-	// Output only.
+	// Output only. Average log probability score of the candidate.
 	AvgLogprobs float64 `protobuf:"fixed64,10,opt,name=avg_logprobs,json=avgLogprobs,proto3" json:"avg_logprobs,omitempty"`
 	// Output only. Log-likelihood scores for the response tokens and top tokens
 	LogprobsResult *LogprobsResult `protobuf:"bytes,11,opt,name=logprobs_result,json=logprobsResult,proto3" json:"logprobs_result,omitempty"`
@@ -948,7 +1600,7 @@ type Candidate struct {
 
 func (x *Candidate) Reset() {
 	*x = Candidate{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[4]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -960,7 +1612,7 @@ func (x *Candidate) String() string {
 func (*Candidate) ProtoMessage() {}
 
 func (x *Candidate) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[4]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -973,7 +1625,7 @@ func (x *Candidate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Candidate.ProtoReflect.Descriptor instead.
 func (*Candidate) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{4}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Candidate) GetIndex() int32 {
@@ -1060,7 +1712,7 @@ type LogprobsResult struct {
 
 func (x *LogprobsResult) Reset() {
 	*x = LogprobsResult{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[5]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1072,7 +1724,7 @@ func (x *LogprobsResult) String() string {
 func (*LogprobsResult) ProtoMessage() {}
 
 func (x *LogprobsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[5]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1085,7 +1737,7 @@ func (x *LogprobsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogprobsResult.ProtoReflect.Descriptor instead.
 func (*LogprobsResult) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{5}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *LogprobsResult) GetTopCandidates() []*LogprobsResult_TopCandidates {
@@ -1116,7 +1768,7 @@ type AttributionSourceId struct {
 
 func (x *AttributionSourceId) Reset() {
 	*x = AttributionSourceId{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[6]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1128,7 +1780,7 @@ func (x *AttributionSourceId) String() string {
 func (*AttributionSourceId) ProtoMessage() {}
 
 func (x *AttributionSourceId) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[6]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1141,7 +1793,7 @@ func (x *AttributionSourceId) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AttributionSourceId.ProtoReflect.Descriptor instead.
 func (*AttributionSourceId) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{6}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *AttributionSourceId) GetSource() isAttributionSourceId_Source {
@@ -1200,7 +1852,7 @@ type GroundingAttribution struct {
 
 func (x *GroundingAttribution) Reset() {
 	*x = GroundingAttribution{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[7]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1212,7 +1864,7 @@ func (x *GroundingAttribution) String() string {
 func (*GroundingAttribution) ProtoMessage() {}
 
 func (x *GroundingAttribution) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[7]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1225,7 +1877,7 @@ func (x *GroundingAttribution) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingAttribution.ProtoReflect.Descriptor instead.
 func (*GroundingAttribution) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{7}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GroundingAttribution) GetSourceId() *AttributionSourceId {
@@ -1257,7 +1909,7 @@ type RetrievalMetadata struct {
 
 func (x *RetrievalMetadata) Reset() {
 	*x = RetrievalMetadata{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[8]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1269,7 +1921,7 @@ func (x *RetrievalMetadata) String() string {
 func (*RetrievalMetadata) ProtoMessage() {}
 
 func (x *RetrievalMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[8]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1282,7 +1934,7 @@ func (x *RetrievalMetadata) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RetrievalMetadata.ProtoReflect.Descriptor instead.
 func (*RetrievalMetadata) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{8}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *RetrievalMetadata) GetGoogleSearchDynamicRetrievalScore() float32 {
@@ -1303,13 +1955,15 @@ type GroundingMetadata struct {
 	GroundingSupports []*GroundingSupport `protobuf:"bytes,3,rep,name=grounding_supports,json=groundingSupports,proto3" json:"grounding_supports,omitempty"`
 	// Metadata related to retrieval in the grounding flow.
 	RetrievalMetadata *RetrievalMetadata `protobuf:"bytes,4,opt,name=retrieval_metadata,json=retrievalMetadata,proto3,oneof" json:"retrieval_metadata,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Web search queries for the following-up web search.
+	WebSearchQueries []string `protobuf:"bytes,5,rep,name=web_search_queries,json=webSearchQueries,proto3" json:"web_search_queries,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *GroundingMetadata) Reset() {
 	*x = GroundingMetadata{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[9]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1321,7 +1975,7 @@ func (x *GroundingMetadata) String() string {
 func (*GroundingMetadata) ProtoMessage() {}
 
 func (x *GroundingMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[9]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1334,7 +1988,7 @@ func (x *GroundingMetadata) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingMetadata.ProtoReflect.Descriptor instead.
 func (*GroundingMetadata) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{9}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GroundingMetadata) GetSearchEntryPoint() *SearchEntryPoint {
@@ -1365,6 +2019,13 @@ func (x *GroundingMetadata) GetRetrievalMetadata() *RetrievalMetadata {
 	return nil
 }
 
+func (x *GroundingMetadata) GetWebSearchQueries() []string {
+	if x != nil {
+		return x.WebSearchQueries
+	}
+	return nil
+}
+
 // Google search entry point.
 type SearchEntryPoint struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1380,7 +2041,7 @@ type SearchEntryPoint struct {
 
 func (x *SearchEntryPoint) Reset() {
 	*x = SearchEntryPoint{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[10]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1392,7 +2053,7 @@ func (x *SearchEntryPoint) String() string {
 func (*SearchEntryPoint) ProtoMessage() {}
 
 func (x *SearchEntryPoint) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[10]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1405,7 +2066,7 @@ func (x *SearchEntryPoint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchEntryPoint.ProtoReflect.Descriptor instead.
 func (*SearchEntryPoint) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{10}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *SearchEntryPoint) GetRenderedContent() string {
@@ -1437,7 +2098,7 @@ type GroundingChunk struct {
 
 func (x *GroundingChunk) Reset() {
 	*x = GroundingChunk{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[11]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1449,7 +2110,7 @@ func (x *GroundingChunk) String() string {
 func (*GroundingChunk) ProtoMessage() {}
 
 func (x *GroundingChunk) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[11]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1462,7 +2123,7 @@ func (x *GroundingChunk) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingChunk.ProtoReflect.Descriptor instead.
 func (*GroundingChunk) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{11}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GroundingChunk) GetChunkType() isGroundingChunk_ChunkType {
@@ -1511,7 +2172,7 @@ type Segment struct {
 
 func (x *Segment) Reset() {
 	*x = Segment{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[12]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1523,7 +2184,7 @@ func (x *Segment) String() string {
 func (*Segment) ProtoMessage() {}
 
 func (x *Segment) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[12]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1536,7 +2197,7 @@ func (x *Segment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Segment.ProtoReflect.Descriptor instead.
 func (*Segment) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{12}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *Segment) GetPartIndex() int32 {
@@ -1587,7 +2248,7 @@ type GroundingSupport struct {
 
 func (x *GroundingSupport) Reset() {
 	*x = GroundingSupport{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[13]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1599,7 +2260,7 @@ func (x *GroundingSupport) String() string {
 func (*GroundingSupport) ProtoMessage() {}
 
 func (x *GroundingSupport) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[13]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1612,7 +2273,7 @@ func (x *GroundingSupport) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingSupport.ProtoReflect.Descriptor instead.
 func (*GroundingSupport) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{13}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GroundingSupport) GetSegment() *Segment {
@@ -1693,7 +2354,7 @@ type GenerateAnswerRequest struct {
 
 func (x *GenerateAnswerRequest) Reset() {
 	*x = GenerateAnswerRequest{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[14]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1705,7 +2366,7 @@ func (x *GenerateAnswerRequest) String() string {
 func (*GenerateAnswerRequest) ProtoMessage() {}
 
 func (x *GenerateAnswerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[14]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1718,7 +2379,7 @@ func (x *GenerateAnswerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateAnswerRequest.ProtoReflect.Descriptor instead.
 func (*GenerateAnswerRequest) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{14}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GenerateAnswerRequest) GetGroundingSource() isGenerateAnswerRequest_GroundingSource {
@@ -1841,7 +2502,7 @@ type GenerateAnswerResponse struct {
 
 func (x *GenerateAnswerResponse) Reset() {
 	*x = GenerateAnswerResponse{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[15]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1853,7 +2514,7 @@ func (x *GenerateAnswerResponse) String() string {
 func (*GenerateAnswerResponse) ProtoMessage() {}
 
 func (x *GenerateAnswerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[15]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1866,7 +2527,7 @@ func (x *GenerateAnswerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateAnswerResponse.ProtoReflect.Descriptor instead.
 func (*GenerateAnswerResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{15}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GenerateAnswerResponse) GetAnswer() *Candidate {
@@ -1903,8 +2564,8 @@ type EmbedContentRequest struct {
 	// Required. The content to embed. Only the `parts.text` fields will be
 	// counted.
 	Content *Content `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
-	// Optional. Optional task type for which the embeddings will be used. Can
-	// only be set for `models/embedding-001`.
+	// Optional. Optional task type for which the embeddings will be used. Not
+	// supported on earlier models (`models/embedding-001`).
 	TaskType *TaskType `protobuf:"varint,3,opt,name=task_type,json=taskType,proto3,enum=qclaogui.generativelanguage.v1beta.TaskType,oneof" json:"task_type,omitempty"`
 	// Optional. An optional title for the text. Only applicable when TaskType is
 	// `RETRIEVAL_DOCUMENT`.
@@ -1923,7 +2584,7 @@ type EmbedContentRequest struct {
 
 func (x *EmbedContentRequest) Reset() {
 	*x = EmbedContentRequest{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[16]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1935,7 +2596,7 @@ func (x *EmbedContentRequest) String() string {
 func (*EmbedContentRequest) ProtoMessage() {}
 
 func (x *EmbedContentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[16]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1948,7 +2609,7 @@ func (x *EmbedContentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmbedContentRequest.ProtoReflect.Descriptor instead.
 func (*EmbedContentRequest) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{16}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *EmbedContentRequest) GetModel() string {
@@ -1997,7 +2658,7 @@ type ContentEmbedding struct {
 
 func (x *ContentEmbedding) Reset() {
 	*x = ContentEmbedding{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[17]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2009,7 +2670,7 @@ func (x *ContentEmbedding) String() string {
 func (*ContentEmbedding) ProtoMessage() {}
 
 func (x *ContentEmbedding) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[17]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2022,7 +2683,7 @@ func (x *ContentEmbedding) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ContentEmbedding.ProtoReflect.Descriptor instead.
 func (*ContentEmbedding) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{17}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ContentEmbedding) GetValues() []float32 {
@@ -2043,7 +2704,7 @@ type EmbedContentResponse struct {
 
 func (x *EmbedContentResponse) Reset() {
 	*x = EmbedContentResponse{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[18]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2055,7 +2716,7 @@ func (x *EmbedContentResponse) String() string {
 func (*EmbedContentResponse) ProtoMessage() {}
 
 func (x *EmbedContentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[18]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2068,7 +2729,7 @@ func (x *EmbedContentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmbedContentResponse.ProtoReflect.Descriptor instead.
 func (*EmbedContentResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{18}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *EmbedContentResponse) GetEmbedding() *ContentEmbedding {
@@ -2097,7 +2758,7 @@ type BatchEmbedContentsRequest struct {
 
 func (x *BatchEmbedContentsRequest) Reset() {
 	*x = BatchEmbedContentsRequest{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[19]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2109,7 +2770,7 @@ func (x *BatchEmbedContentsRequest) String() string {
 func (*BatchEmbedContentsRequest) ProtoMessage() {}
 
 func (x *BatchEmbedContentsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[19]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2122,7 +2783,7 @@ func (x *BatchEmbedContentsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BatchEmbedContentsRequest.ProtoReflect.Descriptor instead.
 func (*BatchEmbedContentsRequest) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{19}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *BatchEmbedContentsRequest) GetModel() string {
@@ -2151,7 +2812,7 @@ type BatchEmbedContentsResponse struct {
 
 func (x *BatchEmbedContentsResponse) Reset() {
 	*x = BatchEmbedContentsResponse{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[20]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2163,7 +2824,7 @@ func (x *BatchEmbedContentsResponse) String() string {
 func (*BatchEmbedContentsResponse) ProtoMessage() {}
 
 func (x *BatchEmbedContentsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[20]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2176,7 +2837,7 @@ func (x *BatchEmbedContentsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BatchEmbedContentsResponse.ProtoReflect.Descriptor instead.
 func (*BatchEmbedContentsResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{20}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *BatchEmbedContentsResponse) GetEmbeddings() []*ContentEmbedding {
@@ -2217,7 +2878,7 @@ type CountTokensRequest struct {
 
 func (x *CountTokensRequest) Reset() {
 	*x = CountTokensRequest{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[21]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2229,7 +2890,7 @@ func (x *CountTokensRequest) String() string {
 func (*CountTokensRequest) ProtoMessage() {}
 
 func (x *CountTokensRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[21]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2242,7 +2903,7 @@ func (x *CountTokensRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CountTokensRequest.ProtoReflect.Descriptor instead.
 func (*CountTokensRequest) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{21}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *CountTokensRequest) GetModel() string {
@@ -2276,13 +2937,17 @@ type CountTokensResponse struct {
 	TotalTokens int32 `protobuf:"varint,1,opt,name=total_tokens,json=totalTokens,proto3" json:"total_tokens,omitempty"`
 	// Number of tokens in the cached part of the prompt (the cached content).
 	CachedContentTokenCount int32 `protobuf:"varint,5,opt,name=cached_content_token_count,json=cachedContentTokenCount,proto3" json:"cached_content_token_count,omitempty"`
-	unknownFields           protoimpl.UnknownFields
-	sizeCache               protoimpl.SizeCache
+	// Output only. List of modalities that were processed in the request input.
+	PromptTokensDetails []*ModalityTokenCount `protobuf:"bytes,6,rep,name=prompt_tokens_details,json=promptTokensDetails,proto3" json:"prompt_tokens_details,omitempty"`
+	// Output only. List of modalities that were processed in the cached content.
+	CacheTokensDetails []*ModalityTokenCount `protobuf:"bytes,7,rep,name=cache_tokens_details,json=cacheTokensDetails,proto3" json:"cache_tokens_details,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *CountTokensResponse) Reset() {
 	*x = CountTokensResponse{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[22]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2294,7 +2959,7 @@ func (x *CountTokensResponse) String() string {
 func (*CountTokensResponse) ProtoMessage() {}
 
 func (x *CountTokensResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[22]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2307,7 +2972,7 @@ func (x *CountTokensResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CountTokensResponse.ProtoReflect.Descriptor instead.
 func (*CountTokensResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{22}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *CountTokensResponse) GetTotalTokens() int32 {
@@ -2322,6 +2987,1490 @@ func (x *CountTokensResponse) GetCachedContentTokenCount() int32 {
 		return x.CachedContentTokenCount
 	}
 	return 0
+}
+
+func (x *CountTokensResponse) GetPromptTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.PromptTokensDetails
+	}
+	return nil
+}
+
+func (x *CountTokensResponse) GetCacheTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.CacheTokensDetails
+	}
+	return nil
+}
+
+// Configures the realtime input behavior in `BidiGenerateContent`.
+type RealtimeInputConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional. If not set, automatic activity detection is enabled by default.
+	// If automatic voice detection is disabled, the client must send activity
+	// signals.
+	AutomaticActivityDetection *RealtimeInputConfig_AutomaticActivityDetection `protobuf:"bytes,1,opt,name=automatic_activity_detection,json=automaticActivityDetection,proto3" json:"automatic_activity_detection,omitempty"`
+	// Optional. Defines what effect activity has.
+	ActivityHandling *RealtimeInputConfig_ActivityHandling `protobuf:"varint,3,opt,name=activity_handling,json=activityHandling,proto3,enum=qclaogui.generativelanguage.v1beta.RealtimeInputConfig_ActivityHandling,oneof" json:"activity_handling,omitempty"`
+	// Optional. Defines which input is included in the user's turn.
+	TurnCoverage  *RealtimeInputConfig_TurnCoverage `protobuf:"varint,4,opt,name=turn_coverage,json=turnCoverage,proto3,enum=qclaogui.generativelanguage.v1beta.RealtimeInputConfig_TurnCoverage,oneof" json:"turn_coverage,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RealtimeInputConfig) Reset() {
+	*x = RealtimeInputConfig{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RealtimeInputConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RealtimeInputConfig) ProtoMessage() {}
+
+func (x *RealtimeInputConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RealtimeInputConfig.ProtoReflect.Descriptor instead.
+func (*RealtimeInputConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *RealtimeInputConfig) GetAutomaticActivityDetection() *RealtimeInputConfig_AutomaticActivityDetection {
+	if x != nil {
+		return x.AutomaticActivityDetection
+	}
+	return nil
+}
+
+func (x *RealtimeInputConfig) GetActivityHandling() RealtimeInputConfig_ActivityHandling {
+	if x != nil && x.ActivityHandling != nil {
+		return *x.ActivityHandling
+	}
+	return RealtimeInputConfig_ACTIVITY_HANDLING_UNSPECIFIED
+}
+
+func (x *RealtimeInputConfig) GetTurnCoverage() RealtimeInputConfig_TurnCoverage {
+	if x != nil && x.TurnCoverage != nil {
+		return *x.TurnCoverage
+	}
+	return RealtimeInputConfig_TURN_COVERAGE_UNSPECIFIED
+}
+
+// Session resumption configuration.
+//
+// This message is included in the session configuration as
+// `BidiGenerateContentSetup.session_resumption`. If configured, the server
+// will send `SessionResumptionUpdate` messages.
+type SessionResumptionConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The handle of a previous session. If not present then a new session is
+	// created.
+	//
+	// Session handles come from `SessionResumptionUpdate.token` values in
+	// previous connections.
+	Handle        *string `protobuf:"bytes,1,opt,name=handle,proto3,oneof" json:"handle,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionResumptionConfig) Reset() {
+	*x = SessionResumptionConfig{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionResumptionConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionResumptionConfig) ProtoMessage() {}
+
+func (x *SessionResumptionConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionResumptionConfig.ProtoReflect.Descriptor instead.
+func (*SessionResumptionConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *SessionResumptionConfig) GetHandle() string {
+	if x != nil && x.Handle != nil {
+		return *x.Handle
+	}
+	return ""
+}
+
+// Enables context window compression — a mechanism for managing the model's
+// context window so that it does not exceed a given length.
+type ContextWindowCompressionConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The context window compression mechanism used.
+	//
+	// Types that are valid to be assigned to CompressionMechanism:
+	//
+	//	*ContextWindowCompressionConfig_SlidingWindow_
+	CompressionMechanism isContextWindowCompressionConfig_CompressionMechanism `protobuf_oneof:"compression_mechanism"`
+	// The number of tokens (before running a turn) required to trigger a context
+	// window compression.
+	//
+	// This can be used to balance quality against latency as shorter context
+	// windows may result in faster model responses. However, any compression
+	// operation will cause a temporary latency increase, so they should not be
+	// triggered frequently.
+	//
+	// If not set, the default is 80% of the model's context window limit. This
+	// leaves 20% for the next user request/model response.
+	TriggerTokens *int64 `protobuf:"varint,1,opt,name=trigger_tokens,json=triggerTokens,proto3,oneof" json:"trigger_tokens,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ContextWindowCompressionConfig) Reset() {
+	*x = ContextWindowCompressionConfig{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ContextWindowCompressionConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContextWindowCompressionConfig) ProtoMessage() {}
+
+func (x *ContextWindowCompressionConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContextWindowCompressionConfig.ProtoReflect.Descriptor instead.
+func (*ContextWindowCompressionConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *ContextWindowCompressionConfig) GetCompressionMechanism() isContextWindowCompressionConfig_CompressionMechanism {
+	if x != nil {
+		return x.CompressionMechanism
+	}
+	return nil
+}
+
+func (x *ContextWindowCompressionConfig) GetSlidingWindow() *ContextWindowCompressionConfig_SlidingWindow {
+	if x != nil {
+		if x, ok := x.CompressionMechanism.(*ContextWindowCompressionConfig_SlidingWindow_); ok {
+			return x.SlidingWindow
+		}
+	}
+	return nil
+}
+
+func (x *ContextWindowCompressionConfig) GetTriggerTokens() int64 {
+	if x != nil && x.TriggerTokens != nil {
+		return *x.TriggerTokens
+	}
+	return 0
+}
+
+type isContextWindowCompressionConfig_CompressionMechanism interface {
+	isContextWindowCompressionConfig_CompressionMechanism()
+}
+
+type ContextWindowCompressionConfig_SlidingWindow_ struct {
+	// A sliding-window mechanism.
+	SlidingWindow *ContextWindowCompressionConfig_SlidingWindow `protobuf:"bytes,2,opt,name=sliding_window,json=slidingWindow,proto3,oneof"`
+}
+
+func (*ContextWindowCompressionConfig_SlidingWindow_) isContextWindowCompressionConfig_CompressionMechanism() {
+}
+
+// The audio transcription configuration.
+type AudioTranscriptionConfig struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AudioTranscriptionConfig) Reset() {
+	*x = AudioTranscriptionConfig{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioTranscriptionConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioTranscriptionConfig) ProtoMessage() {}
+
+func (x *AudioTranscriptionConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioTranscriptionConfig.ProtoReflect.Descriptor instead.
+func (*AudioTranscriptionConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{30}
+}
+
+// Message to be sent in the first (and only in the first)
+// `BidiGenerateContentClientMessage`. Contains configuration that will apply
+// for the duration of the streaming RPC.
+//
+// Clients should wait for a `BidiGenerateContentSetupComplete` message before
+// sending any additional messages.
+type BidiGenerateContentSetup struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Required. The model's resource name. This serves as an ID for the Model to
+	// use.
+	//
+	// Format: `models/{model}`
+	Model string `protobuf:"bytes,1,opt,name=model,proto3" json:"model,omitempty"`
+	// Optional. Generation config.
+	//
+	// The following fields are not supported:
+	//
+	//   - `response_logprobs`
+	//   - `response_mime_type`
+	//   - `logprobs`
+	//   - `response_schema`
+	//   - `stop_sequence`
+	//   - `routing_config`
+	//   - `audio_timestamp`
+	GenerationConfig *GenerationConfig `protobuf:"bytes,2,opt,name=generation_config,json=generationConfig,proto3" json:"generation_config,omitempty"`
+	// Optional. The user provided system instructions for the model.
+	//
+	// Note: Only text should be used in parts and content in each part will be
+	// in a separate paragraph.
+	SystemInstruction *Content `protobuf:"bytes,3,opt,name=system_instruction,json=systemInstruction,proto3" json:"system_instruction,omitempty"`
+	// Optional. A list of `Tools` the model may use to generate the next
+	// response.
+	//
+	// A `Tool` is a piece of code that enables the system to interact with
+	// external systems to perform an action, or set of actions, outside of
+	// knowledge and scope of the model.
+	Tools []*Tool `protobuf:"bytes,4,rep,name=tools,proto3" json:"tools,omitempty"`
+	// Optional. Configures the handling of realtime input.
+	RealtimeInputConfig *RealtimeInputConfig `protobuf:"bytes,6,opt,name=realtime_input_config,json=realtimeInputConfig,proto3" json:"realtime_input_config,omitempty"`
+	// Optional. Configures session resumption mechanism.
+	//
+	// If included, the server will send `SessionResumptionUpdate` messages.
+	SessionResumption *SessionResumptionConfig `protobuf:"bytes,7,opt,name=session_resumption,json=sessionResumption,proto3" json:"session_resumption,omitempty"`
+	// Optional. Configures a context window compression mechanism.
+	//
+	// If included, the server will automatically reduce the size of the context
+	// when it exceeds the configured length.
+	ContextWindowCompression *ContextWindowCompressionConfig `protobuf:"bytes,8,opt,name=context_window_compression,json=contextWindowCompression,proto3" json:"context_window_compression,omitempty"`
+	// Optional. If set, enables transcription of the model's audio output. The
+	// transcription aligns with the language code specified for the output
+	// audio, if configured.
+	OutputAudioTranscription *AudioTranscriptionConfig `protobuf:"bytes,11,opt,name=output_audio_transcription,json=outputAudioTranscription,proto3" json:"output_audio_transcription,omitempty"`
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentSetup) Reset() {
+	*x = BidiGenerateContentSetup{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentSetup) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentSetup) ProtoMessage() {}
+
+func (x *BidiGenerateContentSetup) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentSetup.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentSetup) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *BidiGenerateContentSetup) GetModel() string {
+	if x != nil {
+		return x.Model
+	}
+	return ""
+}
+
+func (x *BidiGenerateContentSetup) GetGenerationConfig() *GenerationConfig {
+	if x != nil {
+		return x.GenerationConfig
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentSetup) GetSystemInstruction() *Content {
+	if x != nil {
+		return x.SystemInstruction
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentSetup) GetTools() []*Tool {
+	if x != nil {
+		return x.Tools
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentSetup) GetRealtimeInputConfig() *RealtimeInputConfig {
+	if x != nil {
+		return x.RealtimeInputConfig
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentSetup) GetSessionResumption() *SessionResumptionConfig {
+	if x != nil {
+		return x.SessionResumption
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentSetup) GetContextWindowCompression() *ContextWindowCompressionConfig {
+	if x != nil {
+		return x.ContextWindowCompression
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentSetup) GetOutputAudioTranscription() *AudioTranscriptionConfig {
+	if x != nil {
+		return x.OutputAudioTranscription
+	}
+	return nil
+}
+
+// Incremental update of the current conversation delivered from the client.
+// All of the content here is unconditionally appended to the conversation
+// history and used as part of the prompt to the model to generate content.
+//
+// A message here will interrupt any current model generation.
+type BidiGenerateContentClientContent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional. The content appended to the current conversation with the model.
+	//
+	// For single-turn queries, this is a single instance. For multi-turn
+	// queries, this is a repeated field that contains conversation history and
+	// the latest request.
+	Turns []*Content `protobuf:"bytes,1,rep,name=turns,proto3" json:"turns,omitempty"`
+	// Optional. If true, indicates that the server content generation should
+	// start with the currently accumulated prompt. Otherwise, the server awaits
+	// additional messages before starting generation.
+	TurnComplete  bool `protobuf:"varint,2,opt,name=turn_complete,json=turnComplete,proto3" json:"turn_complete,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentClientContent) Reset() {
+	*x = BidiGenerateContentClientContent{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentClientContent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentClientContent) ProtoMessage() {}
+
+func (x *BidiGenerateContentClientContent) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentClientContent.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentClientContent) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *BidiGenerateContentClientContent) GetTurns() []*Content {
+	if x != nil {
+		return x.Turns
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentClientContent) GetTurnComplete() bool {
+	if x != nil {
+		return x.TurnComplete
+	}
+	return false
+}
+
+// User input that is sent in real time.
+//
+// The different modalities (audio, video and text) are handled as concurrent
+// streams. The ordering across these streams is not guaranteed.
+//
+// This is different from
+// [BidiGenerateContentClientContent][google.ai.generativelanguage.v1beta.BidiGenerateContentClientContent]
+// in a few ways:
+//
+//   - Can be sent continuously without interruption to model generation.
+//   - If there is a need to mix data interleaved across the
+//     [BidiGenerateContentClientContent][google.ai.generativelanguage.v1beta.BidiGenerateContentClientContent]
+//     and the
+//     [BidiGenerateContentRealtimeInput][google.ai.generativelanguage.v1beta.BidiGenerateContentRealtimeInput],
+//     the server attempts to optimize for best response, but there are no
+//     guarantees.
+//   - End of turn is not explicitly specified, but is rather derived from user
+//     activity (for example, end of speech).
+//   - Even before the end of turn, the data is processed incrementally
+//     to optimize for a fast start of the response from the model.
+type BidiGenerateContentRealtimeInput struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional. Inlined bytes data for media input. Multiple `media_chunks` are
+	// not supported, all but the first will be ignored.
+	//
+	// DEPRECATED: Use one of `audio`, `video`, or `text` instead.
+	MediaChunks []*Blob `protobuf:"bytes,1,rep,name=media_chunks,json=mediaChunks,proto3" json:"media_chunks,omitempty"`
+	// Optional. These form the realtime audio input stream.
+	Audio *Blob `protobuf:"bytes,2,opt,name=audio,proto3" json:"audio,omitempty"`
+	// Optional. Indicates that the audio stream has ended, e.g. because the
+	// microphone was turned off.
+	//
+	// This should only be sent when automatic activity detection is enabled
+	// (which is the default).
+	//
+	// The client can reopen the stream by sending an audio message.
+	AudioStreamEnd *bool `protobuf:"varint,3,opt,name=audio_stream_end,json=audioStreamEnd,proto3,oneof" json:"audio_stream_end,omitempty"`
+	// Optional. These form the realtime video input stream.
+	Video *Blob `protobuf:"bytes,4,opt,name=video,proto3" json:"video,omitempty"`
+	// Optional. These form the realtime text input stream.
+	Text *string `protobuf:"bytes,5,opt,name=text,proto3,oneof" json:"text,omitempty"`
+	// Optional. Marks the start of user activity. This can only be sent if
+	// automatic (i.e. server-side) activity detection is disabled.
+	ActivityStart *BidiGenerateContentRealtimeInput_ActivityStart `protobuf:"bytes,6,opt,name=activity_start,json=activityStart,proto3" json:"activity_start,omitempty"`
+	// Optional. Marks the end of user activity. This can only be sent if
+	// automatic (i.e. server-side) activity detection is disabled.
+	ActivityEnd   *BidiGenerateContentRealtimeInput_ActivityEnd `protobuf:"bytes,7,opt,name=activity_end,json=activityEnd,proto3" json:"activity_end,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentRealtimeInput) Reset() {
+	*x = BidiGenerateContentRealtimeInput{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentRealtimeInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentRealtimeInput) ProtoMessage() {}
+
+func (x *BidiGenerateContentRealtimeInput) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentRealtimeInput.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentRealtimeInput) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *BidiGenerateContentRealtimeInput) GetMediaChunks() []*Blob {
+	if x != nil {
+		return x.MediaChunks
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentRealtimeInput) GetAudio() *Blob {
+	if x != nil {
+		return x.Audio
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentRealtimeInput) GetAudioStreamEnd() bool {
+	if x != nil && x.AudioStreamEnd != nil {
+		return *x.AudioStreamEnd
+	}
+	return false
+}
+
+func (x *BidiGenerateContentRealtimeInput) GetVideo() *Blob {
+	if x != nil {
+		return x.Video
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentRealtimeInput) GetText() string {
+	if x != nil && x.Text != nil {
+		return *x.Text
+	}
+	return ""
+}
+
+func (x *BidiGenerateContentRealtimeInput) GetActivityStart() *BidiGenerateContentRealtimeInput_ActivityStart {
+	if x != nil {
+		return x.ActivityStart
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentRealtimeInput) GetActivityEnd() *BidiGenerateContentRealtimeInput_ActivityEnd {
+	if x != nil {
+		return x.ActivityEnd
+	}
+	return nil
+}
+
+// Client generated response to a `ToolCall` received from the server.
+// Individual `FunctionResponse` objects are matched to the respective
+// `FunctionCall` objects by the `id` field.
+//
+// Note that in the unary and server-streaming GenerateContent APIs function
+// calling happens by exchanging the `Content` parts, while in the bidi
+// GenerateContent APIs function calling happens over these dedicated set of
+// messages.
+type BidiGenerateContentToolResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional. The response to the function calls.
+	FunctionResponses []*FunctionResponse `protobuf:"bytes,1,rep,name=function_responses,json=functionResponses,proto3" json:"function_responses,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentToolResponse) Reset() {
+	*x = BidiGenerateContentToolResponse{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentToolResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentToolResponse) ProtoMessage() {}
+
+func (x *BidiGenerateContentToolResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentToolResponse.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentToolResponse) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *BidiGenerateContentToolResponse) GetFunctionResponses() []*FunctionResponse {
+	if x != nil {
+		return x.FunctionResponses
+	}
+	return nil
+}
+
+// Messages sent by the client in the BidiGenerateContent call.
+type BidiGenerateContentClientMessage struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The type of the message.
+	//
+	// Types that are valid to be assigned to MessageType:
+	//
+	//	*BidiGenerateContentClientMessage_Setup
+	//	*BidiGenerateContentClientMessage_ClientContent
+	//	*BidiGenerateContentClientMessage_RealtimeInput
+	//	*BidiGenerateContentClientMessage_ToolResponse
+	MessageType   isBidiGenerateContentClientMessage_MessageType `protobuf_oneof:"message_type"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentClientMessage) Reset() {
+	*x = BidiGenerateContentClientMessage{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentClientMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentClientMessage) ProtoMessage() {}
+
+func (x *BidiGenerateContentClientMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentClientMessage.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentClientMessage) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *BidiGenerateContentClientMessage) GetMessageType() isBidiGenerateContentClientMessage_MessageType {
+	if x != nil {
+		return x.MessageType
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentClientMessage) GetSetup() *BidiGenerateContentSetup {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentClientMessage_Setup); ok {
+			return x.Setup
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentClientMessage) GetClientContent() *BidiGenerateContentClientContent {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentClientMessage_ClientContent); ok {
+			return x.ClientContent
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentClientMessage) GetRealtimeInput() *BidiGenerateContentRealtimeInput {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentClientMessage_RealtimeInput); ok {
+			return x.RealtimeInput
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentClientMessage) GetToolResponse() *BidiGenerateContentToolResponse {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentClientMessage_ToolResponse); ok {
+			return x.ToolResponse
+		}
+	}
+	return nil
+}
+
+type isBidiGenerateContentClientMessage_MessageType interface {
+	isBidiGenerateContentClientMessage_MessageType()
+}
+
+type BidiGenerateContentClientMessage_Setup struct {
+	// Optional. Session configuration sent in the first and only first client
+	// message.
+	Setup *BidiGenerateContentSetup `protobuf:"bytes,1,opt,name=setup,proto3,oneof"`
+}
+
+type BidiGenerateContentClientMessage_ClientContent struct {
+	// Optional. Incremental update of the current conversation delivered from
+	// the client.
+	ClientContent *BidiGenerateContentClientContent `protobuf:"bytes,2,opt,name=client_content,json=clientContent,proto3,oneof"`
+}
+
+type BidiGenerateContentClientMessage_RealtimeInput struct {
+	// Optional. User input that is sent in real time.
+	RealtimeInput *BidiGenerateContentRealtimeInput `protobuf:"bytes,3,opt,name=realtime_input,json=realtimeInput,proto3,oneof"`
+}
+
+type BidiGenerateContentClientMessage_ToolResponse struct {
+	// Optional. Response to a `ToolCallMessage` received from the server.
+	ToolResponse *BidiGenerateContentToolResponse `protobuf:"bytes,4,opt,name=tool_response,json=toolResponse,proto3,oneof"`
+}
+
+func (*BidiGenerateContentClientMessage_Setup) isBidiGenerateContentClientMessage_MessageType() {}
+
+func (*BidiGenerateContentClientMessage_ClientContent) isBidiGenerateContentClientMessage_MessageType() {
+}
+
+func (*BidiGenerateContentClientMessage_RealtimeInput) isBidiGenerateContentClientMessage_MessageType() {
+}
+
+func (*BidiGenerateContentClientMessage_ToolResponse) isBidiGenerateContentClientMessage_MessageType() {
+}
+
+// Sent in response to a `BidiGenerateContentSetup` message from the client.
+type BidiGenerateContentSetupComplete struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentSetupComplete) Reset() {
+	*x = BidiGenerateContentSetupComplete{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentSetupComplete) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentSetupComplete) ProtoMessage() {}
+
+func (x *BidiGenerateContentSetupComplete) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentSetupComplete.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentSetupComplete) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{36}
+}
+
+// Incremental server update generated by the model in response to client
+// messages.
+//
+// Content is generated as quickly as possible, and not in real time. Clients
+// may choose to buffer and play it out in real time.
+type BidiGenerateContentServerContent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Output only. The content that the model has generated as part of the
+	// current conversation with the user.
+	ModelTurn *Content `protobuf:"bytes,1,opt,name=model_turn,json=modelTurn,proto3,oneof" json:"model_turn,omitempty"`
+	// Output only. If true, indicates that the model is done generating.
+	//
+	// When model is interrupted while generating there will be no
+	// 'generation_complete' message in interrupted turn, it will go through
+	// 'interrupted > turn_complete'.
+	//
+	// When model assumes realtime playback there will be delay between
+	// generation_complete and turn_complete that is caused by model waiting for
+	// playback to finish.
+	GenerationComplete bool `protobuf:"varint,5,opt,name=generation_complete,json=generationComplete,proto3" json:"generation_complete,omitempty"`
+	// Output only. If true, indicates that the model has completed its turn.
+	// Generation will only start in response to additional client messages.
+	TurnComplete bool `protobuf:"varint,2,opt,name=turn_complete,json=turnComplete,proto3" json:"turn_complete,omitempty"`
+	// Output only. If true, indicates that a client message has interrupted
+	// current model generation. If the client is playing out the content in real
+	// time, this is a good signal to stop and empty the current playback queue.
+	Interrupted bool `protobuf:"varint,3,opt,name=interrupted,proto3" json:"interrupted,omitempty"`
+	// Output only. Grounding metadata for the generated content.
+	GroundingMetadata *GroundingMetadata `protobuf:"bytes,4,opt,name=grounding_metadata,json=groundingMetadata,proto3" json:"grounding_metadata,omitempty"`
+	// Output only. Output audio transcription. The transcription is sent
+	// independently of the other server messages and there is no guaranteed
+	// ordering, in particular not between `server_content` and this
+	// `output_transcription`.
+	OutputTranscription *BidiGenerateContentTranscription `protobuf:"bytes,7,opt,name=output_transcription,json=outputTranscription,proto3" json:"output_transcription,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentServerContent) Reset() {
+	*x = BidiGenerateContentServerContent{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentServerContent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentServerContent) ProtoMessage() {}
+
+func (x *BidiGenerateContentServerContent) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentServerContent.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentServerContent) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *BidiGenerateContentServerContent) GetModelTurn() *Content {
+	if x != nil {
+		return x.ModelTurn
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerContent) GetGenerationComplete() bool {
+	if x != nil {
+		return x.GenerationComplete
+	}
+	return false
+}
+
+func (x *BidiGenerateContentServerContent) GetTurnComplete() bool {
+	if x != nil {
+		return x.TurnComplete
+	}
+	return false
+}
+
+func (x *BidiGenerateContentServerContent) GetInterrupted() bool {
+	if x != nil {
+		return x.Interrupted
+	}
+	return false
+}
+
+func (x *BidiGenerateContentServerContent) GetGroundingMetadata() *GroundingMetadata {
+	if x != nil {
+		return x.GroundingMetadata
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerContent) GetOutputTranscription() *BidiGenerateContentTranscription {
+	if x != nil {
+		return x.OutputTranscription
+	}
+	return nil
+}
+
+// Request for the client to execute the `function_calls` and return the
+// responses with the matching `id`s.
+type BidiGenerateContentToolCall struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Output only. The function call to be executed.
+	FunctionCalls []*FunctionCall `protobuf:"bytes,2,rep,name=function_calls,json=functionCalls,proto3" json:"function_calls,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentToolCall) Reset() {
+	*x = BidiGenerateContentToolCall{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentToolCall) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentToolCall) ProtoMessage() {}
+
+func (x *BidiGenerateContentToolCall) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentToolCall.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentToolCall) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *BidiGenerateContentToolCall) GetFunctionCalls() []*FunctionCall {
+	if x != nil {
+		return x.FunctionCalls
+	}
+	return nil
+}
+
+// Notification for the client that a previously issued `ToolCallMessage`
+// with the specified `id`s should not have been executed and should be
+// cancelled. If there were side-effects to those tool calls, clients may
+// attempt to undo the tool calls. This message occurs only in cases where the
+// clients interrupt server turns.
+type BidiGenerateContentToolCallCancellation struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Output only. The ids of the tool calls to be cancelled.
+	Ids           []string `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentToolCallCancellation) Reset() {
+	*x = BidiGenerateContentToolCallCancellation{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentToolCallCancellation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentToolCallCancellation) ProtoMessage() {}
+
+func (x *BidiGenerateContentToolCallCancellation) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentToolCallCancellation.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentToolCallCancellation) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *BidiGenerateContentToolCallCancellation) GetIds() []string {
+	if x != nil {
+		return x.Ids
+	}
+	return nil
+}
+
+// A notice that the server will soon disconnect.
+type GoAway struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The remaining time before the connection will be terminated as ABORTED.
+	//
+	// This duration will never be less than a model-specific minimum, which will
+	// be specified together with the rate limits for the model.
+	TimeLeft      *durationpb.Duration `protobuf:"bytes,1,opt,name=time_left,json=timeLeft,proto3" json:"time_left,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GoAway) Reset() {
+	*x = GoAway{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GoAway) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GoAway) ProtoMessage() {}
+
+func (x *GoAway) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GoAway.ProtoReflect.Descriptor instead.
+func (*GoAway) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *GoAway) GetTimeLeft() *durationpb.Duration {
+	if x != nil {
+		return x.TimeLeft
+	}
+	return nil
+}
+
+// Update of the session resumption state.
+//
+// Only sent if `BidiGenerateContentSetup.session_resumption` was set.
+type SessionResumptionUpdate struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// New handle that represents a state that can be resumed. Empty if
+	// `resumable`=false.
+	NewHandle string `protobuf:"bytes,1,opt,name=new_handle,json=newHandle,proto3" json:"new_handle,omitempty"`
+	// True if the current session can be resumed at this point.
+	//
+	// Resumption is not possible at some points in the session. For example, when
+	// the model is executing function calls or generating. Resuming the session
+	// (using a previous session token) in such a state will result in some data
+	// loss. In these cases, `new_handle` will be empty and `resumable` will be
+	// false.
+	Resumable     bool `protobuf:"varint,2,opt,name=resumable,proto3" json:"resumable,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionResumptionUpdate) Reset() {
+	*x = SessionResumptionUpdate{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionResumptionUpdate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionResumptionUpdate) ProtoMessage() {}
+
+func (x *SessionResumptionUpdate) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionResumptionUpdate.ProtoReflect.Descriptor instead.
+func (*SessionResumptionUpdate) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *SessionResumptionUpdate) GetNewHandle() string {
+	if x != nil {
+		return x.NewHandle
+	}
+	return ""
+}
+
+func (x *SessionResumptionUpdate) GetResumable() bool {
+	if x != nil {
+		return x.Resumable
+	}
+	return false
+}
+
+// Transcription of audio (input or output).
+type BidiGenerateContentTranscription struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Transcription text.
+	Text          string `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentTranscription) Reset() {
+	*x = BidiGenerateContentTranscription{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentTranscription) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentTranscription) ProtoMessage() {}
+
+func (x *BidiGenerateContentTranscription) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentTranscription.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentTranscription) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *BidiGenerateContentTranscription) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+// Response message for the BidiGenerateContent call.
+type BidiGenerateContentServerMessage struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The type of the message.
+	//
+	// Types that are valid to be assigned to MessageType:
+	//
+	//	*BidiGenerateContentServerMessage_SetupComplete
+	//	*BidiGenerateContentServerMessage_ServerContent
+	//	*BidiGenerateContentServerMessage_ToolCall
+	//	*BidiGenerateContentServerMessage_ToolCallCancellation
+	//	*BidiGenerateContentServerMessage_GoAway
+	//	*BidiGenerateContentServerMessage_SessionResumptionUpdate
+	MessageType isBidiGenerateContentServerMessage_MessageType `protobuf_oneof:"message_type"`
+	// Output only. Usage metadata about the response(s).
+	UsageMetadata *UsageMetadata `protobuf:"bytes,10,opt,name=usage_metadata,json=usageMetadata,proto3" json:"usage_metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentServerMessage) Reset() {
+	*x = BidiGenerateContentServerMessage{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[43]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentServerMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentServerMessage) ProtoMessage() {}
+
+func (x *BidiGenerateContentServerMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[43]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentServerMessage.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentServerMessage) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *BidiGenerateContentServerMessage) GetMessageType() isBidiGenerateContentServerMessage_MessageType {
+	if x != nil {
+		return x.MessageType
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerMessage) GetSetupComplete() *BidiGenerateContentSetupComplete {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentServerMessage_SetupComplete); ok {
+			return x.SetupComplete
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerMessage) GetServerContent() *BidiGenerateContentServerContent {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentServerMessage_ServerContent); ok {
+			return x.ServerContent
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerMessage) GetToolCall() *BidiGenerateContentToolCall {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentServerMessage_ToolCall); ok {
+			return x.ToolCall
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerMessage) GetToolCallCancellation() *BidiGenerateContentToolCallCancellation {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentServerMessage_ToolCallCancellation); ok {
+			return x.ToolCallCancellation
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerMessage) GetGoAway() *GoAway {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentServerMessage_GoAway); ok {
+			return x.GoAway
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerMessage) GetSessionResumptionUpdate() *SessionResumptionUpdate {
+	if x != nil {
+		if x, ok := x.MessageType.(*BidiGenerateContentServerMessage_SessionResumptionUpdate); ok {
+			return x.SessionResumptionUpdate
+		}
+	}
+	return nil
+}
+
+func (x *BidiGenerateContentServerMessage) GetUsageMetadata() *UsageMetadata {
+	if x != nil {
+		return x.UsageMetadata
+	}
+	return nil
+}
+
+type isBidiGenerateContentServerMessage_MessageType interface {
+	isBidiGenerateContentServerMessage_MessageType()
+}
+
+type BidiGenerateContentServerMessage_SetupComplete struct {
+	// Output only. Sent in response to a `BidiGenerateContentSetup` message
+	// from the client when setup is complete.
+	SetupComplete *BidiGenerateContentSetupComplete `protobuf:"bytes,2,opt,name=setup_complete,json=setupComplete,proto3,oneof"`
+}
+
+type BidiGenerateContentServerMessage_ServerContent struct {
+	// Output only. Content generated by the model in response to client
+	// messages.
+	ServerContent *BidiGenerateContentServerContent `protobuf:"bytes,3,opt,name=server_content,json=serverContent,proto3,oneof"`
+}
+
+type BidiGenerateContentServerMessage_ToolCall struct {
+	// Output only. Request for the client to execute the `function_calls` and
+	// return the responses with the matching `id`s.
+	ToolCall *BidiGenerateContentToolCall `protobuf:"bytes,4,opt,name=tool_call,json=toolCall,proto3,oneof"`
+}
+
+type BidiGenerateContentServerMessage_ToolCallCancellation struct {
+	// Output only. Notification for the client that a previously issued
+	// `ToolCallMessage` with the specified `id`s should be cancelled.
+	ToolCallCancellation *BidiGenerateContentToolCallCancellation `protobuf:"bytes,5,opt,name=tool_call_cancellation,json=toolCallCancellation,proto3,oneof"`
+}
+
+type BidiGenerateContentServerMessage_GoAway struct {
+	// Output only. A notice that the server will soon disconnect.
+	GoAway *GoAway `protobuf:"bytes,6,opt,name=go_away,json=goAway,proto3,oneof"`
+}
+
+type BidiGenerateContentServerMessage_SessionResumptionUpdate struct {
+	// Output only. Update of the session resumption state.
+	SessionResumptionUpdate *SessionResumptionUpdate `protobuf:"bytes,7,opt,name=session_resumption_update,json=sessionResumptionUpdate,proto3,oneof"`
+}
+
+func (*BidiGenerateContentServerMessage_SetupComplete) isBidiGenerateContentServerMessage_MessageType() {
+}
+
+func (*BidiGenerateContentServerMessage_ServerContent) isBidiGenerateContentServerMessage_MessageType() {
+}
+
+func (*BidiGenerateContentServerMessage_ToolCall) isBidiGenerateContentServerMessage_MessageType() {}
+
+func (*BidiGenerateContentServerMessage_ToolCallCancellation) isBidiGenerateContentServerMessage_MessageType() {
+}
+
+func (*BidiGenerateContentServerMessage_GoAway) isBidiGenerateContentServerMessage_MessageType() {}
+
+func (*BidiGenerateContentServerMessage_SessionResumptionUpdate) isBidiGenerateContentServerMessage_MessageType() {
+}
+
+// Usage metadata about response(s).
+type UsageMetadata struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Output only. Number of tokens in the prompt. When `cached_content` is set,
+	// this is still the total effective prompt size meaning this includes the
+	// number of tokens in the cached content.
+	PromptTokenCount int32 `protobuf:"varint,1,opt,name=prompt_token_count,json=promptTokenCount,proto3" json:"prompt_token_count,omitempty"`
+	// Number of tokens in the cached part of the prompt (the cached content)
+	CachedContentTokenCount int32 `protobuf:"varint,4,opt,name=cached_content_token_count,json=cachedContentTokenCount,proto3" json:"cached_content_token_count,omitempty"`
+	// Output only. Total number of tokens across all the generated response
+	// candidates.
+	ResponseTokenCount int32 `protobuf:"varint,2,opt,name=response_token_count,json=responseTokenCount,proto3" json:"response_token_count,omitempty"`
+	// Output only. Number of tokens present in tool-use prompt(s).
+	ToolUsePromptTokenCount int32 `protobuf:"varint,8,opt,name=tool_use_prompt_token_count,json=toolUsePromptTokenCount,proto3" json:"tool_use_prompt_token_count,omitempty"`
+	// Output only. Number of tokens of thoughts for thinking models.
+	ThoughtsTokenCount int32 `protobuf:"varint,10,opt,name=thoughts_token_count,json=thoughtsTokenCount,proto3" json:"thoughts_token_count,omitempty"`
+	// Output only. Total token count for the generation request (prompt +
+	// response candidates).
+	TotalTokenCount int32 `protobuf:"varint,3,opt,name=total_token_count,json=totalTokenCount,proto3" json:"total_token_count,omitempty"`
+	// Output only. List of modalities that were processed in the request input.
+	PromptTokensDetails []*ModalityTokenCount `protobuf:"bytes,5,rep,name=prompt_tokens_details,json=promptTokensDetails,proto3" json:"prompt_tokens_details,omitempty"`
+	// Output only. List of modalities of the cached content in the request input.
+	CacheTokensDetails []*ModalityTokenCount `protobuf:"bytes,6,rep,name=cache_tokens_details,json=cacheTokensDetails,proto3" json:"cache_tokens_details,omitempty"`
+	// Output only. List of modalities that were returned in the response.
+	ResponseTokensDetails []*ModalityTokenCount `protobuf:"bytes,7,rep,name=response_tokens_details,json=responseTokensDetails,proto3" json:"response_tokens_details,omitempty"`
+	// Output only. List of modalities that were processed for tool-use request
+	// inputs.
+	ToolUsePromptTokensDetails []*ModalityTokenCount `protobuf:"bytes,9,rep,name=tool_use_prompt_tokens_details,json=toolUsePromptTokensDetails,proto3" json:"tool_use_prompt_tokens_details,omitempty"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
+}
+
+func (x *UsageMetadata) Reset() {
+	*x = UsageMetadata{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[44]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UsageMetadata) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UsageMetadata) ProtoMessage() {}
+
+func (x *UsageMetadata) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[44]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UsageMetadata.ProtoReflect.Descriptor instead.
+func (*UsageMetadata) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *UsageMetadata) GetPromptTokenCount() int32 {
+	if x != nil {
+		return x.PromptTokenCount
+	}
+	return 0
+}
+
+func (x *UsageMetadata) GetCachedContentTokenCount() int32 {
+	if x != nil {
+		return x.CachedContentTokenCount
+	}
+	return 0
+}
+
+func (x *UsageMetadata) GetResponseTokenCount() int32 {
+	if x != nil {
+		return x.ResponseTokenCount
+	}
+	return 0
+}
+
+func (x *UsageMetadata) GetToolUsePromptTokenCount() int32 {
+	if x != nil {
+		return x.ToolUsePromptTokenCount
+	}
+	return 0
+}
+
+func (x *UsageMetadata) GetThoughtsTokenCount() int32 {
+	if x != nil {
+		return x.ThoughtsTokenCount
+	}
+	return 0
+}
+
+func (x *UsageMetadata) GetTotalTokenCount() int32 {
+	if x != nil {
+		return x.TotalTokenCount
+	}
+	return 0
+}
+
+func (x *UsageMetadata) GetPromptTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.PromptTokensDetails
+	}
+	return nil
+}
+
+func (x *UsageMetadata) GetCacheTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.CacheTokensDetails
+	}
+	return nil
+}
+
+func (x *UsageMetadata) GetResponseTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.ResponseTokensDetails
+	}
+	return nil
+}
+
+func (x *UsageMetadata) GetToolUsePromptTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.ToolUsePromptTokensDetails
+	}
+	return nil
 }
 
 // A set of the feedback metadata the prompt specified in
@@ -2340,7 +4489,7 @@ type GenerateContentResponse_PromptFeedback struct {
 
 func (x *GenerateContentResponse_PromptFeedback) Reset() {
 	*x = GenerateContentResponse_PromptFeedback{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[23]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2352,7 +4501,7 @@ func (x *GenerateContentResponse_PromptFeedback) String() string {
 func (*GenerateContentResponse_PromptFeedback) ProtoMessage() {}
 
 func (x *GenerateContentResponse_PromptFeedback) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[23]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2365,7 +4514,7 @@ func (x *GenerateContentResponse_PromptFeedback) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use GenerateContentResponse_PromptFeedback.ProtoReflect.Descriptor instead.
 func (*GenerateContentResponse_PromptFeedback) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{3, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{7, 0}
 }
 
 func (x *GenerateContentResponse_PromptFeedback) GetBlockReason() GenerateContentResponse_PromptFeedback_BlockReason {
@@ -2393,16 +4542,30 @@ type GenerateContentResponse_UsageMetadata struct {
 	CachedContentTokenCount int32 `protobuf:"varint,4,opt,name=cached_content_token_count,json=cachedContentTokenCount,proto3" json:"cached_content_token_count,omitempty"`
 	// Total number of tokens across all the generated response candidates.
 	CandidatesTokenCount int32 `protobuf:"varint,2,opt,name=candidates_token_count,json=candidatesTokenCount,proto3" json:"candidates_token_count,omitempty"`
+	// Output only. Number of tokens present in tool-use prompt(s).
+	ToolUsePromptTokenCount int32 `protobuf:"varint,8,opt,name=tool_use_prompt_token_count,json=toolUsePromptTokenCount,proto3" json:"tool_use_prompt_token_count,omitempty"`
+	// Output only. Number of tokens of thoughts for thinking models.
+	ThoughtsTokenCount int32 `protobuf:"varint,10,opt,name=thoughts_token_count,json=thoughtsTokenCount,proto3" json:"thoughts_token_count,omitempty"`
 	// Total token count for the generation request (prompt + response
 	// candidates).
 	TotalTokenCount int32 `protobuf:"varint,3,opt,name=total_token_count,json=totalTokenCount,proto3" json:"total_token_count,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// Output only. List of modalities that were processed in the request input.
+	PromptTokensDetails []*ModalityTokenCount `protobuf:"bytes,5,rep,name=prompt_tokens_details,json=promptTokensDetails,proto3" json:"prompt_tokens_details,omitempty"`
+	// Output only. List of modalities of the cached content in the request
+	// input.
+	CacheTokensDetails []*ModalityTokenCount `protobuf:"bytes,6,rep,name=cache_tokens_details,json=cacheTokensDetails,proto3" json:"cache_tokens_details,omitempty"`
+	// Output only. List of modalities that were returned in the response.
+	CandidatesTokensDetails []*ModalityTokenCount `protobuf:"bytes,7,rep,name=candidates_tokens_details,json=candidatesTokensDetails,proto3" json:"candidates_tokens_details,omitempty"`
+	// Output only. List of modalities that were processed for tool-use request
+	// inputs.
+	ToolUsePromptTokensDetails []*ModalityTokenCount `protobuf:"bytes,9,rep,name=tool_use_prompt_tokens_details,json=toolUsePromptTokensDetails,proto3" json:"tool_use_prompt_tokens_details,omitempty"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
 }
 
 func (x *GenerateContentResponse_UsageMetadata) Reset() {
 	*x = GenerateContentResponse_UsageMetadata{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[24]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2414,7 +4577,7 @@ func (x *GenerateContentResponse_UsageMetadata) String() string {
 func (*GenerateContentResponse_UsageMetadata) ProtoMessage() {}
 
 func (x *GenerateContentResponse_UsageMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[24]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2427,7 +4590,7 @@ func (x *GenerateContentResponse_UsageMetadata) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use GenerateContentResponse_UsageMetadata.ProtoReflect.Descriptor instead.
 func (*GenerateContentResponse_UsageMetadata) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{3, 1}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{7, 1}
 }
 
 func (x *GenerateContentResponse_UsageMetadata) GetPromptTokenCount() int32 {
@@ -2451,11 +4614,53 @@ func (x *GenerateContentResponse_UsageMetadata) GetCandidatesTokenCount() int32 
 	return 0
 }
 
+func (x *GenerateContentResponse_UsageMetadata) GetToolUsePromptTokenCount() int32 {
+	if x != nil {
+		return x.ToolUsePromptTokenCount
+	}
+	return 0
+}
+
+func (x *GenerateContentResponse_UsageMetadata) GetThoughtsTokenCount() int32 {
+	if x != nil {
+		return x.ThoughtsTokenCount
+	}
+	return 0
+}
+
 func (x *GenerateContentResponse_UsageMetadata) GetTotalTokenCount() int32 {
 	if x != nil {
 		return x.TotalTokenCount
 	}
 	return 0
+}
+
+func (x *GenerateContentResponse_UsageMetadata) GetPromptTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.PromptTokensDetails
+	}
+	return nil
+}
+
+func (x *GenerateContentResponse_UsageMetadata) GetCacheTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.CacheTokensDetails
+	}
+	return nil
+}
+
+func (x *GenerateContentResponse_UsageMetadata) GetCandidatesTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.CandidatesTokensDetails
+	}
+	return nil
+}
+
+func (x *GenerateContentResponse_UsageMetadata) GetToolUsePromptTokensDetails() []*ModalityTokenCount {
+	if x != nil {
+		return x.ToolUsePromptTokensDetails
+	}
+	return nil
 }
 
 // Candidate for the logprobs token and score.
@@ -2473,7 +4678,7 @@ type LogprobsResult_Candidate struct {
 
 func (x *LogprobsResult_Candidate) Reset() {
 	*x = LogprobsResult_Candidate{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[25]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2485,7 +4690,7 @@ func (x *LogprobsResult_Candidate) String() string {
 func (*LogprobsResult_Candidate) ProtoMessage() {}
 
 func (x *LogprobsResult_Candidate) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[25]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2498,7 +4703,7 @@ func (x *LogprobsResult_Candidate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogprobsResult_Candidate.ProtoReflect.Descriptor instead.
 func (*LogprobsResult_Candidate) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{5, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{9, 0}
 }
 
 func (x *LogprobsResult_Candidate) GetToken() string {
@@ -2533,7 +4738,7 @@ type LogprobsResult_TopCandidates struct {
 
 func (x *LogprobsResult_TopCandidates) Reset() {
 	*x = LogprobsResult_TopCandidates{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[26]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2545,7 +4750,7 @@ func (x *LogprobsResult_TopCandidates) String() string {
 func (*LogprobsResult_TopCandidates) ProtoMessage() {}
 
 func (x *LogprobsResult_TopCandidates) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[26]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2558,7 +4763,7 @@ func (x *LogprobsResult_TopCandidates) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogprobsResult_TopCandidates.ProtoReflect.Descriptor instead.
 func (*LogprobsResult_TopCandidates) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{5, 1}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{9, 1}
 }
 
 func (x *LogprobsResult_TopCandidates) GetCandidates() []*LogprobsResult_Candidate {
@@ -2583,7 +4788,7 @@ type AttributionSourceId_GroundingPassageId struct {
 
 func (x *AttributionSourceId_GroundingPassageId) Reset() {
 	*x = AttributionSourceId_GroundingPassageId{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[27]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2595,7 +4800,7 @@ func (x *AttributionSourceId_GroundingPassageId) String() string {
 func (*AttributionSourceId_GroundingPassageId) ProtoMessage() {}
 
 func (x *AttributionSourceId_GroundingPassageId) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[27]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2608,7 +4813,7 @@ func (x *AttributionSourceId_GroundingPassageId) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use AttributionSourceId_GroundingPassageId.ProtoReflect.Descriptor instead.
 func (*AttributionSourceId_GroundingPassageId) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{6, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{10, 0}
 }
 
 func (x *AttributionSourceId_GroundingPassageId) GetPassageId() string {
@@ -2642,7 +4847,7 @@ type AttributionSourceId_SemanticRetrieverChunk struct {
 
 func (x *AttributionSourceId_SemanticRetrieverChunk) Reset() {
 	*x = AttributionSourceId_SemanticRetrieverChunk{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[28]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2654,7 +4859,7 @@ func (x *AttributionSourceId_SemanticRetrieverChunk) String() string {
 func (*AttributionSourceId_SemanticRetrieverChunk) ProtoMessage() {}
 
 func (x *AttributionSourceId_SemanticRetrieverChunk) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[28]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2667,7 +4872,7 @@ func (x *AttributionSourceId_SemanticRetrieverChunk) ProtoReflect() protoreflect
 
 // Deprecated: Use AttributionSourceId_SemanticRetrieverChunk.ProtoReflect.Descriptor instead.
 func (*AttributionSourceId_SemanticRetrieverChunk) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{6, 1}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{10, 1}
 }
 
 func (x *AttributionSourceId_SemanticRetrieverChunk) GetSource() string {
@@ -2697,7 +4902,7 @@ type GroundingChunk_Web struct {
 
 func (x *GroundingChunk_Web) Reset() {
 	*x = GroundingChunk_Web{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[29]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2709,7 +4914,7 @@ func (x *GroundingChunk_Web) String() string {
 func (*GroundingChunk_Web) ProtoMessage() {}
 
 func (x *GroundingChunk_Web) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[29]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2722,7 +4927,7 @@ func (x *GroundingChunk_Web) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingChunk_Web.ProtoReflect.Descriptor instead.
 func (*GroundingChunk_Web) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{11, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{15, 0}
 }
 
 func (x *GroundingChunk_Web) GetUri() string {
@@ -2755,7 +4960,7 @@ type GenerateAnswerResponse_InputFeedback struct {
 
 func (x *GenerateAnswerResponse_InputFeedback) Reset() {
 	*x = GenerateAnswerResponse_InputFeedback{}
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[30]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2767,7 +4972,7 @@ func (x *GenerateAnswerResponse_InputFeedback) String() string {
 func (*GenerateAnswerResponse_InputFeedback) ProtoMessage() {}
 
 func (x *GenerateAnswerResponse_InputFeedback) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[30]
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2780,7 +4985,7 @@ func (x *GenerateAnswerResponse_InputFeedback) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use GenerateAnswerResponse_InputFeedback.ProtoReflect.Descriptor instead.
 func (*GenerateAnswerResponse_InputFeedback) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{15, 0}
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{19, 0}
 }
 
 func (x *GenerateAnswerResponse_InputFeedback) GetBlockReason() GenerateAnswerResponse_InputFeedback_BlockReason {
@@ -2797,11 +5002,229 @@ func (x *GenerateAnswerResponse_InputFeedback) GetSafetyRatings() []*SafetyRatin
 	return nil
 }
 
+// Configures automatic detection of activity.
+type RealtimeInputConfig_AutomaticActivityDetection struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional. If enabled (the default), detected voice and text input count
+	// as activity. If disabled, the client must send activity signals.
+	Disabled *bool `protobuf:"varint,2,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
+	// Optional. Determines how likely speech is to be detected.
+	StartOfSpeechSensitivity *RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity `protobuf:"varint,3,opt,name=start_of_speech_sensitivity,json=startOfSpeechSensitivity,proto3,enum=qclaogui.generativelanguage.v1beta.RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity,oneof" json:"start_of_speech_sensitivity,omitempty"`
+	// Optional. The required duration of detected speech before start-of-speech
+	// is committed. The lower this value, the more sensitive the
+	// start-of-speech detection is and shorter speech can be recognized.
+	// However, this also increases the probability of false positives.
+	PrefixPaddingMs *int32 `protobuf:"varint,4,opt,name=prefix_padding_ms,json=prefixPaddingMs,proto3,oneof" json:"prefix_padding_ms,omitempty"`
+	// Optional. Determines how likely detected speech is ended.
+	EndOfSpeechSensitivity *RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity `protobuf:"varint,5,opt,name=end_of_speech_sensitivity,json=endOfSpeechSensitivity,proto3,enum=qclaogui.generativelanguage.v1beta.RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity,oneof" json:"end_of_speech_sensitivity,omitempty"`
+	// Optional. The required duration of detected non-speech (e.g. silence)
+	// before end-of-speech is committed. The larger this value, the longer
+	// speech gaps can be without interrupting the user's activity but this will
+	// increase the model's latency.
+	SilenceDurationMs *int32 `protobuf:"varint,6,opt,name=silence_duration_ms,json=silenceDurationMs,proto3,oneof" json:"silence_duration_ms,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *RealtimeInputConfig_AutomaticActivityDetection) Reset() {
+	*x = RealtimeInputConfig_AutomaticActivityDetection{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[53]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RealtimeInputConfig_AutomaticActivityDetection) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RealtimeInputConfig_AutomaticActivityDetection) ProtoMessage() {}
+
+func (x *RealtimeInputConfig_AutomaticActivityDetection) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[53]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RealtimeInputConfig_AutomaticActivityDetection.ProtoReflect.Descriptor instead.
+func (*RealtimeInputConfig_AutomaticActivityDetection) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{27, 0}
+}
+
+func (x *RealtimeInputConfig_AutomaticActivityDetection) GetDisabled() bool {
+	if x != nil && x.Disabled != nil {
+		return *x.Disabled
+	}
+	return false
+}
+
+func (x *RealtimeInputConfig_AutomaticActivityDetection) GetStartOfSpeechSensitivity() RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity {
+	if x != nil && x.StartOfSpeechSensitivity != nil {
+		return *x.StartOfSpeechSensitivity
+	}
+	return RealtimeInputConfig_AutomaticActivityDetection_START_SENSITIVITY_UNSPECIFIED
+}
+
+func (x *RealtimeInputConfig_AutomaticActivityDetection) GetPrefixPaddingMs() int32 {
+	if x != nil && x.PrefixPaddingMs != nil {
+		return *x.PrefixPaddingMs
+	}
+	return 0
+}
+
+func (x *RealtimeInputConfig_AutomaticActivityDetection) GetEndOfSpeechSensitivity() RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity {
+	if x != nil && x.EndOfSpeechSensitivity != nil {
+		return *x.EndOfSpeechSensitivity
+	}
+	return RealtimeInputConfig_AutomaticActivityDetection_END_SENSITIVITY_UNSPECIFIED
+}
+
+func (x *RealtimeInputConfig_AutomaticActivityDetection) GetSilenceDurationMs() int32 {
+	if x != nil && x.SilenceDurationMs != nil {
+		return *x.SilenceDurationMs
+	}
+	return 0
+}
+
+// The SlidingWindow method operates by discarding content at the beginning of
+// the context window. The resulting context will always begin at the start of
+// a USER role turn. System instructions and any
+// `BidiGenerateContentSetup.prefix_turns` will always remain at the beginning
+// of the result.
+type ContextWindowCompressionConfig_SlidingWindow struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The target number of tokens to keep. The default value is
+	// trigger_tokens/2.
+	//
+	// Discarding parts of the context window causes a temporary latency
+	// increase so this value should be calibrated to avoid frequent compression
+	// operations.
+	TargetTokens  *int64 `protobuf:"varint,1,opt,name=target_tokens,json=targetTokens,proto3,oneof" json:"target_tokens,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ContextWindowCompressionConfig_SlidingWindow) Reset() {
+	*x = ContextWindowCompressionConfig_SlidingWindow{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[54]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ContextWindowCompressionConfig_SlidingWindow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContextWindowCompressionConfig_SlidingWindow) ProtoMessage() {}
+
+func (x *ContextWindowCompressionConfig_SlidingWindow) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[54]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContextWindowCompressionConfig_SlidingWindow.ProtoReflect.Descriptor instead.
+func (*ContextWindowCompressionConfig_SlidingWindow) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{29, 0}
+}
+
+func (x *ContextWindowCompressionConfig_SlidingWindow) GetTargetTokens() int64 {
+	if x != nil && x.TargetTokens != nil {
+		return *x.TargetTokens
+	}
+	return 0
+}
+
+// Marks the start of user activity.
+type BidiGenerateContentRealtimeInput_ActivityStart struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentRealtimeInput_ActivityStart) Reset() {
+	*x = BidiGenerateContentRealtimeInput_ActivityStart{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[55]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentRealtimeInput_ActivityStart) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentRealtimeInput_ActivityStart) ProtoMessage() {}
+
+func (x *BidiGenerateContentRealtimeInput_ActivityStart) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[55]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentRealtimeInput_ActivityStart.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentRealtimeInput_ActivityStart) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{33, 0}
+}
+
+// Marks the end of user activity.
+type BidiGenerateContentRealtimeInput_ActivityEnd struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BidiGenerateContentRealtimeInput_ActivityEnd) Reset() {
+	*x = BidiGenerateContentRealtimeInput_ActivityEnd{}
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[56]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BidiGenerateContentRealtimeInput_ActivityEnd) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BidiGenerateContentRealtimeInput_ActivityEnd) ProtoMessage() {}
+
+func (x *BidiGenerateContentRealtimeInput_ActivityEnd) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[56]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BidiGenerateContentRealtimeInput_ActivityEnd.ProtoReflect.Descriptor instead.
+func (*BidiGenerateContentRealtimeInput_ActivityEnd) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZIP(), []int{33, 1}
+}
+
 var File_qclaogui_generativelanguage_v1beta_generative_service_proto protoreflect.FileDescriptor
 
 const file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc = "" +
 	"\n" +
-	";qclaogui/generativelanguage/v1beta/generative_service.proto\x12\"qclaogui.generativelanguage.v1beta\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x19google/api/resource.proto\x1a1qclaogui/generativelanguage/v1beta/citation.proto\x1a0qclaogui/generativelanguage/v1beta/content.proto\x1a2qclaogui/generativelanguage/v1beta/retriever.proto\x1a/qclaogui/generativelanguage/v1beta/safety.proto\"\xa5\x06\n" +
+	";qclaogui/generativelanguage/v1beta/generative_service.proto\x12\"qclaogui.generativelanguage.v1beta\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x19google/api/resource.proto\x1a\x1egoogle/protobuf/duration.proto\x1a1qclaogui/generativelanguage/v1beta/citation.proto\x1a0qclaogui/generativelanguage/v1beta/content.proto\x1a2qclaogui/generativelanguage/v1beta/retriever.proto\x1a/qclaogui/generativelanguage/v1beta/safety.proto\"\xa5\x06\n" +
 	"\x16GenerateContentRequest\x12D\n" +
 	"\x05model\x18\x01 \x01(\tB.\xe2A\x01\x02\xfaA'\n" +
 	"%generativelanguage.qclaogui.com/ModelR\x05model\x12e\n" +
@@ -2816,29 +5239,66 @@ const file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc =
 	"-generativelanguage.qclaogui.com/CachedContentH\x02R\rcachedContent\x88\x01\x01B\x15\n" +
 	"\x13_system_instructionB\x14\n" +
 	"\x12_generation_configB\x11\n" +
-	"\x0f_cached_content\"\x8f\x06\n" +
+	"\x0f_cached_content\"H\n" +
+	"\x13PrebuiltVoiceConfig\x12\"\n" +
+	"\n" +
+	"voice_name\x18\x01 \x01(\tH\x00R\tvoiceName\x88\x01\x01B\r\n" +
+	"\v_voice_name\"\x8c\x01\n" +
+	"\vVoiceConfig\x12m\n" +
+	"\x15prebuilt_voice_config\x18\x01 \x01(\v27.qclaogui.generativelanguage.v1beta.PrebuiltVoiceConfigH\x00R\x13prebuiltVoiceConfigB\x0e\n" +
+	"\fvoice_config\"\x8d\x01\n" +
+	"\fSpeechConfig\x12R\n" +
+	"\fvoice_config\x18\x01 \x01(\v2/.qclaogui.generativelanguage.v1beta.VoiceConfigR\vvoiceConfig\x12)\n" +
+	"\rlanguage_code\x18\x02 \x01(\tB\x04\xe2A\x01\x01R\flanguageCode\"\x97\x01\n" +
+	"\x0eThinkingConfig\x12.\n" +
+	"\x10include_thoughts\x18\x01 \x01(\bH\x00R\x0fincludeThoughts\x88\x01\x01\x12,\n" +
+	"\x0fthinking_budget\x18\x02 \x01(\x05H\x01R\x0ethinkingBudget\x88\x01\x01B\x13\n" +
+	"\x11_include_thoughtsB\x12\n" +
+	"\x10_thinking_budget\"\xec\f\n" +
 	"\x10GenerationConfig\x122\n" +
 	"\x0fcandidate_count\x18\x01 \x01(\x05B\x04\xe2A\x01\x01H\x00R\x0ecandidateCount\x88\x01\x01\x12+\n" +
 	"\x0estop_sequences\x18\x02 \x03(\tB\x04\xe2A\x01\x01R\rstopSequences\x125\n" +
 	"\x11max_output_tokens\x18\x04 \x01(\x05B\x04\xe2A\x01\x01H\x01R\x0fmaxOutputTokens\x88\x01\x01\x12+\n" +
 	"\vtemperature\x18\x05 \x01(\x02B\x04\xe2A\x01\x01H\x02R\vtemperature\x88\x01\x01\x12\x1e\n" +
 	"\x05top_p\x18\x06 \x01(\x02B\x04\xe2A\x01\x01H\x03R\x04topP\x88\x01\x01\x12\x1e\n" +
-	"\x05top_k\x18\a \x01(\x05B\x04\xe2A\x01\x01H\x04R\x04topK\x88\x01\x01\x122\n" +
+	"\x05top_k\x18\a \x01(\x05B\x04\xe2A\x01\x01H\x04R\x04topK\x88\x01\x01\x12\x1d\n" +
+	"\x04seed\x18\b \x01(\x05B\x04\xe2A\x01\x01H\x05R\x04seed\x88\x01\x01\x122\n" +
 	"\x12response_mime_type\x18\r \x01(\tB\x04\xe2A\x01\x01R\x10responseMimeType\x12Y\n" +
 	"\x0fresponse_schema\x18\x0e \x01(\v2*.qclaogui.generativelanguage.v1beta.SchemaB\x04\xe2A\x01\x01R\x0eresponseSchema\x124\n" +
-	"\x10presence_penalty\x18\x0f \x01(\x02B\x04\xe2A\x01\x01H\x05R\x0fpresencePenalty\x88\x01\x01\x126\n" +
-	"\x11frequency_penalty\x18\x10 \x01(\x02B\x04\xe2A\x01\x01H\x06R\x10frequencyPenalty\x88\x01\x01\x126\n" +
-	"\x11response_logprobs\x18\x11 \x01(\bB\x04\xe2A\x01\x01H\aR\x10responseLogprobs\x88\x01\x01\x12%\n" +
-	"\blogprobs\x18\x12 \x01(\x05B\x04\xe2A\x01\x01H\bR\blogprobs\x88\x01\x01B\x12\n" +
+	"\x10presence_penalty\x18\x0f \x01(\x02B\x04\xe2A\x01\x01H\x06R\x0fpresencePenalty\x88\x01\x01\x126\n" +
+	"\x11frequency_penalty\x18\x10 \x01(\x02B\x04\xe2A\x01\x01H\aR\x10frequencyPenalty\x88\x01\x01\x126\n" +
+	"\x11response_logprobs\x18\x11 \x01(\bB\x04\xe2A\x01\x01H\bR\x10responseLogprobs\x88\x01\x01\x12%\n" +
+	"\blogprobs\x18\x12 \x01(\x05B\x04\xe2A\x01\x01H\tR\blogprobs\x88\x01\x01\x12L\n" +
+	"\x1denable_enhanced_civic_answers\x18\x13 \x01(\bB\x04\xe2A\x01\x01H\n" +
+	"R\x1aenableEnhancedCivicAnswers\x88\x01\x01\x12t\n" +
+	"\x13response_modalities\x18\x14 \x03(\x0e2=.qclaogui.generativelanguage.v1beta.GenerationConfig.ModalityB\x04\xe2A\x01\x01R\x12responseModalities\x12`\n" +
+	"\rspeech_config\x18\x15 \x01(\v20.qclaogui.generativelanguage.v1beta.SpeechConfigB\x04\xe2A\x01\x01H\vR\fspeechConfig\x88\x01\x01\x12f\n" +
+	"\x0fthinking_config\x18\x16 \x01(\v22.qclaogui.generativelanguage.v1beta.ThinkingConfigB\x04\xe2A\x01\x01H\fR\x0ethinkingConfig\x88\x01\x01\x12z\n" +
+	"\x10media_resolution\x18\x17 \x01(\x0e2D.qclaogui.generativelanguage.v1beta.GenerationConfig.MediaResolutionB\x04\xe2A\x01\x01H\rR\x0fmediaResolution\x88\x01\x01\"D\n" +
+	"\bModality\x12\x18\n" +
+	"\x14MODALITY_UNSPECIFIED\x10\x00\x12\b\n" +
+	"\x04TEXT\x10\x01\x12\t\n" +
+	"\x05IMAGE\x10\x02\x12\t\n" +
+	"\x05AUDIO\x10\x03\"\x85\x01\n" +
+	"\x0fMediaResolution\x12 \n" +
+	"\x1cMEDIA_RESOLUTION_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14MEDIA_RESOLUTION_LOW\x10\x01\x12\x1b\n" +
+	"\x17MEDIA_RESOLUTION_MEDIUM\x10\x02\x12\x19\n" +
+	"\x15MEDIA_RESOLUTION_HIGH\x10\x03B\x12\n" +
 	"\x10_candidate_countB\x14\n" +
 	"\x12_max_output_tokensB\x0e\n" +
 	"\f_temperatureB\b\n" +
 	"\x06_top_pB\b\n" +
-	"\x06_top_kB\x13\n" +
+	"\x06_top_kB\a\n" +
+	"\x05_seedB\x13\n" +
 	"\x11_presence_penaltyB\x14\n" +
 	"\x12_frequency_penaltyB\x14\n" +
 	"\x12_response_logprobsB\v\n" +
-	"\t_logprobs\"\x8e\x03\n" +
+	"\t_logprobsB \n" +
+	"\x1e_enable_enhanced_civic_answersB\x10\n" +
+	"\x0e_speech_configB\x12\n" +
+	"\x10_thinking_configB\x13\n" +
+	"\x11_media_resolution\"\x8e\x03\n" +
 	"\x17SemanticRetrieverConfig\x12\x1c\n" +
 	"\x06source\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x06source\x12G\n" +
 	"\x05query\x18\x02 \x01(\v2+.qclaogui.generativelanguage.v1beta.ContentB\x04\xe2A\x01\x02R\x05query\x12c\n" +
@@ -2846,28 +5306,37 @@ const file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc =
 	"\x10max_chunks_count\x18\x04 \x01(\x05B\x04\xe2A\x01\x01H\x00R\x0emaxChunksCount\x88\x01\x01\x12A\n" +
 	"\x17minimum_relevance_score\x18\x05 \x01(\x02B\x04\xe2A\x01\x01H\x01R\x15minimumRelevanceScore\x88\x01\x01B\x13\n" +
 	"\x11_max_chunks_countB\x1a\n" +
-	"\x18_minimum_relevance_score\"\x8c\a\n" +
+	"\x18_minimum_relevance_score\"\xa4\f\n" +
 	"\x17GenerateContentResponse\x12M\n" +
 	"\n" +
 	"candidates\x18\x01 \x03(\v2-.qclaogui.generativelanguage.v1beta.CandidateR\n" +
 	"candidates\x12s\n" +
 	"\x0fprompt_feedback\x18\x02 \x01(\v2J.qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedbackR\x0epromptFeedback\x12v\n" +
-	"\x0eusage_metadata\x18\x03 \x01(\v2I.qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadataB\x04\xe2A\x01\x03R\rusageMetadata\x1a\xd5\x02\n" +
+	"\x0eusage_metadata\x18\x03 \x01(\v2I.qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadataB\x04\xe2A\x01\x03R\rusageMetadata\x12)\n" +
+	"\rmodel_version\x18\x04 \x01(\tB\x04\xe2A\x01\x03R\fmodelVersion\x1a\xe7\x02\n" +
 	"\x0ePromptFeedback\x12\x7f\n" +
 	"\fblock_reason\x18\x01 \x01(\x0e2V.qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.BlockReasonB\x04\xe2A\x01\x01R\vblockReason\x12W\n" +
-	"\x0esafety_ratings\x18\x02 \x03(\v20.qclaogui.generativelanguage.v1beta.SafetyRatingR\rsafetyRatings\"i\n" +
+	"\x0esafety_ratings\x18\x02 \x03(\v20.qclaogui.generativelanguage.v1beta.SafetyRatingR\rsafetyRatings\"{\n" +
 	"\vBlockReason\x12\x1c\n" +
 	"\x18BLOCK_REASON_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
 	"\x06SAFETY\x10\x01\x12\t\n" +
 	"\x05OTHER\x10\x02\x12\r\n" +
 	"\tBLOCKLIST\x10\x03\x12\x16\n" +
-	"\x12PROHIBITED_CONTENT\x10\x04\x1a\xdc\x01\n" +
+	"\x12PROHIBITED_CONTENT\x10\x04\x12\x10\n" +
+	"\fIMAGE_SAFETY\x10\x05\x1a\xb7\x06\n" +
 	"\rUsageMetadata\x12,\n" +
 	"\x12prompt_token_count\x18\x01 \x01(\x05R\x10promptTokenCount\x12;\n" +
 	"\x1acached_content_token_count\x18\x04 \x01(\x05R\x17cachedContentTokenCount\x124\n" +
-	"\x16candidates_token_count\x18\x02 \x01(\x05R\x14candidatesTokenCount\x12*\n" +
-	"\x11total_token_count\x18\x03 \x01(\x05R\x0ftotalTokenCount\"\x90\b\n" +
+	"\x16candidates_token_count\x18\x02 \x01(\x05R\x14candidatesTokenCount\x12B\n" +
+	"\x1btool_use_prompt_token_count\x18\b \x01(\x05B\x04\xe2A\x01\x03R\x17toolUsePromptTokenCount\x126\n" +
+	"\x14thoughts_token_count\x18\n" +
+	" \x01(\x05B\x04\xe2A\x01\x03R\x12thoughtsTokenCount\x12*\n" +
+	"\x11total_token_count\x18\x03 \x01(\x05R\x0ftotalTokenCount\x12p\n" +
+	"\x15prompt_tokens_details\x18\x05 \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x13promptTokensDetails\x12n\n" +
+	"\x14cache_tokens_details\x18\x06 \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x12cacheTokensDetails\x12x\n" +
+	"\x19candidates_tokens_details\x18\a \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x17candidatesTokensDetails\x12\x80\x01\n" +
+	"\x1etool_use_prompt_tokens_details\x18\t \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x1atoolUsePromptTokensDetails\"\xa2\b\n" +
 	"\tCandidate\x12\x1f\n" +
 	"\x05index\x18\x03 \x01(\x05B\x04\xe2A\x01\x03H\x00R\x05index\x88\x01\x01\x12K\n" +
 	"\acontent\x18\x01 \x01(\v2+.qclaogui.generativelanguage.v1beta.ContentB\x04\xe2A\x01\x03R\acontent\x12f\n" +
@@ -2880,7 +5349,7 @@ const file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc =
 	"\x12grounding_metadata\x18\t \x01(\v25.qclaogui.generativelanguage.v1beta.GroundingMetadataB\x04\xe2A\x01\x03R\x11groundingMetadata\x12'\n" +
 	"\favg_logprobs\x18\n" +
 	" \x01(\x01B\x04\xe2A\x01\x03R\vavgLogprobs\x12a\n" +
-	"\x0flogprobs_result\x18\v \x01(\v22.qclaogui.generativelanguage.v1beta.LogprobsResultB\x04\xe2A\x01\x03R\x0elogprobsResult\"\xca\x01\n" +
+	"\x0flogprobs_result\x18\v \x01(\v22.qclaogui.generativelanguage.v1beta.LogprobsResultB\x04\xe2A\x01\x03R\x0elogprobsResult\"\xdc\x01\n" +
 	"\fFinishReason\x12\x1d\n" +
 	"\x19FINISH_REASON_UNSPECIFIED\x10\x00\x12\b\n" +
 	"\x04STOP\x10\x01\x12\x0e\n" +
@@ -2896,7 +5365,8 @@ const file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc =
 	"\x12PROHIBITED_CONTENT\x10\b\x12\b\n" +
 	"\x04SPII\x10\t\x12\x1b\n" +
 	"\x17MALFORMED_FUNCTION_CALL\x10\n" +
-	"B\b\n" +
+	"\x12\x10\n" +
+	"\fIMAGE_SAFETY\x10\vB\b\n" +
 	"\x06_index\"\xf5\x03\n" +
 	"\x0eLogprobsResult\x12g\n" +
 	"\x0etop_candidates\x18\x01 \x03(\v2@.qclaogui.generativelanguage.v1beta.LogprobsResult.TopCandidatesR\rtopCandidates\x12i\n" +
@@ -2928,12 +5398,13 @@ const file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc =
 	"\tsource_id\x18\x03 \x01(\v27.qclaogui.generativelanguage.v1beta.AttributionSourceIdB\x04\xe2A\x01\x03R\bsourceId\x12E\n" +
 	"\acontent\x18\x02 \x01(\v2+.qclaogui.generativelanguage.v1beta.ContentR\acontent\"k\n" +
 	"\x11RetrievalMetadata\x12V\n" +
-	"%google_search_dynamic_retrieval_score\x18\x02 \x01(\x02B\x04\xe2A\x01\x01R!googleSearchDynamicRetrievalScore\"\xdf\x03\n" +
+	"%google_search_dynamic_retrieval_score\x18\x02 \x01(\x02B\x04\xe2A\x01\x01R!googleSearchDynamicRetrievalScore\"\x8d\x04\n" +
 	"\x11GroundingMetadata\x12m\n" +
 	"\x12search_entry_point\x18\x01 \x01(\v24.qclaogui.generativelanguage.v1beta.SearchEntryPointB\x04\xe2A\x01\x01H\x00R\x10searchEntryPoint\x88\x01\x01\x12]\n" +
 	"\x10grounding_chunks\x18\x02 \x03(\v22.qclaogui.generativelanguage.v1beta.GroundingChunkR\x0fgroundingChunks\x12c\n" +
 	"\x12grounding_supports\x18\x03 \x03(\v24.qclaogui.generativelanguage.v1beta.GroundingSupportR\x11groundingSupports\x12i\n" +
-	"\x12retrieval_metadata\x18\x04 \x01(\v25.qclaogui.generativelanguage.v1beta.RetrievalMetadataH\x01R\x11retrievalMetadata\x88\x01\x01B\x15\n" +
+	"\x12retrieval_metadata\x18\x04 \x01(\v25.qclaogui.generativelanguage.v1beta.RetrievalMetadataH\x01R\x11retrievalMetadata\x88\x01\x01\x12,\n" +
+	"\x12web_search_queries\x18\x05 \x03(\tR\x10webSearchQueriesB\x15\n" +
 	"\x13_search_entry_pointB\x15\n" +
 	"\x13_retrieval_metadata\"d\n" +
 	"\x10SearchEntryPoint\x12/\n" +
@@ -3020,10 +5491,133 @@ const file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc =
 	"\x05model\x18\x01 \x01(\tB.\xe2A\x01\x02\xfaA'\n" +
 	"%generativelanguage.qclaogui.com/ModelR\x05model\x12M\n" +
 	"\bcontents\x18\x02 \x03(\v2+.qclaogui.generativelanguage.v1beta.ContentB\x04\xe2A\x01\x01R\bcontents\x12z\n" +
-	"\x18generate_content_request\x18\x03 \x01(\v2:.qclaogui.generativelanguage.v1beta.GenerateContentRequestB\x04\xe2A\x01\x01R\x16generateContentRequest\"u\n" +
+	"\x18generate_content_request\x18\x03 \x01(\v2:.qclaogui.generativelanguage.v1beta.GenerateContentRequestB\x04\xe2A\x01\x01R\x16generateContentRequest\"\xd7\x02\n" +
 	"\x13CountTokensResponse\x12!\n" +
 	"\ftotal_tokens\x18\x01 \x01(\x05R\vtotalTokens\x12;\n" +
-	"\x1acached_content_token_count\x18\x05 \x01(\x05R\x17cachedContentTokenCount*\xbe\x01\n" +
+	"\x1acached_content_token_count\x18\x05 \x01(\x05R\x17cachedContentTokenCount\x12p\n" +
+	"\x15prompt_tokens_details\x18\x06 \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x13promptTokensDetails\x12n\n" +
+	"\x14cache_tokens_details\x18\a \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x12cacheTokensDetails\"\x8d\f\n" +
+	"\x13RealtimeInputConfig\x12\x9a\x01\n" +
+	"\x1cautomatic_activity_detection\x18\x01 \x01(\v2R.qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetectionB\x04\xe2A\x01\x01R\x1aautomaticActivityDetection\x12\x80\x01\n" +
+	"\x11activity_handling\x18\x03 \x01(\x0e2H.qclaogui.generativelanguage.v1beta.RealtimeInputConfig.ActivityHandlingB\x04\xe2A\x01\x01H\x00R\x10activityHandling\x88\x01\x01\x12t\n" +
+	"\rturn_coverage\x18\x04 \x01(\x0e2D.qclaogui.generativelanguage.v1beta.RealtimeInputConfig.TurnCoverageB\x04\xe2A\x01\x01H\x01R\fturnCoverage\x88\x01\x01\x1a\xdc\x06\n" +
+	"\x1aAutomaticActivityDetection\x12%\n" +
+	"\bdisabled\x18\x02 \x01(\bB\x04\xe2A\x01\x01H\x00R\bdisabled\x88\x01\x01\x12\xad\x01\n" +
+	"\x1bstart_of_speech_sensitivity\x18\x03 \x01(\x0e2c.qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection.StartSensitivityB\x04\xe2A\x01\x01H\x01R\x18startOfSpeechSensitivity\x88\x01\x01\x125\n" +
+	"\x11prefix_padding_ms\x18\x04 \x01(\x05B\x04\xe2A\x01\x01H\x02R\x0fprefixPaddingMs\x88\x01\x01\x12\xa7\x01\n" +
+	"\x19end_of_speech_sensitivity\x18\x05 \x01(\x0e2a.qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection.EndSensitivityB\x04\xe2A\x01\x01H\x03R\x16endOfSpeechSensitivity\x88\x01\x01\x129\n" +
+	"\x13silence_duration_ms\x18\x06 \x01(\x05B\x04\xe2A\x01\x01H\x04R\x11silenceDurationMs\x88\x01\x01\"l\n" +
+	"\x10StartSensitivity\x12!\n" +
+	"\x1dSTART_SENSITIVITY_UNSPECIFIED\x10\x00\x12\x1a\n" +
+	"\x16START_SENSITIVITY_HIGH\x10\x01\x12\x19\n" +
+	"\x15START_SENSITIVITY_LOW\x10\x02\"d\n" +
+	"\x0eEndSensitivity\x12\x1f\n" +
+	"\x1bEND_SENSITIVITY_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14END_SENSITIVITY_HIGH\x10\x01\x12\x17\n" +
+	"\x13END_SENSITIVITY_LOW\x10\x02B\v\n" +
+	"\t_disabledB\x1e\n" +
+	"\x1c_start_of_speech_sensitivityB\x14\n" +
+	"\x12_prefix_padding_msB\x1c\n" +
+	"\x1a_end_of_speech_sensitivityB\x16\n" +
+	"\x14_silence_duration_ms\"l\n" +
+	"\x10ActivityHandling\x12!\n" +
+	"\x1dACTIVITY_HANDLING_UNSPECIFIED\x10\x00\x12 \n" +
+	"\x1cSTART_OF_ACTIVITY_INTERRUPTS\x10\x01\x12\x13\n" +
+	"\x0fNO_INTERRUPTION\x10\x02\"k\n" +
+	"\fTurnCoverage\x12\x1d\n" +
+	"\x19TURN_COVERAGE_UNSPECIFIED\x10\x00\x12\x1f\n" +
+	"\x1bTURN_INCLUDES_ONLY_ACTIVITY\x10\x01\x12\x1b\n" +
+	"\x17TURN_INCLUDES_ALL_INPUT\x10\x02B\x14\n" +
+	"\x12_activity_handlingB\x10\n" +
+	"\x0e_turn_coverage\"A\n" +
+	"\x17SessionResumptionConfig\x12\x1b\n" +
+	"\x06handle\x18\x01 \x01(\tH\x00R\x06handle\x88\x01\x01B\t\n" +
+	"\a_handle\"\xc0\x02\n" +
+	"\x1eContextWindowCompressionConfig\x12y\n" +
+	"\x0esliding_window\x18\x02 \x01(\v2P.qclaogui.generativelanguage.v1beta.ContextWindowCompressionConfig.SlidingWindowH\x00R\rslidingWindow\x12*\n" +
+	"\x0etrigger_tokens\x18\x01 \x01(\x03H\x01R\rtriggerTokens\x88\x01\x01\x1aK\n" +
+	"\rSlidingWindow\x12(\n" +
+	"\rtarget_tokens\x18\x01 \x01(\x03H\x00R\ftargetTokens\x88\x01\x01B\x10\n" +
+	"\x0e_target_tokensB\x17\n" +
+	"\x15compression_mechanismB\x11\n" +
+	"\x0f_trigger_tokens\"\x1a\n" +
+	"\x18AudioTranscriptionConfig\"\xb8\x06\n" +
+	"\x18BidiGenerateContentSetup\x12\x1a\n" +
+	"\x05model\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x05model\x12g\n" +
+	"\x11generation_config\x18\x02 \x01(\v24.qclaogui.generativelanguage.v1beta.GenerationConfigB\x04\xe2A\x01\x01R\x10generationConfig\x12`\n" +
+	"\x12system_instruction\x18\x03 \x01(\v2+.qclaogui.generativelanguage.v1beta.ContentB\x04\xe2A\x01\x01R\x11systemInstruction\x12D\n" +
+	"\x05tools\x18\x04 \x03(\v2(.qclaogui.generativelanguage.v1beta.ToolB\x04\xe2A\x01\x01R\x05tools\x12q\n" +
+	"\x15realtime_input_config\x18\x06 \x01(\v27.qclaogui.generativelanguage.v1beta.RealtimeInputConfigB\x04\xe2A\x01\x01R\x13realtimeInputConfig\x12p\n" +
+	"\x12session_resumption\x18\a \x01(\v2;.qclaogui.generativelanguage.v1beta.SessionResumptionConfigB\x04\xe2A\x01\x01R\x11sessionResumption\x12\x86\x01\n" +
+	"\x1acontext_window_compression\x18\b \x01(\v2B.qclaogui.generativelanguage.v1beta.ContextWindowCompressionConfigB\x04\xe2A\x01\x01R\x18contextWindowCompression\x12\x80\x01\n" +
+	"\x1aoutput_audio_transcription\x18\v \x01(\v2<.qclaogui.generativelanguage.v1beta.AudioTranscriptionConfigB\x04\xe2A\x01\x01R\x18outputAudioTranscription\"\x96\x01\n" +
+	" BidiGenerateContentClientContent\x12G\n" +
+	"\x05turns\x18\x01 \x03(\v2+.qclaogui.generativelanguage.v1beta.ContentB\x04\xe2A\x01\x01R\x05turns\x12)\n" +
+	"\rturn_complete\x18\x02 \x01(\bB\x04\xe2A\x01\x01R\fturnComplete\"\x8f\x05\n" +
+	" BidiGenerateContentRealtimeInput\x12Q\n" +
+	"\fmedia_chunks\x18\x01 \x03(\v2(.qclaogui.generativelanguage.v1beta.BlobB\x04\xe2A\x01\x01R\vmediaChunks\x12D\n" +
+	"\x05audio\x18\x02 \x01(\v2(.qclaogui.generativelanguage.v1beta.BlobB\x04\xe2A\x01\x01R\x05audio\x123\n" +
+	"\x10audio_stream_end\x18\x03 \x01(\bB\x04\xe2A\x01\x01H\x00R\x0eaudioStreamEnd\x88\x01\x01\x12D\n" +
+	"\x05video\x18\x04 \x01(\v2(.qclaogui.generativelanguage.v1beta.BlobB\x04\xe2A\x01\x01R\x05video\x12\x1d\n" +
+	"\x04text\x18\x05 \x01(\tB\x04\xe2A\x01\x01H\x01R\x04text\x88\x01\x01\x12\x7f\n" +
+	"\x0eactivity_start\x18\x06 \x01(\v2R.qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.ActivityStartB\x04\xe2A\x01\x01R\ractivityStart\x12y\n" +
+	"\factivity_end\x18\a \x01(\v2P.qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.ActivityEndB\x04\xe2A\x01\x01R\vactivityEnd\x1a\x0f\n" +
+	"\rActivityStart\x1a\r\n" +
+	"\vActivityEndB\x13\n" +
+	"\x11_audio_stream_endB\a\n" +
+	"\x05_text\"\x8c\x01\n" +
+	"\x1fBidiGenerateContentToolResponse\x12i\n" +
+	"\x12function_responses\x18\x01 \x03(\v24.qclaogui.generativelanguage.v1beta.FunctionResponseB\x04\xe2A\x01\x01R\x11functionResponses\"\xea\x03\n" +
+	" BidiGenerateContentClientMessage\x12Z\n" +
+	"\x05setup\x18\x01 \x01(\v2<.qclaogui.generativelanguage.v1beta.BidiGenerateContentSetupB\x04\xe2A\x01\x01H\x00R\x05setup\x12s\n" +
+	"\x0eclient_content\x18\x02 \x01(\v2D.qclaogui.generativelanguage.v1beta.BidiGenerateContentClientContentB\x04\xe2A\x01\x01H\x00R\rclientContent\x12s\n" +
+	"\x0erealtime_input\x18\x03 \x01(\v2D.qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInputB\x04\xe2A\x01\x01H\x00R\rrealtimeInput\x12p\n" +
+	"\rtool_response\x18\x04 \x01(\v2C.qclaogui.generativelanguage.v1beta.BidiGenerateContentToolResponseB\x04\xe2A\x01\x01H\x00R\ftoolResponseB\x0e\n" +
+	"\fmessage_type\"\"\n" +
+	" BidiGenerateContentSetupComplete\"\xfd\x03\n" +
+	" BidiGenerateContentServerContent\x12U\n" +
+	"\n" +
+	"model_turn\x18\x01 \x01(\v2+.qclaogui.generativelanguage.v1beta.ContentB\x04\xe2A\x01\x03H\x00R\tmodelTurn\x88\x01\x01\x125\n" +
+	"\x13generation_complete\x18\x05 \x01(\bB\x04\xe2A\x01\x03R\x12generationComplete\x12)\n" +
+	"\rturn_complete\x18\x02 \x01(\bB\x04\xe2A\x01\x03R\fturnComplete\x12&\n" +
+	"\vinterrupted\x18\x03 \x01(\bB\x04\xe2A\x01\x03R\vinterrupted\x12j\n" +
+	"\x12grounding_metadata\x18\x04 \x01(\v25.qclaogui.generativelanguage.v1beta.GroundingMetadataB\x04\xe2A\x01\x03R\x11groundingMetadata\x12}\n" +
+	"\x14output_transcription\x18\a \x01(\v2D.qclaogui.generativelanguage.v1beta.BidiGenerateContentTranscriptionB\x04\xe2A\x01\x03R\x13outputTranscriptionB\r\n" +
+	"\v_model_turn\"|\n" +
+	"\x1bBidiGenerateContentToolCall\x12]\n" +
+	"\x0efunction_calls\x18\x02 \x03(\v20.qclaogui.generativelanguage.v1beta.FunctionCallB\x04\xe2A\x01\x03R\rfunctionCalls\"A\n" +
+	"'BidiGenerateContentToolCallCancellation\x12\x16\n" +
+	"\x03ids\x18\x01 \x03(\tB\x04\xe2A\x01\x03R\x03ids\"@\n" +
+	"\x06GoAway\x126\n" +
+	"\ttime_left\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\btimeLeft\"V\n" +
+	"\x17SessionResumptionUpdate\x12\x1d\n" +
+	"\n" +
+	"new_handle\x18\x01 \x01(\tR\tnewHandle\x12\x1c\n" +
+	"\tresumable\x18\x02 \x01(\bR\tresumable\"6\n" +
+	" BidiGenerateContentTranscription\x12\x12\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text\"\xbc\x06\n" +
+	" BidiGenerateContentServerMessage\x12s\n" +
+	"\x0esetup_complete\x18\x02 \x01(\v2D.qclaogui.generativelanguage.v1beta.BidiGenerateContentSetupCompleteB\x04\xe2A\x01\x03H\x00R\rsetupComplete\x12s\n" +
+	"\x0eserver_content\x18\x03 \x01(\v2D.qclaogui.generativelanguage.v1beta.BidiGenerateContentServerContentB\x04\xe2A\x01\x03H\x00R\rserverContent\x12d\n" +
+	"\ttool_call\x18\x04 \x01(\v2?.qclaogui.generativelanguage.v1beta.BidiGenerateContentToolCallB\x04\xe2A\x01\x03H\x00R\btoolCall\x12\x89\x01\n" +
+	"\x16tool_call_cancellation\x18\x05 \x01(\v2K.qclaogui.generativelanguage.v1beta.BidiGenerateContentToolCallCancellationB\x04\xe2A\x01\x03H\x00R\x14toolCallCancellation\x12K\n" +
+	"\ago_away\x18\x06 \x01(\v2*.qclaogui.generativelanguage.v1beta.GoAwayB\x04\xe2A\x01\x03H\x00R\x06goAway\x12\x7f\n" +
+	"\x19session_resumption_update\x18\a \x01(\v2;.qclaogui.generativelanguage.v1beta.SessionResumptionUpdateB\x04\xe2A\x01\x03H\x00R\x17sessionResumptionUpdate\x12^\n" +
+	"\x0eusage_metadata\x18\n" +
+	" \x01(\v21.qclaogui.generativelanguage.v1beta.UsageMetadataB\x04\xe2A\x01\x03R\rusageMetadataB\x0e\n" +
+	"\fmessage_type\"\xc1\x06\n" +
+	"\rUsageMetadata\x122\n" +
+	"\x12prompt_token_count\x18\x01 \x01(\x05B\x04\xe2A\x01\x03R\x10promptTokenCount\x12;\n" +
+	"\x1acached_content_token_count\x18\x04 \x01(\x05R\x17cachedContentTokenCount\x126\n" +
+	"\x14response_token_count\x18\x02 \x01(\x05B\x04\xe2A\x01\x03R\x12responseTokenCount\x12B\n" +
+	"\x1btool_use_prompt_token_count\x18\b \x01(\x05B\x04\xe2A\x01\x03R\x17toolUsePromptTokenCount\x126\n" +
+	"\x14thoughts_token_count\x18\n" +
+	" \x01(\x05B\x04\xe2A\x01\x03R\x12thoughtsTokenCount\x120\n" +
+	"\x11total_token_count\x18\x03 \x01(\x05B\x04\xe2A\x01\x03R\x0ftotalTokenCount\x12p\n" +
+	"\x15prompt_tokens_details\x18\x05 \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x13promptTokensDetails\x12n\n" +
+	"\x14cache_tokens_details\x18\x06 \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x12cacheTokensDetails\x12t\n" +
+	"\x17response_tokens_details\x18\a \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x15responseTokensDetails\x12\x80\x01\n" +
+	"\x1etool_use_prompt_tokens_details\x18\t \x03(\v26.qclaogui.generativelanguage.v1beta.ModalityTokenCountB\x04\xe2A\x01\x03R\x1atoolUsePromptTokensDetails*\xd8\x01\n" +
 	"\bTaskType\x12\x19\n" +
 	"\x15TASK_TYPE_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fRETRIEVAL_QUERY\x10\x01\x12\x16\n" +
@@ -3033,15 +5627,16 @@ const file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc =
 	"\n" +
 	"CLUSTERING\x10\x05\x12\x16\n" +
 	"\x12QUESTION_ANSWERING\x10\x06\x12\x15\n" +
-	"\x11FACT_VERIFICATION\x10\a2\xf3\n" +
-	"\n" +
-	"\x11GenerativeService\x12\x84\x02\n" +
-	"\x0fGenerateContent\x12:.qclaogui.generativelanguage.v1beta.GenerateContentRequest\x1a;.qclaogui.generativelanguage.v1beta.GenerateContentResponse\"x\xdaA\x0emodel,contents\x82\xd3\xe4\x93\x02a:\x01*Z2:\x01*\"-/v1beta/{model=tunedModels/*}:generateContent\"(/v1beta/{model=models/*}:generateContent\x12\xe9\x01\n" +
-	"\x0eGenerateAnswer\x129.qclaogui.generativelanguage.v1beta.GenerateAnswerRequest\x1a:.qclaogui.generativelanguage.v1beta.GenerateAnswerResponse\"`\xdaA+model,contents,safety_settings,answer_style\x82\xd3\xe4\x93\x02,:\x01*\"'/v1beta/{model=models/*}:generateAnswer\x12\xde\x01\n" +
-	"\x15StreamGenerateContent\x12:.qclaogui.generativelanguage.v1beta.GenerateContentRequest\x1a;.qclaogui.generativelanguage.v1beta.GenerateContentResponse\"J\xdaA\x0emodel,contents\x82\xd3\xe4\x93\x023:\x01*\"./v1beta/{model=models/*}:streamGenerateContent0\x01\x12\xc3\x01\n" +
+	"\x11FACT_VERIFICATION\x10\a\x12\x18\n" +
+	"\x14CODE_RETRIEVAL_QUERY\x10\b2\xc1\r\n" +
+	"\x11GenerativeService\x12\xb6\x02\n" +
+	"\x0fGenerateContent\x12:.qclaogui.generativelanguage.v1beta.GenerateContentRequest\x1a;.qclaogui.generativelanguage.v1beta.GenerateContentResponse\"\xa9\x01\xdaA\x0emodel,contents\x82\xd3\xe4\x93\x02\x91\x01:\x01*Z2:\x01*\"-/v1beta/{model=tunedModels/*}:generateContentZ.:\x01*\")/v1beta/{model=dynamic/*}:generateContent\"(/v1beta/{model=models/*}:generateContent\x12\xe9\x01\n" +
+	"\x0eGenerateAnswer\x129.qclaogui.generativelanguage.v1beta.GenerateAnswerRequest\x1a:.qclaogui.generativelanguage.v1beta.GenerateAnswerResponse\"`\xdaA+model,contents,safety_settings,answer_style\x82\xd3\xe4\x93\x02,:\x01*\"'/v1beta/{model=models/*}:generateAnswer\x12\xd0\x02\n" +
+	"\x15StreamGenerateContent\x12:.qclaogui.generativelanguage.v1beta.GenerateContentRequest\x1a;.qclaogui.generativelanguage.v1beta.GenerateContentResponse\"\xbb\x01\xdaA\x0emodel,contents\x82\xd3\xe4\x93\x02\xa3\x01:\x01*Z8:\x01*\"3/v1beta/{model=tunedModels/*}:streamGenerateContentZ4:\x01*\"//v1beta/{model=dynamic/*}:streamGenerateContent\"./v1beta/{model=models/*}:streamGenerateContent0\x01\x12\xc3\x01\n" +
 	"\fEmbedContent\x127.qclaogui.generativelanguage.v1beta.EmbedContentRequest\x1a8.qclaogui.generativelanguage.v1beta.EmbedContentResponse\"@\xdaA\rmodel,content\x82\xd3\xe4\x93\x02*:\x01*\"%/v1beta/{model=models/*}:embedContent\x12\xdc\x01\n" +
 	"\x12BatchEmbedContents\x12=.qclaogui.generativelanguage.v1beta.BatchEmbedContentsRequest\x1a>.qclaogui.generativelanguage.v1beta.BatchEmbedContentsResponse\"G\xdaA\x0emodel,requests\x82\xd3\xe4\x93\x020:\x01*\"+/v1beta/{model=models/*}:batchEmbedContents\x12\xc0\x01\n" +
-	"\vCountTokens\x126.qclaogui.generativelanguage.v1beta.CountTokensRequest\x1a7.qclaogui.generativelanguage.v1beta.CountTokensResponse\"@\xdaA\x0emodel,contents\x82\xd3\xe4\x93\x02):\x01*\"$/v1beta/{model=models/*}:countTokens\x1a\"\xcaA\x1fgenerativelanguage.qclaogui.comBUZSgithub.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepbb\x06proto3"
+	"\vCountTokens\x126.qclaogui.generativelanguage.v1beta.CountTokensRequest\x1a7.qclaogui.generativelanguage.v1beta.CountTokensResponse\"@\xdaA\x0emodel,contents\x82\xd3\xe4\x93\x02):\x01*\"$/v1beta/{model=models/*}:countTokens\x12\xa7\x01\n" +
+	"\x13BidiGenerateContent\x12D.qclaogui.generativelanguage.v1beta.BidiGenerateContentClientMessage\x1aD.qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage\"\x00(\x010\x01\x1a\"\xcaA\x1fgenerativelanguage.qclaogui.comBUZSgithub.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepbb\x06proto3"
 
 var (
 	file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescOnce sync.Once
@@ -3056,125 +5651,216 @@ func file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDescGZI
 }
 
 var (
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes  = make([]protoimpl.MessageInfo, 31)
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_enumTypes = make([]protoimpl.EnumInfo, 11)
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes  = make([]protoimpl.MessageInfo, 57)
 	file_qclaogui_generativelanguage_v1beta_generative_service_proto_goTypes   = []any{
-		(TaskType)(0), // 0: qclaogui.generativelanguage.v1beta.TaskType
-		(GenerateContentResponse_PromptFeedback_BlockReason)(0), // 1: qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.BlockReason
-		(Candidate_FinishReason)(0),                             // 2: qclaogui.generativelanguage.v1beta.Candidate.FinishReason
-		(GenerateAnswerRequest_AnswerStyle)(0),                  // 3: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.AnswerStyle
-		(GenerateAnswerResponse_InputFeedback_BlockReason)(0),   // 4: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback.BlockReason
-		(*GenerateContentRequest)(nil),                          // 5: qclaogui.generativelanguage.v1beta.GenerateContentRequest
-		(*GenerationConfig)(nil),                                // 6: qclaogui.generativelanguage.v1beta.GenerationConfig
-		(*SemanticRetrieverConfig)(nil),                         // 7: qclaogui.generativelanguage.v1beta.SemanticRetrieverConfig
-		(*GenerateContentResponse)(nil),                         // 8: qclaogui.generativelanguage.v1beta.GenerateContentResponse
-		(*Candidate)(nil),                                       // 9: qclaogui.generativelanguage.v1beta.Candidate
-		(*LogprobsResult)(nil),                                  // 10: qclaogui.generativelanguage.v1beta.LogprobsResult
-		(*AttributionSourceId)(nil),                             // 11: qclaogui.generativelanguage.v1beta.AttributionSourceId
-		(*GroundingAttribution)(nil),                            // 12: qclaogui.generativelanguage.v1beta.GroundingAttribution
-		(*RetrievalMetadata)(nil),                               // 13: qclaogui.generativelanguage.v1beta.RetrievalMetadata
-		(*GroundingMetadata)(nil),                               // 14: qclaogui.generativelanguage.v1beta.GroundingMetadata
-		(*SearchEntryPoint)(nil),                                // 15: qclaogui.generativelanguage.v1beta.SearchEntryPoint
-		(*GroundingChunk)(nil),                                  // 16: qclaogui.generativelanguage.v1beta.GroundingChunk
-		(*Segment)(nil),                                         // 17: qclaogui.generativelanguage.v1beta.Segment
-		(*GroundingSupport)(nil),                                // 18: qclaogui.generativelanguage.v1beta.GroundingSupport
-		(*GenerateAnswerRequest)(nil),                           // 19: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest
-		(*GenerateAnswerResponse)(nil),                          // 20: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse
-		(*EmbedContentRequest)(nil),                             // 21: qclaogui.generativelanguage.v1beta.EmbedContentRequest
-		(*ContentEmbedding)(nil),                                // 22: qclaogui.generativelanguage.v1beta.ContentEmbedding
-		(*EmbedContentResponse)(nil),                            // 23: qclaogui.generativelanguage.v1beta.EmbedContentResponse
-		(*BatchEmbedContentsRequest)(nil),                       // 24: qclaogui.generativelanguage.v1beta.BatchEmbedContentsRequest
-		(*BatchEmbedContentsResponse)(nil),                      // 25: qclaogui.generativelanguage.v1beta.BatchEmbedContentsResponse
-		(*CountTokensRequest)(nil),                              // 26: qclaogui.generativelanguage.v1beta.CountTokensRequest
-		(*CountTokensResponse)(nil),                             // 27: qclaogui.generativelanguage.v1beta.CountTokensResponse
-		(*GenerateContentResponse_PromptFeedback)(nil),          // 28: qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback
-		(*GenerateContentResponse_UsageMetadata)(nil),           // 29: qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata
-		(*LogprobsResult_Candidate)(nil),                        // 30: qclaogui.generativelanguage.v1beta.LogprobsResult.Candidate
-		(*LogprobsResult_TopCandidates)(nil),                    // 31: qclaogui.generativelanguage.v1beta.LogprobsResult.TopCandidates
-		(*AttributionSourceId_GroundingPassageId)(nil),          // 32: qclaogui.generativelanguage.v1beta.AttributionSourceId.GroundingPassageId
-		(*AttributionSourceId_SemanticRetrieverChunk)(nil),      // 33: qclaogui.generativelanguage.v1beta.AttributionSourceId.SemanticRetrieverChunk
-		(*GroundingChunk_Web)(nil),                              // 34: qclaogui.generativelanguage.v1beta.GroundingChunk.Web
-		(*GenerateAnswerResponse_InputFeedback)(nil),            // 35: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback
-		(*Content)(nil),                                         // 36: qclaogui.generativelanguage.v1beta.Content
-		(*Tool)(nil),                                            // 37: qclaogui.generativelanguage.v1beta.Tool
-		(*ToolConfig)(nil),                                      // 38: qclaogui.generativelanguage.v1beta.ToolConfig
-		(*SafetySetting)(nil),                                   // 39: qclaogui.generativelanguage.v1beta.SafetySetting
-		(*Schema)(nil),                                          // 40: qclaogui.generativelanguage.v1beta.Schema
-		(*MetadataFilter)(nil),                                  // 41: qclaogui.generativelanguage.v1beta.MetadataFilter
-		(*SafetyRating)(nil),                                    // 42: qclaogui.generativelanguage.v1beta.SafetyRating
-		(*CitationMetadata)(nil),                                // 43: qclaogui.generativelanguage.v1beta.CitationMetadata
-		(*GroundingPassages)(nil),                               // 44: qclaogui.generativelanguage.v1beta.GroundingPassages
+		(TaskType)(0),                                                        // 0: qclaogui.generativelanguage.v1beta.TaskType
+		(GenerationConfig_Modality)(0),                                       // 1: qclaogui.generativelanguage.v1beta.GenerationConfig.Modality
+		(GenerationConfig_MediaResolution)(0),                                // 2: qclaogui.generativelanguage.v1beta.GenerationConfig.MediaResolution
+		(GenerateContentResponse_PromptFeedback_BlockReason)(0),              // 3: qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.BlockReason
+		(Candidate_FinishReason)(0),                                          // 4: qclaogui.generativelanguage.v1beta.Candidate.FinishReason
+		(GenerateAnswerRequest_AnswerStyle)(0),                               // 5: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.AnswerStyle
+		(GenerateAnswerResponse_InputFeedback_BlockReason)(0),                // 6: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback.BlockReason
+		(RealtimeInputConfig_ActivityHandling)(0),                            // 7: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.ActivityHandling
+		(RealtimeInputConfig_TurnCoverage)(0),                                // 8: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.TurnCoverage
+		(RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity)(0), // 9: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection.StartSensitivity
+		(RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity)(0),   // 10: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection.EndSensitivity
+		(*GenerateContentRequest)(nil),                                       // 11: qclaogui.generativelanguage.v1beta.GenerateContentRequest
+		(*PrebuiltVoiceConfig)(nil),                                          // 12: qclaogui.generativelanguage.v1beta.PrebuiltVoiceConfig
+		(*VoiceConfig)(nil),                                                  // 13: qclaogui.generativelanguage.v1beta.VoiceConfig
+		(*SpeechConfig)(nil),                                                 // 14: qclaogui.generativelanguage.v1beta.SpeechConfig
+		(*ThinkingConfig)(nil),                                               // 15: qclaogui.generativelanguage.v1beta.ThinkingConfig
+		(*GenerationConfig)(nil),                                             // 16: qclaogui.generativelanguage.v1beta.GenerationConfig
+		(*SemanticRetrieverConfig)(nil),                                      // 17: qclaogui.generativelanguage.v1beta.SemanticRetrieverConfig
+		(*GenerateContentResponse)(nil),                                      // 18: qclaogui.generativelanguage.v1beta.GenerateContentResponse
+		(*Candidate)(nil),                                                    // 19: qclaogui.generativelanguage.v1beta.Candidate
+		(*LogprobsResult)(nil),                                               // 20: qclaogui.generativelanguage.v1beta.LogprobsResult
+		(*AttributionSourceId)(nil),                                          // 21: qclaogui.generativelanguage.v1beta.AttributionSourceId
+		(*GroundingAttribution)(nil),                                         // 22: qclaogui.generativelanguage.v1beta.GroundingAttribution
+		(*RetrievalMetadata)(nil),                                            // 23: qclaogui.generativelanguage.v1beta.RetrievalMetadata
+		(*GroundingMetadata)(nil),                                            // 24: qclaogui.generativelanguage.v1beta.GroundingMetadata
+		(*SearchEntryPoint)(nil),                                             // 25: qclaogui.generativelanguage.v1beta.SearchEntryPoint
+		(*GroundingChunk)(nil),                                               // 26: qclaogui.generativelanguage.v1beta.GroundingChunk
+		(*Segment)(nil),                                                      // 27: qclaogui.generativelanguage.v1beta.Segment
+		(*GroundingSupport)(nil),                                             // 28: qclaogui.generativelanguage.v1beta.GroundingSupport
+		(*GenerateAnswerRequest)(nil),                                        // 29: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest
+		(*GenerateAnswerResponse)(nil),                                       // 30: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse
+		(*EmbedContentRequest)(nil),                                          // 31: qclaogui.generativelanguage.v1beta.EmbedContentRequest
+		(*ContentEmbedding)(nil),                                             // 32: qclaogui.generativelanguage.v1beta.ContentEmbedding
+		(*EmbedContentResponse)(nil),                                         // 33: qclaogui.generativelanguage.v1beta.EmbedContentResponse
+		(*BatchEmbedContentsRequest)(nil),                                    // 34: qclaogui.generativelanguage.v1beta.BatchEmbedContentsRequest
+		(*BatchEmbedContentsResponse)(nil),                                   // 35: qclaogui.generativelanguage.v1beta.BatchEmbedContentsResponse
+		(*CountTokensRequest)(nil),                                           // 36: qclaogui.generativelanguage.v1beta.CountTokensRequest
+		(*CountTokensResponse)(nil),                                          // 37: qclaogui.generativelanguage.v1beta.CountTokensResponse
+		(*RealtimeInputConfig)(nil),                                          // 38: qclaogui.generativelanguage.v1beta.RealtimeInputConfig
+		(*SessionResumptionConfig)(nil),                                      // 39: qclaogui.generativelanguage.v1beta.SessionResumptionConfig
+		(*ContextWindowCompressionConfig)(nil),                               // 40: qclaogui.generativelanguage.v1beta.ContextWindowCompressionConfig
+		(*AudioTranscriptionConfig)(nil),                                     // 41: qclaogui.generativelanguage.v1beta.AudioTranscriptionConfig
+		(*BidiGenerateContentSetup)(nil),                                     // 42: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup
+		(*BidiGenerateContentClientContent)(nil),                             // 43: qclaogui.generativelanguage.v1beta.BidiGenerateContentClientContent
+		(*BidiGenerateContentRealtimeInput)(nil),                             // 44: qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput
+		(*BidiGenerateContentToolResponse)(nil),                              // 45: qclaogui.generativelanguage.v1beta.BidiGenerateContentToolResponse
+		(*BidiGenerateContentClientMessage)(nil),                             // 46: qclaogui.generativelanguage.v1beta.BidiGenerateContentClientMessage
+		(*BidiGenerateContentSetupComplete)(nil),                             // 47: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetupComplete
+		(*BidiGenerateContentServerContent)(nil),                             // 48: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerContent
+		(*BidiGenerateContentToolCall)(nil),                                  // 49: qclaogui.generativelanguage.v1beta.BidiGenerateContentToolCall
+		(*BidiGenerateContentToolCallCancellation)(nil),                      // 50: qclaogui.generativelanguage.v1beta.BidiGenerateContentToolCallCancellation
+		(*GoAway)(nil),                                                       // 51: qclaogui.generativelanguage.v1beta.GoAway
+		(*SessionResumptionUpdate)(nil),                                      // 52: qclaogui.generativelanguage.v1beta.SessionResumptionUpdate
+		(*BidiGenerateContentTranscription)(nil),                             // 53: qclaogui.generativelanguage.v1beta.BidiGenerateContentTranscription
+		(*BidiGenerateContentServerMessage)(nil),                             // 54: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage
+		(*UsageMetadata)(nil),                                                // 55: qclaogui.generativelanguage.v1beta.UsageMetadata
+		(*GenerateContentResponse_PromptFeedback)(nil),                       // 56: qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback
+		(*GenerateContentResponse_UsageMetadata)(nil),                        // 57: qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata
+		(*LogprobsResult_Candidate)(nil),                                     // 58: qclaogui.generativelanguage.v1beta.LogprobsResult.Candidate
+		(*LogprobsResult_TopCandidates)(nil),                                 // 59: qclaogui.generativelanguage.v1beta.LogprobsResult.TopCandidates
+		(*AttributionSourceId_GroundingPassageId)(nil),                       // 60: qclaogui.generativelanguage.v1beta.AttributionSourceId.GroundingPassageId
+		(*AttributionSourceId_SemanticRetrieverChunk)(nil),                   // 61: qclaogui.generativelanguage.v1beta.AttributionSourceId.SemanticRetrieverChunk
+		(*GroundingChunk_Web)(nil),                                           // 62: qclaogui.generativelanguage.v1beta.GroundingChunk.Web
+		(*GenerateAnswerResponse_InputFeedback)(nil),                         // 63: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback
+		(*RealtimeInputConfig_AutomaticActivityDetection)(nil),               // 64: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection
+		(*ContextWindowCompressionConfig_SlidingWindow)(nil),                 // 65: qclaogui.generativelanguage.v1beta.ContextWindowCompressionConfig.SlidingWindow
+		(*BidiGenerateContentRealtimeInput_ActivityStart)(nil),               // 66: qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.ActivityStart
+		(*BidiGenerateContentRealtimeInput_ActivityEnd)(nil),                 // 67: qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.ActivityEnd
+		(*Content)(nil),                                                      // 68: qclaogui.generativelanguage.v1beta.Content
+		(*Tool)(nil),                                                         // 69: qclaogui.generativelanguage.v1beta.Tool
+		(*ToolConfig)(nil),                                                   // 70: qclaogui.generativelanguage.v1beta.ToolConfig
+		(*SafetySetting)(nil),                                                // 71: qclaogui.generativelanguage.v1beta.SafetySetting
+		(*Schema)(nil),                                                       // 72: qclaogui.generativelanguage.v1beta.Schema
+		(*MetadataFilter)(nil),                                               // 73: qclaogui.generativelanguage.v1beta.MetadataFilter
+		(*SafetyRating)(nil),                                                 // 74: qclaogui.generativelanguage.v1beta.SafetyRating
+		(*CitationMetadata)(nil),                                             // 75: qclaogui.generativelanguage.v1beta.CitationMetadata
+		(*GroundingPassages)(nil),                                            // 76: qclaogui.generativelanguage.v1beta.GroundingPassages
+		(*ModalityTokenCount)(nil),                                           // 77: qclaogui.generativelanguage.v1beta.ModalityTokenCount
+		(*Blob)(nil),                                                         // 78: qclaogui.generativelanguage.v1beta.Blob
+		(*FunctionResponse)(nil),                                             // 79: qclaogui.generativelanguage.v1beta.FunctionResponse
+		(*FunctionCall)(nil),                                                 // 80: qclaogui.generativelanguage.v1beta.FunctionCall
+		(*durationpb.Duration)(nil),                                          // 81: google.protobuf.Duration
 	}
 )
 
 var file_qclaogui_generativelanguage_v1beta_generative_service_proto_depIdxs = []int32{
-	36, // 0: qclaogui.generativelanguage.v1beta.GenerateContentRequest.system_instruction:type_name -> qclaogui.generativelanguage.v1beta.Content
-	36, // 1: qclaogui.generativelanguage.v1beta.GenerateContentRequest.contents:type_name -> qclaogui.generativelanguage.v1beta.Content
-	37, // 2: qclaogui.generativelanguage.v1beta.GenerateContentRequest.tools:type_name -> qclaogui.generativelanguage.v1beta.Tool
-	38, // 3: qclaogui.generativelanguage.v1beta.GenerateContentRequest.tool_config:type_name -> qclaogui.generativelanguage.v1beta.ToolConfig
-	39, // 4: qclaogui.generativelanguage.v1beta.GenerateContentRequest.safety_settings:type_name -> qclaogui.generativelanguage.v1beta.SafetySetting
-	6,  // 5: qclaogui.generativelanguage.v1beta.GenerateContentRequest.generation_config:type_name -> qclaogui.generativelanguage.v1beta.GenerationConfig
-	40, // 6: qclaogui.generativelanguage.v1beta.GenerationConfig.response_schema:type_name -> qclaogui.generativelanguage.v1beta.Schema
-	36, // 7: qclaogui.generativelanguage.v1beta.SemanticRetrieverConfig.query:type_name -> qclaogui.generativelanguage.v1beta.Content
-	41, // 8: qclaogui.generativelanguage.v1beta.SemanticRetrieverConfig.metadata_filters:type_name -> qclaogui.generativelanguage.v1beta.MetadataFilter
-	9,  // 9: qclaogui.generativelanguage.v1beta.GenerateContentResponse.candidates:type_name -> qclaogui.generativelanguage.v1beta.Candidate
-	28, // 10: qclaogui.generativelanguage.v1beta.GenerateContentResponse.prompt_feedback:type_name -> qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback
-	29, // 11: qclaogui.generativelanguage.v1beta.GenerateContentResponse.usage_metadata:type_name -> qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata
-	36, // 12: qclaogui.generativelanguage.v1beta.Candidate.content:type_name -> qclaogui.generativelanguage.v1beta.Content
-	2,  // 13: qclaogui.generativelanguage.v1beta.Candidate.finish_reason:type_name -> qclaogui.generativelanguage.v1beta.Candidate.FinishReason
-	42, // 14: qclaogui.generativelanguage.v1beta.Candidate.safety_ratings:type_name -> qclaogui.generativelanguage.v1beta.SafetyRating
-	43, // 15: qclaogui.generativelanguage.v1beta.Candidate.citation_metadata:type_name -> qclaogui.generativelanguage.v1beta.CitationMetadata
-	12, // 16: qclaogui.generativelanguage.v1beta.Candidate.grounding_attributions:type_name -> qclaogui.generativelanguage.v1beta.GroundingAttribution
-	14, // 17: qclaogui.generativelanguage.v1beta.Candidate.grounding_metadata:type_name -> qclaogui.generativelanguage.v1beta.GroundingMetadata
-	10, // 18: qclaogui.generativelanguage.v1beta.Candidate.logprobs_result:type_name -> qclaogui.generativelanguage.v1beta.LogprobsResult
-	31, // 19: qclaogui.generativelanguage.v1beta.LogprobsResult.top_candidates:type_name -> qclaogui.generativelanguage.v1beta.LogprobsResult.TopCandidates
-	30, // 20: qclaogui.generativelanguage.v1beta.LogprobsResult.chosen_candidates:type_name -> qclaogui.generativelanguage.v1beta.LogprobsResult.Candidate
-	32, // 21: qclaogui.generativelanguage.v1beta.AttributionSourceId.grounding_passage:type_name -> qclaogui.generativelanguage.v1beta.AttributionSourceId.GroundingPassageId
-	33, // 22: qclaogui.generativelanguage.v1beta.AttributionSourceId.semantic_retriever_chunk:type_name -> qclaogui.generativelanguage.v1beta.AttributionSourceId.SemanticRetrieverChunk
-	11, // 23: qclaogui.generativelanguage.v1beta.GroundingAttribution.source_id:type_name -> qclaogui.generativelanguage.v1beta.AttributionSourceId
-	36, // 24: qclaogui.generativelanguage.v1beta.GroundingAttribution.content:type_name -> qclaogui.generativelanguage.v1beta.Content
-	15, // 25: qclaogui.generativelanguage.v1beta.GroundingMetadata.search_entry_point:type_name -> qclaogui.generativelanguage.v1beta.SearchEntryPoint
-	16, // 26: qclaogui.generativelanguage.v1beta.GroundingMetadata.grounding_chunks:type_name -> qclaogui.generativelanguage.v1beta.GroundingChunk
-	18, // 27: qclaogui.generativelanguage.v1beta.GroundingMetadata.grounding_supports:type_name -> qclaogui.generativelanguage.v1beta.GroundingSupport
-	13, // 28: qclaogui.generativelanguage.v1beta.GroundingMetadata.retrieval_metadata:type_name -> qclaogui.generativelanguage.v1beta.RetrievalMetadata
-	34, // 29: qclaogui.generativelanguage.v1beta.GroundingChunk.web:type_name -> qclaogui.generativelanguage.v1beta.GroundingChunk.Web
-	17, // 30: qclaogui.generativelanguage.v1beta.GroundingSupport.segment:type_name -> qclaogui.generativelanguage.v1beta.Segment
-	44, // 31: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.inline_passages:type_name -> qclaogui.generativelanguage.v1beta.GroundingPassages
-	7,  // 32: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.semantic_retriever:type_name -> qclaogui.generativelanguage.v1beta.SemanticRetrieverConfig
-	36, // 33: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.contents:type_name -> qclaogui.generativelanguage.v1beta.Content
-	3,  // 34: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.answer_style:type_name -> qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.AnswerStyle
-	39, // 35: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.safety_settings:type_name -> qclaogui.generativelanguage.v1beta.SafetySetting
-	9,  // 36: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.answer:type_name -> qclaogui.generativelanguage.v1beta.Candidate
-	35, // 37: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.input_feedback:type_name -> qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback
-	36, // 38: qclaogui.generativelanguage.v1beta.EmbedContentRequest.content:type_name -> qclaogui.generativelanguage.v1beta.Content
-	0,  // 39: qclaogui.generativelanguage.v1beta.EmbedContentRequest.task_type:type_name -> qclaogui.generativelanguage.v1beta.TaskType
-	22, // 40: qclaogui.generativelanguage.v1beta.EmbedContentResponse.embedding:type_name -> qclaogui.generativelanguage.v1beta.ContentEmbedding
-	21, // 41: qclaogui.generativelanguage.v1beta.BatchEmbedContentsRequest.requests:type_name -> qclaogui.generativelanguage.v1beta.EmbedContentRequest
-	22, // 42: qclaogui.generativelanguage.v1beta.BatchEmbedContentsResponse.embeddings:type_name -> qclaogui.generativelanguage.v1beta.ContentEmbedding
-	36, // 43: qclaogui.generativelanguage.v1beta.CountTokensRequest.contents:type_name -> qclaogui.generativelanguage.v1beta.Content
-	5,  // 44: qclaogui.generativelanguage.v1beta.CountTokensRequest.generate_content_request:type_name -> qclaogui.generativelanguage.v1beta.GenerateContentRequest
-	1,  // 45: qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.block_reason:type_name -> qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.BlockReason
-	42, // 46: qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.safety_ratings:type_name -> qclaogui.generativelanguage.v1beta.SafetyRating
-	30, // 47: qclaogui.generativelanguage.v1beta.LogprobsResult.TopCandidates.candidates:type_name -> qclaogui.generativelanguage.v1beta.LogprobsResult.Candidate
-	4,  // 48: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback.block_reason:type_name -> qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback.BlockReason
-	42, // 49: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback.safety_ratings:type_name -> qclaogui.generativelanguage.v1beta.SafetyRating
-	5,  // 50: qclaogui.generativelanguage.v1beta.GenerativeService.GenerateContent:input_type -> qclaogui.generativelanguage.v1beta.GenerateContentRequest
-	19, // 51: qclaogui.generativelanguage.v1beta.GenerativeService.GenerateAnswer:input_type -> qclaogui.generativelanguage.v1beta.GenerateAnswerRequest
-	5,  // 52: qclaogui.generativelanguage.v1beta.GenerativeService.StreamGenerateContent:input_type -> qclaogui.generativelanguage.v1beta.GenerateContentRequest
-	21, // 53: qclaogui.generativelanguage.v1beta.GenerativeService.EmbedContent:input_type -> qclaogui.generativelanguage.v1beta.EmbedContentRequest
-	24, // 54: qclaogui.generativelanguage.v1beta.GenerativeService.BatchEmbedContents:input_type -> qclaogui.generativelanguage.v1beta.BatchEmbedContentsRequest
-	26, // 55: qclaogui.generativelanguage.v1beta.GenerativeService.CountTokens:input_type -> qclaogui.generativelanguage.v1beta.CountTokensRequest
-	8,  // 56: qclaogui.generativelanguage.v1beta.GenerativeService.GenerateContent:output_type -> qclaogui.generativelanguage.v1beta.GenerateContentResponse
-	20, // 57: qclaogui.generativelanguage.v1beta.GenerativeService.GenerateAnswer:output_type -> qclaogui.generativelanguage.v1beta.GenerateAnswerResponse
-	8,  // 58: qclaogui.generativelanguage.v1beta.GenerativeService.StreamGenerateContent:output_type -> qclaogui.generativelanguage.v1beta.GenerateContentResponse
-	23, // 59: qclaogui.generativelanguage.v1beta.GenerativeService.EmbedContent:output_type -> qclaogui.generativelanguage.v1beta.EmbedContentResponse
-	25, // 60: qclaogui.generativelanguage.v1beta.GenerativeService.BatchEmbedContents:output_type -> qclaogui.generativelanguage.v1beta.BatchEmbedContentsResponse
-	27, // 61: qclaogui.generativelanguage.v1beta.GenerativeService.CountTokens:output_type -> qclaogui.generativelanguage.v1beta.CountTokensResponse
-	56, // [56:62] is the sub-list for method output_type
-	50, // [50:56] is the sub-list for method input_type
-	50, // [50:50] is the sub-list for extension type_name
-	50, // [50:50] is the sub-list for extension extendee
-	0,  // [0:50] is the sub-list for field type_name
+	68,  // 0: qclaogui.generativelanguage.v1beta.GenerateContentRequest.system_instruction:type_name -> qclaogui.generativelanguage.v1beta.Content
+	68,  // 1: qclaogui.generativelanguage.v1beta.GenerateContentRequest.contents:type_name -> qclaogui.generativelanguage.v1beta.Content
+	69,  // 2: qclaogui.generativelanguage.v1beta.GenerateContentRequest.tools:type_name -> qclaogui.generativelanguage.v1beta.Tool
+	70,  // 3: qclaogui.generativelanguage.v1beta.GenerateContentRequest.tool_config:type_name -> qclaogui.generativelanguage.v1beta.ToolConfig
+	71,  // 4: qclaogui.generativelanguage.v1beta.GenerateContentRequest.safety_settings:type_name -> qclaogui.generativelanguage.v1beta.SafetySetting
+	16,  // 5: qclaogui.generativelanguage.v1beta.GenerateContentRequest.generation_config:type_name -> qclaogui.generativelanguage.v1beta.GenerationConfig
+	12,  // 6: qclaogui.generativelanguage.v1beta.VoiceConfig.prebuilt_voice_config:type_name -> qclaogui.generativelanguage.v1beta.PrebuiltVoiceConfig
+	13,  // 7: qclaogui.generativelanguage.v1beta.SpeechConfig.voice_config:type_name -> qclaogui.generativelanguage.v1beta.VoiceConfig
+	72,  // 8: qclaogui.generativelanguage.v1beta.GenerationConfig.response_schema:type_name -> qclaogui.generativelanguage.v1beta.Schema
+	1,   // 9: qclaogui.generativelanguage.v1beta.GenerationConfig.response_modalities:type_name -> qclaogui.generativelanguage.v1beta.GenerationConfig.Modality
+	14,  // 10: qclaogui.generativelanguage.v1beta.GenerationConfig.speech_config:type_name -> qclaogui.generativelanguage.v1beta.SpeechConfig
+	15,  // 11: qclaogui.generativelanguage.v1beta.GenerationConfig.thinking_config:type_name -> qclaogui.generativelanguage.v1beta.ThinkingConfig
+	2,   // 12: qclaogui.generativelanguage.v1beta.GenerationConfig.media_resolution:type_name -> qclaogui.generativelanguage.v1beta.GenerationConfig.MediaResolution
+	68,  // 13: qclaogui.generativelanguage.v1beta.SemanticRetrieverConfig.query:type_name -> qclaogui.generativelanguage.v1beta.Content
+	73,  // 14: qclaogui.generativelanguage.v1beta.SemanticRetrieverConfig.metadata_filters:type_name -> qclaogui.generativelanguage.v1beta.MetadataFilter
+	19,  // 15: qclaogui.generativelanguage.v1beta.GenerateContentResponse.candidates:type_name -> qclaogui.generativelanguage.v1beta.Candidate
+	56,  // 16: qclaogui.generativelanguage.v1beta.GenerateContentResponse.prompt_feedback:type_name -> qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback
+	57,  // 17: qclaogui.generativelanguage.v1beta.GenerateContentResponse.usage_metadata:type_name -> qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata
+	68,  // 18: qclaogui.generativelanguage.v1beta.Candidate.content:type_name -> qclaogui.generativelanguage.v1beta.Content
+	4,   // 19: qclaogui.generativelanguage.v1beta.Candidate.finish_reason:type_name -> qclaogui.generativelanguage.v1beta.Candidate.FinishReason
+	74,  // 20: qclaogui.generativelanguage.v1beta.Candidate.safety_ratings:type_name -> qclaogui.generativelanguage.v1beta.SafetyRating
+	75,  // 21: qclaogui.generativelanguage.v1beta.Candidate.citation_metadata:type_name -> qclaogui.generativelanguage.v1beta.CitationMetadata
+	22,  // 22: qclaogui.generativelanguage.v1beta.Candidate.grounding_attributions:type_name -> qclaogui.generativelanguage.v1beta.GroundingAttribution
+	24,  // 23: qclaogui.generativelanguage.v1beta.Candidate.grounding_metadata:type_name -> qclaogui.generativelanguage.v1beta.GroundingMetadata
+	20,  // 24: qclaogui.generativelanguage.v1beta.Candidate.logprobs_result:type_name -> qclaogui.generativelanguage.v1beta.LogprobsResult
+	59,  // 25: qclaogui.generativelanguage.v1beta.LogprobsResult.top_candidates:type_name -> qclaogui.generativelanguage.v1beta.LogprobsResult.TopCandidates
+	58,  // 26: qclaogui.generativelanguage.v1beta.LogprobsResult.chosen_candidates:type_name -> qclaogui.generativelanguage.v1beta.LogprobsResult.Candidate
+	60,  // 27: qclaogui.generativelanguage.v1beta.AttributionSourceId.grounding_passage:type_name -> qclaogui.generativelanguage.v1beta.AttributionSourceId.GroundingPassageId
+	61,  // 28: qclaogui.generativelanguage.v1beta.AttributionSourceId.semantic_retriever_chunk:type_name -> qclaogui.generativelanguage.v1beta.AttributionSourceId.SemanticRetrieverChunk
+	21,  // 29: qclaogui.generativelanguage.v1beta.GroundingAttribution.source_id:type_name -> qclaogui.generativelanguage.v1beta.AttributionSourceId
+	68,  // 30: qclaogui.generativelanguage.v1beta.GroundingAttribution.content:type_name -> qclaogui.generativelanguage.v1beta.Content
+	25,  // 31: qclaogui.generativelanguage.v1beta.GroundingMetadata.search_entry_point:type_name -> qclaogui.generativelanguage.v1beta.SearchEntryPoint
+	26,  // 32: qclaogui.generativelanguage.v1beta.GroundingMetadata.grounding_chunks:type_name -> qclaogui.generativelanguage.v1beta.GroundingChunk
+	28,  // 33: qclaogui.generativelanguage.v1beta.GroundingMetadata.grounding_supports:type_name -> qclaogui.generativelanguage.v1beta.GroundingSupport
+	23,  // 34: qclaogui.generativelanguage.v1beta.GroundingMetadata.retrieval_metadata:type_name -> qclaogui.generativelanguage.v1beta.RetrievalMetadata
+	62,  // 35: qclaogui.generativelanguage.v1beta.GroundingChunk.web:type_name -> qclaogui.generativelanguage.v1beta.GroundingChunk.Web
+	27,  // 36: qclaogui.generativelanguage.v1beta.GroundingSupport.segment:type_name -> qclaogui.generativelanguage.v1beta.Segment
+	76,  // 37: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.inline_passages:type_name -> qclaogui.generativelanguage.v1beta.GroundingPassages
+	17,  // 38: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.semantic_retriever:type_name -> qclaogui.generativelanguage.v1beta.SemanticRetrieverConfig
+	68,  // 39: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.contents:type_name -> qclaogui.generativelanguage.v1beta.Content
+	5,   // 40: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.answer_style:type_name -> qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.AnswerStyle
+	71,  // 41: qclaogui.generativelanguage.v1beta.GenerateAnswerRequest.safety_settings:type_name -> qclaogui.generativelanguage.v1beta.SafetySetting
+	19,  // 42: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.answer:type_name -> qclaogui.generativelanguage.v1beta.Candidate
+	63,  // 43: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.input_feedback:type_name -> qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback
+	68,  // 44: qclaogui.generativelanguage.v1beta.EmbedContentRequest.content:type_name -> qclaogui.generativelanguage.v1beta.Content
+	0,   // 45: qclaogui.generativelanguage.v1beta.EmbedContentRequest.task_type:type_name -> qclaogui.generativelanguage.v1beta.TaskType
+	32,  // 46: qclaogui.generativelanguage.v1beta.EmbedContentResponse.embedding:type_name -> qclaogui.generativelanguage.v1beta.ContentEmbedding
+	31,  // 47: qclaogui.generativelanguage.v1beta.BatchEmbedContentsRequest.requests:type_name -> qclaogui.generativelanguage.v1beta.EmbedContentRequest
+	32,  // 48: qclaogui.generativelanguage.v1beta.BatchEmbedContentsResponse.embeddings:type_name -> qclaogui.generativelanguage.v1beta.ContentEmbedding
+	68,  // 49: qclaogui.generativelanguage.v1beta.CountTokensRequest.contents:type_name -> qclaogui.generativelanguage.v1beta.Content
+	11,  // 50: qclaogui.generativelanguage.v1beta.CountTokensRequest.generate_content_request:type_name -> qclaogui.generativelanguage.v1beta.GenerateContentRequest
+	77,  // 51: qclaogui.generativelanguage.v1beta.CountTokensResponse.prompt_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	77,  // 52: qclaogui.generativelanguage.v1beta.CountTokensResponse.cache_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	64,  // 53: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.automatic_activity_detection:type_name -> qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection
+	7,   // 54: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.activity_handling:type_name -> qclaogui.generativelanguage.v1beta.RealtimeInputConfig.ActivityHandling
+	8,   // 55: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.turn_coverage:type_name -> qclaogui.generativelanguage.v1beta.RealtimeInputConfig.TurnCoverage
+	65,  // 56: qclaogui.generativelanguage.v1beta.ContextWindowCompressionConfig.sliding_window:type_name -> qclaogui.generativelanguage.v1beta.ContextWindowCompressionConfig.SlidingWindow
+	16,  // 57: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup.generation_config:type_name -> qclaogui.generativelanguage.v1beta.GenerationConfig
+	68,  // 58: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup.system_instruction:type_name -> qclaogui.generativelanguage.v1beta.Content
+	69,  // 59: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup.tools:type_name -> qclaogui.generativelanguage.v1beta.Tool
+	38,  // 60: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup.realtime_input_config:type_name -> qclaogui.generativelanguage.v1beta.RealtimeInputConfig
+	39,  // 61: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup.session_resumption:type_name -> qclaogui.generativelanguage.v1beta.SessionResumptionConfig
+	40,  // 62: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup.context_window_compression:type_name -> qclaogui.generativelanguage.v1beta.ContextWindowCompressionConfig
+	41,  // 63: qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup.output_audio_transcription:type_name -> qclaogui.generativelanguage.v1beta.AudioTranscriptionConfig
+	68,  // 64: qclaogui.generativelanguage.v1beta.BidiGenerateContentClientContent.turns:type_name -> qclaogui.generativelanguage.v1beta.Content
+	78,  // 65: qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.media_chunks:type_name -> qclaogui.generativelanguage.v1beta.Blob
+	78,  // 66: qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.audio:type_name -> qclaogui.generativelanguage.v1beta.Blob
+	78,  // 67: qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.video:type_name -> qclaogui.generativelanguage.v1beta.Blob
+	66,  // 68: qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.activity_start:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.ActivityStart
+	67,  // 69: qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.activity_end:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.ActivityEnd
+	79,  // 70: qclaogui.generativelanguage.v1beta.BidiGenerateContentToolResponse.function_responses:type_name -> qclaogui.generativelanguage.v1beta.FunctionResponse
+	42,  // 71: qclaogui.generativelanguage.v1beta.BidiGenerateContentClientMessage.setup:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentSetup
+	43,  // 72: qclaogui.generativelanguage.v1beta.BidiGenerateContentClientMessage.client_content:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentClientContent
+	44,  // 73: qclaogui.generativelanguage.v1beta.BidiGenerateContentClientMessage.realtime_input:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentRealtimeInput
+	45,  // 74: qclaogui.generativelanguage.v1beta.BidiGenerateContentClientMessage.tool_response:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentToolResponse
+	68,  // 75: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerContent.model_turn:type_name -> qclaogui.generativelanguage.v1beta.Content
+	24,  // 76: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerContent.grounding_metadata:type_name -> qclaogui.generativelanguage.v1beta.GroundingMetadata
+	53,  // 77: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerContent.output_transcription:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentTranscription
+	80,  // 78: qclaogui.generativelanguage.v1beta.BidiGenerateContentToolCall.function_calls:type_name -> qclaogui.generativelanguage.v1beta.FunctionCall
+	81,  // 79: qclaogui.generativelanguage.v1beta.GoAway.time_left:type_name -> google.protobuf.Duration
+	47,  // 80: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage.setup_complete:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentSetupComplete
+	48,  // 81: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage.server_content:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentServerContent
+	49,  // 82: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage.tool_call:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentToolCall
+	50,  // 83: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage.tool_call_cancellation:type_name -> qclaogui.generativelanguage.v1beta.BidiGenerateContentToolCallCancellation
+	51,  // 84: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage.go_away:type_name -> qclaogui.generativelanguage.v1beta.GoAway
+	52,  // 85: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage.session_resumption_update:type_name -> qclaogui.generativelanguage.v1beta.SessionResumptionUpdate
+	55,  // 86: qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage.usage_metadata:type_name -> qclaogui.generativelanguage.v1beta.UsageMetadata
+	77,  // 87: qclaogui.generativelanguage.v1beta.UsageMetadata.prompt_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	77,  // 88: qclaogui.generativelanguage.v1beta.UsageMetadata.cache_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	77,  // 89: qclaogui.generativelanguage.v1beta.UsageMetadata.response_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	77,  // 90: qclaogui.generativelanguage.v1beta.UsageMetadata.tool_use_prompt_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	3,   // 91: qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.block_reason:type_name -> qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.BlockReason
+	74,  // 92: qclaogui.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback.safety_ratings:type_name -> qclaogui.generativelanguage.v1beta.SafetyRating
+	77,  // 93: qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata.prompt_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	77,  // 94: qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata.cache_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	77,  // 95: qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata.candidates_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	77,  // 96: qclaogui.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata.tool_use_prompt_tokens_details:type_name -> qclaogui.generativelanguage.v1beta.ModalityTokenCount
+	58,  // 97: qclaogui.generativelanguage.v1beta.LogprobsResult.TopCandidates.candidates:type_name -> qclaogui.generativelanguage.v1beta.LogprobsResult.Candidate
+	6,   // 98: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback.block_reason:type_name -> qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback.BlockReason
+	74,  // 99: qclaogui.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback.safety_ratings:type_name -> qclaogui.generativelanguage.v1beta.SafetyRating
+	9,   // 100: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection.start_of_speech_sensitivity:type_name -> qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection.StartSensitivity
+	10,  // 101: qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection.end_of_speech_sensitivity:type_name -> qclaogui.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection.EndSensitivity
+	11,  // 102: qclaogui.generativelanguage.v1beta.GenerativeService.GenerateContent:input_type -> qclaogui.generativelanguage.v1beta.GenerateContentRequest
+	29,  // 103: qclaogui.generativelanguage.v1beta.GenerativeService.GenerateAnswer:input_type -> qclaogui.generativelanguage.v1beta.GenerateAnswerRequest
+	11,  // 104: qclaogui.generativelanguage.v1beta.GenerativeService.StreamGenerateContent:input_type -> qclaogui.generativelanguage.v1beta.GenerateContentRequest
+	31,  // 105: qclaogui.generativelanguage.v1beta.GenerativeService.EmbedContent:input_type -> qclaogui.generativelanguage.v1beta.EmbedContentRequest
+	34,  // 106: qclaogui.generativelanguage.v1beta.GenerativeService.BatchEmbedContents:input_type -> qclaogui.generativelanguage.v1beta.BatchEmbedContentsRequest
+	36,  // 107: qclaogui.generativelanguage.v1beta.GenerativeService.CountTokens:input_type -> qclaogui.generativelanguage.v1beta.CountTokensRequest
+	46,  // 108: qclaogui.generativelanguage.v1beta.GenerativeService.BidiGenerateContent:input_type -> qclaogui.generativelanguage.v1beta.BidiGenerateContentClientMessage
+	18,  // 109: qclaogui.generativelanguage.v1beta.GenerativeService.GenerateContent:output_type -> qclaogui.generativelanguage.v1beta.GenerateContentResponse
+	30,  // 110: qclaogui.generativelanguage.v1beta.GenerativeService.GenerateAnswer:output_type -> qclaogui.generativelanguage.v1beta.GenerateAnswerResponse
+	18,  // 111: qclaogui.generativelanguage.v1beta.GenerativeService.StreamGenerateContent:output_type -> qclaogui.generativelanguage.v1beta.GenerateContentResponse
+	33,  // 112: qclaogui.generativelanguage.v1beta.GenerativeService.EmbedContent:output_type -> qclaogui.generativelanguage.v1beta.EmbedContentResponse
+	35,  // 113: qclaogui.generativelanguage.v1beta.GenerativeService.BatchEmbedContents:output_type -> qclaogui.generativelanguage.v1beta.BatchEmbedContentsResponse
+	37,  // 114: qclaogui.generativelanguage.v1beta.GenerativeService.CountTokens:output_type -> qclaogui.generativelanguage.v1beta.CountTokensResponse
+	54,  // 115: qclaogui.generativelanguage.v1beta.GenerativeService.BidiGenerateContent:output_type -> qclaogui.generativelanguage.v1beta.BidiGenerateContentServerMessage
+	109, // [109:116] is the sub-list for method output_type
+	102, // [102:109] is the sub-list for method input_type
+	102, // [102:102] is the sub-list for extension type_name
+	102, // [102:102] is the sub-list for extension extendee
+	0,   // [0:102] is the sub-list for field type_name
 }
 
 func init() { file_qclaogui_generativelanguage_v1beta_generative_service_proto_init() }
@@ -3188,33 +5874,61 @@ func file_qclaogui_generativelanguage_v1beta_generative_service_proto_init() {
 	file_qclaogui_generativelanguage_v1beta_safety_proto_init()
 	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[0].OneofWrappers = []any{}
 	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[1].OneofWrappers = []any{}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[2].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[2].OneofWrappers = []any{
+		(*VoiceConfig_PrebuiltVoiceConfig)(nil),
+	}
 	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[4].OneofWrappers = []any{}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[6].OneofWrappers = []any{
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[5].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[6].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[8].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[10].OneofWrappers = []any{
 		(*AttributionSourceId_GroundingPassage)(nil),
 		(*AttributionSourceId_SemanticRetrieverChunk_)(nil),
 	}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[9].OneofWrappers = []any{}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[11].OneofWrappers = []any{
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[13].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[15].OneofWrappers = []any{
 		(*GroundingChunk_Web_)(nil),
 	}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[13].OneofWrappers = []any{}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[14].OneofWrappers = []any{
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[17].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[18].OneofWrappers = []any{
 		(*GenerateAnswerRequest_InlinePassages)(nil),
 		(*GenerateAnswerRequest_SemanticRetriever)(nil),
 	}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[15].OneofWrappers = []any{}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[16].OneofWrappers = []any{}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[25].OneofWrappers = []any{}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[29].OneofWrappers = []any{}
-	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[30].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[19].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[20].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[27].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[28].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[29].OneofWrappers = []any{
+		(*ContextWindowCompressionConfig_SlidingWindow_)(nil),
+	}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[33].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[35].OneofWrappers = []any{
+		(*BidiGenerateContentClientMessage_Setup)(nil),
+		(*BidiGenerateContentClientMessage_ClientContent)(nil),
+		(*BidiGenerateContentClientMessage_RealtimeInput)(nil),
+		(*BidiGenerateContentClientMessage_ToolResponse)(nil),
+	}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[37].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[43].OneofWrappers = []any{
+		(*BidiGenerateContentServerMessage_SetupComplete)(nil),
+		(*BidiGenerateContentServerMessage_ServerContent)(nil),
+		(*BidiGenerateContentServerMessage_ToolCall)(nil),
+		(*BidiGenerateContentServerMessage_ToolCallCancellation)(nil),
+		(*BidiGenerateContentServerMessage_GoAway)(nil),
+		(*BidiGenerateContentServerMessage_SessionResumptionUpdate)(nil),
+	}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[47].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[51].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[52].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[53].OneofWrappers = []any{}
+	file_qclaogui_generativelanguage_v1beta_generative_service_proto_msgTypes[54].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc), len(file_qclaogui_generativelanguage_v1beta_generative_service_proto_rawDesc)),
-			NumEnums:      5,
-			NumMessages:   31,
+			NumEnums:      11,
+			NumMessages:   57,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

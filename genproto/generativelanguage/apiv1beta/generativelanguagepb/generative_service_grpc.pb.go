@@ -40,6 +40,7 @@ const (
 	GenerativeService_EmbedContent_FullMethodName          = "/qclaogui.generativelanguage.v1beta.GenerativeService/EmbedContent"
 	GenerativeService_BatchEmbedContents_FullMethodName    = "/qclaogui.generativelanguage.v1beta.GenerativeService/BatchEmbedContents"
 	GenerativeService_CountTokens_FullMethodName           = "/qclaogui.generativelanguage.v1beta.GenerativeService/CountTokens"
+	GenerativeService_BidiGenerateContent_FullMethodName   = "/qclaogui.generativelanguage.v1beta.GenerativeService/BidiGenerateContent"
 )
 
 // GenerativeServiceClient is the client API for GenerativeService service.
@@ -76,6 +77,9 @@ type GenerativeServiceClient interface {
 	// Refer to the [tokens guide](https://ai.google.dev/gemini-api/docs/tokens)
 	// to learn more about tokens.
 	CountTokens(ctx context.Context, in *CountTokensRequest, opts ...grpc.CallOption) (*CountTokensResponse, error)
+	// Low-Latency bidirectional streaming API that supports audio and video
+	// streaming inputs can produce multimodal output streams (audio and text).
+	BidiGenerateContent(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[BidiGenerateContentClientMessage, BidiGenerateContentServerMessage], error)
 }
 
 type generativeServiceClient struct {
@@ -155,6 +159,19 @@ func (c *generativeServiceClient) CountTokens(ctx context.Context, in *CountToke
 	return out, nil
 }
 
+func (c *generativeServiceClient) BidiGenerateContent(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[BidiGenerateContentClientMessage, BidiGenerateContentServerMessage], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &GenerativeService_ServiceDesc.Streams[1], GenerativeService_BidiGenerateContent_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[BidiGenerateContentClientMessage, BidiGenerateContentServerMessage]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type GenerativeService_BidiGenerateContentClient = grpc.BidiStreamingClient[BidiGenerateContentClientMessage, BidiGenerateContentServerMessage]
+
 // GenerativeServiceServer is the server API for GenerativeService service.
 // All implementations should embed UnimplementedGenerativeServiceServer
 // for forward compatibility.
@@ -189,6 +206,9 @@ type GenerativeServiceServer interface {
 	// Refer to the [tokens guide](https://ai.google.dev/gemini-api/docs/tokens)
 	// to learn more about tokens.
 	CountTokens(context.Context, *CountTokensRequest) (*CountTokensResponse, error)
+	// Low-Latency bidirectional streaming API that supports audio and video
+	// streaming inputs can produce multimodal output streams (audio and text).
+	BidiGenerateContent(grpc.BidiStreamingServer[BidiGenerateContentClientMessage, BidiGenerateContentServerMessage]) error
 }
 
 // UnimplementedGenerativeServiceServer should be embedded to have
@@ -220,6 +240,10 @@ func (UnimplementedGenerativeServiceServer) BatchEmbedContents(context.Context, 
 
 func (UnimplementedGenerativeServiceServer) CountTokens(context.Context, *CountTokensRequest) (*CountTokensResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CountTokens not implemented")
+}
+
+func (UnimplementedGenerativeServiceServer) BidiGenerateContent(grpc.BidiStreamingServer[BidiGenerateContentClientMessage, BidiGenerateContentServerMessage]) error {
+	return status.Errorf(codes.Unimplemented, "method BidiGenerateContent not implemented")
 }
 func (UnimplementedGenerativeServiceServer) testEmbeddedByValue() {}
 
@@ -342,6 +366,13 @@ func _GenerativeService_CountTokens_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GenerativeService_BidiGenerateContent_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GenerativeServiceServer).BidiGenerateContent(&grpc.GenericServerStream[BidiGenerateContentClientMessage, BidiGenerateContentServerMessage]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type GenerativeService_BidiGenerateContentServer = grpc.BidiStreamingServer[BidiGenerateContentClientMessage, BidiGenerateContentServerMessage]
+
 // GenerativeService_ServiceDesc is the grpc.ServiceDesc for GenerativeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -375,6 +406,12 @@ var GenerativeService_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "StreamGenerateContent",
 			Handler:       _GenerativeService_StreamGenerateContent_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "BidiGenerateContent",
+			Handler:       _GenerativeService_BidiGenerateContent_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "qclaogui/generativelanguage/v1beta/generative_service.proto",

@@ -23,6 +23,8 @@ package generativelanguagepb
 import (
 	context "context"
 
+	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -34,7 +36,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PredictionService_Predict_FullMethodName = "/qclaogui.generativelanguage.v1beta.PredictionService/Predict"
+	PredictionService_Predict_FullMethodName            = "/qclaogui.generativelanguage.v1beta.PredictionService/Predict"
+	PredictionService_PredictLongRunning_FullMethodName = "/qclaogui.generativelanguage.v1beta.PredictionService/PredictLongRunning"
 )
 
 // PredictionServiceClient is the client API for PredictionService service.
@@ -45,6 +48,8 @@ const (
 type PredictionServiceClient interface {
 	// Performs a prediction request.
 	Predict(ctx context.Context, in *PredictRequest, opts ...grpc.CallOption) (*PredictResponse, error)
+	// Same as Predict but returns an LRO.
+	PredictLongRunning(ctx context.Context, in *PredictLongRunningRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
 }
 
 type predictionServiceClient struct {
@@ -65,6 +70,16 @@ func (c *predictionServiceClient) Predict(ctx context.Context, in *PredictReques
 	return out, nil
 }
 
+func (c *predictionServiceClient) PredictLongRunning(ctx context.Context, in *PredictLongRunningRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(longrunningpb.Operation)
+	err := c.cc.Invoke(ctx, PredictionService_PredictLongRunning_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PredictionServiceServer is the server API for PredictionService service.
 // All implementations should embed UnimplementedPredictionServiceServer
 // for forward compatibility.
@@ -73,6 +88,8 @@ func (c *predictionServiceClient) Predict(ctx context.Context, in *PredictReques
 type PredictionServiceServer interface {
 	// Performs a prediction request.
 	Predict(context.Context, *PredictRequest) (*PredictResponse, error)
+	// Same as Predict but returns an LRO.
+	PredictLongRunning(context.Context, *PredictLongRunningRequest) (*longrunningpb.Operation, error)
 }
 
 // UnimplementedPredictionServiceServer should be embedded to have
@@ -84,6 +101,10 @@ type UnimplementedPredictionServiceServer struct{}
 
 func (UnimplementedPredictionServiceServer) Predict(context.Context, *PredictRequest) (*PredictResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Predict not implemented")
+}
+
+func (UnimplementedPredictionServiceServer) PredictLongRunning(context.Context, *PredictLongRunningRequest) (*longrunningpb.Operation, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PredictLongRunning not implemented")
 }
 func (UnimplementedPredictionServiceServer) testEmbeddedByValue() {}
 
@@ -123,6 +144,24 @@ func _PredictionService_Predict_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PredictionService_PredictLongRunning_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PredictLongRunningRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PredictionServiceServer).PredictLongRunning(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PredictionService_PredictLongRunning_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PredictionServiceServer).PredictLongRunning(ctx, req.(*PredictLongRunningRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PredictionService_ServiceDesc is the grpc.ServiceDesc for PredictionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -133,6 +172,10 @@ var PredictionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Predict",
 			Handler:    _PredictionService_Predict_Handler,
+		},
+		{
+			MethodName: "PredictLongRunning",
+			Handler:    _PredictionService_PredictLongRunning_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

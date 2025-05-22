@@ -336,6 +336,90 @@ func (x *DeleteFileRequest) GetName() string {
 	return ""
 }
 
+// Request for `DownloadFile`.
+type DownloadFileRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Required. The name of the `File` to download.
+	// Example: `files/abc-123`
+	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DownloadFileRequest) Reset() {
+	*x = DownloadFileRequest{}
+	mi := &file_qclaogui_generativelanguage_v1beta_file_service_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DownloadFileRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DownloadFileRequest) ProtoMessage() {}
+
+func (x *DownloadFileRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_file_service_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DownloadFileRequest.ProtoReflect.Descriptor instead.
+func (*DownloadFileRequest) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_file_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *DownloadFileRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+// Response for `DownloadFile`.
+type DownloadFileResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DownloadFileResponse) Reset() {
+	*x = DownloadFileResponse{}
+	mi := &file_qclaogui_generativelanguage_v1beta_file_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DownloadFileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DownloadFileResponse) ProtoMessage() {}
+
+func (x *DownloadFileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_file_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DownloadFileResponse.ProtoReflect.Descriptor instead.
+func (*DownloadFileResponse) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_file_service_proto_rawDescGZIP(), []int{7}
+}
+
 var File_qclaogui_generativelanguage_v1beta_file_service_proto protoreflect.FileDescriptor
 
 const file_qclaogui_generativelanguage_v1beta_file_service_proto_rawDesc = "" +
@@ -357,14 +441,19 @@ const file_qclaogui_generativelanguage_v1beta_file_service_proto_rawDesc = "" +
 	"$generativelanguage.qclaogui.com/FileR\x04name\"V\n" +
 	"\x11DeleteFileRequest\x12A\n" +
 	"\x04name\x18\x01 \x01(\tB-\xe2A\x01\x02\xfaA&\n" +
-	"$generativelanguage.qclaogui.com/FileR\x04name2\xf1\x04\n" +
+	"$generativelanguage.qclaogui.com/FileR\x04name\"X\n" +
+	"\x13DownloadFileRequest\x12A\n" +
+	"\x04name\x18\x01 \x01(\tB-\xe2A\x01\x02\xfaA&\n" +
+	"$generativelanguage.qclaogui.com/FileR\x04name\"\x16\n" +
+	"\x14DownloadFileResponse2\xa5\x06\n" +
 	"\vFileService\x12\x95\x01\n" +
 	"\n" +
 	"CreateFile\x125.qclaogui.generativelanguage.v1beta.CreateFileRequest\x1a6.qclaogui.generativelanguage.v1beta.CreateFileResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1beta/files\x12\x8f\x01\n" +
 	"\tListFiles\x124.qclaogui.generativelanguage.v1beta.ListFilesRequest\x1a5.qclaogui.generativelanguage.v1beta.ListFilesResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/v1beta/files\x12\x8e\x01\n" +
 	"\aGetFile\x122.qclaogui.generativelanguage.v1beta.GetFileRequest\x1a(.qclaogui.generativelanguage.v1beta.File\"%\xdaA\x04name\x82\xd3\xe4\x93\x02\x18\x12\x16/v1beta/{name=files/*}\x12\x82\x01\n" +
 	"\n" +
-	"DeleteFile\x125.qclaogui.generativelanguage.v1beta.DeleteFileRequest\x1a\x16.google.protobuf.Empty\"%\xdaA\x04name\x82\xd3\xe4\x93\x02\x18*\x16/v1beta/{name=files/*}\x1a\"\xcaA\x1fgenerativelanguage.qclaogui.comBUZSgithub.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepbb\x06proto3"
+	"DeleteFile\x125.qclaogui.generativelanguage.v1beta.DeleteFileRequest\x1a\x16.google.protobuf.Empty\"%\xdaA\x04name\x82\xd3\xe4\x93\x02\x18*\x16/v1beta/{name=files/*}\x12\xb1\x01\n" +
+	"\fDownloadFile\x127.qclaogui.generativelanguage.v1beta.DownloadFileRequest\x1a8.qclaogui.generativelanguage.v1beta.DownloadFileResponse\".\xdaA\x04name\x82\xd3\xe4\x93\x02!\x12\x1f/v1beta/{name=files/*}:download\x1a\"\xcaA\x1fgenerativelanguage.qclaogui.comBUZSgithub.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepbb\x06proto3"
 
 var (
 	file_qclaogui_generativelanguage_v1beta_file_service_proto_rawDescOnce sync.Once
@@ -379,33 +468,37 @@ func file_qclaogui_generativelanguage_v1beta_file_service_proto_rawDescGZIP() []
 }
 
 var (
-	file_qclaogui_generativelanguage_v1beta_file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+	file_qclaogui_generativelanguage_v1beta_file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 	file_qclaogui_generativelanguage_v1beta_file_service_proto_goTypes  = []any{
-		(*CreateFileRequest)(nil),  // 0: qclaogui.generativelanguage.v1beta.CreateFileRequest
-		(*CreateFileResponse)(nil), // 1: qclaogui.generativelanguage.v1beta.CreateFileResponse
-		(*ListFilesRequest)(nil),   // 2: qclaogui.generativelanguage.v1beta.ListFilesRequest
-		(*ListFilesResponse)(nil),  // 3: qclaogui.generativelanguage.v1beta.ListFilesResponse
-		(*GetFileRequest)(nil),     // 4: qclaogui.generativelanguage.v1beta.GetFileRequest
-		(*DeleteFileRequest)(nil),  // 5: qclaogui.generativelanguage.v1beta.DeleteFileRequest
-		(*File)(nil),               // 6: qclaogui.generativelanguage.v1beta.File
-		(*emptypb.Empty)(nil),      // 7: google.protobuf.Empty
+		(*CreateFileRequest)(nil),    // 0: qclaogui.generativelanguage.v1beta.CreateFileRequest
+		(*CreateFileResponse)(nil),   // 1: qclaogui.generativelanguage.v1beta.CreateFileResponse
+		(*ListFilesRequest)(nil),     // 2: qclaogui.generativelanguage.v1beta.ListFilesRequest
+		(*ListFilesResponse)(nil),    // 3: qclaogui.generativelanguage.v1beta.ListFilesResponse
+		(*GetFileRequest)(nil),       // 4: qclaogui.generativelanguage.v1beta.GetFileRequest
+		(*DeleteFileRequest)(nil),    // 5: qclaogui.generativelanguage.v1beta.DeleteFileRequest
+		(*DownloadFileRequest)(nil),  // 6: qclaogui.generativelanguage.v1beta.DownloadFileRequest
+		(*DownloadFileResponse)(nil), // 7: qclaogui.generativelanguage.v1beta.DownloadFileResponse
+		(*File)(nil),                 // 8: qclaogui.generativelanguage.v1beta.File
+		(*emptypb.Empty)(nil),        // 9: google.protobuf.Empty
 	}
 )
 
 var file_qclaogui_generativelanguage_v1beta_file_service_proto_depIdxs = []int32{
-	6, // 0: qclaogui.generativelanguage.v1beta.CreateFileRequest.file:type_name -> qclaogui.generativelanguage.v1beta.File
-	6, // 1: qclaogui.generativelanguage.v1beta.CreateFileResponse.file:type_name -> qclaogui.generativelanguage.v1beta.File
-	6, // 2: qclaogui.generativelanguage.v1beta.ListFilesResponse.files:type_name -> qclaogui.generativelanguage.v1beta.File
+	8, // 0: qclaogui.generativelanguage.v1beta.CreateFileRequest.file:type_name -> qclaogui.generativelanguage.v1beta.File
+	8, // 1: qclaogui.generativelanguage.v1beta.CreateFileResponse.file:type_name -> qclaogui.generativelanguage.v1beta.File
+	8, // 2: qclaogui.generativelanguage.v1beta.ListFilesResponse.files:type_name -> qclaogui.generativelanguage.v1beta.File
 	0, // 3: qclaogui.generativelanguage.v1beta.FileService.CreateFile:input_type -> qclaogui.generativelanguage.v1beta.CreateFileRequest
 	2, // 4: qclaogui.generativelanguage.v1beta.FileService.ListFiles:input_type -> qclaogui.generativelanguage.v1beta.ListFilesRequest
 	4, // 5: qclaogui.generativelanguage.v1beta.FileService.GetFile:input_type -> qclaogui.generativelanguage.v1beta.GetFileRequest
 	5, // 6: qclaogui.generativelanguage.v1beta.FileService.DeleteFile:input_type -> qclaogui.generativelanguage.v1beta.DeleteFileRequest
-	1, // 7: qclaogui.generativelanguage.v1beta.FileService.CreateFile:output_type -> qclaogui.generativelanguage.v1beta.CreateFileResponse
-	3, // 8: qclaogui.generativelanguage.v1beta.FileService.ListFiles:output_type -> qclaogui.generativelanguage.v1beta.ListFilesResponse
-	6, // 9: qclaogui.generativelanguage.v1beta.FileService.GetFile:output_type -> qclaogui.generativelanguage.v1beta.File
-	7, // 10: qclaogui.generativelanguage.v1beta.FileService.DeleteFile:output_type -> google.protobuf.Empty
-	7, // [7:11] is the sub-list for method output_type
-	3, // [3:7] is the sub-list for method input_type
+	6, // 7: qclaogui.generativelanguage.v1beta.FileService.DownloadFile:input_type -> qclaogui.generativelanguage.v1beta.DownloadFileRequest
+	1, // 8: qclaogui.generativelanguage.v1beta.FileService.CreateFile:output_type -> qclaogui.generativelanguage.v1beta.CreateFileResponse
+	3, // 9: qclaogui.generativelanguage.v1beta.FileService.ListFiles:output_type -> qclaogui.generativelanguage.v1beta.ListFilesResponse
+	8, // 10: qclaogui.generativelanguage.v1beta.FileService.GetFile:output_type -> qclaogui.generativelanguage.v1beta.File
+	9, // 11: qclaogui.generativelanguage.v1beta.FileService.DeleteFile:output_type -> google.protobuf.Empty
+	7, // 12: qclaogui.generativelanguage.v1beta.FileService.DownloadFile:output_type -> qclaogui.generativelanguage.v1beta.DownloadFileResponse
+	8, // [8:13] is the sub-list for method output_type
+	3, // [3:8] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -423,7 +516,7 @@ func file_qclaogui_generativelanguage_v1beta_file_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_qclaogui_generativelanguage_v1beta_file_service_proto_rawDesc), len(file_qclaogui_generativelanguage_v1beta_file_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

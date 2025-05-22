@@ -57,6 +57,10 @@ const (
 	Type_ARRAY Type = 5
 	// Object type.
 	Type_OBJECT Type = 6
+	// Null type.
+	// HACK: We use this to handle optional parameters, which users are specifying
+	// optional things by using a OneOf with a second type of NULL.
+	Type_NULL Type = 7
 )
 
 // Enum value maps for Type.
@@ -69,6 +73,7 @@ var (
 		4: "BOOLEAN",
 		5: "ARRAY",
 		6: "OBJECT",
+		7: "NULL",
 	}
 	Type_value = map[string]int32{
 		"TYPE_UNSPECIFIED": 0,
@@ -78,6 +83,7 @@ var (
 		"BOOLEAN":          4,
 		"ARRAY":            5,
 		"OBJECT":           6,
+		"NULL":             7,
 	}
 )
 
@@ -106,6 +112,71 @@ func (x Type) Number() protoreflect.EnumNumber {
 // Deprecated: Use Type.Descriptor instead.
 func (Type) EnumDescriptor() ([]byte, []int) {
 	return file_qclaogui_generativelanguage_v1beta_content_proto_rawDescGZIP(), []int{0}
+}
+
+// Content Part modality
+type Modality int32
+
+const (
+	// Unspecified modality.
+	Modality_MODALITY_UNSPECIFIED Modality = 0
+	// Plain text.
+	Modality_TEXT Modality = 1
+	// Image.
+	Modality_IMAGE Modality = 2
+	// Video.
+	Modality_VIDEO Modality = 3
+	// Audio.
+	Modality_AUDIO Modality = 4
+	// Document, e.g. PDF.
+	Modality_DOCUMENT Modality = 5
+)
+
+// Enum value maps for Modality.
+var (
+	Modality_name = map[int32]string{
+		0: "MODALITY_UNSPECIFIED",
+		1: "TEXT",
+		2: "IMAGE",
+		3: "VIDEO",
+		4: "AUDIO",
+		5: "DOCUMENT",
+	}
+	Modality_value = map[string]int32{
+		"MODALITY_UNSPECIFIED": 0,
+		"TEXT":                 1,
+		"IMAGE":                2,
+		"VIDEO":                3,
+		"AUDIO":                4,
+		"DOCUMENT":             5,
+	}
+)
+
+func (x Modality) Enum() *Modality {
+	p := new(Modality)
+	*p = x
+	return p
+}
+
+func (x Modality) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Modality) Descriptor() protoreflect.EnumDescriptor {
+	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[1].Descriptor()
+}
+
+func (Modality) Type() protoreflect.EnumType {
+	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[1]
+}
+
+func (x Modality) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Modality.Descriptor instead.
+func (Modality) EnumDescriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_content_proto_rawDescGZIP(), []int{1}
 }
 
 // Supported programming languages for the generated code.
@@ -141,11 +212,11 @@ func (x ExecutableCode_Language) String() string {
 }
 
 func (ExecutableCode_Language) Descriptor() protoreflect.EnumDescriptor {
-	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[1].Descriptor()
+	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[2].Descriptor()
 }
 
 func (ExecutableCode_Language) Type() protoreflect.EnumType {
-	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[1]
+	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[2]
 }
 
 func (x ExecutableCode_Language) Number() protoreflect.EnumNumber {
@@ -200,11 +271,11 @@ func (x CodeExecutionResult_Outcome) String() string {
 }
 
 func (CodeExecutionResult_Outcome) Descriptor() protoreflect.EnumDescriptor {
-	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[2].Descriptor()
+	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[3].Descriptor()
 }
 
 func (CodeExecutionResult_Outcome) Type() protoreflect.EnumType {
-	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[2]
+	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[3]
 }
 
 func (x CodeExecutionResult_Outcome) Number() protoreflect.EnumNumber {
@@ -249,11 +320,11 @@ func (x DynamicRetrievalConfig_Mode) String() string {
 }
 
 func (DynamicRetrievalConfig_Mode) Descriptor() protoreflect.EnumDescriptor {
-	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[3].Descriptor()
+	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[4].Descriptor()
 }
 
 func (DynamicRetrievalConfig_Mode) Type() protoreflect.EnumType {
-	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[3]
+	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[4]
 }
 
 func (x DynamicRetrievalConfig_Mode) Number() protoreflect.EnumNumber {
@@ -283,6 +354,10 @@ const (
 	// Model will not predict any function call. Model behavior is same as when
 	// not passing any function declarations.
 	FunctionCallingConfig_NONE FunctionCallingConfig_Mode = 3
+	// Model decides to predict either a function call
+	// or a natural language response, but will validate function calls with
+	// constrained decoding.
+	FunctionCallingConfig_VALIDATED FunctionCallingConfig_Mode = 4
 )
 
 // Enum value maps for FunctionCallingConfig_Mode.
@@ -292,12 +367,14 @@ var (
 		1: "AUTO",
 		2: "ANY",
 		3: "NONE",
+		4: "VALIDATED",
 	}
 	FunctionCallingConfig_Mode_value = map[string]int32{
 		"MODE_UNSPECIFIED": 0,
 		"AUTO":             1,
 		"ANY":              2,
 		"NONE":             3,
+		"VALIDATED":        4,
 	}
 )
 
@@ -312,11 +389,11 @@ func (x FunctionCallingConfig_Mode) String() string {
 }
 
 func (FunctionCallingConfig_Mode) Descriptor() protoreflect.EnumDescriptor {
-	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[4].Descriptor()
+	return file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[5].Descriptor()
 }
 
 func (FunctionCallingConfig_Mode) Type() protoreflect.EnumType {
-	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[4]
+	return &file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes[5]
 }
 
 func (x FunctionCallingConfig_Mode) Number() protoreflect.EnumNumber {
@@ -409,7 +486,9 @@ type Part struct {
 	//	*Part_FileData
 	//	*Part_ExecutableCode
 	//	*Part_CodeExecutionResult
-	Data          isPart_Data `protobuf_oneof:"data"`
+	Data isPart_Data `protobuf_oneof:"data"`
+	// Optional. Indicates if the part is thought from the model.
+	Thought       bool `protobuf:"varint,11,opt,name=thought,proto3" json:"thought,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -512,6 +591,13 @@ func (x *Part) GetCodeExecutionResult() *CodeExecutionResult {
 		}
 	}
 	return nil
+}
+
+func (x *Part) GetThought() bool {
+	if x != nil {
+		return x.Thought
+	}
+	return false
 }
 
 type isPart_Data interface {
@@ -835,6 +921,9 @@ type Tool struct {
 	GoogleSearchRetrieval *GoogleSearchRetrieval `protobuf:"bytes,2,opt,name=google_search_retrieval,json=googleSearchRetrieval,proto3" json:"google_search_retrieval,omitempty"`
 	// Optional. Enables the model to execute code as part of generation.
 	CodeExecution *CodeExecution `protobuf:"bytes,3,opt,name=code_execution,json=codeExecution,proto3" json:"code_execution,omitempty"`
+	// Optional. GoogleSearch tool type.
+	// Tool to support Google Search in Model. Powered by Google.
+	GoogleSearch  *Tool_GoogleSearch `protobuf:"bytes,4,opt,name=google_search,json=googleSearch,proto3" json:"google_search,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -886,6 +975,13 @@ func (x *Tool) GetGoogleSearchRetrieval() *GoogleSearchRetrieval {
 func (x *Tool) GetCodeExecution() *CodeExecution {
 	if x != nil {
 		return x.CodeExecution
+	}
+	return nil
+}
+
+func (x *Tool) GetGoogleSearch() *Tool_GoogleSearch {
+	if x != nil {
+		return x.GoogleSearch
 	}
 	return nil
 }
@@ -1158,7 +1254,11 @@ type FunctionDeclaration struct {
 	// API 3.03 Parameter Object string Key: the name of the parameter. Parameter
 	// names are case sensitive. Schema Value: the Schema defining the type used
 	// for the parameter.
-	Parameters    *Schema `protobuf:"bytes,3,opt,name=parameters,proto3,oneof" json:"parameters,omitempty"`
+	Parameters *Schema `protobuf:"bytes,3,opt,name=parameters,proto3,oneof" json:"parameters,omitempty"`
+	// Optional. Describes the output from this function in JSON Schema format.
+	// Reflects the Open API 3.03 Response Object. The Schema defines the type
+	// used for the response value of the function.
+	Response      *Schema `protobuf:"bytes,4,opt,name=response,proto3,oneof" json:"response,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1214,11 +1314,21 @@ func (x *FunctionDeclaration) GetParameters() *Schema {
 	return nil
 }
 
+func (x *FunctionDeclaration) GetResponse() *Schema {
+	if x != nil {
+		return x.Response
+	}
+	return nil
+}
+
 // A predicted `FunctionCall` returned from the model that contains
 // a string representing the `FunctionDeclaration.name` with the
 // arguments and their values.
 type FunctionCall struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional. The unique id of the function call. If populated, the client to
+	// execute the `function_call` and return the response with the matching `id`.
+	Id string `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
 	// Required. The name of the function to call.
 	// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
 	// length of 63.
@@ -1259,6 +1369,13 @@ func (*FunctionCall) Descriptor() ([]byte, []int) {
 	return file_qclaogui_generativelanguage_v1beta_content_proto_rawDescGZIP(), []int{13}
 }
 
+func (x *FunctionCall) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 func (x *FunctionCall) GetName() string {
 	if x != nil {
 		return x.Name
@@ -1280,6 +1397,9 @@ func (x *FunctionCall) GetArgs() *structpb.Struct {
 // based on model prediction.
 type FunctionResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional. The id of the function call this response is for. Populated by
+	// the client to match the corresponding function call `id`.
+	Id string `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
 	// Required. The name of the function to call.
 	// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
 	// length of 63.
@@ -1320,6 +1440,13 @@ func (*FunctionResponse) Descriptor() ([]byte, []int) {
 	return file_qclaogui_generativelanguage_v1beta_content_proto_rawDescGZIP(), []int{14}
 }
 
+func (x *FunctionResponse) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 func (x *FunctionResponse) GetName() string {
 	if x != nil {
 		return x.Name
@@ -1347,8 +1474,10 @@ type Schema struct {
 	//
 	//	for NUMBER type: float, double
 	//	for INTEGER type: int32, int64
-	//	for STRING type: enum
+	//	for STRING type: enum, date-time
 	Format string `protobuf:"bytes,2,opt,name=format,proto3" json:"format,omitempty"`
+	// Optional. The title of the schema.
+	Title string `protobuf:"bytes,24,opt,name=title,proto3" json:"title,omitempty"`
 	// Optional. A brief description of the parameter. This could contain examples
 	// of use. Parameter description may be formatted as Markdown.
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
@@ -1367,7 +1496,24 @@ type Schema struct {
 	// Optional. Properties of Type.OBJECT.
 	Properties map[string]*Schema `protobuf:"bytes,7,rep,name=properties,proto3" json:"properties,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Optional. Required properties of Type.OBJECT.
-	Required      []string `protobuf:"bytes,8,rep,name=required,proto3" json:"required,omitempty"`
+	Required []string `protobuf:"bytes,8,rep,name=required,proto3" json:"required,omitempty"`
+	// Optional. SCHEMA FIELDS FOR TYPE INTEGER and NUMBER
+	// Minimum value of the Type.INTEGER and Type.NUMBER
+	Minimum *float64 `protobuf:"fixed64,11,opt,name=minimum,proto3,oneof" json:"minimum,omitempty"`
+	// Optional. Maximum value of the Type.INTEGER and Type.NUMBER
+	Maximum *float64 `protobuf:"fixed64,12,opt,name=maximum,proto3,oneof" json:"maximum,omitempty"`
+	// Optional. The value should be validated against any (one or more) of the
+	// subschemas in the list.
+	AnyOf []*Schema `protobuf:"bytes,18,rep,name=any_of,json=anyOf,proto3" json:"any_of,omitempty"`
+	// Optional. The order of the properties.
+	// Not a standard field in open api spec. Used to determine the order of the
+	// properties in the response.
+	PropertyOrdering []string `protobuf:"bytes,23,rep,name=property_ordering,json=propertyOrdering,proto3" json:"property_ordering,omitempty"`
+	// Optional. Default value of the field. Per JSON Schema, this field is
+	// intended for documentation generators and doesn't affect validation. Thus
+	// it's included here and ignored so that developers who send schemas with a
+	// `default` field don't get unknown-field errors.
+	Default       *structpb.Value `protobuf:"bytes,25,opt,name=default,proto3" json:"default,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1412,6 +1558,13 @@ func (x *Schema) GetType() Type {
 func (x *Schema) GetFormat() string {
 	if x != nil {
 		return x.Format
+	}
+	return ""
+}
+
+func (x *Schema) GetTitle() string {
+	if x != nil {
+		return x.Title
 	}
 	return ""
 }
@@ -1468,6 +1621,41 @@ func (x *Schema) GetProperties() map[string]*Schema {
 func (x *Schema) GetRequired() []string {
 	if x != nil {
 		return x.Required
+	}
+	return nil
+}
+
+func (x *Schema) GetMinimum() float64 {
+	if x != nil && x.Minimum != nil {
+		return *x.Minimum
+	}
+	return 0
+}
+
+func (x *Schema) GetMaximum() float64 {
+	if x != nil && x.Maximum != nil {
+		return *x.Maximum
+	}
+	return 0
+}
+
+func (x *Schema) GetAnyOf() []*Schema {
+	if x != nil {
+		return x.AnyOf
+	}
+	return nil
+}
+
+func (x *Schema) GetPropertyOrdering() []string {
+	if x != nil {
+		return x.PropertyOrdering
+	}
+	return nil
+}
+
+func (x *Schema) GetDefault() *structpb.Value {
+	if x != nil {
+		return x.Default
 	}
 	return nil
 }
@@ -1574,6 +1762,99 @@ func (x *GroundingPassages) GetPassages() []*GroundingPassage {
 	return nil
 }
 
+// Represents token counting info for a single modality.
+type ModalityTokenCount struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The modality associated with this token count.
+	Modality Modality `protobuf:"varint,1,opt,name=modality,proto3,enum=qclaogui.generativelanguage.v1beta.Modality" json:"modality,omitempty"`
+	// Number of tokens.
+	TokenCount    int32 `protobuf:"varint,2,opt,name=token_count,json=tokenCount,proto3" json:"token_count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ModalityTokenCount) Reset() {
+	*x = ModalityTokenCount{}
+	mi := &file_qclaogui_generativelanguage_v1beta_content_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ModalityTokenCount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModalityTokenCount) ProtoMessage() {}
+
+func (x *ModalityTokenCount) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_content_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModalityTokenCount.ProtoReflect.Descriptor instead.
+func (*ModalityTokenCount) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_content_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *ModalityTokenCount) GetModality() Modality {
+	if x != nil {
+		return x.Modality
+	}
+	return Modality_MODALITY_UNSPECIFIED
+}
+
+func (x *ModalityTokenCount) GetTokenCount() int32 {
+	if x != nil {
+		return x.TokenCount
+	}
+	return 0
+}
+
+// GoogleSearch tool type.
+// Tool to support Google Search in Model. Powered by Google.
+type Tool_GoogleSearch struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Tool_GoogleSearch) Reset() {
+	*x = Tool_GoogleSearch{}
+	mi := &file_qclaogui_generativelanguage_v1beta_content_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Tool_GoogleSearch) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Tool_GoogleSearch) ProtoMessage() {}
+
+func (x *Tool_GoogleSearch) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_content_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Tool_GoogleSearch.ProtoReflect.Descriptor instead.
+func (*Tool_GoogleSearch) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_content_proto_rawDescGZIP(), []int{6, 0}
+}
+
 var File_qclaogui_generativelanguage_v1beta_content_proto protoreflect.FileDescriptor
 
 const file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc = "" +
@@ -1581,7 +1862,7 @@ const file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc = "" +
 	"0qclaogui/generativelanguage/v1beta/content.proto\x12\"qclaogui.generativelanguage.v1beta\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\"c\n" +
 	"\aContent\x12>\n" +
 	"\x05parts\x18\x01 \x03(\v2(.qclaogui.generativelanguage.v1beta.PartR\x05parts\x12\x18\n" +
-	"\x04role\x18\x02 \x01(\tB\x04\xe2A\x01\x01R\x04role\"\xca\x04\n" +
+	"\x04role\x18\x02 \x01(\tB\x04\xe2A\x01\x01R\x04role\"\xea\x04\n" +
 	"\x04Part\x12\x14\n" +
 	"\x04text\x18\x02 \x01(\tH\x00R\x04text\x12K\n" +
 	"\vinline_data\x18\x03 \x01(\v2(.qclaogui.generativelanguage.v1beta.BlobH\x00R\n" +
@@ -1591,7 +1872,8 @@ const file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc = "" +
 	"\tfile_data\x18\x06 \x01(\v2,.qclaogui.generativelanguage.v1beta.FileDataH\x00R\bfileData\x12]\n" +
 	"\x0fexecutable_code\x18\t \x01(\v22.qclaogui.generativelanguage.v1beta.ExecutableCodeH\x00R\x0eexecutableCode\x12m\n" +
 	"\x15code_execution_result\x18\n" +
-	" \x01(\v27.qclaogui.generativelanguage.v1beta.CodeExecutionResultH\x00R\x13codeExecutionResultB\x06\n" +
+	" \x01(\v27.qclaogui.generativelanguage.v1beta.CodeExecutionResultH\x00R\x13codeExecutionResult\x12\x1e\n" +
+	"\athought\x18\v \x01(\bB\x04\xe2A\x01\x01R\athoughtB\x06\n" +
 	"\x04data\"7\n" +
 	"\x04Blob\x12\x1b\n" +
 	"\tmime_type\x18\x01 \x01(\tR\bmimeType\x12\x12\n" +
@@ -1614,11 +1896,13 @@ const file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc = "" +
 	"\n" +
 	"OUTCOME_OK\x10\x01\x12\x12\n" +
 	"\x0eOUTCOME_FAILED\x10\x02\x12\x1d\n" +
-	"\x19OUTCOME_DEADLINE_EXCEEDED\x10\x03\"\xd3\x02\n" +
+	"\x19OUTCOME_DEADLINE_EXCEEDED\x10\x03\"\xc5\x03\n" +
 	"\x04Tool\x12r\n" +
 	"\x15function_declarations\x18\x01 \x03(\v27.qclaogui.generativelanguage.v1beta.FunctionDeclarationB\x04\xe2A\x01\x01R\x14functionDeclarations\x12w\n" +
 	"\x17google_search_retrieval\x18\x02 \x01(\v29.qclaogui.generativelanguage.v1beta.GoogleSearchRetrievalB\x04\xe2A\x01\x01R\x15googleSearchRetrieval\x12^\n" +
-	"\x0ecode_execution\x18\x03 \x01(\v21.qclaogui.generativelanguage.v1beta.CodeExecutionB\x04\xe2A\x01\x01R\rcodeExecution\"\x8d\x01\n" +
+	"\x0ecode_execution\x18\x03 \x01(\v21.qclaogui.generativelanguage.v1beta.CodeExecutionB\x04\xe2A\x01\x01R\rcodeExecution\x12`\n" +
+	"\rgoogle_search\x18\x04 \x01(\v25.qclaogui.generativelanguage.v1beta.Tool.GoogleSearchB\x04\xe2A\x01\x01R\fgoogleSearch\x1a\x0e\n" +
+	"\fGoogleSearch\"\x8d\x01\n" +
 	"\x15GoogleSearchRetrieval\x12t\n" +
 	"\x18dynamic_retrieval_config\x18\x01 \x01(\v2:.qclaogui.generativelanguage.v1beta.DynamicRetrievalConfigR\x16dynamicRetrievalConfig\"\xe5\x01\n" +
 	"\x16DynamicRetrievalConfig\x12S\n" +
@@ -1631,32 +1915,38 @@ const file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc = "" +
 	"\rCodeExecution\"\x85\x01\n" +
 	"\n" +
 	"ToolConfig\x12w\n" +
-	"\x17function_calling_config\x18\x01 \x01(\v29.qclaogui.generativelanguage.v1beta.FunctionCallingConfigB\x04\xe2A\x01\x01R\x15functionCallingConfig\"\xe8\x01\n" +
+	"\x17function_calling_config\x18\x01 \x01(\v29.qclaogui.generativelanguage.v1beta.FunctionCallingConfigB\x04\xe2A\x01\x01R\x15functionCallingConfig\"\xf7\x01\n" +
 	"\x15FunctionCallingConfig\x12X\n" +
 	"\x04mode\x18\x01 \x01(\x0e2>.qclaogui.generativelanguage.v1beta.FunctionCallingConfig.ModeB\x04\xe2A\x01\x01R\x04mode\x12:\n" +
-	"\x16allowed_function_names\x18\x02 \x03(\tB\x04\xe2A\x01\x01R\x14allowedFunctionNames\"9\n" +
+	"\x16allowed_function_names\x18\x02 \x03(\tB\x04\xe2A\x01\x01R\x14allowedFunctionNames\"H\n" +
 	"\x04Mode\x12\x14\n" +
 	"\x10MODE_UNSPECIFIED\x10\x00\x12\b\n" +
 	"\x04AUTO\x10\x01\x12\a\n" +
 	"\x03ANY\x10\x02\x12\b\n" +
-	"\x04NONE\x10\x03\"\xbd\x01\n" +
+	"\x04NONE\x10\x03\x12\r\n" +
+	"\tVALIDATED\x10\x04\"\x9d\x02\n" +
 	"\x13FunctionDeclaration\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12&\n" +
 	"\vdescription\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\vdescription\x12U\n" +
 	"\n" +
 	"parameters\x18\x03 \x01(\v2*.qclaogui.generativelanguage.v1beta.SchemaB\x04\xe2A\x01\x01H\x00R\n" +
-	"parameters\x88\x01\x01B\r\n" +
-	"\v_parameters\"i\n" +
-	"\fFunctionCall\x12\x18\n" +
+	"parameters\x88\x01\x01\x12Q\n" +
+	"\bresponse\x18\x04 \x01(\v2*.qclaogui.generativelanguage.v1beta.SchemaB\x04\xe2A\x01\x01H\x01R\bresponse\x88\x01\x01B\r\n" +
+	"\v_parametersB\v\n" +
+	"\t_response\"\x7f\n" +
+	"\fFunctionCall\x12\x14\n" +
+	"\x02id\x18\x03 \x01(\tB\x04\xe2A\x01\x01R\x02id\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x126\n" +
 	"\x04args\x18\x02 \x01(\v2\x17.google.protobuf.StructB\x04\xe2A\x01\x01H\x00R\x04args\x88\x01\x01B\a\n" +
-	"\x05_args\"g\n" +
-	"\x10FunctionResponse\x12\x18\n" +
+	"\x05_args\"}\n" +
+	"\x10FunctionResponse\x12\x14\n" +
+	"\x02id\x18\x03 \x01(\tB\x04\xe2A\x01\x01R\x02id\x12\x18\n" +
 	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x129\n" +
-	"\bresponse\x18\x02 \x01(\v2\x17.google.protobuf.StructB\x04\xe2A\x01\x02R\bresponse\"\xda\x04\n" +
+	"\bresponse\x18\x02 \x01(\v2\x17.google.protobuf.StructB\x04\xe2A\x01\x02R\bresponse\"\x8c\a\n" +
 	"\x06Schema\x12B\n" +
 	"\x04type\x18\x01 \x01(\x0e2(.qclaogui.generativelanguage.v1beta.TypeB\x04\xe2A\x01\x02R\x04type\x12\x1c\n" +
-	"\x06format\x18\x02 \x01(\tB\x04\xe2A\x01\x01R\x06format\x12&\n" +
+	"\x06format\x18\x02 \x01(\tB\x04\xe2A\x01\x01R\x06format\x12\x1a\n" +
+	"\x05title\x18\x18 \x01(\tB\x04\xe2A\x01\x01R\x05title\x12&\n" +
 	"\vdescription\x18\x03 \x01(\tB\x04\xe2A\x01\x01R\vdescription\x12 \n" +
 	"\bnullable\x18\x04 \x01(\bB\x04\xe2A\x01\x01R\bnullable\x12\x18\n" +
 	"\x04enum\x18\x05 \x03(\tB\x04\xe2A\x01\x01R\x04enum\x12K\n" +
@@ -1666,16 +1956,29 @@ const file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc = "" +
 	"\n" +
 	"properties\x18\a \x03(\v2:.qclaogui.generativelanguage.v1beta.Schema.PropertiesEntryB\x04\xe2A\x01\x01R\n" +
 	"properties\x12 \n" +
-	"\brequired\x18\b \x03(\tB\x04\xe2A\x01\x01R\brequired\x1ai\n" +
+	"\brequired\x18\b \x03(\tB\x04\xe2A\x01\x01R\brequired\x12#\n" +
+	"\aminimum\x18\v \x01(\x01B\x04\xe2A\x01\x01H\x01R\aminimum\x88\x01\x01\x12#\n" +
+	"\amaximum\x18\f \x01(\x01B\x04\xe2A\x01\x01H\x02R\amaximum\x88\x01\x01\x12G\n" +
+	"\x06any_of\x18\x12 \x03(\v2*.qclaogui.generativelanguage.v1beta.SchemaB\x04\xe2A\x01\x01R\x05anyOf\x121\n" +
+	"\x11property_ordering\x18\x17 \x03(\tB\x04\xe2A\x01\x01R\x10propertyOrdering\x126\n" +
+	"\adefault\x18\x19 \x01(\v2\x16.google.protobuf.ValueB\x04\xe2A\x01\x01R\adefault\x1ai\n" +
 	"\x0fPropertiesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12@\n" +
 	"\x05value\x18\x02 \x01(\v2*.qclaogui.generativelanguage.v1beta.SchemaR\x05value:\x028\x01B\b\n" +
-	"\x06_items\"i\n" +
+	"\x06_itemsB\n" +
+	"\n" +
+	"\b_minimumB\n" +
+	"\n" +
+	"\b_maximum\"i\n" +
 	"\x10GroundingPassage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12E\n" +
 	"\acontent\x18\x02 \x01(\v2+.qclaogui.generativelanguage.v1beta.ContentR\acontent\"e\n" +
 	"\x11GroundingPassages\x12P\n" +
-	"\bpassages\x18\x01 \x03(\v24.qclaogui.generativelanguage.v1beta.GroundingPassageR\bpassages*e\n" +
+	"\bpassages\x18\x01 \x03(\v24.qclaogui.generativelanguage.v1beta.GroundingPassageR\bpassages\"\x7f\n" +
+	"\x12ModalityTokenCount\x12H\n" +
+	"\bmodality\x18\x01 \x01(\x0e2,.qclaogui.generativelanguage.v1beta.ModalityR\bmodality\x12\x1f\n" +
+	"\vtoken_count\x18\x02 \x01(\x05R\n" +
+	"tokenCount*o\n" +
 	"\x04Type\x12\x14\n" +
 	"\x10TYPE_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
@@ -1686,7 +1989,15 @@ const file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc = "" +
 	"\aBOOLEAN\x10\x04\x12\t\n" +
 	"\x05ARRAY\x10\x05\x12\n" +
 	"\n" +
-	"\x06OBJECT\x10\x06BUZSgithub.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepbb\x06proto3"
+	"\x06OBJECT\x10\x06\x12\b\n" +
+	"\x04NULL\x10\a*]\n" +
+	"\bModality\x12\x18\n" +
+	"\x14MODALITY_UNSPECIFIED\x10\x00\x12\b\n" +
+	"\x04TEXT\x10\x01\x12\t\n" +
+	"\x05IMAGE\x10\x02\x12\t\n" +
+	"\x05VIDEO\x10\x03\x12\t\n" +
+	"\x05AUDIO\x10\x04\x12\f\n" +
+	"\bDOCUMENT\x10\x05BUZSgithub.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepbb\x06proto3"
 
 var (
 	file_qclaogui_generativelanguage_v1beta_content_proto_rawDescOnce sync.Once
@@ -1701,68 +2012,77 @@ func file_qclaogui_generativelanguage_v1beta_content_proto_rawDescGZIP() []byte 
 }
 
 var (
-	file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-	file_qclaogui_generativelanguage_v1beta_content_proto_msgTypes  = make([]protoimpl.MessageInfo, 19)
+	file_qclaogui_generativelanguage_v1beta_content_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
+	file_qclaogui_generativelanguage_v1beta_content_proto_msgTypes  = make([]protoimpl.MessageInfo, 21)
 	file_qclaogui_generativelanguage_v1beta_content_proto_goTypes   = []any{
 		(Type)(0),                        // 0: qclaogui.generativelanguage.v1beta.Type
-		(ExecutableCode_Language)(0),     // 1: qclaogui.generativelanguage.v1beta.ExecutableCode.Language
-		(CodeExecutionResult_Outcome)(0), // 2: qclaogui.generativelanguage.v1beta.CodeExecutionResult.Outcome
-		(DynamicRetrievalConfig_Mode)(0), // 3: qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig.Mode
-		(FunctionCallingConfig_Mode)(0),  // 4: qclaogui.generativelanguage.v1beta.FunctionCallingConfig.Mode
-		(*Content)(nil),                  // 5: qclaogui.generativelanguage.v1beta.Content
-		(*Part)(nil),                     // 6: qclaogui.generativelanguage.v1beta.Part
-		(*Blob)(nil),                     // 7: qclaogui.generativelanguage.v1beta.Blob
-		(*FileData)(nil),                 // 8: qclaogui.generativelanguage.v1beta.FileData
-		(*ExecutableCode)(nil),           // 9: qclaogui.generativelanguage.v1beta.ExecutableCode
-		(*CodeExecutionResult)(nil),      // 10: qclaogui.generativelanguage.v1beta.CodeExecutionResult
-		(*Tool)(nil),                     // 11: qclaogui.generativelanguage.v1beta.Tool
-		(*GoogleSearchRetrieval)(nil),    // 12: qclaogui.generativelanguage.v1beta.GoogleSearchRetrieval
-		(*DynamicRetrievalConfig)(nil),   // 13: qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig
-		(*CodeExecution)(nil),            // 14: qclaogui.generativelanguage.v1beta.CodeExecution
-		(*ToolConfig)(nil),               // 15: qclaogui.generativelanguage.v1beta.ToolConfig
-		(*FunctionCallingConfig)(nil),    // 16: qclaogui.generativelanguage.v1beta.FunctionCallingConfig
-		(*FunctionDeclaration)(nil),      // 17: qclaogui.generativelanguage.v1beta.FunctionDeclaration
-		(*FunctionCall)(nil),             // 18: qclaogui.generativelanguage.v1beta.FunctionCall
-		(*FunctionResponse)(nil),         // 19: qclaogui.generativelanguage.v1beta.FunctionResponse
-		(*Schema)(nil),                   // 20: qclaogui.generativelanguage.v1beta.Schema
-		(*GroundingPassage)(nil),         // 21: qclaogui.generativelanguage.v1beta.GroundingPassage
-		(*GroundingPassages)(nil),        // 22: qclaogui.generativelanguage.v1beta.GroundingPassages
-		nil,                              // 23: qclaogui.generativelanguage.v1beta.Schema.PropertiesEntry
-		(*structpb.Struct)(nil),          // 24: google.protobuf.Struct
+		(Modality)(0),                    // 1: qclaogui.generativelanguage.v1beta.Modality
+		(ExecutableCode_Language)(0),     // 2: qclaogui.generativelanguage.v1beta.ExecutableCode.Language
+		(CodeExecutionResult_Outcome)(0), // 3: qclaogui.generativelanguage.v1beta.CodeExecutionResult.Outcome
+		(DynamicRetrievalConfig_Mode)(0), // 4: qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig.Mode
+		(FunctionCallingConfig_Mode)(0),  // 5: qclaogui.generativelanguage.v1beta.FunctionCallingConfig.Mode
+		(*Content)(nil),                  // 6: qclaogui.generativelanguage.v1beta.Content
+		(*Part)(nil),                     // 7: qclaogui.generativelanguage.v1beta.Part
+		(*Blob)(nil),                     // 8: qclaogui.generativelanguage.v1beta.Blob
+		(*FileData)(nil),                 // 9: qclaogui.generativelanguage.v1beta.FileData
+		(*ExecutableCode)(nil),           // 10: qclaogui.generativelanguage.v1beta.ExecutableCode
+		(*CodeExecutionResult)(nil),      // 11: qclaogui.generativelanguage.v1beta.CodeExecutionResult
+		(*Tool)(nil),                     // 12: qclaogui.generativelanguage.v1beta.Tool
+		(*GoogleSearchRetrieval)(nil),    // 13: qclaogui.generativelanguage.v1beta.GoogleSearchRetrieval
+		(*DynamicRetrievalConfig)(nil),   // 14: qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig
+		(*CodeExecution)(nil),            // 15: qclaogui.generativelanguage.v1beta.CodeExecution
+		(*ToolConfig)(nil),               // 16: qclaogui.generativelanguage.v1beta.ToolConfig
+		(*FunctionCallingConfig)(nil),    // 17: qclaogui.generativelanguage.v1beta.FunctionCallingConfig
+		(*FunctionDeclaration)(nil),      // 18: qclaogui.generativelanguage.v1beta.FunctionDeclaration
+		(*FunctionCall)(nil),             // 19: qclaogui.generativelanguage.v1beta.FunctionCall
+		(*FunctionResponse)(nil),         // 20: qclaogui.generativelanguage.v1beta.FunctionResponse
+		(*Schema)(nil),                   // 21: qclaogui.generativelanguage.v1beta.Schema
+		(*GroundingPassage)(nil),         // 22: qclaogui.generativelanguage.v1beta.GroundingPassage
+		(*GroundingPassages)(nil),        // 23: qclaogui.generativelanguage.v1beta.GroundingPassages
+		(*ModalityTokenCount)(nil),       // 24: qclaogui.generativelanguage.v1beta.ModalityTokenCount
+		(*Tool_GoogleSearch)(nil),        // 25: qclaogui.generativelanguage.v1beta.Tool.GoogleSearch
+		nil,                              // 26: qclaogui.generativelanguage.v1beta.Schema.PropertiesEntry
+		(*structpb.Struct)(nil),          // 27: google.protobuf.Struct
+		(*structpb.Value)(nil),           // 28: google.protobuf.Value
 	}
 )
 
 var file_qclaogui_generativelanguage_v1beta_content_proto_depIdxs = []int32{
-	6,  // 0: qclaogui.generativelanguage.v1beta.Content.parts:type_name -> qclaogui.generativelanguage.v1beta.Part
-	7,  // 1: qclaogui.generativelanguage.v1beta.Part.inline_data:type_name -> qclaogui.generativelanguage.v1beta.Blob
-	18, // 2: qclaogui.generativelanguage.v1beta.Part.function_call:type_name -> qclaogui.generativelanguage.v1beta.FunctionCall
-	19, // 3: qclaogui.generativelanguage.v1beta.Part.function_response:type_name -> qclaogui.generativelanguage.v1beta.FunctionResponse
-	8,  // 4: qclaogui.generativelanguage.v1beta.Part.file_data:type_name -> qclaogui.generativelanguage.v1beta.FileData
-	9,  // 5: qclaogui.generativelanguage.v1beta.Part.executable_code:type_name -> qclaogui.generativelanguage.v1beta.ExecutableCode
-	10, // 6: qclaogui.generativelanguage.v1beta.Part.code_execution_result:type_name -> qclaogui.generativelanguage.v1beta.CodeExecutionResult
-	1,  // 7: qclaogui.generativelanguage.v1beta.ExecutableCode.language:type_name -> qclaogui.generativelanguage.v1beta.ExecutableCode.Language
-	2,  // 8: qclaogui.generativelanguage.v1beta.CodeExecutionResult.outcome:type_name -> qclaogui.generativelanguage.v1beta.CodeExecutionResult.Outcome
-	17, // 9: qclaogui.generativelanguage.v1beta.Tool.function_declarations:type_name -> qclaogui.generativelanguage.v1beta.FunctionDeclaration
-	12, // 10: qclaogui.generativelanguage.v1beta.Tool.google_search_retrieval:type_name -> qclaogui.generativelanguage.v1beta.GoogleSearchRetrieval
-	14, // 11: qclaogui.generativelanguage.v1beta.Tool.code_execution:type_name -> qclaogui.generativelanguage.v1beta.CodeExecution
-	13, // 12: qclaogui.generativelanguage.v1beta.GoogleSearchRetrieval.dynamic_retrieval_config:type_name -> qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig
-	3,  // 13: qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig.mode:type_name -> qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig.Mode
-	16, // 14: qclaogui.generativelanguage.v1beta.ToolConfig.function_calling_config:type_name -> qclaogui.generativelanguage.v1beta.FunctionCallingConfig
-	4,  // 15: qclaogui.generativelanguage.v1beta.FunctionCallingConfig.mode:type_name -> qclaogui.generativelanguage.v1beta.FunctionCallingConfig.Mode
-	20, // 16: qclaogui.generativelanguage.v1beta.FunctionDeclaration.parameters:type_name -> qclaogui.generativelanguage.v1beta.Schema
-	24, // 17: qclaogui.generativelanguage.v1beta.FunctionCall.args:type_name -> google.protobuf.Struct
-	24, // 18: qclaogui.generativelanguage.v1beta.FunctionResponse.response:type_name -> google.protobuf.Struct
-	0,  // 19: qclaogui.generativelanguage.v1beta.Schema.type:type_name -> qclaogui.generativelanguage.v1beta.Type
-	20, // 20: qclaogui.generativelanguage.v1beta.Schema.items:type_name -> qclaogui.generativelanguage.v1beta.Schema
-	23, // 21: qclaogui.generativelanguage.v1beta.Schema.properties:type_name -> qclaogui.generativelanguage.v1beta.Schema.PropertiesEntry
-	5,  // 22: qclaogui.generativelanguage.v1beta.GroundingPassage.content:type_name -> qclaogui.generativelanguage.v1beta.Content
-	21, // 23: qclaogui.generativelanguage.v1beta.GroundingPassages.passages:type_name -> qclaogui.generativelanguage.v1beta.GroundingPassage
-	20, // 24: qclaogui.generativelanguage.v1beta.Schema.PropertiesEntry.value:type_name -> qclaogui.generativelanguage.v1beta.Schema
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	7,  // 0: qclaogui.generativelanguage.v1beta.Content.parts:type_name -> qclaogui.generativelanguage.v1beta.Part
+	8,  // 1: qclaogui.generativelanguage.v1beta.Part.inline_data:type_name -> qclaogui.generativelanguage.v1beta.Blob
+	19, // 2: qclaogui.generativelanguage.v1beta.Part.function_call:type_name -> qclaogui.generativelanguage.v1beta.FunctionCall
+	20, // 3: qclaogui.generativelanguage.v1beta.Part.function_response:type_name -> qclaogui.generativelanguage.v1beta.FunctionResponse
+	9,  // 4: qclaogui.generativelanguage.v1beta.Part.file_data:type_name -> qclaogui.generativelanguage.v1beta.FileData
+	10, // 5: qclaogui.generativelanguage.v1beta.Part.executable_code:type_name -> qclaogui.generativelanguage.v1beta.ExecutableCode
+	11, // 6: qclaogui.generativelanguage.v1beta.Part.code_execution_result:type_name -> qclaogui.generativelanguage.v1beta.CodeExecutionResult
+	2,  // 7: qclaogui.generativelanguage.v1beta.ExecutableCode.language:type_name -> qclaogui.generativelanguage.v1beta.ExecutableCode.Language
+	3,  // 8: qclaogui.generativelanguage.v1beta.CodeExecutionResult.outcome:type_name -> qclaogui.generativelanguage.v1beta.CodeExecutionResult.Outcome
+	18, // 9: qclaogui.generativelanguage.v1beta.Tool.function_declarations:type_name -> qclaogui.generativelanguage.v1beta.FunctionDeclaration
+	13, // 10: qclaogui.generativelanguage.v1beta.Tool.google_search_retrieval:type_name -> qclaogui.generativelanguage.v1beta.GoogleSearchRetrieval
+	15, // 11: qclaogui.generativelanguage.v1beta.Tool.code_execution:type_name -> qclaogui.generativelanguage.v1beta.CodeExecution
+	25, // 12: qclaogui.generativelanguage.v1beta.Tool.google_search:type_name -> qclaogui.generativelanguage.v1beta.Tool.GoogleSearch
+	14, // 13: qclaogui.generativelanguage.v1beta.GoogleSearchRetrieval.dynamic_retrieval_config:type_name -> qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig
+	4,  // 14: qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig.mode:type_name -> qclaogui.generativelanguage.v1beta.DynamicRetrievalConfig.Mode
+	17, // 15: qclaogui.generativelanguage.v1beta.ToolConfig.function_calling_config:type_name -> qclaogui.generativelanguage.v1beta.FunctionCallingConfig
+	5,  // 16: qclaogui.generativelanguage.v1beta.FunctionCallingConfig.mode:type_name -> qclaogui.generativelanguage.v1beta.FunctionCallingConfig.Mode
+	21, // 17: qclaogui.generativelanguage.v1beta.FunctionDeclaration.parameters:type_name -> qclaogui.generativelanguage.v1beta.Schema
+	21, // 18: qclaogui.generativelanguage.v1beta.FunctionDeclaration.response:type_name -> qclaogui.generativelanguage.v1beta.Schema
+	27, // 19: qclaogui.generativelanguage.v1beta.FunctionCall.args:type_name -> google.protobuf.Struct
+	27, // 20: qclaogui.generativelanguage.v1beta.FunctionResponse.response:type_name -> google.protobuf.Struct
+	0,  // 21: qclaogui.generativelanguage.v1beta.Schema.type:type_name -> qclaogui.generativelanguage.v1beta.Type
+	21, // 22: qclaogui.generativelanguage.v1beta.Schema.items:type_name -> qclaogui.generativelanguage.v1beta.Schema
+	26, // 23: qclaogui.generativelanguage.v1beta.Schema.properties:type_name -> qclaogui.generativelanguage.v1beta.Schema.PropertiesEntry
+	21, // 24: qclaogui.generativelanguage.v1beta.Schema.any_of:type_name -> qclaogui.generativelanguage.v1beta.Schema
+	28, // 25: qclaogui.generativelanguage.v1beta.Schema.default:type_name -> google.protobuf.Value
+	6,  // 26: qclaogui.generativelanguage.v1beta.GroundingPassage.content:type_name -> qclaogui.generativelanguage.v1beta.Content
+	22, // 27: qclaogui.generativelanguage.v1beta.GroundingPassages.passages:type_name -> qclaogui.generativelanguage.v1beta.GroundingPassage
+	1,  // 28: qclaogui.generativelanguage.v1beta.ModalityTokenCount.modality:type_name -> qclaogui.generativelanguage.v1beta.Modality
+	21, // 29: qclaogui.generativelanguage.v1beta.Schema.PropertiesEntry.value:type_name -> qclaogui.generativelanguage.v1beta.Schema
+	30, // [30:30] is the sub-list for method output_type
+	30, // [30:30] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_qclaogui_generativelanguage_v1beta_content_proto_init() }
@@ -1788,8 +2108,8 @@ func file_qclaogui_generativelanguage_v1beta_content_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc), len(file_qclaogui_generativelanguage_v1beta_content_proto_rawDesc)),
-			NumEnums:      5,
-			NumMessages:   19,
+			NumEnums:      6,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

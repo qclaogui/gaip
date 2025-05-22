@@ -35,10 +35,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FileService_CreateFile_FullMethodName = "/qclaogui.generativelanguage.v1beta.FileService/CreateFile"
-	FileService_ListFiles_FullMethodName  = "/qclaogui.generativelanguage.v1beta.FileService/ListFiles"
-	FileService_GetFile_FullMethodName    = "/qclaogui.generativelanguage.v1beta.FileService/GetFile"
-	FileService_DeleteFile_FullMethodName = "/qclaogui.generativelanguage.v1beta.FileService/DeleteFile"
+	FileService_CreateFile_FullMethodName   = "/qclaogui.generativelanguage.v1beta.FileService/CreateFile"
+	FileService_ListFiles_FullMethodName    = "/qclaogui.generativelanguage.v1beta.FileService/ListFiles"
+	FileService_GetFile_FullMethodName      = "/qclaogui.generativelanguage.v1beta.FileService/GetFile"
+	FileService_DeleteFile_FullMethodName   = "/qclaogui.generativelanguage.v1beta.FileService/DeleteFile"
+	FileService_DownloadFile_FullMethodName = "/qclaogui.generativelanguage.v1beta.FileService/DownloadFile"
 )
 
 // FileServiceClient is the client API for FileService service.
@@ -55,6 +56,8 @@ type FileServiceClient interface {
 	GetFile(ctx context.Context, in *GetFileRequest, opts ...grpc.CallOption) (*File, error)
 	// Deletes the `File`.
 	DeleteFile(ctx context.Context, in *DeleteFileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Download the `File`.
+	DownloadFile(ctx context.Context, in *DownloadFileRequest, opts ...grpc.CallOption) (*DownloadFileResponse, error)
 }
 
 type fileServiceClient struct {
@@ -105,6 +108,16 @@ func (c *fileServiceClient) DeleteFile(ctx context.Context, in *DeleteFileReques
 	return out, nil
 }
 
+func (c *fileServiceClient) DownloadFile(ctx context.Context, in *DownloadFileRequest, opts ...grpc.CallOption) (*DownloadFileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DownloadFileResponse)
+	err := c.cc.Invoke(ctx, FileService_DownloadFile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FileServiceServer is the server API for FileService service.
 // All implementations should embed UnimplementedFileServiceServer
 // for forward compatibility.
@@ -119,6 +132,8 @@ type FileServiceServer interface {
 	GetFile(context.Context, *GetFileRequest) (*File, error)
 	// Deletes the `File`.
 	DeleteFile(context.Context, *DeleteFileRequest) (*emptypb.Empty, error)
+	// Download the `File`.
+	DownloadFile(context.Context, *DownloadFileRequest) (*DownloadFileResponse, error)
 }
 
 // UnimplementedFileServiceServer should be embedded to have
@@ -142,6 +157,10 @@ func (UnimplementedFileServiceServer) GetFile(context.Context, *GetFileRequest) 
 
 func (UnimplementedFileServiceServer) DeleteFile(context.Context, *DeleteFileRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFile not implemented")
+}
+
+func (UnimplementedFileServiceServer) DownloadFile(context.Context, *DownloadFileRequest) (*DownloadFileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DownloadFile not implemented")
 }
 func (UnimplementedFileServiceServer) testEmbeddedByValue() {}
 
@@ -235,6 +254,24 @@ func _FileService_DeleteFile_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FileService_DownloadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServiceServer).DownloadFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FileService_DownloadFile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServiceServer).DownloadFile(ctx, req.(*DownloadFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FileService_ServiceDesc is the grpc.ServiceDesc for FileService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -257,6 +294,10 @@ var FileService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteFile",
 			Handler:    _FileService_DeleteFile_Handler,
+		},
+		{
+			MethodName: "DownloadFile",
+			Handler:    _FileService_DownloadFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

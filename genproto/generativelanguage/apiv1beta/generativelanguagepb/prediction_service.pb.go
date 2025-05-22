@@ -25,6 +25,7 @@ import (
 	sync "sync"
 	unsafe "unsafe"
 
+	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -104,6 +105,71 @@ func (x *PredictRequest) GetParameters() *structpb.Value {
 	return nil
 }
 
+// Request message for [PredictionService.PredictLongRunning].
+type PredictLongRunningRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Required. The name of the model for prediction.
+	// Format: `name=models/{model}`.
+	Model string `protobuf:"bytes,1,opt,name=model,proto3" json:"model,omitempty"`
+	// Required. The instances that are the input to the prediction call.
+	Instances []*structpb.Value `protobuf:"bytes,2,rep,name=instances,proto3" json:"instances,omitempty"`
+	// Optional. The parameters that govern the prediction call.
+	Parameters    *structpb.Value `protobuf:"bytes,3,opt,name=parameters,proto3" json:"parameters,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PredictLongRunningRequest) Reset() {
+	*x = PredictLongRunningRequest{}
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PredictLongRunningRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PredictLongRunningRequest) ProtoMessage() {}
+
+func (x *PredictLongRunningRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PredictLongRunningRequest.ProtoReflect.Descriptor instead.
+func (*PredictLongRunningRequest) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *PredictLongRunningRequest) GetModel() string {
+	if x != nil {
+		return x.Model
+	}
+	return ""
+}
+
+func (x *PredictLongRunningRequest) GetInstances() []*structpb.Value {
+	if x != nil {
+		return x.Instances
+	}
+	return nil
+}
+
+func (x *PredictLongRunningRequest) GetParameters() *structpb.Value {
+	if x != nil {
+		return x.Parameters
+	}
+	return nil
+}
+
 // Response message for [PredictionService.Predict].
 type PredictResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -115,7 +181,7 @@ type PredictResponse struct {
 
 func (x *PredictResponse) Reset() {
 	*x = PredictResponse{}
-	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[1]
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -127,7 +193,7 @@ func (x *PredictResponse) String() string {
 func (*PredictResponse) ProtoMessage() {}
 
 func (x *PredictResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[1]
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -140,7 +206,7 @@ func (x *PredictResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PredictResponse.ProtoReflect.Descriptor instead.
 func (*PredictResponse) Descriptor() ([]byte, []int) {
-	return file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZIP(), []int{1}
+	return file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *PredictResponse) GetPredictions() []*structpb.Value {
@@ -150,12 +216,347 @@ func (x *PredictResponse) GetPredictions() []*structpb.Value {
 	return nil
 }
 
+// Response message for [PredictionService.PredictLongRunning]
+type PredictLongRunningResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The response of the long running operation.
+	//
+	// Types that are valid to be assigned to Response:
+	//
+	//	*PredictLongRunningResponse_GenerateVideoResponse
+	Response      isPredictLongRunningResponse_Response `protobuf_oneof:"response"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PredictLongRunningResponse) Reset() {
+	*x = PredictLongRunningResponse{}
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PredictLongRunningResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PredictLongRunningResponse) ProtoMessage() {}
+
+func (x *PredictLongRunningResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PredictLongRunningResponse.ProtoReflect.Descriptor instead.
+func (*PredictLongRunningResponse) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *PredictLongRunningResponse) GetResponse() isPredictLongRunningResponse_Response {
+	if x != nil {
+		return x.Response
+	}
+	return nil
+}
+
+func (x *PredictLongRunningResponse) GetGenerateVideoResponse() *GenerateVideoResponse {
+	if x != nil {
+		if x, ok := x.Response.(*PredictLongRunningResponse_GenerateVideoResponse); ok {
+			return x.GenerateVideoResponse
+		}
+	}
+	return nil
+}
+
+type isPredictLongRunningResponse_Response interface {
+	isPredictLongRunningResponse_Response()
+}
+
+type PredictLongRunningResponse_GenerateVideoResponse struct {
+	// The response of the video generation prediction.
+	GenerateVideoResponse *GenerateVideoResponse `protobuf:"bytes,1,opt,name=generate_video_response,json=generateVideoResponse,proto3,oneof"`
+}
+
+func (*PredictLongRunningResponse_GenerateVideoResponse) isPredictLongRunningResponse_Response() {}
+
+// Metadata for PredictLongRunning long running operations.
+type PredictLongRunningMetadata struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PredictLongRunningMetadata) Reset() {
+	*x = PredictLongRunningMetadata{}
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PredictLongRunningMetadata) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PredictLongRunningMetadata) ProtoMessage() {}
+
+func (x *PredictLongRunningMetadata) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PredictLongRunningMetadata.ProtoReflect.Descriptor instead.
+func (*PredictLongRunningMetadata) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZIP(), []int{4}
+}
+
+// A proto encapsulate various type of media.
+type Media struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Type of media.
+	//
+	// Types that are valid to be assigned to Type:
+	//
+	//	*Media_Video
+	Type          isMedia_Type `protobuf_oneof:"type"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Media) Reset() {
+	*x = Media{}
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Media) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Media) ProtoMessage() {}
+
+func (x *Media) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Media.ProtoReflect.Descriptor instead.
+func (*Media) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *Media) GetType() isMedia_Type {
+	if x != nil {
+		return x.Type
+	}
+	return nil
+}
+
+func (x *Media) GetVideo() *Video {
+	if x != nil {
+		if x, ok := x.Type.(*Media_Video); ok {
+			return x.Video
+		}
+	}
+	return nil
+}
+
+type isMedia_Type interface {
+	isMedia_Type()
+}
+
+type Media_Video struct {
+	// Video as the only one for now.  This is mimicking Vertex proto.
+	Video *Video `protobuf:"bytes,1,opt,name=video,proto3,oneof"`
+}
+
+func (*Media_Video) isMedia_Type() {}
+
+// Representation of a video.
+type Video struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Where the video content is.
+	//
+	// Types that are valid to be assigned to Content:
+	//
+	//	*Video_Video
+	//	*Video_Uri
+	Content       isVideo_Content `protobuf_oneof:"content"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Video) Reset() {
+	*x = Video{}
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Video) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Video) ProtoMessage() {}
+
+func (x *Video) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Video.ProtoReflect.Descriptor instead.
+func (*Video) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *Video) GetContent() isVideo_Content {
+	if x != nil {
+		return x.Content
+	}
+	return nil
+}
+
+func (x *Video) GetVideo() []byte {
+	if x != nil {
+		if x, ok := x.Content.(*Video_Video); ok {
+			return x.Video
+		}
+	}
+	return nil
+}
+
+func (x *Video) GetUri() string {
+	if x != nil {
+		if x, ok := x.Content.(*Video_Uri); ok {
+			return x.Uri
+		}
+	}
+	return ""
+}
+
+type isVideo_Content interface {
+	isVideo_Content()
+}
+
+type Video_Video struct {
+	// Raw bytes.
+	Video []byte `protobuf:"bytes,1,opt,name=video,proto3,oneof"`
+}
+
+type Video_Uri struct {
+	// Path to another storage.
+	Uri string `protobuf:"bytes,2,opt,name=uri,proto3,oneof"`
+}
+
+func (*Video_Video) isVideo_Content() {}
+
+func (*Video_Uri) isVideo_Content() {}
+
+// Veo response.
+type GenerateVideoResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The generated samples.
+	GeneratedSamples []*Media `protobuf:"bytes,1,rep,name=generated_samples,json=generatedSamples,proto3" json:"generated_samples,omitempty"`
+	// Returns if any videos were filtered due to RAI policies.
+	RaiMediaFilteredCount int32 `protobuf:"varint,2,opt,name=rai_media_filtered_count,json=raiMediaFilteredCount,proto3" json:"rai_media_filtered_count,omitempty"`
+	// Returns rai failure reasons if any.
+	RaiMediaFilteredReasons []string `protobuf:"bytes,3,rep,name=rai_media_filtered_reasons,json=raiMediaFilteredReasons,proto3" json:"rai_media_filtered_reasons,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
+}
+
+func (x *GenerateVideoResponse) Reset() {
+	*x = GenerateVideoResponse{}
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateVideoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateVideoResponse) ProtoMessage() {}
+
+func (x *GenerateVideoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateVideoResponse.ProtoReflect.Descriptor instead.
+func (*GenerateVideoResponse) Descriptor() ([]byte, []int) {
+	return file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GenerateVideoResponse) GetGeneratedSamples() []*Media {
+	if x != nil {
+		return x.GeneratedSamples
+	}
+	return nil
+}
+
+func (x *GenerateVideoResponse) GetRaiMediaFilteredCount() int32 {
+	if x != nil {
+		return x.RaiMediaFilteredCount
+	}
+	return 0
+}
+
+func (x *GenerateVideoResponse) GetRaiMediaFilteredReasons() []string {
+	if x != nil {
+		return x.RaiMediaFilteredReasons
+	}
+	return nil
+}
+
 var File_qclaogui_generativelanguage_v1beta_prediction_service_proto protoreflect.FileDescriptor
 
 const file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDesc = "" +
 	"\n" +
-	";qclaogui/generativelanguage/v1beta/prediction_service.proto\x12\"qclaogui.generativelanguage.v1beta\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x19google/api/resource.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xd0\x01\n" +
+	";qclaogui/generativelanguage/v1beta/prediction_service.proto\x12\"qclaogui.generativelanguage.v1beta\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x19google/api/resource.proto\x1a#google/longrunning/operations.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xd0\x01\n" +
 	"\x0ePredictRequest\x12D\n" +
+	"\x05model\x18\x01 \x01(\tB.\xe2A\x01\x02\xfaA'\n" +
+	"%generativelanguage.qclaogui.com/ModelR\x05model\x12:\n" +
+	"\tinstances\x18\x02 \x03(\v2\x16.google.protobuf.ValueB\x04\xe2A\x01\x02R\tinstances\x12<\n" +
+	"\n" +
+	"parameters\x18\x03 \x01(\v2\x16.google.protobuf.ValueB\x04\xe2A\x01\x01R\n" +
+	"parameters\"\xdb\x01\n" +
+	"\x19PredictLongRunningRequest\x12D\n" +
 	"\x05model\x18\x01 \x01(\tB.\xe2A\x01\x02\xfaA'\n" +
 	"%generativelanguage.qclaogui.com/ModelR\x05model\x12:\n" +
 	"\tinstances\x18\x02 \x03(\v2\x16.google.protobuf.ValueB\x04\xe2A\x01\x02R\tinstances\x12<\n" +
@@ -163,9 +564,27 @@ const file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDesc =
 	"parameters\x18\x03 \x01(\v2\x16.google.protobuf.ValueB\x04\xe2A\x01\x01R\n" +
 	"parameters\"K\n" +
 	"\x0fPredictResponse\x128\n" +
-	"\vpredictions\x18\x01 \x03(\v2\x16.google.protobuf.ValueR\vpredictions2\xeb\x01\n" +
+	"\vpredictions\x18\x01 \x03(\v2\x16.google.protobuf.ValueR\vpredictions\"\x9d\x01\n" +
+	"\x1aPredictLongRunningResponse\x12s\n" +
+	"\x17generate_video_response\x18\x01 \x01(\v29.qclaogui.generativelanguage.v1beta.GenerateVideoResponseH\x00R\x15generateVideoResponseB\n" +
+	"\n" +
+	"\bresponse\"\x1c\n" +
+	"\x1aPredictLongRunningMetadata\"R\n" +
+	"\x05Media\x12A\n" +
+	"\x05video\x18\x01 \x01(\v2).qclaogui.generativelanguage.v1beta.VideoH\x00R\x05videoB\x06\n" +
+	"\x04type\">\n" +
+	"\x05Video\x12\x16\n" +
+	"\x05video\x18\x01 \x01(\fH\x00R\x05video\x12\x12\n" +
+	"\x03uri\x18\x02 \x01(\tH\x00R\x03uriB\t\n" +
+	"\acontent\"\xe5\x01\n" +
+	"\x15GenerateVideoResponse\x12V\n" +
+	"\x11generated_samples\x18\x01 \x03(\v2).qclaogui.generativelanguage.v1beta.MediaR\x10generatedSamples\x127\n" +
+	"\x18rai_media_filtered_count\x18\x02 \x01(\x05R\x15raiMediaFilteredCount\x12;\n" +
+	"\x1arai_media_filtered_reasons\x18\x03 \x03(\tR\x17raiMediaFilteredReasons2\xe6\x03\n" +
 	"\x11PredictionService\x12\xb1\x01\n" +
-	"\aPredict\x122.qclaogui.generativelanguage.v1beta.PredictRequest\x1a3.qclaogui.generativelanguage.v1beta.PredictResponse\"=\xdaA\x0fmodel,instances\x82\xd3\xe4\x93\x02%:\x01*\" /v1beta/{model=models/*}:predict\x1a\"\xcaA\x1fgenerativelanguage.qclaogui.comBUZSgithub.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepbb\x06proto3"
+	"\aPredict\x122.qclaogui.generativelanguage.v1beta.PredictRequest\x1a3.qclaogui.generativelanguage.v1beta.PredictResponse\"=\xdaA\x0fmodel,instances\x82\xd3\xe4\x93\x02%:\x01*\" /v1beta/{model=models/*}:predict\x12\xf8\x01\n" +
+	"\x12PredictLongRunning\x12=.qclaogui.generativelanguage.v1beta.PredictLongRunningRequest\x1a\x1d.google.longrunning.Operation\"\x83\x01\xcaA8\n" +
+	"\x1aPredictLongRunningResponse\x12\x1aPredictLongRunningMetadata\xdaA\x0fmodel,instances\x82\xd3\xe4\x93\x020:\x01*\"+/v1beta/{model=models/*}:predictLongRunning\x1a\"\xcaA\x1fgenerativelanguage.qclaogui.comBUZSgithub.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepbb\x06proto3"
 
 var (
 	file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescOnce sync.Once
@@ -180,25 +599,39 @@ func file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDescGZI
 }
 
 var (
-	file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 	file_qclaogui_generativelanguage_v1beta_prediction_service_proto_goTypes  = []any{
-		(*PredictRequest)(nil),  // 0: qclaogui.generativelanguage.v1beta.PredictRequest
-		(*PredictResponse)(nil), // 1: qclaogui.generativelanguage.v1beta.PredictResponse
-		(*structpb.Value)(nil),  // 2: google.protobuf.Value
+		(*PredictRequest)(nil),             // 0: qclaogui.generativelanguage.v1beta.PredictRequest
+		(*PredictLongRunningRequest)(nil),  // 1: qclaogui.generativelanguage.v1beta.PredictLongRunningRequest
+		(*PredictResponse)(nil),            // 2: qclaogui.generativelanguage.v1beta.PredictResponse
+		(*PredictLongRunningResponse)(nil), // 3: qclaogui.generativelanguage.v1beta.PredictLongRunningResponse
+		(*PredictLongRunningMetadata)(nil), // 4: qclaogui.generativelanguage.v1beta.PredictLongRunningMetadata
+		(*Media)(nil),                      // 5: qclaogui.generativelanguage.v1beta.Media
+		(*Video)(nil),                      // 6: qclaogui.generativelanguage.v1beta.Video
+		(*GenerateVideoResponse)(nil),      // 7: qclaogui.generativelanguage.v1beta.GenerateVideoResponse
+		(*structpb.Value)(nil),             // 8: google.protobuf.Value
+		(*longrunningpb.Operation)(nil),    // 9: google.longrunning.Operation
 	}
 )
 
 var file_qclaogui_generativelanguage_v1beta_prediction_service_proto_depIdxs = []int32{
-	2, // 0: qclaogui.generativelanguage.v1beta.PredictRequest.instances:type_name -> google.protobuf.Value
-	2, // 1: qclaogui.generativelanguage.v1beta.PredictRequest.parameters:type_name -> google.protobuf.Value
-	2, // 2: qclaogui.generativelanguage.v1beta.PredictResponse.predictions:type_name -> google.protobuf.Value
-	0, // 3: qclaogui.generativelanguage.v1beta.PredictionService.Predict:input_type -> qclaogui.generativelanguage.v1beta.PredictRequest
-	1, // 4: qclaogui.generativelanguage.v1beta.PredictionService.Predict:output_type -> qclaogui.generativelanguage.v1beta.PredictResponse
-	4, // [4:5] is the sub-list for method output_type
-	3, // [3:4] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	8,  // 0: qclaogui.generativelanguage.v1beta.PredictRequest.instances:type_name -> google.protobuf.Value
+	8,  // 1: qclaogui.generativelanguage.v1beta.PredictRequest.parameters:type_name -> google.protobuf.Value
+	8,  // 2: qclaogui.generativelanguage.v1beta.PredictLongRunningRequest.instances:type_name -> google.protobuf.Value
+	8,  // 3: qclaogui.generativelanguage.v1beta.PredictLongRunningRequest.parameters:type_name -> google.protobuf.Value
+	8,  // 4: qclaogui.generativelanguage.v1beta.PredictResponse.predictions:type_name -> google.protobuf.Value
+	7,  // 5: qclaogui.generativelanguage.v1beta.PredictLongRunningResponse.generate_video_response:type_name -> qclaogui.generativelanguage.v1beta.GenerateVideoResponse
+	6,  // 6: qclaogui.generativelanguage.v1beta.Media.video:type_name -> qclaogui.generativelanguage.v1beta.Video
+	5,  // 7: qclaogui.generativelanguage.v1beta.GenerateVideoResponse.generated_samples:type_name -> qclaogui.generativelanguage.v1beta.Media
+	0,  // 8: qclaogui.generativelanguage.v1beta.PredictionService.Predict:input_type -> qclaogui.generativelanguage.v1beta.PredictRequest
+	1,  // 9: qclaogui.generativelanguage.v1beta.PredictionService.PredictLongRunning:input_type -> qclaogui.generativelanguage.v1beta.PredictLongRunningRequest
+	2,  // 10: qclaogui.generativelanguage.v1beta.PredictionService.Predict:output_type -> qclaogui.generativelanguage.v1beta.PredictResponse
+	9,  // 11: qclaogui.generativelanguage.v1beta.PredictionService.PredictLongRunning:output_type -> google.longrunning.Operation
+	10, // [10:12] is the sub-list for method output_type
+	8,  // [8:10] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_qclaogui_generativelanguage_v1beta_prediction_service_proto_init() }
@@ -206,13 +639,23 @@ func file_qclaogui_generativelanguage_v1beta_prediction_service_proto_init() {
 	if File_qclaogui_generativelanguage_v1beta_prediction_service_proto != nil {
 		return
 	}
+	file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[3].OneofWrappers = []any{
+		(*PredictLongRunningResponse_GenerateVideoResponse)(nil),
+	}
+	file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[5].OneofWrappers = []any{
+		(*Media_Video)(nil),
+	}
+	file_qclaogui_generativelanguage_v1beta_prediction_service_proto_msgTypes[6].OneofWrappers = []any{
+		(*Video_Video)(nil),
+		(*Video_Uri)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDesc), len(file_qclaogui_generativelanguage_v1beta_prediction_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

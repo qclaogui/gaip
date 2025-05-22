@@ -44,6 +44,32 @@ enum Type {
 
   // Object type.
   OBJECT = 6;
+
+  // Null type.
+  // HACK: We use this to handle optional parameters, which users are specifying
+  // optional things by using a OneOf with a second type of NULL.
+  NULL = 7;
+}
+
+// Content Part modality
+enum Modality {
+  // Unspecified modality.
+  MODALITY_UNSPECIFIED = 0;
+
+  // Plain text.
+  TEXT = 1;
+
+  // Image.
+  IMAGE = 2;
+
+  // Video.
+  VIDEO = 3;
+
+  // Audio.
+  AUDIO = 4;
+
+  // Document, e.g. PDF.
+  DOCUMENT = 5;
 }
 
 // The base structured datatype containing multi-part content of a message.
@@ -98,6 +124,9 @@ message Part {
     // Result of executing the `ExecutableCode`.
     CodeExecutionResult code_execution_result = 10;
   }
+
+  // Optional. Indicates if the part is thought from the model.
+  bool thought = 11 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Raw media bytes.
@@ -185,6 +214,10 @@ message CodeExecutionResult {
 // external systems to perform an action, or set of actions, outside of
 // knowledge and scope of the model.
 message Tool {
+  // GoogleSearch tool type.
+  // Tool to support Google Search in Model. Powered by Google.
+  message GoogleSearch {}
+
   // Optional. A list of `FunctionDeclarations` available to the model that can
   // be used for function calling.
   //
@@ -205,6 +238,10 @@ message Tool {
 
   // Optional. Enables the model to execute code as part of generation.
   CodeExecution code_execution = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. GoogleSearch tool type.
+  // Tool to support Google Search in Model. Powered by Google.
+  GoogleSearch google_search = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Tool to retrieve public web data for grounding, powered by Google.
@@ -267,6 +304,11 @@ message FunctionCallingConfig {
     // Model will not predict any function call. Model behavior is same as when
     // not passing any function declarations.
     NONE = 3;
+
+    // Model decides to predict either a function call
+    // or a natural language response, but will validate function calls with
+    // constrained decoding.
+    VALIDATED = 4;
   }
 
   // Optional. Specifies the mode in which function calling should execute. If
@@ -301,12 +343,21 @@ message FunctionDeclaration {
   // names are case sensitive. Schema Value: the Schema defining the type used
   // for the parameter.
   optional Schema parameters = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Describes the output from this function in JSON Schema format.
+  // Reflects the Open API 3.03 Response Object. The Schema defines the type
+  // used for the response value of the function.
+  optional Schema response = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // A predicted `FunctionCall` returned from the model that contains
 // a string representing the `FunctionDeclaration.name` with the
 // arguments and their values.
 message FunctionCall {
+  // Optional. The unique id of the function call. If populated, the client to
+  // execute the `function_call` and return the response with the matching `id`.
+  string id = 3 [(google.api.field_behavior) = OPTIONAL];
+
   // Required. The name of the function to call.
   // Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
   // length of 63.
@@ -322,6 +373,10 @@ message FunctionCall {
 // the model. This should contain the result of a`FunctionCall` made
 // based on model prediction.
 message FunctionResponse {
+  // Optional. The id of the function call this response is for. Populated by
+  // the client to match the corresponding function call `id`.
+  string id = 3 [(google.api.field_behavior) = OPTIONAL];
+
   // Required. The name of the function to call.
   // Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
   // length of 63.
@@ -343,8 +398,11 @@ message Schema {
   // datatypes. Supported formats:
   //  for NUMBER type: float, double
   //  for INTEGER type: int32, int64
-  //  for STRING type: enum
+  //  for STRING type: enum, date-time
   string format = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. The title of the schema.
+  string title = 24 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. A brief description of the parameter. This could contain examples
   // of use. Parameter description may be formatted as Markdown.
@@ -372,6 +430,28 @@ message Schema {
 
   // Optional. Required properties of Type.OBJECT.
   repeated string required = 8 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. SCHEMA FIELDS FOR TYPE INTEGER and NUMBER
+  // Minimum value of the Type.INTEGER and Type.NUMBER
+  optional double minimum = 11 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Maximum value of the Type.INTEGER and Type.NUMBER
+  optional double maximum = 12 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. The value should be validated against any (one or more) of the
+  // subschemas in the list.
+  repeated Schema any_of = 18 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. The order of the properties.
+  // Not a standard field in open api spec. Used to determine the order of the
+  // properties in the response.
+  repeated string property_ordering = 23 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. Default value of the field. Per JSON Schema, this field is
+  // intended for documentation generators and doesn't affect validation. Thus
+  // it's included here and ignored so that developers who send schemas with a
+  // `default` field don't get unknown-field errors.
+  google.protobuf.Value default = 25 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Passage included inline with a grounding configuration.
@@ -388,4 +468,13 @@ message GroundingPassage {
 message GroundingPassages {
   // List of passages.
   repeated GroundingPassage passages = 1;
+}
+
+// Represents token counting info for a single modality.
+message ModalityTokenCount {
+  // The modality associated with this token count.
+  Modality modality = 1;
+
+  // Number of tokens.
+  int32 token_count = 2;
 }
