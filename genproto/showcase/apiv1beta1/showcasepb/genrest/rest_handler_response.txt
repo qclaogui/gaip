@@ -3,8 +3,8 @@ Generated via "google.golang.org/protobuf/compiler/protogen" via ProtoModel!
 
 Proto Files:
 qclaogui/showcase/v1beta1/blurb.proto
-qclaogui/showcase/v1beta1/echo.proto
 qclaogui/showcase/v1beta1/echo_service.proto
+qclaogui/showcase/v1beta1/echo.proto
 qclaogui/showcase/v1beta1/identity_service.proto
 qclaogui/showcase/v1beta1/messaging_service.proto
 qclaogui/showcase/v1beta1/rest_error.proto

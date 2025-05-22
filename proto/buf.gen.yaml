@@ -2,7 +2,7 @@ version: v2
 managed:
   enabled: true
 plugins:
-  - local: /Users/Shared/code/golang/bin/protoc-gen-go-v1.36.5
+  - local: /Users/Shared/code/golang/bin/protoc-gen-go-v1.36.6
     out: ../genproto
     opt: module=github.com/qclaogui/gaip/genproto
   - local: /Users/Shared/code/golang/bin/protoc-gen-go-grpc-v1.5.1
@@ -10,7 +10,7 @@ plugins:
     opt:
       - module=github.com/qclaogui/gaip/genproto
       - require_unimplemented_servers=false
-  - local: /Users/Shared/code/golang/bin/protoc-gen-go_gapic-v0.51.1
+  - local: /Users/Shared/code/golang/bin/protoc-gen-go_gapic-v0.53.0
     out: ../genproto
     opt:
       - go-gapic-package=github.com/qclaogui/gaip/genproto/library/apiv1;library
