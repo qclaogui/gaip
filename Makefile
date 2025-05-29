@@ -318,7 +318,7 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 #    go install ./internal/protoveneer/cmd/protoveneer
 #
 protoveneer-gen: $(PROTOVENEER)
-	protoveneer -license LICENSE -outdir genproto/generativelanguage/apiv1beta proto/qclaogui/generativelanguage/v1beta/protoveneer_v1beta.yaml genproto/generativelanguage/apiv1beta/generativelanguagepb
+	@$(PROTOVENEER) -license LICENSE -outdir genproto/generativelanguage/apiv1beta proto/qclaogui/generativelanguage/v1beta/protoveneer_v1beta.yaml genproto/generativelanguage/apiv1beta/generativelanguagepb
 
 ##@ Testing Lint & Fmt
 

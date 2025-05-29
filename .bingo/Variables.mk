@@ -125,6 +125,12 @@ $(PROTOC_GEN_OPENAPIV2): $(BINGO_DIR)/protoc-gen-openapiv2.mod
 	@echo "(re)installing $(GOBIN)/protoc-gen-openapiv2-v2.26.3"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-openapiv2.mod -o=$(GOBIN)/protoc-gen-openapiv2-v2.26.3 "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2"
 
+PROTOVENEER := $(GOBIN)/protoveneer-v0.0.0-20250529072452-215f1d052cf0
+$(PROTOVENEER): $(BINGO_DIR)/protoveneer.mod
+	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
+	@echo "(re)installing $(GOBIN)/protoveneer-v0.0.0-20250529072452-215f1d052cf0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoveneer.mod -o=$(GOBIN)/protoveneer-v0.0.0-20250529072452-215f1d052cf0 "github.com/qclaogui/gaip/cmd/protoveneer"
+
 SKAFFOLD := $(GOBIN)/skaffold-v2.16.0
 $(SKAFFOLD): $(BINGO_DIR)/skaffold.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
