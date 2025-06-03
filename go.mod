@@ -5,6 +5,7 @@ go 1.24
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250425153114-8976f5be98c1.1
 	cloud.google.com/go v0.121.2
+	cloud.google.com/go/iam v1.5.2
 	cloud.google.com/go/longrunning v0.6.7
 	entgo.io/ent v0.14.4
 	github.com/blang/semver v3.5.1+incompatible

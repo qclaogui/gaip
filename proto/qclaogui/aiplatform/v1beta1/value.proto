@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package qclaogui.aiplatform.v1beta1;
+
+option go_package = "github.com/qclaogui/gaip/genproto/aiplatform/apiv1beta1/aiplatformpb";
+
+// Value is the value of the field.
+message Value {
+  oneof value {
+    // An integer value.
+    int64 int_value = 1;
+
+    // A double value.
+    double double_value = 2;
+
+    // A string value.
+    string string_value = 3;
+  }
+}
