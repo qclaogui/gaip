@@ -40,6 +40,8 @@ linters:
       - third_party$
       - builtin$
       - examples$
+      - "vertexai"
+      - "cmd/protoveneer"
 formatters:
   enable:
     - gofmt
@@ -51,3 +53,5 @@ formatters:
       - third_party$
       - builtin$
       - examples$
+      - "vertexai"
+      - "cmd/protoveneer"

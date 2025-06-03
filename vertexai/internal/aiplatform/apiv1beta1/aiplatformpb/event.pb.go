@@ -259,14 +259,17 @@ func file_google_cloud_aiplatform_v1beta1_event_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_event_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_event_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_google_cloud_aiplatform_v1beta1_event_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_google_cloud_aiplatform_v1beta1_event_proto_goTypes = []interface{}{
-	(Event_Type)(0),               // 0: google.cloud.aiplatform.v1beta1.Event.Type
-	(*Event)(nil),                 // 1: google.cloud.aiplatform.v1beta1.Event
-	nil,                           // 2: google.cloud.aiplatform.v1beta1.Event.LabelsEntry
-	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_event_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_google_cloud_aiplatform_v1beta1_event_proto_msgTypes  = make([]protoimpl.MessageInfo, 2)
+	file_google_cloud_aiplatform_v1beta1_event_proto_goTypes   = []interface{}{
+		(Event_Type)(0),               // 0: google.cloud.aiplatform.v1beta1.Event.Type
+		(*Event)(nil),                 // 1: google.cloud.aiplatform.v1beta1.Event
+		nil,                           // 2: google.cloud.aiplatform.v1beta1.Event.LabelsEntry
+		(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_event_proto_depIdxs = []int32{
 	3, // 0: google.cloud.aiplatform.v1beta1.Event.event_time:type_name -> google.protobuf.Timestamp
 	0, // 1: google.cloud.aiplatform.v1beta1.Event.type:type_name -> google.cloud.aiplatform.v1beta1.Event.Type

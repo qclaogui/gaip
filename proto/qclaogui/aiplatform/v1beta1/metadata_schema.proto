@@ -52,8 +52,7 @@ message MetadataSchema {
   MetadataSchemaType schema_type = 4;
 
   // Output only. Timestamp when this MetadataSchema was created.
-  google.protobuf.Timestamp create_time = 5
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp create_time = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Description of the Metadata Schema
   string description = 6;

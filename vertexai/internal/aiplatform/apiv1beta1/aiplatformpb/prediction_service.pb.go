@@ -2116,44 +2116,47 @@ func file_google_cloud_aiplatform_v1beta1_prediction_service_proto_rawDescGZIP()
 	return file_google_cloud_aiplatform_v1beta1_prediction_service_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_prediction_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_google_cloud_aiplatform_v1beta1_prediction_service_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
-var file_google_cloud_aiplatform_v1beta1_prediction_service_proto_goTypes = []interface{}{
-	(GenerateContentResponse_PromptFeedback_BlockedReason)(0), // 0: google.cloud.aiplatform.v1beta1.GenerateContentResponse.PromptFeedback.BlockedReason
-	(*PredictRequest)(nil),                        // 1: google.cloud.aiplatform.v1beta1.PredictRequest
-	(*PredictResponse)(nil),                       // 2: google.cloud.aiplatform.v1beta1.PredictResponse
-	(*RawPredictRequest)(nil),                     // 3: google.cloud.aiplatform.v1beta1.RawPredictRequest
-	(*DirectPredictRequest)(nil),                  // 4: google.cloud.aiplatform.v1beta1.DirectPredictRequest
-	(*DirectPredictResponse)(nil),                 // 5: google.cloud.aiplatform.v1beta1.DirectPredictResponse
-	(*DirectRawPredictRequest)(nil),               // 6: google.cloud.aiplatform.v1beta1.DirectRawPredictRequest
-	(*DirectRawPredictResponse)(nil),              // 7: google.cloud.aiplatform.v1beta1.DirectRawPredictResponse
-	(*StreamingPredictRequest)(nil),               // 8: google.cloud.aiplatform.v1beta1.StreamingPredictRequest
-	(*StreamingPredictResponse)(nil),              // 9: google.cloud.aiplatform.v1beta1.StreamingPredictResponse
-	(*StreamingRawPredictRequest)(nil),            // 10: google.cloud.aiplatform.v1beta1.StreamingRawPredictRequest
-	(*StreamingRawPredictResponse)(nil),           // 11: google.cloud.aiplatform.v1beta1.StreamingRawPredictResponse
-	(*ExplainRequest)(nil),                        // 12: google.cloud.aiplatform.v1beta1.ExplainRequest
-	(*ExplainResponse)(nil),                       // 13: google.cloud.aiplatform.v1beta1.ExplainResponse
-	(*CountTokensRequest)(nil),                    // 14: google.cloud.aiplatform.v1beta1.CountTokensRequest
-	(*CountTokensResponse)(nil),                   // 15: google.cloud.aiplatform.v1beta1.CountTokensResponse
-	(*GenerateContentRequest)(nil),                // 16: google.cloud.aiplatform.v1beta1.GenerateContentRequest
-	(*GenerateContentResponse)(nil),               // 17: google.cloud.aiplatform.v1beta1.GenerateContentResponse
-	nil,                                           // 18: google.cloud.aiplatform.v1beta1.ExplainRequest.ConcurrentExplanationSpecOverrideEntry
-	(*ExplainResponse_ConcurrentExplanation)(nil), // 19: google.cloud.aiplatform.v1beta1.ExplainResponse.ConcurrentExplanation
-	nil, // 20: google.cloud.aiplatform.v1beta1.ExplainResponse.ConcurrentExplanationsEntry
-	(*GenerateContentResponse_PromptFeedback)(nil), // 21: google.cloud.aiplatform.v1beta1.GenerateContentResponse.PromptFeedback
-	(*GenerateContentResponse_UsageMetadata)(nil),  // 22: google.cloud.aiplatform.v1beta1.GenerateContentResponse.UsageMetadata
-	(*structpb.Value)(nil),                         // 23: google.protobuf.Value
-	(*httpbody.HttpBody)(nil),                      // 24: google.api.HttpBody
-	(*Tensor)(nil),                                 // 25: google.cloud.aiplatform.v1beta1.Tensor
-	(*ExplanationSpecOverride)(nil),                // 26: google.cloud.aiplatform.v1beta1.ExplanationSpecOverride
-	(*Explanation)(nil),                            // 27: google.cloud.aiplatform.v1beta1.Explanation
-	(*Content)(nil),                                // 28: google.cloud.aiplatform.v1beta1.Content
-	(*Tool)(nil),                                   // 29: google.cloud.aiplatform.v1beta1.Tool
-	(*SafetySetting)(nil),                          // 30: google.cloud.aiplatform.v1beta1.SafetySetting
-	(*GenerationConfig)(nil),                       // 31: google.cloud.aiplatform.v1beta1.GenerationConfig
-	(*Candidate)(nil),                              // 32: google.cloud.aiplatform.v1beta1.Candidate
-	(*SafetyRating)(nil),                           // 33: google.cloud.aiplatform.v1beta1.SafetyRating
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_prediction_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_google_cloud_aiplatform_v1beta1_prediction_service_proto_msgTypes  = make([]protoimpl.MessageInfo, 22)
+	file_google_cloud_aiplatform_v1beta1_prediction_service_proto_goTypes   = []interface{}{
+		(GenerateContentResponse_PromptFeedback_BlockedReason)(0), // 0: google.cloud.aiplatform.v1beta1.GenerateContentResponse.PromptFeedback.BlockedReason
+		(*PredictRequest)(nil),                        // 1: google.cloud.aiplatform.v1beta1.PredictRequest
+		(*PredictResponse)(nil),                       // 2: google.cloud.aiplatform.v1beta1.PredictResponse
+		(*RawPredictRequest)(nil),                     // 3: google.cloud.aiplatform.v1beta1.RawPredictRequest
+		(*DirectPredictRequest)(nil),                  // 4: google.cloud.aiplatform.v1beta1.DirectPredictRequest
+		(*DirectPredictResponse)(nil),                 // 5: google.cloud.aiplatform.v1beta1.DirectPredictResponse
+		(*DirectRawPredictRequest)(nil),               // 6: google.cloud.aiplatform.v1beta1.DirectRawPredictRequest
+		(*DirectRawPredictResponse)(nil),              // 7: google.cloud.aiplatform.v1beta1.DirectRawPredictResponse
+		(*StreamingPredictRequest)(nil),               // 8: google.cloud.aiplatform.v1beta1.StreamingPredictRequest
+		(*StreamingPredictResponse)(nil),              // 9: google.cloud.aiplatform.v1beta1.StreamingPredictResponse
+		(*StreamingRawPredictRequest)(nil),            // 10: google.cloud.aiplatform.v1beta1.StreamingRawPredictRequest
+		(*StreamingRawPredictResponse)(nil),           // 11: google.cloud.aiplatform.v1beta1.StreamingRawPredictResponse
+		(*ExplainRequest)(nil),                        // 12: google.cloud.aiplatform.v1beta1.ExplainRequest
+		(*ExplainResponse)(nil),                       // 13: google.cloud.aiplatform.v1beta1.ExplainResponse
+		(*CountTokensRequest)(nil),                    // 14: google.cloud.aiplatform.v1beta1.CountTokensRequest
+		(*CountTokensResponse)(nil),                   // 15: google.cloud.aiplatform.v1beta1.CountTokensResponse
+		(*GenerateContentRequest)(nil),                // 16: google.cloud.aiplatform.v1beta1.GenerateContentRequest
+		(*GenerateContentResponse)(nil),               // 17: google.cloud.aiplatform.v1beta1.GenerateContentResponse
+		nil,                                           // 18: google.cloud.aiplatform.v1beta1.ExplainRequest.ConcurrentExplanationSpecOverrideEntry
+		(*ExplainResponse_ConcurrentExplanation)(nil), // 19: google.cloud.aiplatform.v1beta1.ExplainResponse.ConcurrentExplanation
+		nil, // 20: google.cloud.aiplatform.v1beta1.ExplainResponse.ConcurrentExplanationsEntry
+		(*GenerateContentResponse_PromptFeedback)(nil), // 21: google.cloud.aiplatform.v1beta1.GenerateContentResponse.PromptFeedback
+		(*GenerateContentResponse_UsageMetadata)(nil),  // 22: google.cloud.aiplatform.v1beta1.GenerateContentResponse.UsageMetadata
+		(*structpb.Value)(nil),                         // 23: google.protobuf.Value
+		(*httpbody.HttpBody)(nil),                      // 24: google.api.HttpBody
+		(*Tensor)(nil),                                 // 25: google.cloud.aiplatform.v1beta1.Tensor
+		(*ExplanationSpecOverride)(nil),                // 26: google.cloud.aiplatform.v1beta1.ExplanationSpecOverride
+		(*Explanation)(nil),                            // 27: google.cloud.aiplatform.v1beta1.Explanation
+		(*Content)(nil),                                // 28: google.cloud.aiplatform.v1beta1.Content
+		(*Tool)(nil),                                   // 29: google.cloud.aiplatform.v1beta1.Tool
+		(*SafetySetting)(nil),                          // 30: google.cloud.aiplatform.v1beta1.SafetySetting
+		(*GenerationConfig)(nil),                       // 31: google.cloud.aiplatform.v1beta1.GenerationConfig
+		(*Candidate)(nil),                              // 32: google.cloud.aiplatform.v1beta1.Candidate
+		(*SafetyRating)(nil),                           // 33: google.cloud.aiplatform.v1beta1.SafetyRating
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_prediction_service_proto_depIdxs = []int32{
 	23, // 0: google.cloud.aiplatform.v1beta1.PredictRequest.instances:type_name -> google.protobuf.Value
 	23, // 1: google.cloud.aiplatform.v1beta1.PredictRequest.parameters:type_name -> google.protobuf.Value
@@ -2489,8 +2492,10 @@ func file_google_cloud_aiplatform_v1beta1_prediction_service_proto_init() {
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
+var (
+	_ context.Context
+	_ grpc.ClientConnInterface
+)
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
@@ -2781,36 +2786,44 @@ type PredictionServiceServer interface {
 }
 
 // UnimplementedPredictionServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedPredictionServiceServer struct {
-}
+type UnimplementedPredictionServiceServer struct{}
 
 func (*UnimplementedPredictionServiceServer) Predict(context.Context, *PredictRequest) (*PredictResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Predict not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) RawPredict(context.Context, *RawPredictRequest) (*httpbody.HttpBody, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RawPredict not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) DirectPredict(context.Context, *DirectPredictRequest) (*DirectPredictResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DirectPredict not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) DirectRawPredict(context.Context, *DirectRawPredictRequest) (*DirectRawPredictResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DirectRawPredict not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) StreamingPredict(PredictionService_StreamingPredictServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamingPredict not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) ServerStreamingPredict(*StreamingPredictRequest, PredictionService_ServerStreamingPredictServer) error {
 	return status.Errorf(codes.Unimplemented, "method ServerStreamingPredict not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) StreamingRawPredict(PredictionService_StreamingRawPredictServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamingRawPredict not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) Explain(context.Context, *ExplainRequest) (*ExplainResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Explain not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) CountTokens(context.Context, *CountTokensRequest) (*CountTokensResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CountTokens not implemented")
 }
+
 func (*UnimplementedPredictionServiceServer) StreamGenerateContent(*GenerateContentRequest, PredictionService_StreamGenerateContentServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamGenerateContent not implemented")
 }

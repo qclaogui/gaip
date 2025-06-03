@@ -3,9 +3,9 @@ syntax = "proto3";
 package qclaogui.aiplatform.v1beta1;
 
 import "google/api/field_behavior.proto";
-import "qclaogui/aiplatform/v1beta1/tool.proto";
 import "google/protobuf/duration.proto";
 import "google/type/date.proto";
+import "qclaogui/aiplatform/v1beta1/tool.proto";
 
 option go_package = "github.com/qclaogui/gaip/genproto/aiplatform/apiv1beta1/aiplatformpb";
 
@@ -71,8 +71,7 @@ message Part {
     // representing the [FunctionDeclaration.name] and a structured JSON object
     // containing any output from the function call. It is used as context to
     // the model.
-    FunctionResponse function_response = 6
-        [(google.api.field_behavior) = OPTIONAL];
+    FunctionResponse function_response = 6 [(google.api.field_behavior) = OPTIONAL];
   }
 
   oneof metadata {
@@ -105,12 +104,10 @@ message FileData {
 // Metadata describes the input video content.
 message VideoMetadata {
   // Optional. The start offset of the video.
-  google.protobuf.Duration start_offset = 1
-      [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Duration start_offset = 1 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. The end offset of the video.
-  google.protobuf.Duration end_offset = 2
-      [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Duration end_offset = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Generation config.
@@ -216,8 +213,7 @@ message Citation {
   string license = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Publication date of the attribution.
-  google.type.Date publication_date = 6
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.type.Date publication_date = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // A response candidate generated from the model.
@@ -260,15 +256,12 @@ message Candidate {
   // Output only. List of ratings for the safety of a response candidate.
   //
   // There is at most one rating per category.
-  repeated SafetyRating safety_ratings = 4
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  repeated SafetyRating safety_ratings = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Describes the reason the mode stopped generating tokens in
   // more detail. This is only filled when `finish_reason` is set.
-  optional string finish_message = 5
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string finish_message = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Source attribution of the generated content.
-  CitationMetadata citation_metadata = 6
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  CitationMetadata citation_metadata = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

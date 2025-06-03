@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2023 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +21,7 @@ package genai
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -116,7 +121,7 @@ func (m *GenerativeModel) generateContent(ctx context.Context, req *pb.GenerateC
 	}
 	for {
 		_, err := iter.Next()
-		if err == iterator.Done {
+		if errors.Is(err, iterator.Done) {
 			return iter.merged, nil
 		}
 		if err != nil {
@@ -127,11 +132,11 @@ func (m *GenerativeModel) generateContent(ctx context.Context, req *pb.GenerateC
 
 func (m *GenerativeModel) newRequest(contents ...*Content) *pb.GenerateContentRequest {
 	return &pb.GenerateContentRequest{
-		//Endpoint: m.fullName,
+		// Endpoint: m.fullName,
 		Model:            m.fullName,
 		Contents:         mapSlice(contents, (*Content).proto),
 		SafetySettings:   mapSlice(m.SafetySettings, (*SafetySetting).proto),
-		GenerationConfig: m.GenerationConfig.proto(),
+		GenerationConfig: m.proto(),
 	}
 }
 
@@ -154,7 +159,7 @@ func (iter *GenerateContentResponseIterator) Next() (*GenerateContentResponse, e
 	}
 	resp, err := iter.sc.Recv()
 	iter.err = err
-	if err == io.EOF {
+	if errors.Is(err, io.EOF) {
 		if iter.cs != nil && iter.merged != nil {
 			iter.cs.addToHistory(iter.merged.Candidates)
 		}

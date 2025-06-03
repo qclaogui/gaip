@@ -588,17 +588,20 @@ func file_google_cloud_aiplatform_v1beta1_types_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_types_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_types_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_google_cloud_aiplatform_v1beta1_types_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_google_cloud_aiplatform_v1beta1_types_proto_goTypes = []interface{}{
-	(Tensor_DataType)(0), // 0: google.cloud.aiplatform.v1beta1.Tensor.DataType
-	(*BoolArray)(nil),    // 1: google.cloud.aiplatform.v1beta1.BoolArray
-	(*DoubleArray)(nil),  // 2: google.cloud.aiplatform.v1beta1.DoubleArray
-	(*Int64Array)(nil),   // 3: google.cloud.aiplatform.v1beta1.Int64Array
-	(*StringArray)(nil),  // 4: google.cloud.aiplatform.v1beta1.StringArray
-	(*Tensor)(nil),       // 5: google.cloud.aiplatform.v1beta1.Tensor
-	nil,                  // 6: google.cloud.aiplatform.v1beta1.Tensor.StructValEntry
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_types_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_google_cloud_aiplatform_v1beta1_types_proto_msgTypes  = make([]protoimpl.MessageInfo, 6)
+	file_google_cloud_aiplatform_v1beta1_types_proto_goTypes   = []interface{}{
+		(Tensor_DataType)(0), // 0: google.cloud.aiplatform.v1beta1.Tensor.DataType
+		(*BoolArray)(nil),    // 1: google.cloud.aiplatform.v1beta1.BoolArray
+		(*DoubleArray)(nil),  // 2: google.cloud.aiplatform.v1beta1.DoubleArray
+		(*Int64Array)(nil),   // 3: google.cloud.aiplatform.v1beta1.Int64Array
+		(*StringArray)(nil),  // 4: google.cloud.aiplatform.v1beta1.StringArray
+		(*Tensor)(nil),       // 5: google.cloud.aiplatform.v1beta1.Tensor
+		nil,                  // 6: google.cloud.aiplatform.v1beta1.Tensor.StructValEntry
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_types_proto_depIdxs = []int32{
 	0, // 0: google.cloud.aiplatform.v1beta1.Tensor.dtype:type_name -> google.cloud.aiplatform.v1beta1.Tensor.DataType
 	5, // 1: google.cloud.aiplatform.v1beta1.Tensor.list_val:type_name -> google.cloud.aiplatform.v1beta1.Tensor

@@ -373,8 +373,7 @@ message ExplanationMetadata {
   //
   // For custom images, the key must match with the key in
   // [instance][google.cloud.aiplatform.v1beta1.ExplainRequest.instances].
-  map<string, InputMetadata> inputs = 1
-      [(google.api.field_behavior) = REQUIRED];
+  map<string, InputMetadata> inputs = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Required. Map from output names to output metadata.
   //
@@ -385,8 +384,7 @@ message ExplanationMetadata {
   // to be explained.
   //
   // Currently only one key is allowed.
-  map<string, OutputMetadata> outputs = 2
-      [(google.api.field_behavior) = REQUIRED];
+  map<string, OutputMetadata> outputs = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Points to a YAML file stored on Google Cloud Storage describing the format
   // of the [feature

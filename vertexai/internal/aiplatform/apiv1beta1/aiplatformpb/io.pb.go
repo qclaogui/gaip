@@ -588,18 +588,21 @@ func file_google_cloud_aiplatform_v1beta1_io_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_io_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_io_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_google_cloud_aiplatform_v1beta1_io_proto_goTypes = []interface{}{
-	(*AvroSource)(nil),                   // 0: google.cloud.aiplatform.v1beta1.AvroSource
-	(*CsvSource)(nil),                    // 1: google.cloud.aiplatform.v1beta1.CsvSource
-	(*GcsSource)(nil),                    // 2: google.cloud.aiplatform.v1beta1.GcsSource
-	(*GcsDestination)(nil),               // 3: google.cloud.aiplatform.v1beta1.GcsDestination
-	(*BigQuerySource)(nil),               // 4: google.cloud.aiplatform.v1beta1.BigQuerySource
-	(*BigQueryDestination)(nil),          // 5: google.cloud.aiplatform.v1beta1.BigQueryDestination
-	(*CsvDestination)(nil),               // 6: google.cloud.aiplatform.v1beta1.CsvDestination
-	(*TFRecordDestination)(nil),          // 7: google.cloud.aiplatform.v1beta1.TFRecordDestination
-	(*ContainerRegistryDestination)(nil), // 8: google.cloud.aiplatform.v1beta1.ContainerRegistryDestination
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_io_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+	file_google_cloud_aiplatform_v1beta1_io_proto_goTypes  = []interface{}{
+		(*AvroSource)(nil),                   // 0: google.cloud.aiplatform.v1beta1.AvroSource
+		(*CsvSource)(nil),                    // 1: google.cloud.aiplatform.v1beta1.CsvSource
+		(*GcsSource)(nil),                    // 2: google.cloud.aiplatform.v1beta1.GcsSource
+		(*GcsDestination)(nil),               // 3: google.cloud.aiplatform.v1beta1.GcsDestination
+		(*BigQuerySource)(nil),               // 4: google.cloud.aiplatform.v1beta1.BigQuerySource
+		(*BigQueryDestination)(nil),          // 5: google.cloud.aiplatform.v1beta1.BigQueryDestination
+		(*CsvDestination)(nil),               // 6: google.cloud.aiplatform.v1beta1.CsvDestination
+		(*TFRecordDestination)(nil),          // 7: google.cloud.aiplatform.v1beta1.TFRecordDestination
+		(*ContainerRegistryDestination)(nil), // 8: google.cloud.aiplatform.v1beta1.ContainerRegistryDestination
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_io_proto_depIdxs = []int32{
 	2, // 0: google.cloud.aiplatform.v1beta1.AvroSource.gcs_source:type_name -> google.cloud.aiplatform.v1beta1.GcsSource
 	2, // 1: google.cloud.aiplatform.v1beta1.CsvSource.gcs_source:type_name -> google.cloud.aiplatform.v1beta1.GcsSource

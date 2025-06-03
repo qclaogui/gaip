@@ -319,14 +319,17 @@ func file_google_cloud_aiplatform_v1beta1_openapi_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_openapi_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_openapi_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_google_cloud_aiplatform_v1beta1_openapi_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_google_cloud_aiplatform_v1beta1_openapi_proto_goTypes = []interface{}{
-	(Type)(0),              // 0: google.cloud.aiplatform.v1beta1.Type
-	(*Schema)(nil),         // 1: google.cloud.aiplatform.v1beta1.Schema
-	nil,                    // 2: google.cloud.aiplatform.v1beta1.Schema.PropertiesEntry
-	(*structpb.Value)(nil), // 3: google.protobuf.Value
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_openapi_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_google_cloud_aiplatform_v1beta1_openapi_proto_msgTypes  = make([]protoimpl.MessageInfo, 2)
+	file_google_cloud_aiplatform_v1beta1_openapi_proto_goTypes   = []interface{}{
+		(Type)(0),              // 0: google.cloud.aiplatform.v1beta1.Type
+		(*Schema)(nil),         // 1: google.cloud.aiplatform.v1beta1.Schema
+		nil,                    // 2: google.cloud.aiplatform.v1beta1.Schema.PropertiesEntry
+		(*structpb.Value)(nil), // 3: google.protobuf.Value
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_openapi_proto_depIdxs = []int32{
 	0, // 0: google.cloud.aiplatform.v1beta1.Schema.type:type_name -> google.cloud.aiplatform.v1beta1.Type
 	1, // 1: google.cloud.aiplatform.v1beta1.Schema.items:type_name -> google.cloud.aiplatform.v1beta1.Schema

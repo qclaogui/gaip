@@ -1258,23 +1258,26 @@ func file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_rawDescGZIP
 	return file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_goTypes = []interface{}{
-	(ExplanationMetadata_InputMetadata_Encoding)(0),                  // 0: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Encoding
-	(ExplanationMetadata_InputMetadata_Visualization_Type)(0),        // 1: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization.Type
-	(ExplanationMetadata_InputMetadata_Visualization_Polarity)(0),    // 2: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization.Polarity
-	(ExplanationMetadata_InputMetadata_Visualization_ColorMap)(0),    // 3: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization.ColorMap
-	(ExplanationMetadata_InputMetadata_Visualization_OverlayType)(0), // 4: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization.OverlayType
-	(*ExplanationMetadata)(nil),                                      // 5: google.cloud.aiplatform.v1beta1.ExplanationMetadata
-	(*ExplanationMetadata_InputMetadata)(nil),                        // 6: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata
-	(*ExplanationMetadata_OutputMetadata)(nil),                       // 7: google.cloud.aiplatform.v1beta1.ExplanationMetadata.OutputMetadata
-	nil, // 8: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputsEntry
-	nil, // 9: google.cloud.aiplatform.v1beta1.ExplanationMetadata.OutputsEntry
-	(*ExplanationMetadata_InputMetadata_FeatureValueDomain)(nil), // 10: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.FeatureValueDomain
-	(*ExplanationMetadata_InputMetadata_Visualization)(nil),      // 11: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization
-	(*structpb.Value)(nil), // 12: google.protobuf.Value
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
+	file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_msgTypes  = make([]protoimpl.MessageInfo, 7)
+	file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_goTypes   = []interface{}{
+		(ExplanationMetadata_InputMetadata_Encoding)(0),                  // 0: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Encoding
+		(ExplanationMetadata_InputMetadata_Visualization_Type)(0),        // 1: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization.Type
+		(ExplanationMetadata_InputMetadata_Visualization_Polarity)(0),    // 2: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization.Polarity
+		(ExplanationMetadata_InputMetadata_Visualization_ColorMap)(0),    // 3: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization.ColorMap
+		(ExplanationMetadata_InputMetadata_Visualization_OverlayType)(0), // 4: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization.OverlayType
+		(*ExplanationMetadata)(nil),                                      // 5: google.cloud.aiplatform.v1beta1.ExplanationMetadata
+		(*ExplanationMetadata_InputMetadata)(nil),                        // 6: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata
+		(*ExplanationMetadata_OutputMetadata)(nil),                       // 7: google.cloud.aiplatform.v1beta1.ExplanationMetadata.OutputMetadata
+		nil, // 8: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputsEntry
+		nil, // 9: google.cloud.aiplatform.v1beta1.ExplanationMetadata.OutputsEntry
+		(*ExplanationMetadata_InputMetadata_FeatureValueDomain)(nil), // 10: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.FeatureValueDomain
+		(*ExplanationMetadata_InputMetadata_Visualization)(nil),      // 11: google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization
+		(*structpb.Value)(nil), // 12: google.protobuf.Value
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_explanation_metadata_proto_depIdxs = []int32{
 	8,  // 0: google.cloud.aiplatform.v1beta1.ExplanationMetadata.inputs:type_name -> google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputsEntry
 	9,  // 1: google.cloud.aiplatform.v1beta1.ExplanationMetadata.outputs:type_name -> google.cloud.aiplatform.v1beta1.ExplanationMetadata.OutputsEntry

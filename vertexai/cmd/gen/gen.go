@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2023 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,7 +72,7 @@ func main() {
 		iter := model.GenerateContentStream(ctx, genai.Text(text))
 		for {
 			res, err := iter.Next()
-			if err == iterator.Done {
+			if errors.Is(err, iterator.Done) {
 				break
 			}
 			if err != nil {

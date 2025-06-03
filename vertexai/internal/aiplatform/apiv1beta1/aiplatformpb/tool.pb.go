@@ -381,15 +381,18 @@ func file_google_cloud_aiplatform_v1beta1_tool_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_tool_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_tool_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_google_cloud_aiplatform_v1beta1_tool_proto_goTypes = []interface{}{
-	(*Tool)(nil),                // 0: google.cloud.aiplatform.v1beta1.Tool
-	(*FunctionDeclaration)(nil), // 1: google.cloud.aiplatform.v1beta1.FunctionDeclaration
-	(*FunctionCall)(nil),        // 2: google.cloud.aiplatform.v1beta1.FunctionCall
-	(*FunctionResponse)(nil),    // 3: google.cloud.aiplatform.v1beta1.FunctionResponse
-	(*Schema)(nil),              // 4: google.cloud.aiplatform.v1beta1.Schema
-	(*structpb.Struct)(nil),     // 5: google.protobuf.Struct
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_tool_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+	file_google_cloud_aiplatform_v1beta1_tool_proto_goTypes  = []interface{}{
+		(*Tool)(nil),                // 0: google.cloud.aiplatform.v1beta1.Tool
+		(*FunctionDeclaration)(nil), // 1: google.cloud.aiplatform.v1beta1.FunctionDeclaration
+		(*FunctionCall)(nil),        // 2: google.cloud.aiplatform.v1beta1.FunctionCall
+		(*FunctionResponse)(nil),    // 3: google.cloud.aiplatform.v1beta1.FunctionResponse
+		(*Schema)(nil),              // 4: google.cloud.aiplatform.v1beta1.Schema
+		(*structpb.Struct)(nil),     // 5: google.protobuf.Struct
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_tool_proto_depIdxs = []int32{
 	1, // 0: google.cloud.aiplatform.v1beta1.Tool.function_declarations:type_name -> google.cloud.aiplatform.v1beta1.FunctionDeclaration
 	4, // 1: google.cloud.aiplatform.v1beta1.FunctionDeclaration.parameters:type_name -> google.cloud.aiplatform.v1beta1.Schema

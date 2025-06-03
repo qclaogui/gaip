@@ -643,18 +643,21 @@ func file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_rawDescGZIP
 	return file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_goTypes = []interface{}{
-	(EvaluatedAnnotation_EvaluatedAnnotationType)(0), // 0: google.cloud.aiplatform.v1beta1.EvaluatedAnnotation.EvaluatedAnnotationType
-	(ErrorAnalysisAnnotation_QueryType)(0),           // 1: google.cloud.aiplatform.v1beta1.ErrorAnalysisAnnotation.QueryType
-	(*EvaluatedAnnotation)(nil),                      // 2: google.cloud.aiplatform.v1beta1.EvaluatedAnnotation
-	(*EvaluatedAnnotationExplanation)(nil),           // 3: google.cloud.aiplatform.v1beta1.EvaluatedAnnotationExplanation
-	(*ErrorAnalysisAnnotation)(nil),                  // 4: google.cloud.aiplatform.v1beta1.ErrorAnalysisAnnotation
-	(*ErrorAnalysisAnnotation_AttributedItem)(nil),   // 5: google.cloud.aiplatform.v1beta1.ErrorAnalysisAnnotation.AttributedItem
-	(*structpb.Value)(nil),                           // 6: google.protobuf.Value
-	(*Explanation)(nil),                              // 7: google.cloud.aiplatform.v1beta1.Explanation
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+	file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_msgTypes  = make([]protoimpl.MessageInfo, 4)
+	file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_goTypes   = []interface{}{
+		(EvaluatedAnnotation_EvaluatedAnnotationType)(0), // 0: google.cloud.aiplatform.v1beta1.EvaluatedAnnotation.EvaluatedAnnotationType
+		(ErrorAnalysisAnnotation_QueryType)(0),           // 1: google.cloud.aiplatform.v1beta1.ErrorAnalysisAnnotation.QueryType
+		(*EvaluatedAnnotation)(nil),                      // 2: google.cloud.aiplatform.v1beta1.EvaluatedAnnotation
+		(*EvaluatedAnnotationExplanation)(nil),           // 3: google.cloud.aiplatform.v1beta1.EvaluatedAnnotationExplanation
+		(*ErrorAnalysisAnnotation)(nil),                  // 4: google.cloud.aiplatform.v1beta1.ErrorAnalysisAnnotation
+		(*ErrorAnalysisAnnotation_AttributedItem)(nil),   // 5: google.cloud.aiplatform.v1beta1.ErrorAnalysisAnnotation.AttributedItem
+		(*structpb.Value)(nil),                           // 6: google.protobuf.Value
+		(*Explanation)(nil),                              // 7: google.cloud.aiplatform.v1beta1.Explanation
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_evaluated_annotation_proto_depIdxs = []int32{
 	0, // 0: google.cloud.aiplatform.v1beta1.EvaluatedAnnotation.type:type_name -> google.cloud.aiplatform.v1beta1.EvaluatedAnnotation.EvaluatedAnnotationType
 	6, // 1: google.cloud.aiplatform.v1beta1.EvaluatedAnnotation.predictions:type_name -> google.protobuf.Value

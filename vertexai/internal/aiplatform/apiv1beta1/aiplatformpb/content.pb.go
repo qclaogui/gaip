@@ -1396,29 +1396,32 @@ func file_google_cloud_aiplatform_v1beta1_content_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_content_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_content_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_google_cloud_aiplatform_v1beta1_content_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_google_cloud_aiplatform_v1beta1_content_proto_goTypes = []interface{}{
-	(HarmCategory)(0),                     // 0: google.cloud.aiplatform.v1beta1.HarmCategory
-	(SafetySetting_HarmBlockThreshold)(0), // 1: google.cloud.aiplatform.v1beta1.SafetySetting.HarmBlockThreshold
-	(SafetyRating_HarmProbability)(0),     // 2: google.cloud.aiplatform.v1beta1.SafetyRating.HarmProbability
-	(Candidate_FinishReason)(0),           // 3: google.cloud.aiplatform.v1beta1.Candidate.FinishReason
-	(*Content)(nil),                       // 4: google.cloud.aiplatform.v1beta1.Content
-	(*Part)(nil),                          // 5: google.cloud.aiplatform.v1beta1.Part
-	(*Blob)(nil),                          // 6: google.cloud.aiplatform.v1beta1.Blob
-	(*FileData)(nil),                      // 7: google.cloud.aiplatform.v1beta1.FileData
-	(*VideoMetadata)(nil),                 // 8: google.cloud.aiplatform.v1beta1.VideoMetadata
-	(*GenerationConfig)(nil),              // 9: google.cloud.aiplatform.v1beta1.GenerationConfig
-	(*SafetySetting)(nil),                 // 10: google.cloud.aiplatform.v1beta1.SafetySetting
-	(*SafetyRating)(nil),                  // 11: google.cloud.aiplatform.v1beta1.SafetyRating
-	(*CitationMetadata)(nil),              // 12: google.cloud.aiplatform.v1beta1.CitationMetadata
-	(*Citation)(nil),                      // 13: google.cloud.aiplatform.v1beta1.Citation
-	(*Candidate)(nil),                     // 14: google.cloud.aiplatform.v1beta1.Candidate
-	(*FunctionCall)(nil),                  // 15: google.cloud.aiplatform.v1beta1.FunctionCall
-	(*FunctionResponse)(nil),              // 16: google.cloud.aiplatform.v1beta1.FunctionResponse
-	(*durationpb.Duration)(nil),           // 17: google.protobuf.Duration
-	(*date.Date)(nil),                     // 18: google.type.Date
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_content_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+	file_google_cloud_aiplatform_v1beta1_content_proto_msgTypes  = make([]protoimpl.MessageInfo, 11)
+	file_google_cloud_aiplatform_v1beta1_content_proto_goTypes   = []interface{}{
+		(HarmCategory)(0),                     // 0: google.cloud.aiplatform.v1beta1.HarmCategory
+		(SafetySetting_HarmBlockThreshold)(0), // 1: google.cloud.aiplatform.v1beta1.SafetySetting.HarmBlockThreshold
+		(SafetyRating_HarmProbability)(0),     // 2: google.cloud.aiplatform.v1beta1.SafetyRating.HarmProbability
+		(Candidate_FinishReason)(0),           // 3: google.cloud.aiplatform.v1beta1.Candidate.FinishReason
+		(*Content)(nil),                       // 4: google.cloud.aiplatform.v1beta1.Content
+		(*Part)(nil),                          // 5: google.cloud.aiplatform.v1beta1.Part
+		(*Blob)(nil),                          // 6: google.cloud.aiplatform.v1beta1.Blob
+		(*FileData)(nil),                      // 7: google.cloud.aiplatform.v1beta1.FileData
+		(*VideoMetadata)(nil),                 // 8: google.cloud.aiplatform.v1beta1.VideoMetadata
+		(*GenerationConfig)(nil),              // 9: google.cloud.aiplatform.v1beta1.GenerationConfig
+		(*SafetySetting)(nil),                 // 10: google.cloud.aiplatform.v1beta1.SafetySetting
+		(*SafetyRating)(nil),                  // 11: google.cloud.aiplatform.v1beta1.SafetyRating
+		(*CitationMetadata)(nil),              // 12: google.cloud.aiplatform.v1beta1.CitationMetadata
+		(*Citation)(nil),                      // 13: google.cloud.aiplatform.v1beta1.Citation
+		(*Candidate)(nil),                     // 14: google.cloud.aiplatform.v1beta1.Candidate
+		(*FunctionCall)(nil),                  // 15: google.cloud.aiplatform.v1beta1.FunctionCall
+		(*FunctionResponse)(nil),              // 16: google.cloud.aiplatform.v1beta1.FunctionResponse
+		(*durationpb.Duration)(nil),           // 17: google.protobuf.Duration
+		(*date.Date)(nil),                     // 18: google.type.Date
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_content_proto_depIdxs = []int32{
 	5,  // 0: google.cloud.aiplatform.v1beta1.Content.parts:type_name -> google.cloud.aiplatform.v1beta1.Part
 	6,  // 1: google.cloud.aiplatform.v1beta1.Part.inline_data:type_name -> google.cloud.aiplatform.v1beta1.Blob

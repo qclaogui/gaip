@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2023 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -293,7 +297,7 @@ type Candidate struct {
 	Index        int32
 	Content      *Content
 	FinishReason FinishReason
-	//FinishMessage    string
+	// FinishMessage    string
 	SafetyRatings    []*SafetyRating
 	CitationMetadata *CitationMetadata
 }
@@ -309,7 +313,7 @@ func protoToCandidate(c *pb.Candidate) *Candidate {
 		Content:       protoToContent(c.Content),
 		FinishReason:  FinishReason(c.FinishReason),
 		SafetyRatings: mapSlice(c.SafetyRatings, protoToSafetyRating),
-		//FinishMessage:    fm,
+		// FinishMessage:    fm,
 		CitationMetadata: protoToCitationMetadata(c.CitationMetadata),
 	}
 }

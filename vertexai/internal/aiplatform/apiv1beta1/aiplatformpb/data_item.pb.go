@@ -225,13 +225,16 @@ func file_google_cloud_aiplatform_v1beta1_data_item_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_data_item_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_data_item_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_google_cloud_aiplatform_v1beta1_data_item_proto_goTypes = []interface{}{
-	(*DataItem)(nil),              // 0: google.cloud.aiplatform.v1beta1.DataItem
-	nil,                           // 1: google.cloud.aiplatform.v1beta1.DataItem.LabelsEntry
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
-	(*structpb.Value)(nil),        // 3: google.protobuf.Value
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_data_item_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_google_cloud_aiplatform_v1beta1_data_item_proto_goTypes  = []interface{}{
+		(*DataItem)(nil),              // 0: google.cloud.aiplatform.v1beta1.DataItem
+		nil,                           // 1: google.cloud.aiplatform.v1beta1.DataItem.LabelsEntry
+		(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+		(*structpb.Value)(nil),        // 3: google.protobuf.Value
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_data_item_proto_depIdxs = []int32{
 	2, // 0: google.cloud.aiplatform.v1beta1.DataItem.create_time:type_name -> google.protobuf.Timestamp
 	2, // 1: google.cloud.aiplatform.v1beta1.DataItem.update_time:type_name -> google.protobuf.Timestamp

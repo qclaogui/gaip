@@ -287,13 +287,16 @@ func file_google_cloud_aiplatform_v1beta1_context_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_context_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_context_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_google_cloud_aiplatform_v1beta1_context_proto_goTypes = []interface{}{
-	(*Context)(nil),               // 0: google.cloud.aiplatform.v1beta1.Context
-	nil,                           // 1: google.cloud.aiplatform.v1beta1.Context.LabelsEntry
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),       // 3: google.protobuf.Struct
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_context_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_google_cloud_aiplatform_v1beta1_context_proto_goTypes  = []interface{}{
+		(*Context)(nil),               // 0: google.cloud.aiplatform.v1beta1.Context
+		nil,                           // 1: google.cloud.aiplatform.v1beta1.Context.LabelsEntry
+		(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+		(*structpb.Struct)(nil),       // 3: google.protobuf.Struct
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_context_proto_depIdxs = []int32{
 	1, // 0: google.cloud.aiplatform.v1beta1.Context.labels:type_name -> google.cloud.aiplatform.v1beta1.Context.LabelsEntry
 	2, // 1: google.cloud.aiplatform.v1beta1.Context.create_time:type_name -> google.protobuf.Timestamp

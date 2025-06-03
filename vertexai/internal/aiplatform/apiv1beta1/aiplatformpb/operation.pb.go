@@ -225,13 +225,16 @@ func file_google_cloud_aiplatform_v1beta1_operation_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_operation_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_operation_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_google_cloud_aiplatform_v1beta1_operation_proto_goTypes = []interface{}{
-	(*GenericOperationMetadata)(nil), // 0: google.cloud.aiplatform.v1beta1.GenericOperationMetadata
-	(*DeleteOperationMetadata)(nil),  // 1: google.cloud.aiplatform.v1beta1.DeleteOperationMetadata
-	(*status.Status)(nil),            // 2: google.rpc.Status
-	(*timestamppb.Timestamp)(nil),    // 3: google.protobuf.Timestamp
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_operation_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+	file_google_cloud_aiplatform_v1beta1_operation_proto_goTypes  = []interface{}{
+		(*GenericOperationMetadata)(nil), // 0: google.cloud.aiplatform.v1beta1.GenericOperationMetadata
+		(*DeleteOperationMetadata)(nil),  // 1: google.cloud.aiplatform.v1beta1.DeleteOperationMetadata
+		(*status.Status)(nil),            // 2: google.rpc.Status
+		(*timestamppb.Timestamp)(nil),    // 3: google.protobuf.Timestamp
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_operation_proto_depIdxs = []int32{
 	2, // 0: google.cloud.aiplatform.v1beta1.GenericOperationMetadata.partial_failures:type_name -> google.rpc.Status
 	3, // 1: google.cloud.aiplatform.v1beta1.GenericOperationMetadata.create_time:type_name -> google.protobuf.Timestamp

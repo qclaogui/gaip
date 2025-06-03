@@ -278,13 +278,16 @@ func file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_rawDescGZIP() []
 	return file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_goTypes = []interface{}{
-	(MetadataSchema_MetadataSchemaType)(0), // 0: google.cloud.aiplatform.v1beta1.MetadataSchema.MetadataSchemaType
-	(*MetadataSchema)(nil),                 // 1: google.cloud.aiplatform.v1beta1.MetadataSchema
-	(*timestamppb.Timestamp)(nil),          // 2: google.protobuf.Timestamp
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_msgTypes  = make([]protoimpl.MessageInfo, 1)
+	file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_goTypes   = []interface{}{
+		(MetadataSchema_MetadataSchemaType)(0), // 0: google.cloud.aiplatform.v1beta1.MetadataSchema.MetadataSchemaType
+		(*MetadataSchema)(nil),                 // 1: google.cloud.aiplatform.v1beta1.MetadataSchema
+		(*timestamppb.Timestamp)(nil),          // 2: google.protobuf.Timestamp
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_metadata_schema_proto_depIdxs = []int32{
 	0, // 0: google.cloud.aiplatform.v1beta1.MetadataSchema.schema_type:type_name -> google.cloud.aiplatform.v1beta1.MetadataSchema.MetadataSchemaType
 	2, // 1: google.cloud.aiplatform.v1beta1.MetadataSchema.create_time:type_name -> google.protobuf.Timestamp

@@ -35,12 +35,10 @@ message DataItem {
   string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Timestamp when this DataItem was created.
-  google.protobuf.Timestamp create_time = 2
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp create_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Timestamp when this DataItem was last updated.
-  google.protobuf.Timestamp update_time = 6
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp update_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Optional. The labels with user-defined metadata to organize your DataItems.
   //

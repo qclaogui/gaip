@@ -12,6 +12,7 @@ lint:
     - RPC_RESPONSE_STANDARD_NAME
   ignore:
     - qclaogui/library/v1beta1
+    - qclaogui/aiplatform/v1beta1
     - google
     - buf/validate
   ignore_only:

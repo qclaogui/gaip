@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2023 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +20,9 @@ package genai
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -77,7 +79,7 @@ func TestLive(t *testing.T) {
 				iter := session.SendMessageStream(ctx, Text(msg))
 				for {
 					_, err := iter.Next()
-					if err == iterator.Done {
+					if errors.Is(err, iterator.Done) {
 						break
 					}
 					if err != nil {
@@ -188,7 +190,7 @@ func TestLive(t *testing.T) {
 		var merged *GenerateContentResponse
 		for {
 			res, err := iter.Next()
-			if err == iterator.Done {
+			if errors.Is(err, iterator.Done) {
 				break
 			}
 			if err != nil {
@@ -325,7 +327,7 @@ func responsesString(t *testing.T, iter *GenerateContentResponseIterator) string
 	var lines []string
 	for {
 		resp, err := iter.Next()
-		if err == iterator.Done {
+		if errors.Is(err, iterator.Done) {
 			break
 		}
 		if err != nil {
@@ -340,7 +342,7 @@ func all(iter *GenerateContentResponseIterator) ([]*GenerateContentResponse, err
 	var rs []*GenerateContentResponse
 	for {
 		r, err := iter.Next()
-		if err == iterator.Done {
+		if errors.Is(err, iterator.Done) {
 			return rs, nil
 		}
 		if err != nil {
@@ -348,12 +350,4 @@ func all(iter *GenerateContentResponseIterator) ([]*GenerateContentResponse, err
 		}
 		rs = append(rs, r)
 	}
-}
-
-func dump(x any) {
-	bs, err := json.MarshalIndent(x, "", "    ")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s\n", bs)
 }

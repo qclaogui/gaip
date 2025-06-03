@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,7 +94,7 @@ func main() {
 	}
 }
 
-func run(ctx context.Context, configFile, pbDir, outDir string) error {
+func run(_ context.Context, configFile, pbDir, outDir string) error {
 	config, err := readConfigFile(configFile)
 	if err != nil {
 		return err
@@ -120,7 +124,7 @@ func run(ctx context.Context, configFile, pbDir, outDir string) error {
 		if outDir != "" {
 			outfile = filepath.Join(outDir, outfile)
 		}
-		if err := os.WriteFile(outfile, src, 0660); err != nil {
+		if err := os.WriteFile(outfile, src, 0o660); err != nil {
 			log.Fatal(err)
 		}
 		fmt.Printf("wrote %s\n", outfile)

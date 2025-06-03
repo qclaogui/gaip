@@ -2318,40 +2318,43 @@ func file_google_cloud_aiplatform_v1beta1_explanation_proto_rawDescGZIP() []byte
 	return file_google_cloud_aiplatform_v1beta1_explanation_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_explanation_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_google_cloud_aiplatform_v1beta1_explanation_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
-var file_google_cloud_aiplatform_v1beta1_explanation_proto_goTypes = []interface{}{
-	(Examples_ExampleGcsSource_DataFormat)(0),                 // 0: google.cloud.aiplatform.v1beta1.Examples.ExampleGcsSource.DataFormat
-	(Presets_Query)(0),                                        // 1: google.cloud.aiplatform.v1beta1.Presets.Query
-	(Presets_Modality)(0),                                     // 2: google.cloud.aiplatform.v1beta1.Presets.Modality
-	(ExamplesOverride_DataFormat)(0),                          // 3: google.cloud.aiplatform.v1beta1.ExamplesOverride.DataFormat
-	(*Explanation)(nil),                                       // 4: google.cloud.aiplatform.v1beta1.Explanation
-	(*ModelExplanation)(nil),                                  // 5: google.cloud.aiplatform.v1beta1.ModelExplanation
-	(*Attribution)(nil),                                       // 6: google.cloud.aiplatform.v1beta1.Attribution
-	(*Neighbor)(nil),                                          // 7: google.cloud.aiplatform.v1beta1.Neighbor
-	(*ExplanationSpec)(nil),                                   // 8: google.cloud.aiplatform.v1beta1.ExplanationSpec
-	(*ExplanationParameters)(nil),                             // 9: google.cloud.aiplatform.v1beta1.ExplanationParameters
-	(*SampledShapleyAttribution)(nil),                         // 10: google.cloud.aiplatform.v1beta1.SampledShapleyAttribution
-	(*IntegratedGradientsAttribution)(nil),                    // 11: google.cloud.aiplatform.v1beta1.IntegratedGradientsAttribution
-	(*XraiAttribution)(nil),                                   // 12: google.cloud.aiplatform.v1beta1.XraiAttribution
-	(*SmoothGradConfig)(nil),                                  // 13: google.cloud.aiplatform.v1beta1.SmoothGradConfig
-	(*FeatureNoiseSigma)(nil),                                 // 14: google.cloud.aiplatform.v1beta1.FeatureNoiseSigma
-	(*BlurBaselineConfig)(nil),                                // 15: google.cloud.aiplatform.v1beta1.BlurBaselineConfig
-	(*Examples)(nil),                                          // 16: google.cloud.aiplatform.v1beta1.Examples
-	(*Presets)(nil),                                           // 17: google.cloud.aiplatform.v1beta1.Presets
-	(*ExplanationSpecOverride)(nil),                           // 18: google.cloud.aiplatform.v1beta1.ExplanationSpecOverride
-	(*ExplanationMetadataOverride)(nil),                       // 19: google.cloud.aiplatform.v1beta1.ExplanationMetadataOverride
-	(*ExamplesOverride)(nil),                                  // 20: google.cloud.aiplatform.v1beta1.ExamplesOverride
-	(*ExamplesRestrictionsNamespace)(nil),                     // 21: google.cloud.aiplatform.v1beta1.ExamplesRestrictionsNamespace
-	(*FeatureNoiseSigma_NoiseSigmaForFeature)(nil),            // 22: google.cloud.aiplatform.v1beta1.FeatureNoiseSigma.NoiseSigmaForFeature
-	(*Examples_ExampleGcsSource)(nil),                         // 23: google.cloud.aiplatform.v1beta1.Examples.ExampleGcsSource
-	(*ExplanationMetadataOverride_InputMetadataOverride)(nil), // 24: google.cloud.aiplatform.v1beta1.ExplanationMetadataOverride.InputMetadataOverride
-	nil,                         // 25: google.cloud.aiplatform.v1beta1.ExplanationMetadataOverride.InputsEntry
-	(*structpb.Value)(nil),      // 26: google.protobuf.Value
-	(*ExplanationMetadata)(nil), // 27: google.cloud.aiplatform.v1beta1.ExplanationMetadata
-	(*structpb.ListValue)(nil),  // 28: google.protobuf.ListValue
-	(*GcsSource)(nil),           // 29: google.cloud.aiplatform.v1beta1.GcsSource
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_explanation_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+	file_google_cloud_aiplatform_v1beta1_explanation_proto_msgTypes  = make([]protoimpl.MessageInfo, 22)
+	file_google_cloud_aiplatform_v1beta1_explanation_proto_goTypes   = []interface{}{
+		(Examples_ExampleGcsSource_DataFormat)(0),                 // 0: google.cloud.aiplatform.v1beta1.Examples.ExampleGcsSource.DataFormat
+		(Presets_Query)(0),                                        // 1: google.cloud.aiplatform.v1beta1.Presets.Query
+		(Presets_Modality)(0),                                     // 2: google.cloud.aiplatform.v1beta1.Presets.Modality
+		(ExamplesOverride_DataFormat)(0),                          // 3: google.cloud.aiplatform.v1beta1.ExamplesOverride.DataFormat
+		(*Explanation)(nil),                                       // 4: google.cloud.aiplatform.v1beta1.Explanation
+		(*ModelExplanation)(nil),                                  // 5: google.cloud.aiplatform.v1beta1.ModelExplanation
+		(*Attribution)(nil),                                       // 6: google.cloud.aiplatform.v1beta1.Attribution
+		(*Neighbor)(nil),                                          // 7: google.cloud.aiplatform.v1beta1.Neighbor
+		(*ExplanationSpec)(nil),                                   // 8: google.cloud.aiplatform.v1beta1.ExplanationSpec
+		(*ExplanationParameters)(nil),                             // 9: google.cloud.aiplatform.v1beta1.ExplanationParameters
+		(*SampledShapleyAttribution)(nil),                         // 10: google.cloud.aiplatform.v1beta1.SampledShapleyAttribution
+		(*IntegratedGradientsAttribution)(nil),                    // 11: google.cloud.aiplatform.v1beta1.IntegratedGradientsAttribution
+		(*XraiAttribution)(nil),                                   // 12: google.cloud.aiplatform.v1beta1.XraiAttribution
+		(*SmoothGradConfig)(nil),                                  // 13: google.cloud.aiplatform.v1beta1.SmoothGradConfig
+		(*FeatureNoiseSigma)(nil),                                 // 14: google.cloud.aiplatform.v1beta1.FeatureNoiseSigma
+		(*BlurBaselineConfig)(nil),                                // 15: google.cloud.aiplatform.v1beta1.BlurBaselineConfig
+		(*Examples)(nil),                                          // 16: google.cloud.aiplatform.v1beta1.Examples
+		(*Presets)(nil),                                           // 17: google.cloud.aiplatform.v1beta1.Presets
+		(*ExplanationSpecOverride)(nil),                           // 18: google.cloud.aiplatform.v1beta1.ExplanationSpecOverride
+		(*ExplanationMetadataOverride)(nil),                       // 19: google.cloud.aiplatform.v1beta1.ExplanationMetadataOverride
+		(*ExamplesOverride)(nil),                                  // 20: google.cloud.aiplatform.v1beta1.ExamplesOverride
+		(*ExamplesRestrictionsNamespace)(nil),                     // 21: google.cloud.aiplatform.v1beta1.ExamplesRestrictionsNamespace
+		(*FeatureNoiseSigma_NoiseSigmaForFeature)(nil),            // 22: google.cloud.aiplatform.v1beta1.FeatureNoiseSigma.NoiseSigmaForFeature
+		(*Examples_ExampleGcsSource)(nil),                         // 23: google.cloud.aiplatform.v1beta1.Examples.ExampleGcsSource
+		(*ExplanationMetadataOverride_InputMetadataOverride)(nil), // 24: google.cloud.aiplatform.v1beta1.ExplanationMetadataOverride.InputMetadataOverride
+		nil,                         // 25: google.cloud.aiplatform.v1beta1.ExplanationMetadataOverride.InputsEntry
+		(*structpb.Value)(nil),      // 26: google.protobuf.Value
+		(*ExplanationMetadata)(nil), // 27: google.cloud.aiplatform.v1beta1.ExplanationMetadata
+		(*structpb.ListValue)(nil),  // 28: google.protobuf.ListValue
+		(*GcsSource)(nil),           // 29: google.cloud.aiplatform.v1beta1.GcsSource
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_explanation_proto_depIdxs = []int32{
 	6,  // 0: google.cloud.aiplatform.v1beta1.Explanation.attributions:type_name -> google.cloud.aiplatform.v1beta1.Attribution
 	7,  // 1: google.cloud.aiplatform.v1beta1.Explanation.neighbors:type_name -> google.cloud.aiplatform.v1beta1.Neighbor

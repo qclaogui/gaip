@@ -26,22 +26,17 @@ message Event {
   // Required. The relative resource name of the Artifact in the Event.
   string artifact = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Artifact"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Artifact"}
   ];
 
   // Output only. The relative resource name of the Execution in the Event.
   string execution = 2 [
     (google.api.field_behavior) = OUTPUT_ONLY,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Execution"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Execution"}
   ];
 
   // Output only. Time the Event occurred.
-  google.protobuf.Timestamp event_time = 3
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp event_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Required. The type of the Event.
   Type type = 4 [(google.api.field_behavior) = REQUIRED];

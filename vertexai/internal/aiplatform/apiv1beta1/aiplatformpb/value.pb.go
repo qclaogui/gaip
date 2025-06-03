@@ -178,10 +178,13 @@ func file_google_cloud_aiplatform_v1beta1_value_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_value_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_value_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_google_cloud_aiplatform_v1beta1_value_proto_goTypes = []interface{}{
-	(*Value)(nil), // 0: google.cloud.aiplatform.v1beta1.Value
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_value_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+	file_google_cloud_aiplatform_v1beta1_value_proto_goTypes  = []interface{}{
+		(*Value)(nil), // 0: google.cloud.aiplatform.v1beta1.Value
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_value_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type

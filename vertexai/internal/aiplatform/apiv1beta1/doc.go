@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2023 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -109,8 +113,10 @@ import (
 
 // For more information on implementing a client constructor hook, see
 // https://github.com/googleapis/google-cloud-go/wiki/Customizing-constructors.
-type clientHookParams struct{}
-type clientHook func(context.Context, clientHookParams) ([]option.ClientOption, error)
+type (
+	clientHookParams struct{}
+	clientHook       func(context.Context, clientHookParams) ([]option.ClientOption, error)
+)
 
 var versionClient string
 

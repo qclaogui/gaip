@@ -7,26 +7,25 @@ import "google/api/client.proto";
 import "google/api/field_behavior.proto";
 import "google/api/httpbody.proto";
 import "google/api/resource.proto";
+import "google/protobuf/struct.proto";
 import "qclaogui/aiplatform/v1beta1/content.proto";
 import "qclaogui/aiplatform/v1beta1/explanation.proto";
 import "qclaogui/aiplatform/v1beta1/tool.proto";
 import "qclaogui/aiplatform/v1beta1/types.proto";
-import "google/protobuf/struct.proto";
 
 option go_package = "github.com/qclaogui/gaip/genproto/aiplatform/apiv1beta1/aiplatformpb";
 
 // A service for online predictions and explanations.
 service PredictionService {
   option (google.api.default_host) = "aiplatform.googleapis.com";
-  option (google.api.oauth_scopes) =
-      "https://www.googleapis.com/auth/cloud-platform";
+  option (google.api.oauth_scopes) = "https://www.googleapis.com/auth/cloud-platform";
 
   // Perform an online prediction.
   rpc Predict(PredictRequest) returns (PredictResponse) {
     option (google.api.http) = {
       post: "/v1beta1/{endpoint=projects/*/locations/*/endpoints/*}:predict"
       body: "*"
-      additional_bindings {
+      additional_bindings: {
         post: "/v1beta1/{endpoint=projects/*/locations/*/publishers/*/models/*}:predict"
         body: "*"
       }
@@ -49,7 +48,7 @@ service PredictionService {
     option (google.api.http) = {
       post: "/v1beta1/{endpoint=projects/*/locations/*/endpoints/*}:rawPredict"
       body: "*"
-      additional_bindings {
+      additional_bindings: {
         post: "/v1beta1/{endpoint=projects/*/locations/*/publishers/*/models/*}:rawPredict"
         body: "*"
       }
@@ -67,8 +66,7 @@ service PredictionService {
   }
 
   // Perform an online prediction request through gRPC.
-  rpc DirectRawPredict(DirectRawPredictRequest)
-      returns (DirectRawPredictResponse) {
+  rpc DirectRawPredict(DirectRawPredictRequest) returns (DirectRawPredictResponse) {
     option (google.api.http) = {
       post: "/v1beta1/{endpoint=projects/*/locations/*/endpoints/*}:directRawPredict"
       body: "*"
@@ -77,17 +75,15 @@ service PredictionService {
 
   // Perform a streaming online prediction request for Vertex first-party
   // products and frameworks.
-  rpc StreamingPredict(stream StreamingPredictRequest)
-      returns (stream StreamingPredictResponse) {}
+  rpc StreamingPredict(stream StreamingPredictRequest) returns (stream StreamingPredictResponse) {}
 
   // Perform a server-side streaming online prediction request for Vertex
   // LLM streaming.
-  rpc ServerStreamingPredict(StreamingPredictRequest)
-      returns (stream StreamingPredictResponse) {
+  rpc ServerStreamingPredict(StreamingPredictRequest) returns (stream StreamingPredictResponse) {
     option (google.api.http) = {
       post: "/v1beta1/{endpoint=projects/*/locations/*/endpoints/*}:serverStreamingPredict"
       body: "*"
-      additional_bindings {
+      additional_bindings: {
         post: "/v1beta1/{endpoint=projects/*/locations/*/publishers/*/models/*}:serverStreamingPredict"
         body: "*"
       }
@@ -95,8 +91,7 @@ service PredictionService {
   }
 
   // Perform a streaming online prediction request through gRPC.
-  rpc StreamingRawPredict(stream StreamingRawPredictRequest)
-      returns (stream StreamingRawPredictResponse) {}
+  rpc StreamingRawPredict(stream StreamingRawPredictRequest) returns (stream StreamingRawPredictResponse) {}
 
   // Perform an online explanation.
   //
@@ -114,8 +109,7 @@ service PredictionService {
       post: "/v1beta1/{endpoint=projects/*/locations/*/endpoints/*}:explain"
       body: "*"
     };
-    option (google.api.method_signature) =
-        "endpoint,instances,parameters,deployed_model_id";
+    option (google.api.method_signature) = "endpoint,instances,parameters,deployed_model_id";
   }
 
   // Perform a token counting.
@@ -123,7 +117,7 @@ service PredictionService {
     option (google.api.http) = {
       post: "/v1beta1/{endpoint=projects/*/locations/*/endpoints/*}:countTokens"
       body: "*"
-      additional_bindings {
+      additional_bindings: {
         post: "/v1beta1/{endpoint=projects/*/locations/*/publishers/*/models/*}:countTokens"
         body: "*"
       }
@@ -132,12 +126,11 @@ service PredictionService {
   }
 
   // Generate content with multimodal inputs with streaming support.
-  rpc StreamGenerateContent(GenerateContentRequest)
-      returns (stream GenerateContentResponse) {
+  rpc StreamGenerateContent(GenerateContentRequest) returns (stream GenerateContentResponse) {
     option (google.api.http) = {
       post: "/v1beta1/{model=projects/*/locations/*/endpoints/*}:streamGenerateContent"
       body: "*"
-      additional_bindings {
+      additional_bindings: {
         post: "/v1beta1/{model=projects/*/locations/*/publishers/*/models/*}:streamGenerateContent"
         body: "*"
       }
@@ -154,9 +147,7 @@ message PredictRequest {
   // `projects/{project}/locations/{location}/endpoints/{endpoint}`
   string endpoint = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Endpoint"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Endpoint"}
   ];
 
   // Required. The instances that are the input to the prediction call.
@@ -169,8 +160,7 @@ message PredictRequest {
   // [Model's][google.cloud.aiplatform.v1beta1.DeployedModel.model]
   // [PredictSchemata's][google.cloud.aiplatform.v1beta1.Model.predict_schemata]
   // [instance_schema_uri][google.cloud.aiplatform.v1beta1.PredictSchemata.instance_schema_uri].
-  repeated google.protobuf.Value instances = 2
-      [(google.api.field_behavior) = REQUIRED];
+  repeated google.protobuf.Value instances = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The parameters that govern the prediction. The schema of the parameters may
   // be specified via Endpoint's DeployedModels' [Model's
@@ -198,9 +188,7 @@ message PredictResponse {
   // DeployedModel that this prediction hits.
   string model = 3 [
     (google.api.field_behavior) = OUTPUT_ONLY,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Model"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Model"}
   ];
 
   // Output only. The version ID of the Model which is deployed as the
@@ -214,8 +202,7 @@ message PredictResponse {
 
   // Output only. Request-level metadata returned by the model. The metadata
   // type will be dependent upon the model implementation.
-  google.protobuf.Value metadata = 6
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Value metadata = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // Request message for
@@ -226,9 +213,7 @@ message RawPredictRequest {
   // `projects/{project}/locations/{location}/endpoints/{endpoint}`
   string endpoint = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Endpoint"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Endpoint"}
   ];
 
   // The prediction input. Supports HTTP headers and arbitrary data payload.
@@ -257,9 +242,7 @@ message DirectPredictRequest {
   // `projects/{project}/locations/{location}/endpoints/{endpoint}`
   string endpoint = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Endpoint"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Endpoint"}
   ];
 
   // The prediction input.
@@ -287,9 +270,7 @@ message DirectRawPredictRequest {
   // `projects/{project}/locations/{location}/endpoints/{endpoint}`
   string endpoint = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Endpoint"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Endpoint"}
   ];
 
   // Fully qualified name of the API method being invoked to perform
@@ -325,9 +306,7 @@ message StreamingPredictRequest {
   // `projects/{project}/locations/{location}/endpoints/{endpoint}`
   string endpoint = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Endpoint"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Endpoint"}
   ];
 
   // The prediction input.
@@ -366,9 +345,7 @@ message StreamingRawPredictRequest {
   // `projects/{project}/locations/{location}/endpoints/{endpoint}`
   string endpoint = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Endpoint"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Endpoint"}
   ];
 
   // Fully qualified name of the API method being invoked to perform
@@ -399,9 +376,7 @@ message ExplainRequest {
   // `projects/{project}/locations/{location}/endpoints/{endpoint}`
   string endpoint = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Endpoint"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Endpoint"}
   ];
 
   // Required. The instances that are the input to the explanation call.
@@ -414,8 +389,7 @@ message ExplainRequest {
   // [Model's][google.cloud.aiplatform.v1beta1.DeployedModel.model]
   // [PredictSchemata's][google.cloud.aiplatform.v1beta1.Model.predict_schemata]
   // [instance_schema_uri][google.cloud.aiplatform.v1beta1.PredictSchemata.instance_schema_uri].
-  repeated google.protobuf.Value instances = 2
-      [(google.api.field_behavior) = REQUIRED];
+  repeated google.protobuf.Value instances = 2 [(google.api.field_behavior) = REQUIRED];
 
   // The parameters that govern the prediction. The schema of the parameters may
   // be specified via Endpoint's DeployedModels' [Model's
@@ -441,8 +415,7 @@ message ExplainRequest {
   //
   // Note - these explanations are run **In Addition** to the default
   // Explanation in the deployed model.
-  map<string, ExplanationSpecOverride> concurrent_explanation_spec_override = 6
-      [(google.api.field_behavior) = OPTIONAL];
+  map<string, ExplanationSpecOverride> concurrent_explanation_spec_override = 6 [(google.api.field_behavior) = OPTIONAL];
 
   // If specified, this ExplainRequest will be served by the chosen
   // DeployedModel, overriding
@@ -493,9 +466,7 @@ message CountTokensRequest {
   // `projects/{project}/locations/{location}/endpoints/{endpoint}`
   string endpoint = 1 [
     (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "aiplatform.googleapis.com/Endpoint"
-    }
+    (google.api.resource_reference) = {type: "aiplatform.googleapis.com/Endpoint"}
   ];
 
   // Required. The name of the publisher model requested to serve the
@@ -505,8 +476,7 @@ message CountTokensRequest {
 
   // Required. The instances that are the input to token counting call.
   // Schema is identical to the prediction schema of the underlying model.
-  repeated google.protobuf.Value instances = 2
-      [(google.api.field_behavior) = REQUIRED];
+  repeated google.protobuf.Value instances = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Required. Input content.
   repeated Content contents = 4 [(google.api.field_behavior) = REQUIRED];
@@ -548,12 +518,10 @@ message GenerateContentRequest {
 
   // Optional. Per request settings for blocking unsafe content.
   // Enforced on GenerateContentResponse.candidates.
-  repeated SafetySetting safety_settings = 3
-      [(google.api.field_behavior) = OPTIONAL];
+  repeated SafetySetting safety_settings = 3 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Generation config.
-  GenerationConfig generation_config = 4
-      [(google.api.field_behavior) = OPTIONAL];
+  GenerationConfig generation_config = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response message for [PredictionService.GenerateContent].
@@ -576,8 +544,7 @@ message GenerateContentResponse {
     BlockedReason block_reason = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. Safety ratings.
-    repeated SafetyRating safety_ratings = 2
-        [(google.api.field_behavior) = OUTPUT_ONLY];
+    repeated SafetyRating safety_ratings = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. A readable block reason message.
     string block_reason_message = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
@@ -600,8 +567,7 @@ message GenerateContentResponse {
   // Output only. Content filter results for a prompt sent in the request.
   // Note: Sent only in the first stream chunk.
   // Only happens when no candidates were generated due to content violations.
-  PromptFeedback prompt_feedback = 3
-      [(google.api.field_behavior) = OUTPUT_ONLY];
+  PromptFeedback prompt_feedback = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Usage metadata about the response(s).
   UsageMetadata usage_metadata = 4;

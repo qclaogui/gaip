@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2023 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +20,7 @@ package genai_test
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 
@@ -24,9 +29,11 @@ import (
 	"google.golang.org/api/iterator"
 )
 
-const projectID = "your-project"
-const model = "some-model"
-const location = "some-location"
+const (
+	projectID = "your-project"
+	model     = "some-model"
+	location  = "some-location"
+)
 
 func ExampleGenerativeModel_GenerateContent() {
 	ctx := context.Background()
@@ -59,7 +66,7 @@ func ExampleGenerativeModel_GenerateContentStream() {
 	iter := model.GenerateContentStream(ctx, genai.Text("Tell me a story about a lumberjack and his giant ox. Keep it very short."))
 	for {
 		resp, err := iter.Next()
-		if err == iterator.Done {
+		if errors.Is(err, iterator.Done) {
 			break
 		}
 		if err != nil {
@@ -93,7 +100,7 @@ func ExampleChatSession() {
 	iter := cs.SendMessageStream(ctx, genai.Text("Which one of those do you recommend?"))
 	for {
 		res, err := iter.Next()
-		if err == iterator.Done {
+		if errors.Is(err, iterator.Done) {
 			break
 		}
 		if err != nil {

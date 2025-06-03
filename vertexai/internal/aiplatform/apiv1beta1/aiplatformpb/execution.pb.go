@@ -365,15 +365,18 @@ func file_google_cloud_aiplatform_v1beta1_execution_proto_rawDescGZIP() []byte {
 	return file_google_cloud_aiplatform_v1beta1_execution_proto_rawDescData
 }
 
-var file_google_cloud_aiplatform_v1beta1_execution_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_google_cloud_aiplatform_v1beta1_execution_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_google_cloud_aiplatform_v1beta1_execution_proto_goTypes = []interface{}{
-	(Execution_State)(0),          // 0: google.cloud.aiplatform.v1beta1.Execution.State
-	(*Execution)(nil),             // 1: google.cloud.aiplatform.v1beta1.Execution
-	nil,                           // 2: google.cloud.aiplatform.v1beta1.Execution.LabelsEntry
-	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),       // 4: google.protobuf.Struct
-}
+var (
+	file_google_cloud_aiplatform_v1beta1_execution_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+	file_google_cloud_aiplatform_v1beta1_execution_proto_msgTypes  = make([]protoimpl.MessageInfo, 2)
+	file_google_cloud_aiplatform_v1beta1_execution_proto_goTypes   = []interface{}{
+		(Execution_State)(0),          // 0: google.cloud.aiplatform.v1beta1.Execution.State
+		(*Execution)(nil),             // 1: google.cloud.aiplatform.v1beta1.Execution
+		nil,                           // 2: google.cloud.aiplatform.v1beta1.Execution.LabelsEntry
+		(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+		(*structpb.Struct)(nil),       // 4: google.protobuf.Struct
+	}
+)
+
 var file_google_cloud_aiplatform_v1beta1_execution_proto_depIdxs = []int32{
 	0, // 0: google.cloud.aiplatform.v1beta1.Execution.state:type_name -> google.cloud.aiplatform.v1beta1.Execution.State
 	2, // 1: google.cloud.aiplatform.v1beta1.Execution.labels:type_name -> google.cloud.aiplatform.v1beta1.Execution.LabelsEntry

@@ -3,8 +3,8 @@ syntax = "proto3";
 package qclaogui.aiplatform.v1beta1;
 
 import "google/api/field_behavior.proto";
-import "qclaogui/aiplatform/v1beta1/openapi.proto";
 import "google/protobuf/struct.proto";
+import "qclaogui/aiplatform/v1beta1/openapi.proto";
 
 option go_package = "github.com/qclaogui/gaip/genproto/aiplatform/apiv1beta1/aiplatformpb";
 
@@ -22,8 +22,7 @@ message Tool {
   // in the next turn. Based on the function responses, Model will generate the
   // final response back to the user. Maximum 64 function declarations can be
   // provided.
-  repeated FunctionDeclaration function_declarations = 1
-      [(google.api.field_behavior) = OPTIONAL];
+  repeated FunctionDeclaration function_declarations = 1 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Structured representation of a function declaration as defined by the
