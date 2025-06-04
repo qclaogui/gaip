@@ -410,8 +410,8 @@ gonum.org/v1/gonum v0.0.0-20180816165407-929014505bf4/go.mod h1:Y+Yx5eoAFn32cQvJ
 gonum.org/v1/gonum v0.8.2/go.mod h1:oe/vMfY3deqTw+1EZJhuvEW2iwGF1bW9wwu7XCu0+v0=
 gonum.org/v1/netlib v0.0.0-20190313105609-8cb42192e0e0/go.mod h1:wa6Ws7BG/ESfp6dHfk7C6KdzKA7wR7u/rKwOGE66zvw=
 gonum.org/v1/plot v0.0.0-20190515093506-e2840ee46a6b/go.mod h1:Wt8AAjI+ypCyYX3nZBvf6cAIx93T+c/OS2HFAYskSZc=
-google.golang.org/api v0.235.0 h1:C3MkpQSRxS1Jy6AkzTGKKrpSCOd2WOGrezZ+icKSkKo=
-google.golang.org/api v0.235.0/go.mod h1:QpeJkemzkFKe5VCE/PMv7GsUfn9ZF+u+q1Q7w6ckxTg=
+google.golang.org/api v0.236.0 h1:CAiEiDVtO4D/Qja2IA9VzlFrgPnK3XVMmRoJZlSWbc0=
+google.golang.org/api v0.236.0/go.mod h1:X1WF9CU2oTc+Jml1tiIxGmWFK/UZezdqEu09gcxZAj4=
 google.golang.org/genproto v0.0.0-20180518175338-11a468237815/go.mod h1:JiN7NxoALGmiZfu7CAH4rXhgtRTLTxftemlI0sWmxmc=
 google.golang.org/genproto v0.0.0-20250528174236-200df99c418a h1:KXuwdBmgjb4T3l4ZzXhP6HxxFKXD9FcK5/8qfJI4WwU=
 google.golang.org/genproto v0.0.0-20250528174236-200df99c418a/go.mod h1:Nlk93rrS2X7rV8hiC2gh2A/AJspZhElz9Oh2KGsjLEY=
