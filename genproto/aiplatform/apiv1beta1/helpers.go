@@ -32,7 +32,7 @@ import (
 	"google.golang.org/protobuf/runtime/protoimpl"
 )
 
-const serviceName = "aiplatform.qclaogui.com"
+const serviceName = "aiplatform.googleapis.com"
 
 var protoVersion = fmt.Sprintf("1.%d", protoimpl.MaxVersion)
 

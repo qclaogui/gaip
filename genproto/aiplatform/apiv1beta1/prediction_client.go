@@ -25,7 +25,6 @@ import (
 	"math"
 	"net/http"
 	"net/url"
-	"time"
 
 	iampb "cloud.google.com/go/iam/apiv1/iampb"
 	longrunningpb "cloud.google.com/go/longrunning/autogen/longrunningpb"
@@ -92,9 +91,7 @@ func defaultPredictionGRPCClientOptions() []option.ClientOption {
 
 func defaultPredictionCallOptions() *PredictionCallOptions {
 	return &PredictionCallOptions{
-		Predict: []gax.CallOption{
-			gax.WithTimeout(5000 * time.Millisecond),
-		},
+		Predict:                []gax.CallOption{},
 		RawPredict:             []gax.CallOption{},
 		StreamRawPredict:       []gax.CallOption{},
 		DirectPredict:          []gax.CallOption{},
@@ -104,31 +101,27 @@ func defaultPredictionCallOptions() *PredictionCallOptions {
 		StreamingPredict:       []gax.CallOption{},
 		ServerStreamingPredict: []gax.CallOption{},
 		StreamingRawPredict:    []gax.CallOption{},
-		Explain: []gax.CallOption{
-			gax.WithTimeout(5000 * time.Millisecond),
-		},
-		CountTokens:           []gax.CallOption{},
-		GenerateContent:       []gax.CallOption{},
-		StreamGenerateContent: []gax.CallOption{},
-		ChatCompletions:       []gax.CallOption{},
-		GetLocation:           []gax.CallOption{},
-		ListLocations:         []gax.CallOption{},
-		GetIamPolicy:          []gax.CallOption{},
-		SetIamPolicy:          []gax.CallOption{},
-		TestIamPermissions:    []gax.CallOption{},
-		CancelOperation:       []gax.CallOption{},
-		DeleteOperation:       []gax.CallOption{},
-		GetOperation:          []gax.CallOption{},
-		ListOperations:        []gax.CallOption{},
-		WaitOperation:         []gax.CallOption{},
+		Explain:                []gax.CallOption{},
+		CountTokens:            []gax.CallOption{},
+		GenerateContent:        []gax.CallOption{},
+		StreamGenerateContent:  []gax.CallOption{},
+		ChatCompletions:        []gax.CallOption{},
+		GetLocation:            []gax.CallOption{},
+		ListLocations:          []gax.CallOption{},
+		GetIamPolicy:           []gax.CallOption{},
+		SetIamPolicy:           []gax.CallOption{},
+		TestIamPermissions:     []gax.CallOption{},
+		CancelOperation:        []gax.CallOption{},
+		DeleteOperation:        []gax.CallOption{},
+		GetOperation:           []gax.CallOption{},
+		ListOperations:         []gax.CallOption{},
+		WaitOperation:          []gax.CallOption{},
 	}
 }
 
 func defaultPredictionRESTCallOptions() *PredictionCallOptions {
 	return &PredictionCallOptions{
-		Predict: []gax.CallOption{
-			gax.WithTimeout(5000 * time.Millisecond),
-		},
+		Predict:                []gax.CallOption{},
 		RawPredict:             []gax.CallOption{},
 		StreamRawPredict:       []gax.CallOption{},
 		DirectPredict:          []gax.CallOption{},
@@ -138,23 +131,21 @@ func defaultPredictionRESTCallOptions() *PredictionCallOptions {
 		StreamingPredict:       []gax.CallOption{},
 		ServerStreamingPredict: []gax.CallOption{},
 		StreamingRawPredict:    []gax.CallOption{},
-		Explain: []gax.CallOption{
-			gax.WithTimeout(5000 * time.Millisecond),
-		},
-		CountTokens:           []gax.CallOption{},
-		GenerateContent:       []gax.CallOption{},
-		StreamGenerateContent: []gax.CallOption{},
-		ChatCompletions:       []gax.CallOption{},
-		GetLocation:           []gax.CallOption{},
-		ListLocations:         []gax.CallOption{},
-		GetIamPolicy:          []gax.CallOption{},
-		SetIamPolicy:          []gax.CallOption{},
-		TestIamPermissions:    []gax.CallOption{},
-		CancelOperation:       []gax.CallOption{},
-		DeleteOperation:       []gax.CallOption{},
-		GetOperation:          []gax.CallOption{},
-		ListOperations:        []gax.CallOption{},
-		WaitOperation:         []gax.CallOption{},
+		Explain:                []gax.CallOption{},
+		CountTokens:            []gax.CallOption{},
+		GenerateContent:        []gax.CallOption{},
+		StreamGenerateContent:  []gax.CallOption{},
+		ChatCompletions:        []gax.CallOption{},
+		GetLocation:            []gax.CallOption{},
+		ListLocations:          []gax.CallOption{},
+		GetIamPolicy:           []gax.CallOption{},
+		SetIamPolicy:           []gax.CallOption{},
+		TestIamPermissions:     []gax.CallOption{},
+		CancelOperation:        []gax.CallOption{},
+		DeleteOperation:        []gax.CallOption{},
+		GetOperation:           []gax.CallOption{},
+		ListOperations:         []gax.CallOption{},
+		WaitOperation:          []gax.CallOption{},
 	}
 }
 
