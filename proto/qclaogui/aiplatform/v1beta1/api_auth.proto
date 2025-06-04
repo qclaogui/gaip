@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package qclaogui.aiplatform.v1beta1;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+
+option go_package = "github.com/qclaogui/gaip/genproto/aiplatform/apiv1beta1/aiplatformpb;aiplatformpb";
+
+// The generic reusable api auth config.
+message ApiAuth {
+  // The API secret.
+  message ApiKeyConfig {
+    // Required. The SecretManager secret version resource name storing API key.
+    // e.g. projects/{project}/secrets/{secret}/versions/{version}
+    string api_key_secret_version = 1 [
+      (google.api.field_behavior) = REQUIRED,
+      (google.api.resource_reference) = {type: "secretmanager.googleapis.com/SecretVersion"}
+    ];
+  }
+
+  // The auth config.
+  oneof auth_config {
+    // The API secret.
+    ApiKeyConfig api_key_config = 1;
+  }
+}
