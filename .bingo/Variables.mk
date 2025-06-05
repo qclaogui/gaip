@@ -101,11 +101,11 @@ $(PROTOC_GEN_GO): $(BINGO_DIR)/protoc-gen-go.mod
 	@echo "(re)installing $(GOBIN)/protoc-gen-go-v1.36.6"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go.mod -o=$(GOBIN)/protoc-gen-go-v1.36.6 "google.golang.org/protobuf/cmd/protoc-gen-go"
 
-PROTOC_GEN_GO_GAPIC := $(GOBIN)/protoc-gen-go_gapic-v0.53.0
+PROTOC_GEN_GO_GAPIC := $(GOBIN)/protoc-gen-go_gapic-v0.53.1
 $(PROTOC_GEN_GO_GAPIC): $(BINGO_DIR)/protoc-gen-go_gapic.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/protoc-gen-go_gapic-v0.53.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go_gapic.mod -o=$(GOBIN)/protoc-gen-go_gapic-v0.53.0 "github.com/googleapis/gapic-generator-go/cmd/protoc-gen-go_gapic"
+	@echo "(re)installing $(GOBIN)/protoc-gen-go_gapic-v0.53.1"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=protoc-gen-go_gapic.mod -o=$(GOBIN)/protoc-gen-go_gapic-v0.53.1 "github.com/googleapis/gapic-generator-go/cmd/protoc-gen-go_gapic"
 
 PROTOC_GEN_GO_REST_HANDLER := $(GOBIN)/protoc-gen-go_rest_handler-v0.0.0-20240516080558-0052bb7d2276
 $(PROTOC_GEN_GO_REST_HANDLER): $(BINGO_DIR)/protoc-gen-go_rest_handler.mod

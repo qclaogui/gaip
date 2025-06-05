@@ -323,6 +323,8 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
  		proto/qclaogui/todo/v1/*.proto
 
 	@make swagger-ui
+	@make gen-info
+	@make protoveneer-gen
 	@make fmt
 	@make lint
 #
@@ -335,6 +337,9 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 #
 protoveneer-gen: $(PROTOVENEER)
 	@$(PROTOVENEER) -license LICENSE -outdir vertexai/genai vertexai/genai/protoveneer.yaml genproto/aiplatform/apiv1beta1/aiplatformpb
+
+gen-info:
+	tools/scripts/gen_info.sh genproto/aiplatform/apiv1beta1 aiplatform
 
 ##@ Testing Lint & Fmt
 

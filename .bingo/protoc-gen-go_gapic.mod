@@ -4,4 +4,4 @@ go 1.23.0
 
 toolchain go1.24.3
 
-require github.com/googleapis/gapic-generator-go v0.53.0 // cmd/protoc-gen-go_gapic
+require github.com/googleapis/gapic-generator-go v0.53.1 // cmd/protoc-gen-go_gapic

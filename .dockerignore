@@ -1,4 +1,5 @@
-# Exclude locally vendored dependencies.
+# Exclude locally vendored dependencies
+
 vendor/
 dist/
 .vscode
