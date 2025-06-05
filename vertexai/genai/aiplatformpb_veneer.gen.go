@@ -676,8 +676,6 @@ type GenerateContentResponse struct {
 	// Note: Sent only in the first stream chunk.
 	// Only happens when no candidates were generated due to content violations.
 	PromptFeedback *PromptFeedback
-	// Usage metadata about the response(s).
-	UsageMetadata *UsageMetadata
 }
 
 func (v *GenerateContentResponse) toProto() *pb.GenerateContentResponse {
@@ -690,7 +688,6 @@ func (v *GenerateContentResponse) toProto() *pb.GenerateContentResponse {
 		CreateTime:     pvTimeToProto(v.CreateTime),
 		ResponseId:     v.ResponseId,
 		PromptFeedback: v.PromptFeedback.toProto(),
-		UsageMetadata:  v.UsageMetadata.toProto(),
 	}
 }
 
@@ -704,7 +701,6 @@ func (GenerateContentResponse) fromProto(p *pb.GenerateContentResponse) *Generat
 		CreateTime:     pvTimeFromProto(p.CreateTime),
 		ResponseId:     p.ResponseId,
 		PromptFeedback: (PromptFeedback{}).fromProto(p.PromptFeedback),
-		UsageMetadata:  (UsageMetadata{}).fromProto(p.UsageMetadata),
 	}
 }
 
@@ -1358,62 +1354,6 @@ func (v Type) String() string {
 		return n
 	}
 	return fmt.Sprintf("Type(%d)", v)
-}
-
-// UsageMetadata is usage metadata about response(s).
-type UsageMetadata struct {
-	// Number of tokens in the request. When `cached_content` is set, this is
-	// still the total effective prompt size meaning this includes the number of
-	// tokens in the cached content.
-	PromptTokenCount int32
-	// Number of tokens in the response(s).
-	CandidatesTokenCount int32
-	// Output only. Number of tokens present in thoughts output.
-	ThoughtsTokenCount int32
-	// Total token count for prompt and response candidates.
-	TotalTokenCount int32
-	// Output only. Number of tokens in the cached part in the input (the cached
-	// content).
-	CachedContentTokenCount int32
-	// Output only. List of modalities that were processed in the request input.
-	PromptTokensDetails []*ModalityTokenCount
-	// Output only. List of modalities of the cached content in the request
-	// input.
-	CacheTokensDetails []*ModalityTokenCount
-	// Output only. List of modalities that were returned in the response.
-	CandidatesTokensDetails []*ModalityTokenCount
-}
-
-func (v *UsageMetadata) toProto() *pb.GenerateContentResponse_UsageMetadata {
-	if v == nil {
-		return nil
-	}
-	return &pb.GenerateContentResponse_UsageMetadata{
-		PromptTokenCount:        v.PromptTokenCount,
-		CandidatesTokenCount:    v.CandidatesTokenCount,
-		ThoughtsTokenCount:      v.ThoughtsTokenCount,
-		TotalTokenCount:         v.TotalTokenCount,
-		CachedContentTokenCount: v.CachedContentTokenCount,
-		PromptTokensDetails:     v.PromptTokensDetails,
-		CacheTokensDetails:      v.CacheTokensDetails,
-		CandidatesTokensDetails: v.CandidatesTokensDetails,
-	}
-}
-
-func (UsageMetadata) fromProto(p *pb.GenerateContentResponse_UsageMetadata) *UsageMetadata {
-	if p == nil {
-		return nil
-	}
-	return &UsageMetadata{
-		PromptTokenCount:        p.PromptTokenCount,
-		CandidatesTokenCount:    p.CandidatesTokenCount,
-		ThoughtsTokenCount:      p.ThoughtsTokenCount,
-		TotalTokenCount:         p.TotalTokenCount,
-		CachedContentTokenCount: p.CachedContentTokenCount,
-		PromptTokensDetails:     p.PromptTokensDetails,
-		CacheTokensDetails:      p.CacheTokensDetails,
-		CandidatesTokensDetails: p.CandidatesTokensDetails,
-	}
 }
 
 // pvTransformSlice applies f to each element of from and returns

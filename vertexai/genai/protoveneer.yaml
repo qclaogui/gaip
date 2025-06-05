@@ -120,18 +120,16 @@ types:
     
     GenerateContentResponse:
       doc: 'is the response from a GenerateContent or GenerateContentStream call.'
-      # fields:
-      #   ModalityTokenCount:
-      #     type: 'ModalityTokenCount'
-      #     omit: true
+      fields:
+        UsageMetadata:
+          omit: true
 
     GenerateContentResponse_PromptFeedback:
       name: PromptFeedback
       docVerb: contains
 
-    GenerateContentResponse_UsageMetadata:
-      name: UsageMetadata
-        
+    # GenerateContentResponse_UsageMetadata:
+    #   name: UsageMetadata
 
     CountTokensResponse:
       fields:
@@ -186,6 +184,7 @@ types:
 # Omit everything that is not explicitly configured.
 omitTypes:
   - '*'
+  - 'GenerateContentResponse_UsageMetadata'
 
 converters:
   Part: partToProto, partFromProto
