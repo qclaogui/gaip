@@ -64,6 +64,7 @@ types:
           name: MIMEType
         FileUri:
           name: FileURI
+          doc: 'The URI returned from UploadFile or GetFile.'
 
     FunctionCall:
 
@@ -86,6 +87,18 @@ types:
           convertToFrom: int32pToFloat32p, float32pToInt32p
         ResponseMimeType:
           name: ResponseMIMEType
+        RoutingConfig:
+          omit: true
+        ResponseModalities:
+          omit: true
+        MediaResolution:
+          omit: true
+        SpeechConfig:
+          omit: true
+        ThinkingConfig:
+          omit: true
+        ModelConfig:
+          omit: true
 
     SafetyRating:
       docVerb: 'is the'
@@ -102,9 +115,15 @@ types:
           type: string
         GroundingMetadata:
           omit: true
-
+        LogprobsResult:
+          omit: true
+    
     GenerateContentResponse:
       doc: 'is the response from a GenerateContent or GenerateContentStream call.'
+      # fields:
+      #   ModalityTokenCount:
+      #     type: 'ModalityTokenCount'
+      #     omit: true
 
     GenerateContentResponse_PromptFeedback:
       name: PromptFeedback
@@ -112,19 +131,34 @@ types:
 
     GenerateContentResponse_UsageMetadata:
       name: UsageMetadata
+        
 
     CountTokensResponse:
+      fields:
+        PromptTokensDetails:
+          omit: true
 
     Tool:
       docVerb: contains
       fields:
         Retrieval:
           omit: true
+        GoogleSearch:
+          omit: true
         GoogleSearchRetrieval:
+          omit: true
+        EnterpriseWebSearch:
+          omit: true
+        CodeExecution:
+          omit: true
+        UrlContext:
           omit: true
 
     ToolConfig:
       doc: 'configures tools.'
+      fields:
+        RetrievalConfig:
+          omit: true
  
     Schema:
       fields:
@@ -144,11 +178,14 @@ types:
         Expiration:
           type: ExpireTimeOrTTL
           noConvert: true
+        UsageMetadata:
+          omit: true
+        EncryptionSpec:
+          omit: true
 
 # Omit everything that is not explicitly configured.
 omitTypes:
   - '*'
-
 
 converters:
   Part: partToProto, partFromProto

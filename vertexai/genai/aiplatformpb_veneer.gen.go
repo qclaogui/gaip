@@ -123,12 +123,6 @@ type CachedContent struct {
 	CreateTime time.Time
 	// Output only. When the cache entry was last updated in UTC time.
 	UpdateTime time.Time
-	// Output only. Metadata on the usage of the cached content.
-	UsageMetadata *CachedContent_UsageMetadata
-	// Input only. Immutable. Customer-managed encryption key spec for a
-	// `CachedContent`. If set, this `CachedContent` and all its sub-resources
-	// will be secured by this key.
-	EncryptionSpec *EncryptionSpec
 }
 
 func (v *CachedContent) toProto() *pb.CachedContent {
@@ -145,8 +139,6 @@ func (v *CachedContent) toProto() *pb.CachedContent {
 		ToolConfig:        v.ToolConfig.toProto(),
 		CreateTime:        pvTimeToProto(v.CreateTime),
 		UpdateTime:        pvTimeToProto(v.UpdateTime),
-		UsageMetadata:     v.UsageMetadata,
-		EncryptionSpec:    v.EncryptionSpec,
 	}
 	populateCachedContentTo(p, v)
 	return p
@@ -166,8 +158,6 @@ func (CachedContent) fromProto(p *pb.CachedContent) *CachedContent {
 		ToolConfig:        (ToolConfig{}).fromProto(p.ToolConfig),
 		CreateTime:        pvTimeFromProto(p.CreateTime),
 		UpdateTime:        pvTimeFromProto(p.UpdateTime),
-		UsageMetadata:     p.UsageMetadata,
-		EncryptionSpec:    p.EncryptionSpec,
 	}
 	populateCachedContentFrom(v, p)
 	return v
@@ -181,8 +171,6 @@ type Candidate struct {
 	Content *Content
 	// Output only. Average log probability score of the candidate.
 	AvgLogprobs float64
-	// Output only. Log-likelihood scores for the response tokens and top tokens
-	LogprobsResult *LogprobsResult
 	// Output only. The reason why the model stopped generating tokens.
 	// If empty, the model has not stopped generating the tokens.
 	FinishReason FinishReason
@@ -205,7 +193,6 @@ func (v *Candidate) toProto() *pb.Candidate {
 		Index:            v.Index,
 		Content:          v.Content.toProto(),
 		AvgLogprobs:      v.AvgLogprobs,
-		LogprobsResult:   v.LogprobsResult,
 		FinishReason:     pb.Candidate_FinishReason(v.FinishReason),
 		SafetyRatings:    pvTransformSlice(v.SafetyRatings, (*SafetyRating).toProto),
 		FinishMessage:    pvAddrOrNil(v.FinishMessage),
@@ -221,7 +208,6 @@ func (Candidate) fromProto(p *pb.Candidate) *Candidate {
 		Index:            p.Index,
 		Content:          (Content{}).fromProto(p.Content),
 		AvgLogprobs:      p.AvgLogprobs,
-		LogprobsResult:   p.LogprobsResult,
 		FinishReason:     FinishReason(p.FinishReason),
 		SafetyRatings:    pvTransformSlice(p.SafetyRatings, (SafetyRating{}).fromProto),
 		FinishMessage:    pvDerefOrZero(p.FinishMessage),
@@ -341,8 +327,6 @@ type CountTokensResponse struct {
 	// The total number of billable characters counted across all instances from
 	// the request.
 	TotalBillableCharacters int32
-	// Output only. List of modalities that were processed in the request input.
-	PromptTokensDetails []*ModalityTokenCount
 }
 
 func (v *CountTokensResponse) toProto() *pb.CountTokensResponse {
@@ -352,7 +336,6 @@ func (v *CountTokensResponse) toProto() *pb.CountTokensResponse {
 	return &pb.CountTokensResponse{
 		TotalTokens:             v.TotalTokens,
 		TotalBillableCharacters: v.TotalBillableCharacters,
-		PromptTokensDetails:     v.PromptTokensDetails,
 	}
 }
 
@@ -363,7 +346,6 @@ func (CountTokensResponse) fromProto(p *pb.CountTokensResponse) *CountTokensResp
 	return &CountTokensResponse{
 		TotalTokens:             p.TotalTokens,
 		TotalBillableCharacters: p.TotalBillableCharacters,
-		PromptTokensDetails:     p.PromptTokensDetails,
 	}
 }
 
@@ -371,7 +353,7 @@ func (CountTokensResponse) fromProto(p *pb.CountTokensResponse) *CountTokensResp
 type FileData struct {
 	// Required. The IANA standard MIME type of the source data.
 	MIMEType string
-	// Required. URI.
+	// The URI returned from UploadFile or GetFile.
 	FileURI string
 }
 
@@ -803,23 +785,9 @@ type GenerationConfig struct {
 	// sufficient.) If `$ref` is set on a sub-schema, no other properties, except
 	// for than those starting as a `$`, may be set.
 	ResponseJsonSchema *structpb.Value
-	// Optional. Routing configuration.
-	RoutingConfig *GenerationConfig_RoutingConfig
 	// Optional. If enabled, audio timestamp will be included in the request to
 	// the model.
 	AudioTimestamp *bool
-	// Optional. The modalities of the response.
-	ResponseModalities []GenerationConfig_Modality
-	// Optional. If specified, the media resolution specified will be used.
-	MediaResolution *GenerationConfig_MediaResolution
-	// Optional. The speech generation config.
-	SpeechConfig *SpeechConfig
-	// Optional. Config for thinking features.
-	// An error will be returned if this field is set for models that don't
-	// support thinking.
-	ThinkingConfig *GenerationConfig_ThinkingConfig
-	// Optional. Config for model selection.
-	ModelConfig *GenerationConfig_ModelConfig
 }
 
 func (v *GenerationConfig) toProto() *pb.GenerationConfig {
@@ -841,13 +809,7 @@ func (v *GenerationConfig) toProto() *pb.GenerationConfig {
 		ResponseMimeType:   v.ResponseMIMEType,
 		ResponseSchema:     v.ResponseSchema.toProto(),
 		ResponseJsonSchema: v.ResponseJsonSchema,
-		RoutingConfig:      v.RoutingConfig,
 		AudioTimestamp:     v.AudioTimestamp,
-		ResponseModalities: v.ResponseModalities,
-		MediaResolution:    v.MediaResolution,
-		SpeechConfig:       v.SpeechConfig,
-		ThinkingConfig:     v.ThinkingConfig,
-		ModelConfig:        v.ModelConfig,
 	}
 }
 
@@ -870,13 +832,7 @@ func (GenerationConfig) fromProto(p *pb.GenerationConfig) *GenerationConfig {
 		ResponseMIMEType:   p.ResponseMimeType,
 		ResponseSchema:     (Schema{}).fromProto(p.ResponseSchema),
 		ResponseJsonSchema: p.ResponseJsonSchema,
-		RoutingConfig:      p.RoutingConfig,
 		AudioTimestamp:     p.AudioTimestamp,
-		ResponseModalities: p.ResponseModalities,
-		MediaResolution:    p.MediaResolution,
-		SpeechConfig:       p.SpeechConfig,
-		ThinkingConfig:     p.ThinkingConfig,
-		ModelConfig:        p.ModelConfig,
 	}
 }
 
@@ -1322,17 +1278,6 @@ type Tool struct {
 	// Model will generate the final response back to the user.
 	// Maximum 128 function declarations can be provided.
 	FunctionDeclarations []*FunctionDeclaration
-	// Optional. GoogleSearch tool type.
-	// Tool to support Google Search in Model. Powered by Google.
-	GoogleSearch *Tool_GoogleSearch
-	// Optional. Tool to support searching public web data, powered by Vertex AI
-	// Search and Sec4 compliance.
-	EnterpriseWebSearch *EnterpriseWebSearch
-	// Optional. CodeExecution tool type.
-	// Enables the model to execute code as part of generation.
-	CodeExecution *Tool_CodeExecution
-	// Optional. Tool to support URL context retrieval.
-	UrlContext *UrlContext
 }
 
 func (v *Tool) toProto() *pb.Tool {
@@ -1341,10 +1286,6 @@ func (v *Tool) toProto() *pb.Tool {
 	}
 	return &pb.Tool{
 		FunctionDeclarations: pvTransformSlice(v.FunctionDeclarations, (*FunctionDeclaration).toProto),
-		GoogleSearch:         v.GoogleSearch,
-		EnterpriseWebSearch:  v.EnterpriseWebSearch,
-		CodeExecution:        v.CodeExecution,
-		UrlContext:           v.UrlContext,
 	}
 }
 
@@ -1354,10 +1295,6 @@ func (Tool) fromProto(p *pb.Tool) *Tool {
 	}
 	return &Tool{
 		FunctionDeclarations: pvTransformSlice(p.FunctionDeclarations, (FunctionDeclaration{}).fromProto),
-		GoogleSearch:         p.GoogleSearch,
-		EnterpriseWebSearch:  p.EnterpriseWebSearch,
-		CodeExecution:        p.CodeExecution,
-		UrlContext:           p.UrlContext,
 	}
 }
 
@@ -1365,8 +1302,6 @@ func (Tool) fromProto(p *pb.Tool) *Tool {
 type ToolConfig struct {
 	// Optional. Function calling config.
 	FunctionCallingConfig *FunctionCallingConfig
-	// Optional. Retrieval config.
-	RetrievalConfig *RetrievalConfig
 }
 
 func (v *ToolConfig) toProto() *pb.ToolConfig {
@@ -1375,7 +1310,6 @@ func (v *ToolConfig) toProto() *pb.ToolConfig {
 	}
 	return &pb.ToolConfig{
 		FunctionCallingConfig: v.FunctionCallingConfig.toProto(),
-		RetrievalConfig:       v.RetrievalConfig,
 	}
 }
 
@@ -1385,7 +1319,6 @@ func (ToolConfig) fromProto(p *pb.ToolConfig) *ToolConfig {
 	}
 	return &ToolConfig{
 		FunctionCallingConfig: (FunctionCallingConfig{}).fromProto(p.FunctionCallingConfig),
-		RetrievalConfig:       p.RetrievalConfig,
 	}
 }
 

@@ -45,7 +45,7 @@
 //	// - It may require correct/in-range values for request initialization.
 //	// - It may require specifying regional endpoints when creating the service client as shown in:
 //	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
-//	c, err := aiplatform.NewPredictionClient(ctx)
+//	c, err := aiplatform.NewGenAiCacheClient(ctx)
 //	if err != nil {
 //		// TODO: Handle error.
 //	}
@@ -59,9 +59,20 @@
 //
 // The following is an example of making an API call with the newly created client, mentioned above.
 //
+//	req := &aiplatformpb.CreateCachedContentRequest{
+//		// TODO: Fill request struct fields.
+//		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/aiplatform/apiv1beta1/aiplatformpb#CreateCachedContentRequest.
+//	}
+//	resp, err := c.CreateCachedContent(ctx, req)
+//	if err != nil {
+//		// TODO: Handle error.
+//	}
+//	// TODO: Use resp.
+//	_ = resp
+//
 // # Use of Context
 //
-// The ctx passed to NewPredictionClient is used for authentication requests and
+// The ctx passed to NewGenAiCacheClient is used for authentication requests and
 // for creating the underlying connection, but is not used for subsequent calls.
 // Individual methods on the client use the ctx given to them.
 //
