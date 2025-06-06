@@ -715,6 +715,59 @@ func (Candidate_FinishReason) EnumDescriptor() ([]byte, []int) {
 	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{13, 0}
 }
 
+// Status of the url retrieval.
+type UrlMetadata_UrlRetrievalStatus int32
+
+const (
+	// Default value. This value is unused.
+	UrlMetadata_URL_RETRIEVAL_STATUS_UNSPECIFIED UrlMetadata_UrlRetrievalStatus = 0
+	// Url retrieval is successful.
+	UrlMetadata_URL_RETRIEVAL_STATUS_SUCCESS UrlMetadata_UrlRetrievalStatus = 1
+	// Url retrieval is failed due to error.
+	UrlMetadata_URL_RETRIEVAL_STATUS_ERROR UrlMetadata_UrlRetrievalStatus = 2
+)
+
+// Enum value maps for UrlMetadata_UrlRetrievalStatus.
+var (
+	UrlMetadata_UrlRetrievalStatus_name = map[int32]string{
+		0: "URL_RETRIEVAL_STATUS_UNSPECIFIED",
+		1: "URL_RETRIEVAL_STATUS_SUCCESS",
+		2: "URL_RETRIEVAL_STATUS_ERROR",
+	}
+	UrlMetadata_UrlRetrievalStatus_value = map[string]int32{
+		"URL_RETRIEVAL_STATUS_UNSPECIFIED": 0,
+		"URL_RETRIEVAL_STATUS_SUCCESS":     1,
+		"URL_RETRIEVAL_STATUS_ERROR":       2,
+	}
+)
+
+func (x UrlMetadata_UrlRetrievalStatus) Enum() *UrlMetadata_UrlRetrievalStatus {
+	p := new(UrlMetadata_UrlRetrievalStatus)
+	*p = x
+	return p
+}
+
+func (x UrlMetadata_UrlRetrievalStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (UrlMetadata_UrlRetrievalStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_qclaogui_aiplatform_v1beta1_content_proto_enumTypes[11].Descriptor()
+}
+
+func (UrlMetadata_UrlRetrievalStatus) Type() protoreflect.EnumType {
+	return &file_qclaogui_aiplatform_v1beta1_content_proto_enumTypes[11]
+}
+
+func (x UrlMetadata_UrlRetrievalStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use UrlMetadata_UrlRetrievalStatus.Descriptor instead.
+func (UrlMetadata_UrlRetrievalStatus) EnumDescriptor() ([]byte, []int) {
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{15, 0}
+}
+
 // The base structured datatype containing multi-part content of a message.
 //
 // A `Content` includes a `role` field designating the producer of the `Content`
@@ -1935,8 +1988,10 @@ type Candidate struct {
 	CitationMetadata *CitationMetadata `protobuf:"bytes,6,opt,name=citation_metadata,json=citationMetadata,proto3" json:"citation_metadata,omitempty"`
 	// Output only. Metadata specifies sources used to ground generated content.
 	GroundingMetadata *GroundingMetadata `protobuf:"bytes,7,opt,name=grounding_metadata,json=groundingMetadata,proto3" json:"grounding_metadata,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Output only. Metadata related to url context retrieval tool.
+	UrlContextMetadata *UrlContextMetadata `protobuf:"bytes,11,opt,name=url_context_metadata,json=urlContextMetadata,proto3" json:"url_context_metadata,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *Candidate) Reset() {
@@ -2032,6 +2087,114 @@ func (x *Candidate) GetGroundingMetadata() *GroundingMetadata {
 	return nil
 }
 
+func (x *Candidate) GetUrlContextMetadata() *UrlContextMetadata {
+	if x != nil {
+		return x.UrlContextMetadata
+	}
+	return nil
+}
+
+// Metadata related to url context retrieval tool.
+type UrlContextMetadata struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Output only. List of url context.
+	UrlMetadata   []*UrlMetadata `protobuf:"bytes,1,rep,name=url_metadata,json=urlMetadata,proto3" json:"url_metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UrlContextMetadata) Reset() {
+	*x = UrlContextMetadata{}
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UrlContextMetadata) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UrlContextMetadata) ProtoMessage() {}
+
+func (x *UrlContextMetadata) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UrlContextMetadata.ProtoReflect.Descriptor instead.
+func (*UrlContextMetadata) Descriptor() ([]byte, []int) {
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *UrlContextMetadata) GetUrlMetadata() []*UrlMetadata {
+	if x != nil {
+		return x.UrlMetadata
+	}
+	return nil
+}
+
+// Context of the a single url retrieval.
+type UrlMetadata struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Retrieved url by the tool.
+	RetrievedUrl string `protobuf:"bytes,1,opt,name=retrieved_url,json=retrievedUrl,proto3" json:"retrieved_url,omitempty"`
+	// Status of the url retrieval.
+	UrlRetrievalStatus UrlMetadata_UrlRetrievalStatus `protobuf:"varint,2,opt,name=url_retrieval_status,json=urlRetrievalStatus,proto3,enum=qclaogui.aiplatform.v1beta1.UrlMetadata_UrlRetrievalStatus" json:"url_retrieval_status,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *UrlMetadata) Reset() {
+	*x = UrlMetadata{}
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UrlMetadata) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UrlMetadata) ProtoMessage() {}
+
+func (x *UrlMetadata) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UrlMetadata.ProtoReflect.Descriptor instead.
+func (*UrlMetadata) Descriptor() ([]byte, []int) {
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *UrlMetadata) GetRetrievedUrl() string {
+	if x != nil {
+		return x.RetrievedUrl
+	}
+	return ""
+}
+
+func (x *UrlMetadata) GetUrlRetrievalStatus() UrlMetadata_UrlRetrievalStatus {
+	if x != nil {
+		return x.UrlRetrievalStatus
+	}
+	return UrlMetadata_URL_RETRIEVAL_STATUS_UNSPECIFIED
+}
+
 // Logprobs Result
 type LogprobsResult struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -2046,7 +2209,7 @@ type LogprobsResult struct {
 
 func (x *LogprobsResult) Reset() {
 	*x = LogprobsResult{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[14]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2058,7 +2221,7 @@ func (x *LogprobsResult) String() string {
 func (*LogprobsResult) ProtoMessage() {}
 
 func (x *LogprobsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[14]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2071,7 +2234,7 @@ func (x *LogprobsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogprobsResult.ProtoReflect.Descriptor instead.
 func (*LogprobsResult) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{14}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *LogprobsResult) GetTopCandidates() []*LogprobsResult_TopCandidates {
@@ -2107,7 +2270,7 @@ type Segment struct {
 
 func (x *Segment) Reset() {
 	*x = Segment{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[15]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2119,7 +2282,7 @@ func (x *Segment) String() string {
 func (*Segment) ProtoMessage() {}
 
 func (x *Segment) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[15]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2132,7 +2295,7 @@ func (x *Segment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Segment.ProtoReflect.Descriptor instead.
 func (*Segment) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{15}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *Segment) GetPartIndex() int32 {
@@ -2179,7 +2342,7 @@ type GroundingChunk struct {
 
 func (x *GroundingChunk) Reset() {
 	*x = GroundingChunk{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[16]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2191,7 +2354,7 @@ func (x *GroundingChunk) String() string {
 func (*GroundingChunk) ProtoMessage() {}
 
 func (x *GroundingChunk) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[16]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2204,7 +2367,7 @@ func (x *GroundingChunk) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingChunk.ProtoReflect.Descriptor instead.
 func (*GroundingChunk) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{16}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GroundingChunk) GetChunkType() isGroundingChunk_ChunkType {
@@ -2270,7 +2433,7 @@ type GroundingSupport struct {
 
 func (x *GroundingSupport) Reset() {
 	*x = GroundingSupport{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[17]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2282,7 +2445,7 @@ func (x *GroundingSupport) String() string {
 func (*GroundingSupport) ProtoMessage() {}
 
 func (x *GroundingSupport) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[17]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2295,7 +2458,7 @@ func (x *GroundingSupport) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingSupport.ProtoReflect.Descriptor instead.
 func (*GroundingSupport) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{17}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GroundingSupport) GetSegment() *Segment {
@@ -2340,7 +2503,7 @@ type GroundingMetadata struct {
 
 func (x *GroundingMetadata) Reset() {
 	*x = GroundingMetadata{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[18]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2352,7 +2515,7 @@ func (x *GroundingMetadata) String() string {
 func (*GroundingMetadata) ProtoMessage() {}
 
 func (x *GroundingMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[18]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2365,7 +2528,7 @@ func (x *GroundingMetadata) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingMetadata.ProtoReflect.Descriptor instead.
 func (*GroundingMetadata) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{18}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GroundingMetadata) GetWebSearchQueries() []string {
@@ -2425,7 +2588,7 @@ type SearchEntryPoint struct {
 
 func (x *SearchEntryPoint) Reset() {
 	*x = SearchEntryPoint{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[19]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2437,7 +2600,7 @@ func (x *SearchEntryPoint) String() string {
 func (*SearchEntryPoint) ProtoMessage() {}
 
 func (x *SearchEntryPoint) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[19]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2450,7 +2613,7 @@ func (x *SearchEntryPoint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchEntryPoint.ProtoReflect.Descriptor instead.
 func (*SearchEntryPoint) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{19}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *SearchEntryPoint) GetRenderedContent() string {
@@ -2482,7 +2645,7 @@ type RetrievalMetadata struct {
 
 func (x *RetrievalMetadata) Reset() {
 	*x = RetrievalMetadata{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[20]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2494,7 +2657,7 @@ func (x *RetrievalMetadata) String() string {
 func (*RetrievalMetadata) ProtoMessage() {}
 
 func (x *RetrievalMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[20]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2507,7 +2670,7 @@ func (x *RetrievalMetadata) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RetrievalMetadata.ProtoReflect.Descriptor instead.
 func (*RetrievalMetadata) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{20}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *RetrievalMetadata) GetGoogleSearchDynamicRetrievalScore() float32 {
@@ -2530,7 +2693,7 @@ type ModalityTokenCount struct {
 
 func (x *ModalityTokenCount) Reset() {
 	*x = ModalityTokenCount{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[21]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2542,7 +2705,7 @@ func (x *ModalityTokenCount) String() string {
 func (*ModalityTokenCount) ProtoMessage() {}
 
 func (x *ModalityTokenCount) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[21]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2555,7 +2718,7 @@ func (x *ModalityTokenCount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ModalityTokenCount.ProtoReflect.Descriptor instead.
 func (*ModalityTokenCount) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{21}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ModalityTokenCount) GetModality() Modality {
@@ -2588,7 +2751,7 @@ type GenerationConfig_RoutingConfig struct {
 
 func (x *GenerationConfig_RoutingConfig) Reset() {
 	*x = GenerationConfig_RoutingConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[22]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2600,7 +2763,7 @@ func (x *GenerationConfig_RoutingConfig) String() string {
 func (*GenerationConfig_RoutingConfig) ProtoMessage() {}
 
 func (x *GenerationConfig_RoutingConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[22]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2674,7 +2837,7 @@ type GenerationConfig_ThinkingConfig struct {
 
 func (x *GenerationConfig_ThinkingConfig) Reset() {
 	*x = GenerationConfig_ThinkingConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[23]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2686,7 +2849,7 @@ func (x *GenerationConfig_ThinkingConfig) String() string {
 func (*GenerationConfig_ThinkingConfig) ProtoMessage() {}
 
 func (x *GenerationConfig_ThinkingConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[23]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2727,7 +2890,7 @@ type GenerationConfig_ModelConfig struct {
 
 func (x *GenerationConfig_ModelConfig) Reset() {
 	*x = GenerationConfig_ModelConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[24]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2739,7 +2902,7 @@ func (x *GenerationConfig_ModelConfig) String() string {
 func (*GenerationConfig_ModelConfig) ProtoMessage() {}
 
 func (x *GenerationConfig_ModelConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[24]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2775,7 +2938,7 @@ type GenerationConfig_RoutingConfig_AutoRoutingMode struct {
 
 func (x *GenerationConfig_RoutingConfig_AutoRoutingMode) Reset() {
 	*x = GenerationConfig_RoutingConfig_AutoRoutingMode{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[25]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2787,7 +2950,7 @@ func (x *GenerationConfig_RoutingConfig_AutoRoutingMode) String() string {
 func (*GenerationConfig_RoutingConfig_AutoRoutingMode) ProtoMessage() {}
 
 func (x *GenerationConfig_RoutingConfig_AutoRoutingMode) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[25]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2822,7 +2985,7 @@ type GenerationConfig_RoutingConfig_ManualRoutingMode struct {
 
 func (x *GenerationConfig_RoutingConfig_ManualRoutingMode) Reset() {
 	*x = GenerationConfig_RoutingConfig_ManualRoutingMode{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[26]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2834,7 +2997,7 @@ func (x *GenerationConfig_RoutingConfig_ManualRoutingMode) String() string {
 func (*GenerationConfig_RoutingConfig_ManualRoutingMode) ProtoMessage() {}
 
 func (x *GenerationConfig_RoutingConfig_ManualRoutingMode) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[26]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2872,7 +3035,7 @@ type LogprobsResult_Candidate struct {
 
 func (x *LogprobsResult_Candidate) Reset() {
 	*x = LogprobsResult_Candidate{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[27]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2884,7 +3047,7 @@ func (x *LogprobsResult_Candidate) String() string {
 func (*LogprobsResult_Candidate) ProtoMessage() {}
 
 func (x *LogprobsResult_Candidate) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[27]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2897,7 +3060,7 @@ func (x *LogprobsResult_Candidate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogprobsResult_Candidate.ProtoReflect.Descriptor instead.
 func (*LogprobsResult_Candidate) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{14, 0}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{16, 0}
 }
 
 func (x *LogprobsResult_Candidate) GetToken() string {
@@ -2932,7 +3095,7 @@ type LogprobsResult_TopCandidates struct {
 
 func (x *LogprobsResult_TopCandidates) Reset() {
 	*x = LogprobsResult_TopCandidates{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[28]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2944,7 +3107,7 @@ func (x *LogprobsResult_TopCandidates) String() string {
 func (*LogprobsResult_TopCandidates) ProtoMessage() {}
 
 func (x *LogprobsResult_TopCandidates) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[28]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2957,7 +3120,7 @@ func (x *LogprobsResult_TopCandidates) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogprobsResult_TopCandidates.ProtoReflect.Descriptor instead.
 func (*LogprobsResult_TopCandidates) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{14, 1}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{16, 1}
 }
 
 func (x *LogprobsResult_TopCandidates) GetCandidates() []*LogprobsResult_Candidate {
@@ -2980,7 +3143,7 @@ type GroundingChunk_Web struct {
 
 func (x *GroundingChunk_Web) Reset() {
 	*x = GroundingChunk_Web{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[29]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2992,7 +3155,7 @@ func (x *GroundingChunk_Web) String() string {
 func (*GroundingChunk_Web) ProtoMessage() {}
 
 func (x *GroundingChunk_Web) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[29]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3005,7 +3168,7 @@ func (x *GroundingChunk_Web) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingChunk_Web.ProtoReflect.Descriptor instead.
 func (*GroundingChunk_Web) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{16, 0}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{18, 0}
 }
 
 func (x *GroundingChunk_Web) GetUri() string {
@@ -3043,7 +3206,7 @@ type GroundingChunk_RetrievedContext struct {
 
 func (x *GroundingChunk_RetrievedContext) Reset() {
 	*x = GroundingChunk_RetrievedContext{}
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[30]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3055,7 +3218,7 @@ func (x *GroundingChunk_RetrievedContext) String() string {
 func (*GroundingChunk_RetrievedContext) ProtoMessage() {}
 
 func (x *GroundingChunk_RetrievedContext) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[30]
+	mi := &file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3068,7 +3231,7 @@ func (x *GroundingChunk_RetrievedContext) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroundingChunk_RetrievedContext.ProtoReflect.Descriptor instead.
 func (*GroundingChunk_RetrievedContext) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{16, 1}
+	return file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP(), []int{18, 1}
 }
 
 func (x *GroundingChunk_RetrievedContext) GetContextDetails() isGroundingChunk_RetrievedContext_ContextDetails {
@@ -3287,7 +3450,7 @@ const file_qclaogui_aiplatform_v1beta1_content_proto_rawDesc = "" +
 	"\x03uri\x18\x03 \x01(\tB\x04\xe2A\x01\x03R\x03uri\x12\x1a\n" +
 	"\x05title\x18\x04 \x01(\tB\x04\xe2A\x01\x03R\x05title\x12\x1e\n" +
 	"\alicense\x18\x05 \x01(\tB\x04\xe2A\x01\x03R\alicense\x12B\n" +
-	"\x10publication_date\x18\x06 \x01(\v2\x11.google.type.DateB\x04\xe2A\x01\x03R\x0fpublicationDate\"\xf5\x06\n" +
+	"\x10publication_date\x18\x06 \x01(\v2\x11.google.type.DateB\x04\xe2A\x01\x03R\x0fpublicationDate\"\xde\a\n" +
 	"\tCandidate\x12\x1a\n" +
 	"\x05index\x18\x01 \x01(\x05B\x04\xe2A\x01\x03R\x05index\x12D\n" +
 	"\acontent\x18\x02 \x01(\v2$.qclaogui.aiplatform.v1beta1.ContentB\x04\xe2A\x01\x03R\acontent\x12'\n" +
@@ -3298,7 +3461,8 @@ const file_qclaogui_aiplatform_v1beta1_content_proto_rawDesc = "" +
 	"\x0esafety_ratings\x18\x04 \x03(\v2).qclaogui.aiplatform.v1beta1.SafetyRatingB\x04\xe2A\x01\x03R\rsafetyRatings\x120\n" +
 	"\x0efinish_message\x18\x05 \x01(\tB\x04\xe2A\x01\x03H\x00R\rfinishMessage\x88\x01\x01\x12`\n" +
 	"\x11citation_metadata\x18\x06 \x01(\v2-.qclaogui.aiplatform.v1beta1.CitationMetadataB\x04\xe2A\x01\x03R\x10citationMetadata\x12c\n" +
-	"\x12grounding_metadata\x18\a \x01(\v2..qclaogui.aiplatform.v1beta1.GroundingMetadataB\x04\xe2A\x01\x03R\x11groundingMetadata\"\xbc\x01\n" +
+	"\x12grounding_metadata\x18\a \x01(\v2..qclaogui.aiplatform.v1beta1.GroundingMetadataB\x04\xe2A\x01\x03R\x11groundingMetadata\x12g\n" +
+	"\x14url_context_metadata\x18\v \x01(\v2/.qclaogui.aiplatform.v1beta1.UrlContextMetadataB\x04\xe2A\x01\x03R\x12urlContextMetadata\"\xbc\x01\n" +
 	"\fFinishReason\x12\x1d\n" +
 	"\x19FINISH_REASON_UNSPECIFIED\x10\x00\x12\b\n" +
 	"\x04STOP\x10\x01\x12\x0e\n" +
@@ -3313,7 +3477,16 @@ const file_qclaogui_aiplatform_v1beta1_content_proto_rawDesc = "" +
 	"\x12PROHIBITED_CONTENT\x10\a\x12\b\n" +
 	"\x04SPII\x10\b\x12\x1b\n" +
 	"\x17MALFORMED_FUNCTION_CALL\x10\tB\x11\n" +
-	"\x0f_finish_message\"\xe0\x03\n" +
+	"\x0f_finish_message\"g\n" +
+	"\x12UrlContextMetadata\x12Q\n" +
+	"\furl_metadata\x18\x01 \x03(\v2(.qclaogui.aiplatform.v1beta1.UrlMetadataB\x04\xe2A\x01\x03R\vurlMetadata\"\x9f\x02\n" +
+	"\vUrlMetadata\x12#\n" +
+	"\rretrieved_url\x18\x01 \x01(\tR\fretrievedUrl\x12m\n" +
+	"\x14url_retrieval_status\x18\x02 \x01(\x0e2;.qclaogui.aiplatform.v1beta1.UrlMetadata.UrlRetrievalStatusR\x12urlRetrievalStatus\"|\n" +
+	"\x12UrlRetrievalStatus\x12$\n" +
+	" URL_RETRIEVAL_STATUS_UNSPECIFIED\x10\x00\x12 \n" +
+	"\x1cURL_RETRIEVAL_STATUS_SUCCESS\x10\x01\x12\x1e\n" +
+	"\x1aURL_RETRIEVAL_STATUS_ERROR\x10\x02\"\xe0\x03\n" +
 	"\x0eLogprobsResult\x12`\n" +
 	"\x0etop_candidates\x18\x01 \x03(\v29.qclaogui.aiplatform.v1beta1.LogprobsResult.TopCandidatesR\rtopCandidates\x12b\n" +
 	"\x11chosen_candidates\x18\x02 \x03(\v25.qclaogui.aiplatform.v1beta1.LogprobsResult.CandidateR\x10chosenCandidates\x1a\x9f\x01\n" +
@@ -3406,8 +3579,8 @@ func file_qclaogui_aiplatform_v1beta1_content_proto_rawDescGZIP() []byte {
 }
 
 var (
-	file_qclaogui_aiplatform_v1beta1_content_proto_enumTypes = make([]protoimpl.EnumInfo, 11)
-	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes  = make([]protoimpl.MessageInfo, 31)
+	file_qclaogui_aiplatform_v1beta1_content_proto_enumTypes = make([]protoimpl.EnumInfo, 12)
+	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes  = make([]protoimpl.MessageInfo, 33)
 	file_qclaogui_aiplatform_v1beta1_content_proto_goTypes   = []any{
 		(HarmCategory)(0),                     // 0: qclaogui.aiplatform.v1beta1.HarmCategory
 		(Modality)(0),                         // 1: qclaogui.aiplatform.v1beta1.Modality
@@ -3420,105 +3593,111 @@ var (
 		(SafetyRating_HarmProbability)(0),                                          // 8: qclaogui.aiplatform.v1beta1.SafetyRating.HarmProbability
 		(SafetyRating_HarmSeverity)(0),                                             // 9: qclaogui.aiplatform.v1beta1.SafetyRating.HarmSeverity
 		(Candidate_FinishReason)(0),                                                // 10: qclaogui.aiplatform.v1beta1.Candidate.FinishReason
-		(*Content)(nil),                                                            // 11: qclaogui.aiplatform.v1beta1.Content
-		(*Part)(nil),                                                               // 12: qclaogui.aiplatform.v1beta1.Part
-		(*Blob)(nil),                                                               // 13: qclaogui.aiplatform.v1beta1.Blob
-		(*FileData)(nil),                                                           // 14: qclaogui.aiplatform.v1beta1.FileData
-		(*VideoMetadata)(nil),                                                      // 15: qclaogui.aiplatform.v1beta1.VideoMetadata
-		(*PrebuiltVoiceConfig)(nil),                                                // 16: qclaogui.aiplatform.v1beta1.PrebuiltVoiceConfig
-		(*VoiceConfig)(nil),                                                        // 17: qclaogui.aiplatform.v1beta1.VoiceConfig
-		(*SpeechConfig)(nil),                                                       // 18: qclaogui.aiplatform.v1beta1.SpeechConfig
-		(*GenerationConfig)(nil),                                                   // 19: qclaogui.aiplatform.v1beta1.GenerationConfig
-		(*SafetySetting)(nil),                                                      // 20: qclaogui.aiplatform.v1beta1.SafetySetting
-		(*SafetyRating)(nil),                                                       // 21: qclaogui.aiplatform.v1beta1.SafetyRating
-		(*CitationMetadata)(nil),                                                   // 22: qclaogui.aiplatform.v1beta1.CitationMetadata
-		(*Citation)(nil),                                                           // 23: qclaogui.aiplatform.v1beta1.Citation
-		(*Candidate)(nil),                                                          // 24: qclaogui.aiplatform.v1beta1.Candidate
-		(*LogprobsResult)(nil),                                                     // 25: qclaogui.aiplatform.v1beta1.LogprobsResult
-		(*Segment)(nil),                                                            // 26: qclaogui.aiplatform.v1beta1.Segment
-		(*GroundingChunk)(nil),                                                     // 27: qclaogui.aiplatform.v1beta1.GroundingChunk
-		(*GroundingSupport)(nil),                                                   // 28: qclaogui.aiplatform.v1beta1.GroundingSupport
-		(*GroundingMetadata)(nil),                                                  // 29: qclaogui.aiplatform.v1beta1.GroundingMetadata
-		(*SearchEntryPoint)(nil),                                                   // 30: qclaogui.aiplatform.v1beta1.SearchEntryPoint
-		(*RetrievalMetadata)(nil),                                                  // 31: qclaogui.aiplatform.v1beta1.RetrievalMetadata
-		(*ModalityTokenCount)(nil),                                                 // 32: qclaogui.aiplatform.v1beta1.ModalityTokenCount
-		(*GenerationConfig_RoutingConfig)(nil),                                     // 33: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig
-		(*GenerationConfig_ThinkingConfig)(nil),                                    // 34: qclaogui.aiplatform.v1beta1.GenerationConfig.ThinkingConfig
-		(*GenerationConfig_ModelConfig)(nil),                                       // 35: qclaogui.aiplatform.v1beta1.GenerationConfig.ModelConfig
-		(*GenerationConfig_RoutingConfig_AutoRoutingMode)(nil),                     // 36: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode
-		(*GenerationConfig_RoutingConfig_ManualRoutingMode)(nil),                   // 37: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.ManualRoutingMode
-		(*LogprobsResult_Candidate)(nil),                                           // 38: qclaogui.aiplatform.v1beta1.LogprobsResult.Candidate
-		(*LogprobsResult_TopCandidates)(nil),                                       // 39: qclaogui.aiplatform.v1beta1.LogprobsResult.TopCandidates
-		(*GroundingChunk_Web)(nil),                                                 // 40: qclaogui.aiplatform.v1beta1.GroundingChunk.Web
-		(*GroundingChunk_RetrievedContext)(nil),                                    // 41: qclaogui.aiplatform.v1beta1.GroundingChunk.RetrievedContext
-		(*FunctionCall)(nil),                                                       // 42: qclaogui.aiplatform.v1beta1.FunctionCall
-		(*FunctionResponse)(nil),                                                   // 43: qclaogui.aiplatform.v1beta1.FunctionResponse
-		(*ExecutableCode)(nil),                                                     // 44: qclaogui.aiplatform.v1beta1.ExecutableCode
-		(*CodeExecutionResult)(nil),                                                // 45: qclaogui.aiplatform.v1beta1.CodeExecutionResult
-		(*durationpb.Duration)(nil),                                                // 46: google.protobuf.Duration
-		(*Schema)(nil),                                                             // 47: qclaogui.aiplatform.v1beta1.Schema
-		(*structpb.Value)(nil),                                                     // 48: google.protobuf.Value
-		(*date.Date)(nil),                                                          // 49: google.type.Date
-		(*RagChunk)(nil),                                                           // 50: qclaogui.aiplatform.v1beta1.RagChunk
+		(UrlMetadata_UrlRetrievalStatus)(0),                                        // 11: qclaogui.aiplatform.v1beta1.UrlMetadata.UrlRetrievalStatus
+		(*Content)(nil),                                                            // 12: qclaogui.aiplatform.v1beta1.Content
+		(*Part)(nil),                                                               // 13: qclaogui.aiplatform.v1beta1.Part
+		(*Blob)(nil),                                                               // 14: qclaogui.aiplatform.v1beta1.Blob
+		(*FileData)(nil),                                                           // 15: qclaogui.aiplatform.v1beta1.FileData
+		(*VideoMetadata)(nil),                                                      // 16: qclaogui.aiplatform.v1beta1.VideoMetadata
+		(*PrebuiltVoiceConfig)(nil),                                                // 17: qclaogui.aiplatform.v1beta1.PrebuiltVoiceConfig
+		(*VoiceConfig)(nil),                                                        // 18: qclaogui.aiplatform.v1beta1.VoiceConfig
+		(*SpeechConfig)(nil),                                                       // 19: qclaogui.aiplatform.v1beta1.SpeechConfig
+		(*GenerationConfig)(nil),                                                   // 20: qclaogui.aiplatform.v1beta1.GenerationConfig
+		(*SafetySetting)(nil),                                                      // 21: qclaogui.aiplatform.v1beta1.SafetySetting
+		(*SafetyRating)(nil),                                                       // 22: qclaogui.aiplatform.v1beta1.SafetyRating
+		(*CitationMetadata)(nil),                                                   // 23: qclaogui.aiplatform.v1beta1.CitationMetadata
+		(*Citation)(nil),                                                           // 24: qclaogui.aiplatform.v1beta1.Citation
+		(*Candidate)(nil),                                                          // 25: qclaogui.aiplatform.v1beta1.Candidate
+		(*UrlContextMetadata)(nil),                                                 // 26: qclaogui.aiplatform.v1beta1.UrlContextMetadata
+		(*UrlMetadata)(nil),                                                        // 27: qclaogui.aiplatform.v1beta1.UrlMetadata
+		(*LogprobsResult)(nil),                                                     // 28: qclaogui.aiplatform.v1beta1.LogprobsResult
+		(*Segment)(nil),                                                            // 29: qclaogui.aiplatform.v1beta1.Segment
+		(*GroundingChunk)(nil),                                                     // 30: qclaogui.aiplatform.v1beta1.GroundingChunk
+		(*GroundingSupport)(nil),                                                   // 31: qclaogui.aiplatform.v1beta1.GroundingSupport
+		(*GroundingMetadata)(nil),                                                  // 32: qclaogui.aiplatform.v1beta1.GroundingMetadata
+		(*SearchEntryPoint)(nil),                                                   // 33: qclaogui.aiplatform.v1beta1.SearchEntryPoint
+		(*RetrievalMetadata)(nil),                                                  // 34: qclaogui.aiplatform.v1beta1.RetrievalMetadata
+		(*ModalityTokenCount)(nil),                                                 // 35: qclaogui.aiplatform.v1beta1.ModalityTokenCount
+		(*GenerationConfig_RoutingConfig)(nil),                                     // 36: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig
+		(*GenerationConfig_ThinkingConfig)(nil),                                    // 37: qclaogui.aiplatform.v1beta1.GenerationConfig.ThinkingConfig
+		(*GenerationConfig_ModelConfig)(nil),                                       // 38: qclaogui.aiplatform.v1beta1.GenerationConfig.ModelConfig
+		(*GenerationConfig_RoutingConfig_AutoRoutingMode)(nil),                     // 39: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode
+		(*GenerationConfig_RoutingConfig_ManualRoutingMode)(nil),                   // 40: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.ManualRoutingMode
+		(*LogprobsResult_Candidate)(nil),                                           // 41: qclaogui.aiplatform.v1beta1.LogprobsResult.Candidate
+		(*LogprobsResult_TopCandidates)(nil),                                       // 42: qclaogui.aiplatform.v1beta1.LogprobsResult.TopCandidates
+		(*GroundingChunk_Web)(nil),                                                 // 43: qclaogui.aiplatform.v1beta1.GroundingChunk.Web
+		(*GroundingChunk_RetrievedContext)(nil),                                    // 44: qclaogui.aiplatform.v1beta1.GroundingChunk.RetrievedContext
+		(*FunctionCall)(nil),                                                       // 45: qclaogui.aiplatform.v1beta1.FunctionCall
+		(*FunctionResponse)(nil),                                                   // 46: qclaogui.aiplatform.v1beta1.FunctionResponse
+		(*ExecutableCode)(nil),                                                     // 47: qclaogui.aiplatform.v1beta1.ExecutableCode
+		(*CodeExecutionResult)(nil),                                                // 48: qclaogui.aiplatform.v1beta1.CodeExecutionResult
+		(*durationpb.Duration)(nil),                                                // 49: google.protobuf.Duration
+		(*Schema)(nil),                                                             // 50: qclaogui.aiplatform.v1beta1.Schema
+		(*structpb.Value)(nil),                                                     // 51: google.protobuf.Value
+		(*date.Date)(nil),                                                          // 52: google.type.Date
+		(*RagChunk)(nil),                                                           // 53: qclaogui.aiplatform.v1beta1.RagChunk
 	}
 )
 
 var file_qclaogui_aiplatform_v1beta1_content_proto_depIdxs = []int32{
-	12, // 0: qclaogui.aiplatform.v1beta1.Content.parts:type_name -> qclaogui.aiplatform.v1beta1.Part
-	13, // 1: qclaogui.aiplatform.v1beta1.Part.inline_data:type_name -> qclaogui.aiplatform.v1beta1.Blob
-	14, // 2: qclaogui.aiplatform.v1beta1.Part.file_data:type_name -> qclaogui.aiplatform.v1beta1.FileData
-	42, // 3: qclaogui.aiplatform.v1beta1.Part.function_call:type_name -> qclaogui.aiplatform.v1beta1.FunctionCall
-	43, // 4: qclaogui.aiplatform.v1beta1.Part.function_response:type_name -> qclaogui.aiplatform.v1beta1.FunctionResponse
-	44, // 5: qclaogui.aiplatform.v1beta1.Part.executable_code:type_name -> qclaogui.aiplatform.v1beta1.ExecutableCode
-	45, // 6: qclaogui.aiplatform.v1beta1.Part.code_execution_result:type_name -> qclaogui.aiplatform.v1beta1.CodeExecutionResult
-	15, // 7: qclaogui.aiplatform.v1beta1.Part.video_metadata:type_name -> qclaogui.aiplatform.v1beta1.VideoMetadata
-	46, // 8: qclaogui.aiplatform.v1beta1.VideoMetadata.start_offset:type_name -> google.protobuf.Duration
-	46, // 9: qclaogui.aiplatform.v1beta1.VideoMetadata.end_offset:type_name -> google.protobuf.Duration
-	16, // 10: qclaogui.aiplatform.v1beta1.VoiceConfig.prebuilt_voice_config:type_name -> qclaogui.aiplatform.v1beta1.PrebuiltVoiceConfig
-	17, // 11: qclaogui.aiplatform.v1beta1.SpeechConfig.voice_config:type_name -> qclaogui.aiplatform.v1beta1.VoiceConfig
-	47, // 12: qclaogui.aiplatform.v1beta1.GenerationConfig.response_schema:type_name -> qclaogui.aiplatform.v1beta1.Schema
-	48, // 13: qclaogui.aiplatform.v1beta1.GenerationConfig.response_json_schema:type_name -> google.protobuf.Value
-	33, // 14: qclaogui.aiplatform.v1beta1.GenerationConfig.routing_config:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig
+	13, // 0: qclaogui.aiplatform.v1beta1.Content.parts:type_name -> qclaogui.aiplatform.v1beta1.Part
+	14, // 1: qclaogui.aiplatform.v1beta1.Part.inline_data:type_name -> qclaogui.aiplatform.v1beta1.Blob
+	15, // 2: qclaogui.aiplatform.v1beta1.Part.file_data:type_name -> qclaogui.aiplatform.v1beta1.FileData
+	45, // 3: qclaogui.aiplatform.v1beta1.Part.function_call:type_name -> qclaogui.aiplatform.v1beta1.FunctionCall
+	46, // 4: qclaogui.aiplatform.v1beta1.Part.function_response:type_name -> qclaogui.aiplatform.v1beta1.FunctionResponse
+	47, // 5: qclaogui.aiplatform.v1beta1.Part.executable_code:type_name -> qclaogui.aiplatform.v1beta1.ExecutableCode
+	48, // 6: qclaogui.aiplatform.v1beta1.Part.code_execution_result:type_name -> qclaogui.aiplatform.v1beta1.CodeExecutionResult
+	16, // 7: qclaogui.aiplatform.v1beta1.Part.video_metadata:type_name -> qclaogui.aiplatform.v1beta1.VideoMetadata
+	49, // 8: qclaogui.aiplatform.v1beta1.VideoMetadata.start_offset:type_name -> google.protobuf.Duration
+	49, // 9: qclaogui.aiplatform.v1beta1.VideoMetadata.end_offset:type_name -> google.protobuf.Duration
+	17, // 10: qclaogui.aiplatform.v1beta1.VoiceConfig.prebuilt_voice_config:type_name -> qclaogui.aiplatform.v1beta1.PrebuiltVoiceConfig
+	18, // 11: qclaogui.aiplatform.v1beta1.SpeechConfig.voice_config:type_name -> qclaogui.aiplatform.v1beta1.VoiceConfig
+	50, // 12: qclaogui.aiplatform.v1beta1.GenerationConfig.response_schema:type_name -> qclaogui.aiplatform.v1beta1.Schema
+	51, // 13: qclaogui.aiplatform.v1beta1.GenerationConfig.response_json_schema:type_name -> google.protobuf.Value
+	36, // 14: qclaogui.aiplatform.v1beta1.GenerationConfig.routing_config:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig
 	2,  // 15: qclaogui.aiplatform.v1beta1.GenerationConfig.response_modalities:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.Modality
 	3,  // 16: qclaogui.aiplatform.v1beta1.GenerationConfig.media_resolution:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.MediaResolution
-	18, // 17: qclaogui.aiplatform.v1beta1.GenerationConfig.speech_config:type_name -> qclaogui.aiplatform.v1beta1.SpeechConfig
-	34, // 18: qclaogui.aiplatform.v1beta1.GenerationConfig.thinking_config:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.ThinkingConfig
-	35, // 19: qclaogui.aiplatform.v1beta1.GenerationConfig.model_config:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.ModelConfig
+	19, // 17: qclaogui.aiplatform.v1beta1.GenerationConfig.speech_config:type_name -> qclaogui.aiplatform.v1beta1.SpeechConfig
+	37, // 18: qclaogui.aiplatform.v1beta1.GenerationConfig.thinking_config:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.ThinkingConfig
+	38, // 19: qclaogui.aiplatform.v1beta1.GenerationConfig.model_config:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.ModelConfig
 	0,  // 20: qclaogui.aiplatform.v1beta1.SafetySetting.category:type_name -> qclaogui.aiplatform.v1beta1.HarmCategory
 	6,  // 21: qclaogui.aiplatform.v1beta1.SafetySetting.threshold:type_name -> qclaogui.aiplatform.v1beta1.SafetySetting.HarmBlockThreshold
 	7,  // 22: qclaogui.aiplatform.v1beta1.SafetySetting.method:type_name -> qclaogui.aiplatform.v1beta1.SafetySetting.HarmBlockMethod
 	0,  // 23: qclaogui.aiplatform.v1beta1.SafetyRating.category:type_name -> qclaogui.aiplatform.v1beta1.HarmCategory
 	8,  // 24: qclaogui.aiplatform.v1beta1.SafetyRating.probability:type_name -> qclaogui.aiplatform.v1beta1.SafetyRating.HarmProbability
 	9,  // 25: qclaogui.aiplatform.v1beta1.SafetyRating.severity:type_name -> qclaogui.aiplatform.v1beta1.SafetyRating.HarmSeverity
-	23, // 26: qclaogui.aiplatform.v1beta1.CitationMetadata.citations:type_name -> qclaogui.aiplatform.v1beta1.Citation
-	49, // 27: qclaogui.aiplatform.v1beta1.Citation.publication_date:type_name -> google.type.Date
-	11, // 28: qclaogui.aiplatform.v1beta1.Candidate.content:type_name -> qclaogui.aiplatform.v1beta1.Content
-	25, // 29: qclaogui.aiplatform.v1beta1.Candidate.logprobs_result:type_name -> qclaogui.aiplatform.v1beta1.LogprobsResult
+	24, // 26: qclaogui.aiplatform.v1beta1.CitationMetadata.citations:type_name -> qclaogui.aiplatform.v1beta1.Citation
+	52, // 27: qclaogui.aiplatform.v1beta1.Citation.publication_date:type_name -> google.type.Date
+	12, // 28: qclaogui.aiplatform.v1beta1.Candidate.content:type_name -> qclaogui.aiplatform.v1beta1.Content
+	28, // 29: qclaogui.aiplatform.v1beta1.Candidate.logprobs_result:type_name -> qclaogui.aiplatform.v1beta1.LogprobsResult
 	10, // 30: qclaogui.aiplatform.v1beta1.Candidate.finish_reason:type_name -> qclaogui.aiplatform.v1beta1.Candidate.FinishReason
-	21, // 31: qclaogui.aiplatform.v1beta1.Candidate.safety_ratings:type_name -> qclaogui.aiplatform.v1beta1.SafetyRating
-	22, // 32: qclaogui.aiplatform.v1beta1.Candidate.citation_metadata:type_name -> qclaogui.aiplatform.v1beta1.CitationMetadata
-	29, // 33: qclaogui.aiplatform.v1beta1.Candidate.grounding_metadata:type_name -> qclaogui.aiplatform.v1beta1.GroundingMetadata
-	39, // 34: qclaogui.aiplatform.v1beta1.LogprobsResult.top_candidates:type_name -> qclaogui.aiplatform.v1beta1.LogprobsResult.TopCandidates
-	38, // 35: qclaogui.aiplatform.v1beta1.LogprobsResult.chosen_candidates:type_name -> qclaogui.aiplatform.v1beta1.LogprobsResult.Candidate
-	40, // 36: qclaogui.aiplatform.v1beta1.GroundingChunk.web:type_name -> qclaogui.aiplatform.v1beta1.GroundingChunk.Web
-	41, // 37: qclaogui.aiplatform.v1beta1.GroundingChunk.retrieved_context:type_name -> qclaogui.aiplatform.v1beta1.GroundingChunk.RetrievedContext
-	26, // 38: qclaogui.aiplatform.v1beta1.GroundingSupport.segment:type_name -> qclaogui.aiplatform.v1beta1.Segment
-	30, // 39: qclaogui.aiplatform.v1beta1.GroundingMetadata.search_entry_point:type_name -> qclaogui.aiplatform.v1beta1.SearchEntryPoint
-	27, // 40: qclaogui.aiplatform.v1beta1.GroundingMetadata.grounding_chunks:type_name -> qclaogui.aiplatform.v1beta1.GroundingChunk
-	28, // 41: qclaogui.aiplatform.v1beta1.GroundingMetadata.grounding_supports:type_name -> qclaogui.aiplatform.v1beta1.GroundingSupport
-	31, // 42: qclaogui.aiplatform.v1beta1.GroundingMetadata.retrieval_metadata:type_name -> qclaogui.aiplatform.v1beta1.RetrievalMetadata
-	1,  // 43: qclaogui.aiplatform.v1beta1.ModalityTokenCount.modality:type_name -> qclaogui.aiplatform.v1beta1.Modality
-	36, // 44: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.auto_mode:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode
-	37, // 45: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.manual_mode:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.ManualRoutingMode
-	5,  // 46: qclaogui.aiplatform.v1beta1.GenerationConfig.ModelConfig.feature_selection_preference:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.ModelConfig.FeatureSelectionPreference
-	4,  // 47: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode.model_routing_preference:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode.ModelRoutingPreference
-	38, // 48: qclaogui.aiplatform.v1beta1.LogprobsResult.TopCandidates.candidates:type_name -> qclaogui.aiplatform.v1beta1.LogprobsResult.Candidate
-	50, // 49: qclaogui.aiplatform.v1beta1.GroundingChunk.RetrievedContext.rag_chunk:type_name -> qclaogui.aiplatform.v1beta1.RagChunk
-	50, // [50:50] is the sub-list for method output_type
-	50, // [50:50] is the sub-list for method input_type
-	50, // [50:50] is the sub-list for extension type_name
-	50, // [50:50] is the sub-list for extension extendee
-	0,  // [0:50] is the sub-list for field type_name
+	22, // 31: qclaogui.aiplatform.v1beta1.Candidate.safety_ratings:type_name -> qclaogui.aiplatform.v1beta1.SafetyRating
+	23, // 32: qclaogui.aiplatform.v1beta1.Candidate.citation_metadata:type_name -> qclaogui.aiplatform.v1beta1.CitationMetadata
+	32, // 33: qclaogui.aiplatform.v1beta1.Candidate.grounding_metadata:type_name -> qclaogui.aiplatform.v1beta1.GroundingMetadata
+	26, // 34: qclaogui.aiplatform.v1beta1.Candidate.url_context_metadata:type_name -> qclaogui.aiplatform.v1beta1.UrlContextMetadata
+	27, // 35: qclaogui.aiplatform.v1beta1.UrlContextMetadata.url_metadata:type_name -> qclaogui.aiplatform.v1beta1.UrlMetadata
+	11, // 36: qclaogui.aiplatform.v1beta1.UrlMetadata.url_retrieval_status:type_name -> qclaogui.aiplatform.v1beta1.UrlMetadata.UrlRetrievalStatus
+	42, // 37: qclaogui.aiplatform.v1beta1.LogprobsResult.top_candidates:type_name -> qclaogui.aiplatform.v1beta1.LogprobsResult.TopCandidates
+	41, // 38: qclaogui.aiplatform.v1beta1.LogprobsResult.chosen_candidates:type_name -> qclaogui.aiplatform.v1beta1.LogprobsResult.Candidate
+	43, // 39: qclaogui.aiplatform.v1beta1.GroundingChunk.web:type_name -> qclaogui.aiplatform.v1beta1.GroundingChunk.Web
+	44, // 40: qclaogui.aiplatform.v1beta1.GroundingChunk.retrieved_context:type_name -> qclaogui.aiplatform.v1beta1.GroundingChunk.RetrievedContext
+	29, // 41: qclaogui.aiplatform.v1beta1.GroundingSupport.segment:type_name -> qclaogui.aiplatform.v1beta1.Segment
+	33, // 42: qclaogui.aiplatform.v1beta1.GroundingMetadata.search_entry_point:type_name -> qclaogui.aiplatform.v1beta1.SearchEntryPoint
+	30, // 43: qclaogui.aiplatform.v1beta1.GroundingMetadata.grounding_chunks:type_name -> qclaogui.aiplatform.v1beta1.GroundingChunk
+	31, // 44: qclaogui.aiplatform.v1beta1.GroundingMetadata.grounding_supports:type_name -> qclaogui.aiplatform.v1beta1.GroundingSupport
+	34, // 45: qclaogui.aiplatform.v1beta1.GroundingMetadata.retrieval_metadata:type_name -> qclaogui.aiplatform.v1beta1.RetrievalMetadata
+	1,  // 46: qclaogui.aiplatform.v1beta1.ModalityTokenCount.modality:type_name -> qclaogui.aiplatform.v1beta1.Modality
+	39, // 47: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.auto_mode:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode
+	40, // 48: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.manual_mode:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.ManualRoutingMode
+	5,  // 49: qclaogui.aiplatform.v1beta1.GenerationConfig.ModelConfig.feature_selection_preference:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.ModelConfig.FeatureSelectionPreference
+	4,  // 50: qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode.model_routing_preference:type_name -> qclaogui.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode.ModelRoutingPreference
+	41, // 51: qclaogui.aiplatform.v1beta1.LogprobsResult.TopCandidates.candidates:type_name -> qclaogui.aiplatform.v1beta1.LogprobsResult.Candidate
+	53, // 52: qclaogui.aiplatform.v1beta1.GroundingChunk.RetrievedContext.rag_chunk:type_name -> qclaogui.aiplatform.v1beta1.RagChunk
+	53, // [53:53] is the sub-list for method output_type
+	53, // [53:53] is the sub-list for method input_type
+	53, // [53:53] is the sub-list for extension type_name
+	53, // [53:53] is the sub-list for extension extendee
+	0,  // [0:53] is the sub-list for field type_name
 }
 
 func init() { file_qclaogui_aiplatform_v1beta1_content_proto_init() }
@@ -3545,22 +3724,22 @@ func file_qclaogui_aiplatform_v1beta1_content_proto_init() {
 	}
 	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[8].OneofWrappers = []any{}
 	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[13].OneofWrappers = []any{}
-	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[16].OneofWrappers = []any{
+	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[18].OneofWrappers = []any{
 		(*GroundingChunk_Web_)(nil),
 		(*GroundingChunk_RetrievedContext_)(nil),
 	}
-	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[17].OneofWrappers = []any{}
-	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[18].OneofWrappers = []any{}
-	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[22].OneofWrappers = []any{
+	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[19].OneofWrappers = []any{}
+	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[20].OneofWrappers = []any{}
+	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[24].OneofWrappers = []any{
 		(*GenerationConfig_RoutingConfig_AutoMode)(nil),
 		(*GenerationConfig_RoutingConfig_ManualMode)(nil),
 	}
-	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[23].OneofWrappers = []any{}
 	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[25].OneofWrappers = []any{}
-	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[26].OneofWrappers = []any{}
 	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[27].OneofWrappers = []any{}
+	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[28].OneofWrappers = []any{}
 	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[29].OneofWrappers = []any{}
-	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[30].OneofWrappers = []any{
+	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[31].OneofWrappers = []any{}
+	file_qclaogui_aiplatform_v1beta1_content_proto_msgTypes[32].OneofWrappers = []any{
 		(*GroundingChunk_RetrievedContext_RagChunk)(nil),
 	}
 	type x struct{}
@@ -3568,8 +3747,8 @@ func file_qclaogui_aiplatform_v1beta1_content_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_qclaogui_aiplatform_v1beta1_content_proto_rawDesc), len(file_qclaogui_aiplatform_v1beta1_content_proto_rawDesc)),
-			NumEnums:      11,
-			NumMessages:   31,
+			NumEnums:      12,
+			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

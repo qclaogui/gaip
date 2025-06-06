@@ -117,6 +117,8 @@ types:
           omit: true
         LogprobsResult:
           omit: true
+        UrlContextMetadata:
+          omit: true
     
     GenerateContentResponse:
       doc: 'is the response from a GenerateContent or GenerateContentStream call.'
