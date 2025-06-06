@@ -22,9 +22,11 @@ func (cs *ChatSession) SendMessage(ctx context.Context, parts ...Part) (*Generat
 	// Call the underlying client with the entire history plus the argument Content.
 	cs.History = append(cs.History, NewUserContent(parts...))
 
-	req := cs.m.newGenerateContentRequest(cs.History...)
-	var cc int32 = 1
-	req.GenerationConfig.CandidateCount = &cc
+	req, err := cs.m.newGenerateContentRequest(cs.History...)
+	if err != nil {
+		return nil, err
+	}
+	req.GenerationConfig.CandidateCount = Ptr[int32](1)
 
 	resp, err := cs.m.generateContent(ctx, req)
 	if err != nil {
@@ -40,12 +42,13 @@ func (cs *ChatSession) SendMessageStream(ctx context.Context, parts ...Part) *Ge
 	// Call the underlying client with the entire history plus the argument Content.
 	cs.History = append(cs.History, NewUserContent(parts...))
 
-	req := cs.m.newGenerateContentRequest(cs.History...)
-	var cc int32 = 1
-	req.GenerationConfig.CandidateCount = &cc
+	req, err := cs.m.newGenerateContentRequest(cs.History...)
+	if err != nil {
+		return &GenerateContentResponseIterator{err: err}
+	}
+	req.GenerationConfig.CandidateCount = Ptr[int32](1)
 
 	streamClient, err := cs.m.c.pc.StreamGenerateContent(ctx, req)
-
 	return &GenerateContentResponseIterator{
 		sc:  streamClient,
 		err: err,
@@ -54,14 +57,17 @@ func (cs *ChatSession) SendMessageStream(ctx context.Context, parts ...Part) *Ge
 }
 
 // By default, use the first candidate for history. The user can modify that if they want.
-func (cs *ChatSession) addToHistory(cands []*Candidate) {
+func (cs *ChatSession) addToHistory(cands []*Candidate) bool {
 	if len(cands) > 0 {
 		c := cands[0].Content
 		if c == nil {
-			return
+			return false
 		}
+		c.Role = roleModel
 		cs.History = append(cs.History, copySanitizedModelContent(c))
+		return true
 	}
+	return false
 }
 
 // copySanitizedModelContent creates a (shallow) copy of c with role set to

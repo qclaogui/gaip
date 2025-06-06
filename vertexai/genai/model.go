@@ -73,37 +73,64 @@ func (m *GenerativeModel) Name() string {
 
 // GenerateContent produces a single request and response.
 func (m *GenerativeModel) GenerateContent(ctx context.Context, parts ...Part) (*GenerateContentResponse, error) {
-	return m.generateContent(ctx, m.newGenerateContentRequest(NewUserContent(parts...)))
-}
-
-// GenerateContentStream returns an iterator that enumerates responses.
-func (m *GenerativeModel) GenerateContentStream(ctx context.Context, parts ...Part) *GenerateContentResponseIterator {
-	streamClient, err := m.c.pc.StreamGenerateContent(ctx, m.newGenerateContentRequest(NewUserContent(parts...)))
-	return &GenerateContentResponseIterator{
-		sc:  streamClient,
-		err: err,
+	req, err := m.newGenerateContentRequest(NewUserContent(parts...))
+	if err != nil {
+		return nil, err
 	}
-}
-
-func (m *GenerativeModel) generateContent(ctx context.Context, req *pb.GenerateContentRequest) (*GenerateContentResponse, error) {
 	resp, err := m.c.pc.GenerateContent(ctx, req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to generate content: %w", err)
+		return nil, err
 	}
 	return protoToResponse(resp)
 }
 
-func (m *GenerativeModel) newGenerateContentRequest(contents ...*Content) *pb.GenerateContentRequest {
-	return &pb.GenerateContentRequest{
-		Model:             m.fullName,
-		Contents:          pvTransformSlice(contents, (*Content).toProto),
-		SafetySettings:    pvTransformSlice(m.SafetySettings, (*SafetySetting).toProto),
-		Tools:             pvTransformSlice(m.Tools, (*Tool).toProto),
-		ToolConfig:        m.ToolConfig.toProto(),
-		GenerationConfig:  m.GenerationConfig.toProto(),
-		SystemInstruction: m.SystemInstruction.toProto(),
-		CachedContent:     m.CachedContentName,
+// GenerateContentStream returns an iterator that enumerates responses.
+func (m *GenerativeModel) GenerateContentStream(ctx context.Context, parts ...Part) *GenerateContentResponseIterator {
+	iter := &GenerateContentResponseIterator{}
+	req, err := m.newGenerateContentRequest(NewUserContent(parts...))
+	if err != nil {
+		iter.err = err
+	} else {
+		iter.sc, iter.err = m.c.pc.StreamGenerateContent(ctx, req)
 	}
+	return iter
+}
+
+func (m *GenerativeModel) generateContent(ctx context.Context, req *pb.GenerateContentRequest) (*GenerateContentResponse, error) {
+	iter := &GenerateContentResponseIterator{}
+	iter.sc, iter.err = m.c.pc.StreamGenerateContent(ctx, req)
+
+	for {
+		_, err := iter.Next()
+		if errors.Is(err, iterator.Done) {
+			return iter.MergedResponse(), nil
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
+}
+
+func (m *GenerativeModel) newGenerateContentRequest(contents ...*Content) (*pb.GenerateContentRequest, error) {
+	return pvCatchPanic(func() *pb.GenerateContentRequest {
+		var cc *string
+		if m.CachedContentName != "" {
+			cc = &m.CachedContentName
+		}
+
+		req := &pb.GenerateContentRequest{
+			Model:             m.fullName,
+			Contents:          pvTransformSlice(contents, (*Content).toProto),
+			SafetySettings:    pvTransformSlice(m.SafetySettings, (*SafetySetting).toProto),
+			Tools:             pvTransformSlice(m.Tools, (*Tool).toProto),
+			ToolConfig:        m.ToolConfig.toProto(),
+			GenerationConfig:  m.GenerationConfig.toProto(),
+			SystemInstruction: m.SystemInstruction.toProto(),
+			CachedContent:     *cc,
+		}
+		debugPrint(req)
+		return req
+	})
 }
 
 // GenerateContentResponseIterator is an iterator over GnerateContentResponse.
@@ -235,16 +262,27 @@ func (iter *GenerateContentResponseIterator) MergedResponse() *GenerateContentRe
 }
 
 func protoToResponse(resp *pb.GenerateContentResponse) (*GenerateContentResponse, error) {
-	gcp := (GenerateContentResponse{}).fromProto(resp)
-	// Assume a non-nil PromptFeedback is an error.
-	// TODO: confirm.
+	gcp, err := fromProto[GenerateContentResponse](resp)
+	if err != nil {
+		return nil, err
+	}
+	if gcp == nil {
+		return nil, errors.New("empty response from model")
+	}
+
 	if gcp.PromptFeedback != nil {
 		return nil, &BlockedError{PromptFeedback: gcp.PromptFeedback}
 	}
+	// Assume a non-nil PromptFeedback is an error.
+	// TODO: confirm.
+	// if gcp.PromptFeedback != nil && gcp.PromptFeedback.BlockReason != BlockReasonUnspecified {
+	// 	return nil, &BlockedError{PromptFeedback: gcp.PromptFeedback}
+	// }
+
 	// If any candidate is blocked, error.
 	// TODO: is this too harsh?
 	for _, c := range gcp.Candidates {
-		if c.FinishReason == FinishReasonSafety {
+		if c.FinishReason == FinishReasonSafety || c.FinishReason == FinishReasonRecitation {
 			return nil, &BlockedError{Candidate: c}
 		}
 	}

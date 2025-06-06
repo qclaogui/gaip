@@ -44,6 +44,7 @@ type Config struct {
 	GRPCListenAddress                     string              `yaml:"grpc_listen_address"`
 	GRPCListenPort                        int                 `yaml:"grpc_listen_port"`
 	GRPCConnLimit                         int                 `yaml:"grpc_listen_conn_limit"`
+	GRPCCollectMaxStreamsByConn           bool                `yaml:"grpc_collect_max_streams_by_conn"`
 	GRPCServerMaxRecvMsgSize              int                 `yaml:"grpc_server_max_recv_msg_size"`
 	GRPCServerMaxSendMsgSize              int                 `yaml:"grpc_server_max_send_msg_size"`
 	GRPCServerMaxConcurrentStreams        uint                `yaml:"grpc_server_max_concurrent_streams"`
@@ -116,6 +117,7 @@ func (cfg *Config) RegisterFlags(fs *flag.FlagSet) {
 	fs.StringVar(&cfg.GRPCListenAddress, "server.grpc-listen-address", "", "gRPC server listen address.")
 	fs.IntVar(&cfg.GRPCListenPort, "server.grpc-listen-port", 9095, "gRPC server listen port.")
 	fs.IntVar(&cfg.GRPCConnLimit, "server.grpc-conn-limit", 0, "Maximum number of simultaneous grpc connections, <=0 to disable")
+	fs.BoolVar(&cfg.GRPCCollectMaxStreamsByConn, "server.grpc-collect-max-streams-by-conn", true, "If true, the max streams by connection gauge will be collected.")
 	fs.IntVar(&cfg.GRPCServerMaxRecvMsgSize, "server.grpc-max-recv-msg-size-bytes", 4*1024*1024, "Limit on the size of a gRPC message this server can receive (bytes).")
 	fs.IntVar(&cfg.GRPCServerMaxSendMsgSize, "server.grpc-max-send-msg-size-bytes", 4*1024*1024, "Limit on the size of a gRPC message this server can send (bytes).")
 	fs.UintVar(&cfg.GRPCServerMaxConcurrentStreams, "server.grpc-max-concurrent-streams", 100, "Limit on the number of concurrent streams for gRPC calls per client connection (0 = unlimited)")

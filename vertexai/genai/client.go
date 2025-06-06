@@ -136,3 +136,8 @@ func float32pToInt32p(x *float32) *int32 {
 	i := int32(*x)
 	return &i
 }
+
+func fromProto[V interface{ fromProto(P) *V }, P any](p P) (*V, error) {
+	var v V
+	return pvCatchPanic(func() *V { return v.fromProto(p) })
+}
