@@ -826,7 +826,10 @@ type RagFile struct {
 	// Output only. Timestamp when this RagFile was last updated.
 	UpdateTime *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=update_time,json=updateTime,proto3" json:"update_time,omitempty"`
 	// Output only. State of the RagFile.
-	FileStatus    *FileStatus `protobuf:"bytes,13,opt,name=file_status,json=fileStatus,proto3" json:"file_status,omitempty"`
+	FileStatus *FileStatus `protobuf:"bytes,13,opt,name=file_status,json=fileStatus,proto3" json:"file_status,omitempty"`
+	// Output only. The metadata for metadata search. The contents will be
+	// be in JSON format.
+	UserMetadata  string `protobuf:"bytes,15,opt,name=user_metadata,json=userMetadata,proto3" json:"user_metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -976,6 +979,13 @@ func (x *RagFile) GetFileStatus() *FileStatus {
 		return x.FileStatus
 	}
 	return nil
+}
+
+func (x *RagFile) GetUserMetadata() string {
+	if x != nil {
+		return x.UserMetadata
+	}
+	return ""
 }
 
 type isRagFile_RagFileSource interface {
@@ -1339,6 +1349,196 @@ func (*RagFileParsingConfig_LayoutParser_) isRagFileParsingConfig_Parser() {}
 
 func (*RagFileParsingConfig_LlmParser_) isRagFileParsingConfig_Parser() {}
 
+// Metadata config for RagFile.
+type RagFileMetadataConfig struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Specifies the metadata schema source.
+	//
+	// Types that are valid to be assigned to MetadataSchemaSource:
+	//
+	//	*RagFileMetadataConfig_GcsMetadataSchemaSource
+	//	*RagFileMetadataConfig_GoogleDriveMetadataSchemaSource
+	//	*RagFileMetadataConfig_InlineMetadataSchemaSource
+	MetadataSchemaSource isRagFileMetadataConfig_MetadataSchemaSource `protobuf_oneof:"metadata_schema_source"`
+	// Specifies the metadata source.
+	//
+	// Types that are valid to be assigned to MetadataSource:
+	//
+	//	*RagFileMetadataConfig_GcsMetadataSource
+	//	*RagFileMetadataConfig_GoogleDriveMetadataSource
+	//	*RagFileMetadataConfig_InlineMetadataSource
+	MetadataSource isRagFileMetadataConfig_MetadataSource `protobuf_oneof:"metadata_source"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *RagFileMetadataConfig) Reset() {
+	*x = RagFileMetadataConfig{}
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RagFileMetadataConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RagFileMetadataConfig) ProtoMessage() {}
+
+func (x *RagFileMetadataConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RagFileMetadataConfig.ProtoReflect.Descriptor instead.
+func (*RagFileMetadataConfig) Descriptor() ([]byte, []int) {
+	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *RagFileMetadataConfig) GetMetadataSchemaSource() isRagFileMetadataConfig_MetadataSchemaSource {
+	if x != nil {
+		return x.MetadataSchemaSource
+	}
+	return nil
+}
+
+func (x *RagFileMetadataConfig) GetGcsMetadataSchemaSource() *GcsSource {
+	if x != nil {
+		if x, ok := x.MetadataSchemaSource.(*RagFileMetadataConfig_GcsMetadataSchemaSource); ok {
+			return x.GcsMetadataSchemaSource
+		}
+	}
+	return nil
+}
+
+func (x *RagFileMetadataConfig) GetGoogleDriveMetadataSchemaSource() *GoogleDriveSource {
+	if x != nil {
+		if x, ok := x.MetadataSchemaSource.(*RagFileMetadataConfig_GoogleDriveMetadataSchemaSource); ok {
+			return x.GoogleDriveMetadataSchemaSource
+		}
+	}
+	return nil
+}
+
+func (x *RagFileMetadataConfig) GetInlineMetadataSchemaSource() string {
+	if x != nil {
+		if x, ok := x.MetadataSchemaSource.(*RagFileMetadataConfig_InlineMetadataSchemaSource); ok {
+			return x.InlineMetadataSchemaSource
+		}
+	}
+	return ""
+}
+
+func (x *RagFileMetadataConfig) GetMetadataSource() isRagFileMetadataConfig_MetadataSource {
+	if x != nil {
+		return x.MetadataSource
+	}
+	return nil
+}
+
+func (x *RagFileMetadataConfig) GetGcsMetadataSource() *GcsSource {
+	if x != nil {
+		if x, ok := x.MetadataSource.(*RagFileMetadataConfig_GcsMetadataSource); ok {
+			return x.GcsMetadataSource
+		}
+	}
+	return nil
+}
+
+func (x *RagFileMetadataConfig) GetGoogleDriveMetadataSource() *GoogleDriveSource {
+	if x != nil {
+		if x, ok := x.MetadataSource.(*RagFileMetadataConfig_GoogleDriveMetadataSource); ok {
+			return x.GoogleDriveMetadataSource
+		}
+	}
+	return nil
+}
+
+func (x *RagFileMetadataConfig) GetInlineMetadataSource() string {
+	if x != nil {
+		if x, ok := x.MetadataSource.(*RagFileMetadataConfig_InlineMetadataSource); ok {
+			return x.InlineMetadataSource
+		}
+	}
+	return ""
+}
+
+type isRagFileMetadataConfig_MetadataSchemaSource interface {
+	isRagFileMetadataConfig_MetadataSchemaSource()
+}
+
+type RagFileMetadataConfig_GcsMetadataSchemaSource struct {
+	// Google Cloud Storage location. Supports importing individual files as
+	// well as entire Google Cloud Storage directories. Sample formats:
+	// - `gs://bucket_name/my_directory/object_name/metadata_schema.json`
+	// - `gs://bucket_name/my_directory`
+	// If providing a directory, the metadata schema will be read from
+	// the files that ends with "metadata_schema.json" in the directory.
+	GcsMetadataSchemaSource *GcsSource `protobuf:"bytes,1,opt,name=gcs_metadata_schema_source,json=gcsMetadataSchemaSource,proto3,oneof"`
+}
+
+type RagFileMetadataConfig_GoogleDriveMetadataSchemaSource struct {
+	// Google Drive location. Supports importing individual files as
+	// well as Google Drive folders.
+	// If providing a folder, the metadata schema will be read from
+	// the files that ends with "metadata_schema.json" in the directory.
+	GoogleDriveMetadataSchemaSource *GoogleDriveSource `protobuf:"bytes,2,opt,name=google_drive_metadata_schema_source,json=googleDriveMetadataSchemaSource,proto3,oneof"`
+}
+
+type RagFileMetadataConfig_InlineMetadataSchemaSource struct {
+	// Inline metadata schema source. Must be a JSON string.
+	InlineMetadataSchemaSource string `protobuf:"bytes,3,opt,name=inline_metadata_schema_source,json=inlineMetadataSchemaSource,proto3,oneof"`
+}
+
+func (*RagFileMetadataConfig_GcsMetadataSchemaSource) isRagFileMetadataConfig_MetadataSchemaSource() {
+}
+
+func (*RagFileMetadataConfig_GoogleDriveMetadataSchemaSource) isRagFileMetadataConfig_MetadataSchemaSource() {
+}
+
+func (*RagFileMetadataConfig_InlineMetadataSchemaSource) isRagFileMetadataConfig_MetadataSchemaSource() {
+}
+
+type isRagFileMetadataConfig_MetadataSource interface {
+	isRagFileMetadataConfig_MetadataSource()
+}
+
+type RagFileMetadataConfig_GcsMetadataSource struct {
+	// Google Cloud Storage location. Supports importing individual files as
+	// well as entire Google Cloud Storage directories. Sample formats:
+	// - `gs://bucket_name/my_directory/object_name/metadata.json`
+	// - `gs://bucket_name/my_directory`
+	// If providing a directory, the metadata will be read from
+	// the files that ends with "metadata.json" in the directory.
+	GcsMetadataSource *GcsSource `protobuf:"bytes,4,opt,name=gcs_metadata_source,json=gcsMetadataSource,proto3,oneof"`
+}
+
+type RagFileMetadataConfig_GoogleDriveMetadataSource struct {
+	// Google Drive location. Supports importing individual files as
+	// well as Google Drive folders.
+	// If providing a directory, the metadata will be read from
+	// the files that ends with "metadata.json" in the directory.
+	GoogleDriveMetadataSource *GoogleDriveSource `protobuf:"bytes,5,opt,name=google_drive_metadata_source,json=googleDriveMetadataSource,proto3,oneof"`
+}
+
+type RagFileMetadataConfig_InlineMetadataSource struct {
+	// Inline metadata source. Must be a JSON string.
+	InlineMetadataSource string `protobuf:"bytes,6,opt,name=inline_metadata_source,json=inlineMetadataSource,proto3,oneof"`
+}
+
+func (*RagFileMetadataConfig_GcsMetadataSource) isRagFileMetadataConfig_MetadataSource() {}
+
+func (*RagFileMetadataConfig_GoogleDriveMetadataSource) isRagFileMetadataConfig_MetadataSource() {}
+
+func (*RagFileMetadataConfig_InlineMetadataSource) isRagFileMetadataConfig_MetadataSource() {}
+
 // Config for uploading RagFile.
 type UploadRagFileConfig struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1348,13 +1548,20 @@ type UploadRagFileConfig struct {
 	RagFileChunkingConfig *RagFileChunkingConfig `protobuf:"bytes,1,opt,name=rag_file_chunking_config,json=ragFileChunkingConfig,proto3" json:"rag_file_chunking_config,omitempty"`
 	// Specifies the transformation config for RagFiles.
 	RagFileTransformationConfig *RagFileTransformationConfig `protobuf:"bytes,3,opt,name=rag_file_transformation_config,json=ragFileTransformationConfig,proto3" json:"rag_file_transformation_config,omitempty"`
-	unknownFields               protoimpl.UnknownFields
-	sizeCache                   protoimpl.SizeCache
+	// Specifies the metadata config for RagFiles.
+	// Including paths for metadata schema and metadata.
+	// Alteratively, inline metadata schema and metadata can be provided.
+	RagFileMetadataConfig *RagFileMetadataConfig `protobuf:"bytes,4,opt,name=rag_file_metadata_config,json=ragFileMetadataConfig,proto3" json:"rag_file_metadata_config,omitempty"`
+	// Optional. Specifies the parsing config for RagFiles.
+	// RAG will use the default parser if this field is not set.
+	RagFileParsingConfig *RagFileParsingConfig `protobuf:"bytes,5,opt,name=rag_file_parsing_config,json=ragFileParsingConfig,proto3" json:"rag_file_parsing_config,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *UploadRagFileConfig) Reset() {
 	*x = UploadRagFileConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[11]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1366,7 +1573,7 @@ func (x *UploadRagFileConfig) String() string {
 func (*UploadRagFileConfig) ProtoMessage() {}
 
 func (x *UploadRagFileConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[11]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1379,7 +1586,7 @@ func (x *UploadRagFileConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadRagFileConfig.ProtoReflect.Descriptor instead.
 func (*UploadRagFileConfig) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{11}
+	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{12}
 }
 
 // Deprecated: Marked as deprecated in qclaogui/aiplatform/v1beta1/vertex_rag_data.proto.
@@ -1393,6 +1600,20 @@ func (x *UploadRagFileConfig) GetRagFileChunkingConfig() *RagFileChunkingConfig 
 func (x *UploadRagFileConfig) GetRagFileTransformationConfig() *RagFileTransformationConfig {
 	if x != nil {
 		return x.RagFileTransformationConfig
+	}
+	return nil
+}
+
+func (x *UploadRagFileConfig) GetRagFileMetadataConfig() *RagFileMetadataConfig {
+	if x != nil {
+		return x.RagFileMetadataConfig
+	}
+	return nil
+}
+
+func (x *UploadRagFileConfig) GetRagFileParsingConfig() *RagFileParsingConfig {
+	if x != nil {
+		return x.RagFileParsingConfig
 	}
 	return nil
 }
@@ -1435,6 +1656,9 @@ type ImportRagFilesConfig struct {
 	// Optional. Specifies the parsing config for RagFiles.
 	// RAG will use the default parser if this field is not set.
 	RagFileParsingConfig *RagFileParsingConfig `protobuf:"bytes,8,opt,name=rag_file_parsing_config,json=ragFileParsingConfig,proto3" json:"rag_file_parsing_config,omitempty"`
+	// Specifies the metadata config for RagFiles.
+	// Including paths for metadata schema and metadata.
+	RagFileMetadataConfig *RagFileMetadataConfig `protobuf:"bytes,17,opt,name=rag_file_metadata_config,json=ragFileMetadataConfig,proto3" json:"rag_file_metadata_config,omitempty"`
 	// Optional. The max number of queries per minute that this job is allowed to
 	// make to the embedding model specified on the corpus. This value is specific
 	// to this job and not shared across other import jobs. Consult the Quotas
@@ -1462,7 +1686,7 @@ type ImportRagFilesConfig struct {
 
 func (x *ImportRagFilesConfig) Reset() {
 	*x = ImportRagFilesConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[12]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1474,7 +1698,7 @@ func (x *ImportRagFilesConfig) String() string {
 func (*ImportRagFilesConfig) ProtoMessage() {}
 
 func (x *ImportRagFilesConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[12]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1487,7 +1711,7 @@ func (x *ImportRagFilesConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportRagFilesConfig.ProtoReflect.Descriptor instead.
 func (*ImportRagFilesConfig) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{12}
+	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ImportRagFilesConfig) GetImportSource() isImportRagFilesConfig_ImportSource {
@@ -1612,6 +1836,13 @@ func (x *ImportRagFilesConfig) GetRagFileTransformationConfig() *RagFileTransfor
 func (x *ImportRagFilesConfig) GetRagFileParsingConfig() *RagFileParsingConfig {
 	if x != nil {
 		return x.RagFileParsingConfig
+	}
+	return nil
+}
+
+func (x *ImportRagFilesConfig) GetRagFileMetadataConfig() *RagFileMetadataConfig {
+	if x != nil {
+		return x.RagFileMetadataConfig
 	}
 	return nil
 }
@@ -1748,7 +1979,7 @@ type RagManagedDbConfig struct {
 
 func (x *RagManagedDbConfig) Reset() {
 	*x = RagManagedDbConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[13]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1760,7 +1991,7 @@ func (x *RagManagedDbConfig) String() string {
 func (*RagManagedDbConfig) ProtoMessage() {}
 
 func (x *RagManagedDbConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[13]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1773,7 +2004,7 @@ func (x *RagManagedDbConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RagManagedDbConfig.ProtoReflect.Descriptor instead.
 func (*RagManagedDbConfig) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{13}
+	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *RagManagedDbConfig) GetTier() isRagManagedDbConfig_Tier {
@@ -1835,7 +2066,7 @@ type RagEngineConfig struct {
 
 func (x *RagEngineConfig) Reset() {
 	*x = RagEngineConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[14]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1847,7 +2078,7 @@ func (x *RagEngineConfig) String() string {
 func (*RagEngineConfig) ProtoMessage() {}
 
 func (x *RagEngineConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[14]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1860,7 +2091,7 @@ func (x *RagEngineConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RagEngineConfig.ProtoReflect.Descriptor instead.
 func (*RagEngineConfig) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{14}
+	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *RagEngineConfig) GetName() string {
@@ -1900,7 +2131,7 @@ type RagEmbeddingModelConfig_VertexPredictionEndpoint struct {
 
 func (x *RagEmbeddingModelConfig_VertexPredictionEndpoint) Reset() {
 	*x = RagEmbeddingModelConfig_VertexPredictionEndpoint{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[15]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1912,7 +2143,7 @@ func (x *RagEmbeddingModelConfig_VertexPredictionEndpoint) String() string {
 func (*RagEmbeddingModelConfig_VertexPredictionEndpoint) ProtoMessage() {}
 
 func (x *RagEmbeddingModelConfig_VertexPredictionEndpoint) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[15]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1964,7 +2195,7 @@ type RagEmbeddingModelConfig_SparseEmbeddingConfig struct {
 
 func (x *RagEmbeddingModelConfig_SparseEmbeddingConfig) Reset() {
 	*x = RagEmbeddingModelConfig_SparseEmbeddingConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[16]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1976,7 +2207,7 @@ func (x *RagEmbeddingModelConfig_SparseEmbeddingConfig) String() string {
 func (*RagEmbeddingModelConfig_SparseEmbeddingConfig) ProtoMessage() {}
 
 func (x *RagEmbeddingModelConfig_SparseEmbeddingConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[16]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2036,7 +2267,7 @@ type RagEmbeddingModelConfig_HybridSearchConfig struct {
 
 func (x *RagEmbeddingModelConfig_HybridSearchConfig) Reset() {
 	*x = RagEmbeddingModelConfig_HybridSearchConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[17]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2048,7 +2279,7 @@ func (x *RagEmbeddingModelConfig_HybridSearchConfig) String() string {
 func (*RagEmbeddingModelConfig_HybridSearchConfig) ProtoMessage() {}
 
 func (x *RagEmbeddingModelConfig_HybridSearchConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[17]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2097,7 +2328,7 @@ type RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25 struct {
 
 func (x *RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25) Reset() {
 	*x = RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[18]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2109,7 +2340,7 @@ func (x *RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25) String() string {
 func (*RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25) ProtoMessage() {}
 
 func (x *RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[18]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2162,7 +2393,7 @@ type RagVectorDbConfig_RagManagedDb struct {
 
 func (x *RagVectorDbConfig_RagManagedDb) Reset() {
 	*x = RagVectorDbConfig_RagManagedDb{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[19]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2174,7 +2405,7 @@ func (x *RagVectorDbConfig_RagManagedDb) String() string {
 func (*RagVectorDbConfig_RagManagedDb) ProtoMessage() {}
 
 func (x *RagVectorDbConfig_RagManagedDb) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[19]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2251,7 +2482,7 @@ type RagVectorDbConfig_Weaviate struct {
 
 func (x *RagVectorDbConfig_Weaviate) Reset() {
 	*x = RagVectorDbConfig_Weaviate{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[20]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2263,7 +2494,7 @@ func (x *RagVectorDbConfig_Weaviate) String() string {
 func (*RagVectorDbConfig_Weaviate) ProtoMessage() {}
 
 func (x *RagVectorDbConfig_Weaviate) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[20]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2305,7 +2536,7 @@ type RagVectorDbConfig_Pinecone struct {
 
 func (x *RagVectorDbConfig_Pinecone) Reset() {
 	*x = RagVectorDbConfig_Pinecone{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[21]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2317,7 +2548,7 @@ func (x *RagVectorDbConfig_Pinecone) String() string {
 func (*RagVectorDbConfig_Pinecone) ProtoMessage() {}
 
 func (x *RagVectorDbConfig_Pinecone) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[21]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2353,7 +2584,7 @@ type RagVectorDbConfig_VertexFeatureStore struct {
 
 func (x *RagVectorDbConfig_VertexFeatureStore) Reset() {
 	*x = RagVectorDbConfig_VertexFeatureStore{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[22]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2365,7 +2596,7 @@ func (x *RagVectorDbConfig_VertexFeatureStore) String() string {
 func (*RagVectorDbConfig_VertexFeatureStore) ProtoMessage() {}
 
 func (x *RagVectorDbConfig_VertexFeatureStore) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[22]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2405,7 +2636,7 @@ type RagVectorDbConfig_VertexVectorSearch struct {
 
 func (x *RagVectorDbConfig_VertexVectorSearch) Reset() {
 	*x = RagVectorDbConfig_VertexVectorSearch{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[23]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2417,7 +2648,7 @@ func (x *RagVectorDbConfig_VertexVectorSearch) String() string {
 func (*RagVectorDbConfig_VertexVectorSearch) ProtoMessage() {}
 
 func (x *RagVectorDbConfig_VertexVectorSearch) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[23]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2456,7 +2687,7 @@ type RagVectorDbConfig_RagManagedDb_KNN struct {
 
 func (x *RagVectorDbConfig_RagManagedDb_KNN) Reset() {
 	*x = RagVectorDbConfig_RagManagedDb_KNN{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[24]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2468,7 +2699,7 @@ func (x *RagVectorDbConfig_RagManagedDb_KNN) String() string {
 func (*RagVectorDbConfig_RagManagedDb_KNN) ProtoMessage() {}
 
 func (x *RagVectorDbConfig_RagManagedDb_KNN) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[24]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2514,7 +2745,7 @@ type RagVectorDbConfig_RagManagedDb_ANN struct {
 
 func (x *RagVectorDbConfig_RagManagedDb_ANN) Reset() {
 	*x = RagVectorDbConfig_RagManagedDb_ANN{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[25]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2526,7 +2757,7 @@ func (x *RagVectorDbConfig_RagManagedDb_ANN) String() string {
 func (*RagVectorDbConfig_RagManagedDb_ANN) ProtoMessage() {}
 
 func (x *RagVectorDbConfig_RagManagedDb_ANN) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[25]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2573,7 +2804,7 @@ type RagCorpus_CorpusTypeConfig struct {
 
 func (x *RagCorpus_CorpusTypeConfig) Reset() {
 	*x = RagCorpus_CorpusTypeConfig{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[26]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2585,7 +2816,7 @@ func (x *RagCorpus_CorpusTypeConfig) String() string {
 func (*RagCorpus_CorpusTypeConfig) ProtoMessage() {}
 
 func (x *RagCorpus_CorpusTypeConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[26]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2653,7 +2884,7 @@ type RagCorpus_CorpusTypeConfig_DocumentCorpus struct {
 
 func (x *RagCorpus_CorpusTypeConfig_DocumentCorpus) Reset() {
 	*x = RagCorpus_CorpusTypeConfig_DocumentCorpus{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[27]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2665,7 +2896,7 @@ func (x *RagCorpus_CorpusTypeConfig_DocumentCorpus) String() string {
 func (*RagCorpus_CorpusTypeConfig_DocumentCorpus) ProtoMessage() {}
 
 func (x *RagCorpus_CorpusTypeConfig_DocumentCorpus) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[27]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2692,7 +2923,7 @@ type RagCorpus_CorpusTypeConfig_MemoryCorpus struct {
 
 func (x *RagCorpus_CorpusTypeConfig_MemoryCorpus) Reset() {
 	*x = RagCorpus_CorpusTypeConfig_MemoryCorpus{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[28]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2704,7 +2935,7 @@ func (x *RagCorpus_CorpusTypeConfig_MemoryCorpus) String() string {
 func (*RagCorpus_CorpusTypeConfig_MemoryCorpus) ProtoMessage() {}
 
 func (x *RagCorpus_CorpusTypeConfig_MemoryCorpus) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[28]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2740,7 +2971,7 @@ type RagChunk_PageSpan struct {
 
 func (x *RagChunk_PageSpan) Reset() {
 	*x = RagChunk_PageSpan{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[29]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2752,7 +2983,7 @@ func (x *RagChunk_PageSpan) String() string {
 func (*RagChunk_PageSpan) ProtoMessage() {}
 
 func (x *RagChunk_PageSpan) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[29]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2795,7 +3026,7 @@ type RagFileChunkingConfig_FixedLengthChunking struct {
 
 func (x *RagFileChunkingConfig_FixedLengthChunking) Reset() {
 	*x = RagFileChunkingConfig_FixedLengthChunking{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[30]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2807,7 +3038,7 @@ func (x *RagFileChunkingConfig_FixedLengthChunking) String() string {
 func (*RagFileChunkingConfig_FixedLengthChunking) ProtoMessage() {}
 
 func (x *RagFileChunkingConfig_FixedLengthChunking) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[30]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2848,7 +3079,7 @@ type RagFileParsingConfig_AdvancedParser struct {
 
 func (x *RagFileParsingConfig_AdvancedParser) Reset() {
 	*x = RagFileParsingConfig_AdvancedParser{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[31]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2860,7 +3091,7 @@ func (x *RagFileParsingConfig_AdvancedParser) String() string {
 func (*RagFileParsingConfig_AdvancedParser) ProtoMessage() {}
 
 func (x *RagFileParsingConfig_AdvancedParser) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[31]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2913,7 +3144,7 @@ type RagFileParsingConfig_LayoutParser struct {
 
 func (x *RagFileParsingConfig_LayoutParser) Reset() {
 	*x = RagFileParsingConfig_LayoutParser{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[32]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2925,7 +3156,7 @@ func (x *RagFileParsingConfig_LayoutParser) String() string {
 func (*RagFileParsingConfig_LayoutParser) ProtoMessage() {}
 
 func (x *RagFileParsingConfig_LayoutParser) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[32]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2992,7 +3223,7 @@ type RagFileParsingConfig_LlmParser struct {
 
 func (x *RagFileParsingConfig_LlmParser) Reset() {
 	*x = RagFileParsingConfig_LlmParser{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[33]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3004,7 +3235,7 @@ func (x *RagFileParsingConfig_LlmParser) String() string {
 func (*RagFileParsingConfig_LlmParser) ProtoMessage() {}
 
 func (x *RagFileParsingConfig_LlmParser) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[33]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3061,7 +3292,7 @@ type RagManagedDbConfig_Enterprise struct {
 
 func (x *RagManagedDbConfig_Enterprise) Reset() {
 	*x = RagManagedDbConfig_Enterprise{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[34]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3073,7 +3304,7 @@ func (x *RagManagedDbConfig_Enterprise) String() string {
 func (*RagManagedDbConfig_Enterprise) ProtoMessage() {}
 
 func (x *RagManagedDbConfig_Enterprise) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[34]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3086,7 +3317,7 @@ func (x *RagManagedDbConfig_Enterprise) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RagManagedDbConfig_Enterprise.ProtoReflect.Descriptor instead.
 func (*RagManagedDbConfig_Enterprise) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{13, 0}
+	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{14, 0}
 }
 
 // Basic tier is a cost-effective and low compute tier suitable for
@@ -3103,7 +3334,7 @@ type RagManagedDbConfig_Basic struct {
 
 func (x *RagManagedDbConfig_Basic) Reset() {
 	*x = RagManagedDbConfig_Basic{}
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[35]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3115,7 +3346,7 @@ func (x *RagManagedDbConfig_Basic) String() string {
 func (*RagManagedDbConfig_Basic) ProtoMessage() {}
 
 func (x *RagManagedDbConfig_Basic) ProtoReflect() protoreflect.Message {
-	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[35]
+	mi := &file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3128,7 +3359,7 @@ func (x *RagManagedDbConfig_Basic) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RagManagedDbConfig_Basic.ProtoReflect.Descriptor instead.
 func (*RagManagedDbConfig_Basic) Descriptor() ([]byte, []int) {
-	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{13, 1}
+	return file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP(), []int{14, 1}
 }
 
 var File_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto protoreflect.FileDescriptor
@@ -3236,7 +3467,8 @@ const file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDesc = "" +
 	"\x12corpus_type_config:\x80\x01\xeaA}\n" +
 	"#aiplatform.googleapis.com/RagCorpus\x12?projects/{project}/locations/{location}/ragCorpora/{rag_corpus}*\n" +
 	"ragCorpora2\tragCorpusB\x10\n" +
-	"\x0ebackend_config\"\xeb\t\n" +
+	"\x0ebackend_config\"\x96\n" +
+	"\n" +
 	"\aRagFile\x12M\n" +
 	"\n" +
 	"gcs_source\x18\b \x01(\v2&.qclaogui.aiplatform.v1beta1.GcsSourceB\x04\xe2A\x01\x03H\x00R\tgcsSource\x12f\n" +
@@ -3258,7 +3490,8 @@ const file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDesc = "" +
 	"\vupdate_time\x18\a \x01(\v2\x1a.google.protobuf.TimestampB\x04\xe2A\x01\x03R\n" +
 	"updateTime\x12N\n" +
 	"\vfile_status\x18\r \x01(\v2'.qclaogui.aiplatform.v1beta1.FileStatusB\x04\xe2A\x01\x03R\n" +
-	"fileStatus\"Z\n" +
+	"fileStatus\x12)\n" +
+	"\ruser_metadata\x18\x0f \x01(\tB\x04\xe2A\x01\x03R\fuserMetadata\"Z\n" +
 	"\vRagFileType\x12\x1d\n" +
 	"\x19RAG_FILE_TYPE_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11RAG_FILE_TYPE_TXT\x10\x01\x12\x15\n" +
@@ -3304,10 +3537,21 @@ const file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDesc = "" +
 	"\x1cmax_parsing_requests_per_min\x18\x02 \x01(\x05R\x18maxParsingRequestsPerMin\x12K\n" +
 	"#global_max_parsing_requests_per_min\x18\x04 \x01(\x05R\x1eglobalMaxParsingRequestsPerMin\x122\n" +
 	"\x15custom_parsing_prompt\x18\x03 \x01(\tR\x13customParsingPromptB\b\n" +
-	"\x06parser\"\x85\x02\n" +
+	"\x06parser\"\xf5\x04\n" +
+	"\x15RagFileMetadataConfig\x12e\n" +
+	"\x1agcs_metadata_schema_source\x18\x01 \x01(\v2&.qclaogui.aiplatform.v1beta1.GcsSourceH\x00R\x17gcsMetadataSchemaSource\x12~\n" +
+	"#google_drive_metadata_schema_source\x18\x02 \x01(\v2..qclaogui.aiplatform.v1beta1.GoogleDriveSourceH\x00R\x1fgoogleDriveMetadataSchemaSource\x12C\n" +
+	"\x1dinline_metadata_schema_source\x18\x03 \x01(\tH\x00R\x1ainlineMetadataSchemaSource\x12X\n" +
+	"\x13gcs_metadata_source\x18\x04 \x01(\v2&.qclaogui.aiplatform.v1beta1.GcsSourceH\x01R\x11gcsMetadataSource\x12q\n" +
+	"\x1cgoogle_drive_metadata_source\x18\x05 \x01(\v2..qclaogui.aiplatform.v1beta1.GoogleDriveSourceH\x01R\x19googleDriveMetadataSource\x126\n" +
+	"\x16inline_metadata_source\x18\x06 \x01(\tH\x01R\x14inlineMetadataSourceB\x18\n" +
+	"\x16metadata_schema_sourceB\x11\n" +
+	"\x0fmetadata_source\"\xe2\x03\n" +
 	"\x13UploadRagFileConfig\x12o\n" +
 	"\x18rag_file_chunking_config\x18\x01 \x01(\v22.qclaogui.aiplatform.v1beta1.RagFileChunkingConfigB\x02\x18\x01R\x15ragFileChunkingConfig\x12}\n" +
-	"\x1erag_file_transformation_config\x18\x03 \x01(\v28.qclaogui.aiplatform.v1beta1.RagFileTransformationConfigR\x1bragFileTransformationConfig\"\xe8\v\n" +
+	"\x1erag_file_transformation_config\x18\x03 \x01(\v28.qclaogui.aiplatform.v1beta1.RagFileTransformationConfigR\x1bragFileTransformationConfig\x12k\n" +
+	"\x18rag_file_metadata_config\x18\x04 \x01(\v22.qclaogui.aiplatform.v1beta1.RagFileMetadataConfigR\x15ragFileMetadataConfig\x12n\n" +
+	"\x17rag_file_parsing_config\x18\x05 \x01(\v21.qclaogui.aiplatform.v1beta1.RagFileParsingConfigB\x04\xe2A\x01\x01R\x14ragFileParsingConfig\"\xd5\f\n" +
 	"\x14ImportRagFilesConfig\x12G\n" +
 	"\n" +
 	"gcs_source\x18\x02 \x01(\v2&.qclaogui.aiplatform.v1beta1.GcsSourceH\x00R\tgcsSource\x12`\n" +
@@ -3322,7 +3566,8 @@ const file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDesc = "" +
 	"\x1bimport_result_bigquery_sink\x18\x0f \x01(\v20.qclaogui.aiplatform.v1beta1.BigQueryDestinationH\x02R\x18importResultBigquerySink\x12o\n" +
 	"\x18rag_file_chunking_config\x18\x04 \x01(\v22.qclaogui.aiplatform.v1beta1.RagFileChunkingConfigB\x02\x18\x01R\x15ragFileChunkingConfig\x12}\n" +
 	"\x1erag_file_transformation_config\x18\x10 \x01(\v28.qclaogui.aiplatform.v1beta1.RagFileTransformationConfigR\x1bragFileTransformationConfig\x12n\n" +
-	"\x17rag_file_parsing_config\x18\b \x01(\v21.qclaogui.aiplatform.v1beta1.RagFileParsingConfigB\x04\xe2A\x01\x01R\x14ragFileParsingConfig\x12H\n" +
+	"\x17rag_file_parsing_config\x18\b \x01(\v21.qclaogui.aiplatform.v1beta1.RagFileParsingConfigB\x04\xe2A\x01\x01R\x14ragFileParsingConfig\x12k\n" +
+	"\x18rag_file_metadata_config\x18\x11 \x01(\v22.qclaogui.aiplatform.v1beta1.RagFileMetadataConfigR\x15ragFileMetadataConfig\x12H\n" +
 	"\x1emax_embedding_requests_per_min\x18\x05 \x01(\x05B\x04\xe2A\x01\x01R\x1amaxEmbeddingRequestsPerMin\x12U\n" +
 	"%global_max_embedding_requests_per_min\x18\x12 \x01(\x05B\x04\xe2A\x01\x01R globalMaxEmbeddingRequestsPerMin\x12*\n" +
 	"\x11rebuild_ann_index\x18\x13 \x01(\bR\x0frebuildAnnIndexB\x0f\n" +
@@ -3357,7 +3602,7 @@ func file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDescGZIP() []byte
 
 var (
 	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes  = make([]protoimpl.MessageInfo, 36)
+	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes  = make([]protoimpl.MessageInfo, 37)
 	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_goTypes   = []any{
 		(FileStatus_State)(0),                                      // 0: qclaogui.aiplatform.v1beta1.FileStatus.State
 		(CorpusStatus_State)(0),                                    // 1: qclaogui.aiplatform.v1beta1.CorpusStatus.State
@@ -3373,54 +3618,55 @@ var (
 		(*RagFileChunkingConfig)(nil),                              // 11: qclaogui.aiplatform.v1beta1.RagFileChunkingConfig
 		(*RagFileTransformationConfig)(nil),                        // 12: qclaogui.aiplatform.v1beta1.RagFileTransformationConfig
 		(*RagFileParsingConfig)(nil),                               // 13: qclaogui.aiplatform.v1beta1.RagFileParsingConfig
-		(*UploadRagFileConfig)(nil),                                // 14: qclaogui.aiplatform.v1beta1.UploadRagFileConfig
-		(*ImportRagFilesConfig)(nil),                               // 15: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig
-		(*RagManagedDbConfig)(nil),                                 // 16: qclaogui.aiplatform.v1beta1.RagManagedDbConfig
-		(*RagEngineConfig)(nil),                                    // 17: qclaogui.aiplatform.v1beta1.RagEngineConfig
-		(*RagEmbeddingModelConfig_VertexPredictionEndpoint)(nil),   // 18: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.VertexPredictionEndpoint
-		(*RagEmbeddingModelConfig_SparseEmbeddingConfig)(nil),      // 19: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig
-		(*RagEmbeddingModelConfig_HybridSearchConfig)(nil),         // 20: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig
-		(*RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25)(nil), // 21: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig.Bm25
-		(*RagVectorDbConfig_RagManagedDb)(nil),                     // 22: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb
-		(*RagVectorDbConfig_Weaviate)(nil),                         // 23: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.Weaviate
-		(*RagVectorDbConfig_Pinecone)(nil),                         // 24: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.Pinecone
-		(*RagVectorDbConfig_VertexFeatureStore)(nil),               // 25: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.VertexFeatureStore
-		(*RagVectorDbConfig_VertexVectorSearch)(nil),               // 26: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.VertexVectorSearch
-		(*RagVectorDbConfig_RagManagedDb_KNN)(nil),                 // 27: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.KNN
-		(*RagVectorDbConfig_RagManagedDb_ANN)(nil),                 // 28: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.ANN
-		(*RagCorpus_CorpusTypeConfig)(nil),                         // 29: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig
-		(*RagCorpus_CorpusTypeConfig_DocumentCorpus)(nil),          // 30: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.DocumentCorpus
-		(*RagCorpus_CorpusTypeConfig_MemoryCorpus)(nil),            // 31: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.MemoryCorpus
-		(*RagChunk_PageSpan)(nil),                                  // 32: qclaogui.aiplatform.v1beta1.RagChunk.PageSpan
-		(*RagFileChunkingConfig_FixedLengthChunking)(nil),          // 33: qclaogui.aiplatform.v1beta1.RagFileChunkingConfig.FixedLengthChunking
-		(*RagFileParsingConfig_AdvancedParser)(nil),                // 34: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.AdvancedParser
-		(*RagFileParsingConfig_LayoutParser)(nil),                  // 35: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LayoutParser
-		(*RagFileParsingConfig_LlmParser)(nil),                     // 36: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LlmParser
-		(*RagManagedDbConfig_Enterprise)(nil),                      // 37: qclaogui.aiplatform.v1beta1.RagManagedDbConfig.Enterprise
-		(*RagManagedDbConfig_Basic)(nil),                           // 38: qclaogui.aiplatform.v1beta1.RagManagedDbConfig.Basic
-		(*ApiAuth)(nil),                                            // 39: qclaogui.aiplatform.v1beta1.ApiAuth
-		(*timestamppb.Timestamp)(nil),                              // 40: google.protobuf.Timestamp
-		(*EncryptionSpec)(nil),                                     // 41: qclaogui.aiplatform.v1beta1.EncryptionSpec
-		(*GcsSource)(nil),                                          // 42: qclaogui.aiplatform.v1beta1.GcsSource
-		(*GoogleDriveSource)(nil),                                  // 43: qclaogui.aiplatform.v1beta1.GoogleDriveSource
-		(*DirectUploadSource)(nil),                                 // 44: qclaogui.aiplatform.v1beta1.DirectUploadSource
-		(*SlackSource)(nil),                                        // 45: qclaogui.aiplatform.v1beta1.SlackSource
-		(*JiraSource)(nil),                                         // 46: qclaogui.aiplatform.v1beta1.JiraSource
-		(*SharePointSources)(nil),                                  // 47: qclaogui.aiplatform.v1beta1.SharePointSources
-		(*GcsDestination)(nil),                                     // 48: qclaogui.aiplatform.v1beta1.GcsDestination
-		(*BigQueryDestination)(nil),                                // 49: qclaogui.aiplatform.v1beta1.BigQueryDestination
+		(*RagFileMetadataConfig)(nil),                              // 14: qclaogui.aiplatform.v1beta1.RagFileMetadataConfig
+		(*UploadRagFileConfig)(nil),                                // 15: qclaogui.aiplatform.v1beta1.UploadRagFileConfig
+		(*ImportRagFilesConfig)(nil),                               // 16: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig
+		(*RagManagedDbConfig)(nil),                                 // 17: qclaogui.aiplatform.v1beta1.RagManagedDbConfig
+		(*RagEngineConfig)(nil),                                    // 18: qclaogui.aiplatform.v1beta1.RagEngineConfig
+		(*RagEmbeddingModelConfig_VertexPredictionEndpoint)(nil),   // 19: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.VertexPredictionEndpoint
+		(*RagEmbeddingModelConfig_SparseEmbeddingConfig)(nil),      // 20: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig
+		(*RagEmbeddingModelConfig_HybridSearchConfig)(nil),         // 21: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig
+		(*RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25)(nil), // 22: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig.Bm25
+		(*RagVectorDbConfig_RagManagedDb)(nil),                     // 23: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb
+		(*RagVectorDbConfig_Weaviate)(nil),                         // 24: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.Weaviate
+		(*RagVectorDbConfig_Pinecone)(nil),                         // 25: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.Pinecone
+		(*RagVectorDbConfig_VertexFeatureStore)(nil),               // 26: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.VertexFeatureStore
+		(*RagVectorDbConfig_VertexVectorSearch)(nil),               // 27: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.VertexVectorSearch
+		(*RagVectorDbConfig_RagManagedDb_KNN)(nil),                 // 28: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.KNN
+		(*RagVectorDbConfig_RagManagedDb_ANN)(nil),                 // 29: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.ANN
+		(*RagCorpus_CorpusTypeConfig)(nil),                         // 30: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig
+		(*RagCorpus_CorpusTypeConfig_DocumentCorpus)(nil),          // 31: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.DocumentCorpus
+		(*RagCorpus_CorpusTypeConfig_MemoryCorpus)(nil),            // 32: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.MemoryCorpus
+		(*RagChunk_PageSpan)(nil),                                  // 33: qclaogui.aiplatform.v1beta1.RagChunk.PageSpan
+		(*RagFileChunkingConfig_FixedLengthChunking)(nil),          // 34: qclaogui.aiplatform.v1beta1.RagFileChunkingConfig.FixedLengthChunking
+		(*RagFileParsingConfig_AdvancedParser)(nil),                // 35: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.AdvancedParser
+		(*RagFileParsingConfig_LayoutParser)(nil),                  // 36: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LayoutParser
+		(*RagFileParsingConfig_LlmParser)(nil),                     // 37: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LlmParser
+		(*RagManagedDbConfig_Enterprise)(nil),                      // 38: qclaogui.aiplatform.v1beta1.RagManagedDbConfig.Enterprise
+		(*RagManagedDbConfig_Basic)(nil),                           // 39: qclaogui.aiplatform.v1beta1.RagManagedDbConfig.Basic
+		(*ApiAuth)(nil),                                            // 40: qclaogui.aiplatform.v1beta1.ApiAuth
+		(*timestamppb.Timestamp)(nil),                              // 41: google.protobuf.Timestamp
+		(*EncryptionSpec)(nil),                                     // 42: qclaogui.aiplatform.v1beta1.EncryptionSpec
+		(*GcsSource)(nil),                                          // 43: qclaogui.aiplatform.v1beta1.GcsSource
+		(*GoogleDriveSource)(nil),                                  // 44: qclaogui.aiplatform.v1beta1.GoogleDriveSource
+		(*DirectUploadSource)(nil),                                 // 45: qclaogui.aiplatform.v1beta1.DirectUploadSource
+		(*SlackSource)(nil),                                        // 46: qclaogui.aiplatform.v1beta1.SlackSource
+		(*JiraSource)(nil),                                         // 47: qclaogui.aiplatform.v1beta1.JiraSource
+		(*SharePointSources)(nil),                                  // 48: qclaogui.aiplatform.v1beta1.SharePointSources
+		(*GcsDestination)(nil),                                     // 49: qclaogui.aiplatform.v1beta1.GcsDestination
+		(*BigQueryDestination)(nil),                                // 50: qclaogui.aiplatform.v1beta1.BigQueryDestination
 	}
 )
 
 var file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_depIdxs = []int32{
-	18, // 0: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.vertex_prediction_endpoint:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.VertexPredictionEndpoint
-	20, // 1: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.hybrid_search_config:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig
-	22, // 2: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.rag_managed_db:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb
-	23, // 3: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.weaviate:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.Weaviate
-	24, // 4: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.pinecone:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.Pinecone
-	25, // 5: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.vertex_feature_store:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.VertexFeatureStore
-	26, // 6: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.vertex_vector_search:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.VertexVectorSearch
-	39, // 7: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.api_auth:type_name -> qclaogui.aiplatform.v1beta1.ApiAuth
+	19, // 0: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.vertex_prediction_endpoint:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.VertexPredictionEndpoint
+	21, // 1: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.hybrid_search_config:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig
+	23, // 2: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.rag_managed_db:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb
+	24, // 3: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.weaviate:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.Weaviate
+	25, // 4: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.pinecone:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.Pinecone
+	26, // 5: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.vertex_feature_store:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.VertexFeatureStore
+	27, // 6: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.vertex_vector_search:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.VertexVectorSearch
+	40, // 7: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.api_auth:type_name -> qclaogui.aiplatform.v1beta1.ApiAuth
 	3,  // 8: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.rag_embedding_model_config:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig
 	0,  // 9: qclaogui.aiplatform.v1beta1.FileStatus.state:type_name -> qclaogui.aiplatform.v1beta1.FileStatus.State
 	1,  // 10: qclaogui.aiplatform.v1beta1.CorpusStatus.state:type_name -> qclaogui.aiplatform.v1beta1.CorpusStatus.State
@@ -3428,57 +3674,64 @@ var file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_depIdxs = []int32{
 	6,  // 12: qclaogui.aiplatform.v1beta1.RagCorpus.vertex_ai_search_config:type_name -> qclaogui.aiplatform.v1beta1.VertexAiSearchConfig
 	3,  // 13: qclaogui.aiplatform.v1beta1.RagCorpus.rag_embedding_model_config:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig
 	4,  // 14: qclaogui.aiplatform.v1beta1.RagCorpus.rag_vector_db_config:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig
-	40, // 15: qclaogui.aiplatform.v1beta1.RagCorpus.create_time:type_name -> google.protobuf.Timestamp
-	40, // 16: qclaogui.aiplatform.v1beta1.RagCorpus.update_time:type_name -> google.protobuf.Timestamp
+	41, // 15: qclaogui.aiplatform.v1beta1.RagCorpus.create_time:type_name -> google.protobuf.Timestamp
+	41, // 16: qclaogui.aiplatform.v1beta1.RagCorpus.update_time:type_name -> google.protobuf.Timestamp
 	7,  // 17: qclaogui.aiplatform.v1beta1.RagCorpus.corpus_status:type_name -> qclaogui.aiplatform.v1beta1.CorpusStatus
-	41, // 18: qclaogui.aiplatform.v1beta1.RagCorpus.encryption_spec:type_name -> qclaogui.aiplatform.v1beta1.EncryptionSpec
-	29, // 19: qclaogui.aiplatform.v1beta1.RagCorpus.corpus_type_config:type_name -> qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig
-	42, // 20: qclaogui.aiplatform.v1beta1.RagFile.gcs_source:type_name -> qclaogui.aiplatform.v1beta1.GcsSource
-	43, // 21: qclaogui.aiplatform.v1beta1.RagFile.google_drive_source:type_name -> qclaogui.aiplatform.v1beta1.GoogleDriveSource
-	44, // 22: qclaogui.aiplatform.v1beta1.RagFile.direct_upload_source:type_name -> qclaogui.aiplatform.v1beta1.DirectUploadSource
-	45, // 23: qclaogui.aiplatform.v1beta1.RagFile.slack_source:type_name -> qclaogui.aiplatform.v1beta1.SlackSource
-	46, // 24: qclaogui.aiplatform.v1beta1.RagFile.jira_source:type_name -> qclaogui.aiplatform.v1beta1.JiraSource
-	47, // 25: qclaogui.aiplatform.v1beta1.RagFile.share_point_sources:type_name -> qclaogui.aiplatform.v1beta1.SharePointSources
+	42, // 18: qclaogui.aiplatform.v1beta1.RagCorpus.encryption_spec:type_name -> qclaogui.aiplatform.v1beta1.EncryptionSpec
+	30, // 19: qclaogui.aiplatform.v1beta1.RagCorpus.corpus_type_config:type_name -> qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig
+	43, // 20: qclaogui.aiplatform.v1beta1.RagFile.gcs_source:type_name -> qclaogui.aiplatform.v1beta1.GcsSource
+	44, // 21: qclaogui.aiplatform.v1beta1.RagFile.google_drive_source:type_name -> qclaogui.aiplatform.v1beta1.GoogleDriveSource
+	45, // 22: qclaogui.aiplatform.v1beta1.RagFile.direct_upload_source:type_name -> qclaogui.aiplatform.v1beta1.DirectUploadSource
+	46, // 23: qclaogui.aiplatform.v1beta1.RagFile.slack_source:type_name -> qclaogui.aiplatform.v1beta1.SlackSource
+	47, // 24: qclaogui.aiplatform.v1beta1.RagFile.jira_source:type_name -> qclaogui.aiplatform.v1beta1.JiraSource
+	48, // 25: qclaogui.aiplatform.v1beta1.RagFile.share_point_sources:type_name -> qclaogui.aiplatform.v1beta1.SharePointSources
 	2,  // 26: qclaogui.aiplatform.v1beta1.RagFile.rag_file_type:type_name -> qclaogui.aiplatform.v1beta1.RagFile.RagFileType
-	40, // 27: qclaogui.aiplatform.v1beta1.RagFile.create_time:type_name -> google.protobuf.Timestamp
-	40, // 28: qclaogui.aiplatform.v1beta1.RagFile.update_time:type_name -> google.protobuf.Timestamp
+	41, // 27: qclaogui.aiplatform.v1beta1.RagFile.create_time:type_name -> google.protobuf.Timestamp
+	41, // 28: qclaogui.aiplatform.v1beta1.RagFile.update_time:type_name -> google.protobuf.Timestamp
 	5,  // 29: qclaogui.aiplatform.v1beta1.RagFile.file_status:type_name -> qclaogui.aiplatform.v1beta1.FileStatus
-	32, // 30: qclaogui.aiplatform.v1beta1.RagChunk.page_span:type_name -> qclaogui.aiplatform.v1beta1.RagChunk.PageSpan
-	33, // 31: qclaogui.aiplatform.v1beta1.RagFileChunkingConfig.fixed_length_chunking:type_name -> qclaogui.aiplatform.v1beta1.RagFileChunkingConfig.FixedLengthChunking
+	33, // 30: qclaogui.aiplatform.v1beta1.RagChunk.page_span:type_name -> qclaogui.aiplatform.v1beta1.RagChunk.PageSpan
+	34, // 31: qclaogui.aiplatform.v1beta1.RagFileChunkingConfig.fixed_length_chunking:type_name -> qclaogui.aiplatform.v1beta1.RagFileChunkingConfig.FixedLengthChunking
 	11, // 32: qclaogui.aiplatform.v1beta1.RagFileTransformationConfig.rag_file_chunking_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileChunkingConfig
-	34, // 33: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.advanced_parser:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig.AdvancedParser
-	35, // 34: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.layout_parser:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LayoutParser
-	36, // 35: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.llm_parser:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LlmParser
-	11, // 36: qclaogui.aiplatform.v1beta1.UploadRagFileConfig.rag_file_chunking_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileChunkingConfig
-	12, // 37: qclaogui.aiplatform.v1beta1.UploadRagFileConfig.rag_file_transformation_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileTransformationConfig
-	42, // 38: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.gcs_source:type_name -> qclaogui.aiplatform.v1beta1.GcsSource
-	43, // 39: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.google_drive_source:type_name -> qclaogui.aiplatform.v1beta1.GoogleDriveSource
-	45, // 40: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.slack_source:type_name -> qclaogui.aiplatform.v1beta1.SlackSource
-	46, // 41: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.jira_source:type_name -> qclaogui.aiplatform.v1beta1.JiraSource
-	47, // 42: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.share_point_sources:type_name -> qclaogui.aiplatform.v1beta1.SharePointSources
-	48, // 43: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.partial_failure_gcs_sink:type_name -> qclaogui.aiplatform.v1beta1.GcsDestination
-	49, // 44: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.partial_failure_bigquery_sink:type_name -> qclaogui.aiplatform.v1beta1.BigQueryDestination
-	48, // 45: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.import_result_gcs_sink:type_name -> qclaogui.aiplatform.v1beta1.GcsDestination
-	49, // 46: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.import_result_bigquery_sink:type_name -> qclaogui.aiplatform.v1beta1.BigQueryDestination
-	11, // 47: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.rag_file_chunking_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileChunkingConfig
-	12, // 48: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.rag_file_transformation_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileTransformationConfig
-	13, // 49: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.rag_file_parsing_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig
-	37, // 50: qclaogui.aiplatform.v1beta1.RagManagedDbConfig.enterprise:type_name -> qclaogui.aiplatform.v1beta1.RagManagedDbConfig.Enterprise
-	38, // 51: qclaogui.aiplatform.v1beta1.RagManagedDbConfig.basic:type_name -> qclaogui.aiplatform.v1beta1.RagManagedDbConfig.Basic
-	16, // 52: qclaogui.aiplatform.v1beta1.RagEngineConfig.rag_managed_db_config:type_name -> qclaogui.aiplatform.v1beta1.RagManagedDbConfig
-	21, // 53: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig.bm25:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig.Bm25
-	19, // 54: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig.sparse_embedding_config:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig
-	18, // 55: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig.dense_embedding_model_prediction_endpoint:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.VertexPredictionEndpoint
-	27, // 56: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.knn:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.KNN
-	28, // 57: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.ann:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.ANN
-	30, // 58: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.document_corpus:type_name -> qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.DocumentCorpus
-	31, // 59: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.memory_corpus:type_name -> qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.MemoryCorpus
-	36, // 60: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.MemoryCorpus.llm_parser:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LlmParser
-	61, // [61:61] is the sub-list for method output_type
-	61, // [61:61] is the sub-list for method input_type
-	61, // [61:61] is the sub-list for extension type_name
-	61, // [61:61] is the sub-list for extension extendee
-	0,  // [0:61] is the sub-list for field type_name
+	35, // 33: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.advanced_parser:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig.AdvancedParser
+	36, // 34: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.layout_parser:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LayoutParser
+	37, // 35: qclaogui.aiplatform.v1beta1.RagFileParsingConfig.llm_parser:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LlmParser
+	43, // 36: qclaogui.aiplatform.v1beta1.RagFileMetadataConfig.gcs_metadata_schema_source:type_name -> qclaogui.aiplatform.v1beta1.GcsSource
+	44, // 37: qclaogui.aiplatform.v1beta1.RagFileMetadataConfig.google_drive_metadata_schema_source:type_name -> qclaogui.aiplatform.v1beta1.GoogleDriveSource
+	43, // 38: qclaogui.aiplatform.v1beta1.RagFileMetadataConfig.gcs_metadata_source:type_name -> qclaogui.aiplatform.v1beta1.GcsSource
+	44, // 39: qclaogui.aiplatform.v1beta1.RagFileMetadataConfig.google_drive_metadata_source:type_name -> qclaogui.aiplatform.v1beta1.GoogleDriveSource
+	11, // 40: qclaogui.aiplatform.v1beta1.UploadRagFileConfig.rag_file_chunking_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileChunkingConfig
+	12, // 41: qclaogui.aiplatform.v1beta1.UploadRagFileConfig.rag_file_transformation_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileTransformationConfig
+	14, // 42: qclaogui.aiplatform.v1beta1.UploadRagFileConfig.rag_file_metadata_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileMetadataConfig
+	13, // 43: qclaogui.aiplatform.v1beta1.UploadRagFileConfig.rag_file_parsing_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig
+	43, // 44: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.gcs_source:type_name -> qclaogui.aiplatform.v1beta1.GcsSource
+	44, // 45: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.google_drive_source:type_name -> qclaogui.aiplatform.v1beta1.GoogleDriveSource
+	46, // 46: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.slack_source:type_name -> qclaogui.aiplatform.v1beta1.SlackSource
+	47, // 47: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.jira_source:type_name -> qclaogui.aiplatform.v1beta1.JiraSource
+	48, // 48: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.share_point_sources:type_name -> qclaogui.aiplatform.v1beta1.SharePointSources
+	49, // 49: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.partial_failure_gcs_sink:type_name -> qclaogui.aiplatform.v1beta1.GcsDestination
+	50, // 50: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.partial_failure_bigquery_sink:type_name -> qclaogui.aiplatform.v1beta1.BigQueryDestination
+	49, // 51: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.import_result_gcs_sink:type_name -> qclaogui.aiplatform.v1beta1.GcsDestination
+	50, // 52: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.import_result_bigquery_sink:type_name -> qclaogui.aiplatform.v1beta1.BigQueryDestination
+	11, // 53: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.rag_file_chunking_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileChunkingConfig
+	12, // 54: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.rag_file_transformation_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileTransformationConfig
+	13, // 55: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.rag_file_parsing_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig
+	14, // 56: qclaogui.aiplatform.v1beta1.ImportRagFilesConfig.rag_file_metadata_config:type_name -> qclaogui.aiplatform.v1beta1.RagFileMetadataConfig
+	38, // 57: qclaogui.aiplatform.v1beta1.RagManagedDbConfig.enterprise:type_name -> qclaogui.aiplatform.v1beta1.RagManagedDbConfig.Enterprise
+	39, // 58: qclaogui.aiplatform.v1beta1.RagManagedDbConfig.basic:type_name -> qclaogui.aiplatform.v1beta1.RagManagedDbConfig.Basic
+	17, // 59: qclaogui.aiplatform.v1beta1.RagEngineConfig.rag_managed_db_config:type_name -> qclaogui.aiplatform.v1beta1.RagManagedDbConfig
+	22, // 60: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig.bm25:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig.Bm25
+	20, // 61: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig.sparse_embedding_config:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig
+	19, // 62: qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig.dense_embedding_model_prediction_endpoint:type_name -> qclaogui.aiplatform.v1beta1.RagEmbeddingModelConfig.VertexPredictionEndpoint
+	28, // 63: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.knn:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.KNN
+	29, // 64: qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.ann:type_name -> qclaogui.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.ANN
+	31, // 65: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.document_corpus:type_name -> qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.DocumentCorpus
+	32, // 66: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.memory_corpus:type_name -> qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.MemoryCorpus
+	37, // 67: qclaogui.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.MemoryCorpus.llm_parser:type_name -> qclaogui.aiplatform.v1beta1.RagFileParsingConfig.LlmParser
+	68, // [68:68] is the sub-list for method output_type
+	68, // [68:68] is the sub-list for method input_type
+	68, // [68:68] is the sub-list for extension type_name
+	68, // [68:68] is the sub-list for extension extendee
+	0,  // [0:68] is the sub-list for field type_name
 }
 
 func init() { file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_init() }
@@ -3521,7 +3774,15 @@ func file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_init() {
 		(*RagFileParsingConfig_LayoutParser_)(nil),
 		(*RagFileParsingConfig_LlmParser_)(nil),
 	}
-	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[12].OneofWrappers = []any{
+	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[11].OneofWrappers = []any{
+		(*RagFileMetadataConfig_GcsMetadataSchemaSource)(nil),
+		(*RagFileMetadataConfig_GoogleDriveMetadataSchemaSource)(nil),
+		(*RagFileMetadataConfig_InlineMetadataSchemaSource)(nil),
+		(*RagFileMetadataConfig_GcsMetadataSource)(nil),
+		(*RagFileMetadataConfig_GoogleDriveMetadataSource)(nil),
+		(*RagFileMetadataConfig_InlineMetadataSource)(nil),
+	}
+	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[13].OneofWrappers = []any{
 		(*ImportRagFilesConfig_GcsSource)(nil),
 		(*ImportRagFilesConfig_GoogleDriveSource)(nil),
 		(*ImportRagFilesConfig_SlackSource)(nil),
@@ -3532,19 +3793,19 @@ func file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_init() {
 		(*ImportRagFilesConfig_ImportResultGcsSink)(nil),
 		(*ImportRagFilesConfig_ImportResultBigquerySink)(nil),
 	}
-	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[13].OneofWrappers = []any{
+	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[14].OneofWrappers = []any{
 		(*RagManagedDbConfig_Enterprise_)(nil),
 		(*RagManagedDbConfig_Basic_)(nil),
 	}
-	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[16].OneofWrappers = []any{
+	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[17].OneofWrappers = []any{
 		(*RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25_)(nil),
 	}
-	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[18].OneofWrappers = []any{}
-	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[19].OneofWrappers = []any{
+	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[19].OneofWrappers = []any{}
+	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[20].OneofWrappers = []any{
 		(*RagVectorDbConfig_RagManagedDb_Knn)(nil),
 		(*RagVectorDbConfig_RagManagedDb_Ann)(nil),
 	}
-	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[26].OneofWrappers = []any{
+	file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_msgTypes[27].OneofWrappers = []any{
 		(*RagCorpus_CorpusTypeConfig_DocumentCorpus_)(nil),
 		(*RagCorpus_CorpusTypeConfig_MemoryCorpus_)(nil),
 	}
@@ -3554,7 +3815,7 @@ func file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDesc), len(file_qclaogui_aiplatform_v1beta1_vertex_rag_data_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   36,
+			NumMessages:   37,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
