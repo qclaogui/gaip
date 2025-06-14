@@ -17,6 +17,7 @@ lint:
     - buf/validate
   ignore_only:
     RPC_REQUEST_STANDARD_NAME:
+      - a2a/v1/a2a_service.proto
       - qclaogui/project/v1/identity_service.proto
       - qclaogui/project/v1/project_service.proto
       - qclaogui/project/v1/echo_service.proto

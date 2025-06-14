@@ -1,0 +1,257 @@
+syntax = "proto3";
+
+package a2a.v1;
+
+import "a2a/v1/agent_card.proto";
+import "a2a/v1/message.proto";
+import "a2a/v1/task.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb";
+
+// A2AService defines the gRPC version of the A2A protocol. This has a slightly
+// different shape than the JSONRPC version to better conform to AIP-127,
+// where appropriate. The nouns are AgentCard, Message, Task and
+// TaskPushNotification.
+// - Messages are not a standard resource so there is no get/delete/update/list
+//   interface, only a send and stream custom methods.
+// - Tasks have a get interface and custom cancel and subscribe methods.
+// - TaskPushNotification are a resource whose parent is a task. They have get,
+//   list and create methods.
+// - AgentCard is a static resource with only a get method.
+// fields are not present as they don't comply with AIP rules, and the
+// optional history_length on the get task method is not present as it also
+// violates AIP-127 and AIP-131.
+service A2AService {
+  option (google.api.default_host) = "a2a.qclaogui.com";
+
+  // Send a message to the agent. This is a blocking call that will return the
+  // task once it is completed, or a LRO if requested.
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {
+    option (google.api.http) = {
+      post: "/v1/message:send"
+      body: "*"
+    };
+  }
+
+  // SendStreamingMessage is a streaming call that will return a stream of
+  // task update events until the Task is in an interrupted or terminal state.
+  rpc SendStreamingMessage(SendMessageRequest) returns (stream StreamResponse) {
+    option (google.api.http) = {
+      post: "/v1/message:stream"
+      body: "*"
+    };
+  }
+
+  // Get the current state of a task from the agent.
+  rpc GetTask(GetTaskRequest) returns (Task) {
+    option (google.api.http) = {get: "/v1/{name=tasks/*}"};
+    option (google.api.method_signature) = "name";
+  }
+
+  // Cancel a task from the agent. If supported one should expect no
+  // more task updates for the task.
+  rpc CancelTask(CancelTaskRequest) returns (Task) {
+    option (google.api.http) = {
+      post: "/v1/{name=tasks/*}:cancel"
+      body: "*"
+    };
+  }
+
+  // TaskSubscription is a streaming call that will return a stream of task
+  // update events. This attaches the stream to an existing in process task.
+  // If the task is complete the stream will return the completed task (like
+  // GetTask) and close the stream.
+  rpc TaskSubscription(TaskSubscriptionRequest) returns (stream StreamResponse) {
+    option (google.api.http) = {get: "/v1/{name=tasks/*}:subscribe"};
+  }
+
+  // Set a push notification config for a task.
+  rpc CreateTaskPushNotification(CreateTaskPushNotificationRequest) returns (TaskPushNotificationConfig) {
+    option (google.api.http) = {
+      post: "/v1/{parent=task/*/pushNotifications}"
+      body: "config"
+    };
+    option (google.api.method_signature) = "parent,config";
+  }
+  // Get a push notification config for a task.
+  rpc GetTaskPushNotification(GetTaskPushNotificationRequest) returns (TaskPushNotificationConfig) {
+    option (google.api.http) = {get: "/v1/{name=tasks/*/pushNotifications/*}"};
+    option (google.api.method_signature) = "name";
+  }
+
+  // Get a list of push notifications configured for a task.
+  rpc ListTaskPushNotification(ListTaskPushNotificationRequest) returns (ListTaskPushNotificationResponse) {
+    option (google.api.http) = {get: "/v1/{parent=tasks/*}/pushNotifications"};
+    option (google.api.method_signature) = "parent";
+  }
+
+  // GetAgentCard returns the agent card for the agent.
+  rpc GetAgentCard(GetAgentCardRequest) returns (AgentCard) {
+    option (google.api.http) = {get: "/v1/card"};
+  }
+}
+
+message TaskSubscriptionRequest {
+  // name=tasks/{id}
+  string name = 1;
+}
+
+message CreateTaskPushNotificationRequest {
+  // The task resource for this config.
+  // Format: tasks/{id}
+  string parent = 1 [(google.api.field_behavior) = REQUIRED];
+  string config_id = 2 [(google.api.field_behavior) = REQUIRED];
+  TaskPushNotificationConfig config = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetTaskPushNotificationRequest {
+  // name=tasks/{id}/pushNotifications/{push_id}
+  string name = 1;
+}
+
+message GetTaskRequest {
+  // name=tasks/{id}
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  int32 history_length = 2;
+}
+
+message CancelTaskRequest {
+  // name=tasks/{id}
+  string name = 1;
+}
+
+message SendMessageRequest {
+  Message request = 1 [(google.api.field_behavior) = REQUIRED];
+  SendMessageConfiguration configuration = 2;
+  google.protobuf.Struct metadata = 3;
+}
+
+message SendMessageResponse {
+  oneof payload {
+    Task task = 1;
+    Message msg = 2;
+  }
+}
+
+// The stream response for a message. The stream should be one of the following
+// sequences:
+// If the response is a message, the stream should contain one, and only one,
+// message and then close
+// If the response is a task lifecycle, the first response should be a Task
+// object followed by zero or more TaskStatusUpdateEvents and
+// TaskArtifactUpdateEvents. The stream should complete when the Task
+// if in an interrupted or terminal state. A stream that ends before these
+// conditions are met are
+message StreamResponse {
+  oneof payload {
+    Task task = 1;
+    Message msg = 2;
+    TaskStatusUpdateEvent status_update = 3;
+    TaskArtifactUpdateEvent artifact_update = 4;
+  }
+}
+
+// TaskStatusUpdateEvent is a delta even on a task indicating that a task
+// has changed.
+message TaskStatusUpdateEvent {
+  // The id of the task that is changed
+  string task_id = 1;
+  // The id of the context that the task belongs to
+  string context_id = 2;
+  // The new status of the task.
+  TaskStatus status = 3;
+  // Whether this is the last status update expected for this task.
+  bool final = 4;
+  // Optional metadata to associate with the task update.
+  google.protobuf.Struct metadata = 5;
+}
+
+// TaskArtifactUpdateEvent represents a task delta where an artifact has
+// been generated.
+message TaskArtifactUpdateEvent {
+  // The id of the task for this artifact
+  string task_id = 1;
+  // The id of the context that this task belongs too
+  string context_id = 2;
+  // The artifact itself
+  Artifact artifact = 3;
+  //  Whether this should be appended to a prior one produced
+  bool append = 4;
+  // Whether this represents the last part of an artifact
+  bool last_chunk = 5;
+  // Optional metadata associated with the artifact update.
+  google.protobuf.Struct metadata = 6;
+}
+
+// Configuration of a send message request.
+message SendMessageConfiguration {
+  // The output modes that the agent is expected to respond with.
+  repeated string accepted_output_modes = 1;
+  // A configuration of a webhook that can be used to receive updates
+  PushNotificationConfig push_notification = 2;
+  // The maximum number of messages to include in the history. if 0, the
+  // history will be unlimited.
+  int32 history_length = 3;
+  // If true, the message will be blocking until the task is completed. If
+  // false, the message will be non-blocking and the task will be returned
+  // immediately. It is the caller's responsibility to check for any task
+  // updates.
+  bool blocking = 4;
+}
+
+message ListTaskPushNotificationRequest {
+  // parent=tasks/{id}
+  string parent = 1;
+  // For AIP-158 these fields are present. Usually not used/needed.
+  // The maximum number of configurations to return.
+  // If unspecified, all configs will be returned.
+  int32 page_size = 2;
+
+  // A page token, received from a previous `ListTaskPushNotificationRequest
+  //  call. Provide this to retrieve the subsequent page.
+  // When paginating, all other parameters provided to
+  // `ListTaskPushNotificationRequest` must match the call that provided
+  // the page token.
+  string page_token = 3;
+}
+
+// Defines authentication details, used for push notifications.
+message AuthenticationInfo {
+  // Supported authentication schemes - e.g. Basic, Bearer, etc
+  repeated string schemes = 1;
+  // Optional credentials
+  string credentials = 2;
+}
+
+// Configuration for setting up push notifications for task updates.
+message PushNotificationConfig {
+  // A unique id for this push notification.
+  string id = 1;
+  // Url to send the notification too
+  string url = 2;
+  // Token unique for this task/session
+  string token = 3;
+  // Information about the authentication to sent with the notification
+  AuthenticationInfo authentication = 4;
+}
+
+message TaskPushNotificationConfig {
+  // name=tasks/{id}/pushNotifications/{id}
+  string name = 1;
+  PushNotificationConfig push_notification_config = 2;
+}
+
+message ListTaskPushNotificationResponse {
+  repeated TaskPushNotificationConfig configs = 1;
+  // A token, which can be sent as `page_token` to retrieve the next page.
+  // If this field is omitted, there are no subsequent pages.
+  string next_page_token = 2;
+}
+
+message GetAgentCardRequest {
+  // Empty. Added to fix linter violation.
+}

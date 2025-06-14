@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package a2a.v1;
+
+import "a2a/v1/message.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb";
+
+// Task is the core unit of action for A2A. It has a current status
+// and when results are created for the task they are stored in the
+// artifact. If there are multiple turns for a task, these are stored in
+// history.
+message Task {
+  // Unique identifer for a task, created by the A2A server.
+  string id = 1;
+  // Unique identifer for the contextual collection of interactions (tasks
+  // and messages). Created by the A2A server.
+  string context_id = 2;
+  // The current status of a Task, including state and a message.
+  TaskStatus status = 3;
+  // A set of output artifacts for a Task.
+  repeated Artifact artifacts = 4;
+  // protolint:disable REPEATED_FIELD_NAMES_PLURALIZED
+  // The history of interactions from a task.
+  repeated Message history = 5;
+  // protolint:enable REPEATED_FIELD_NAMES_PLURALIZED
+  // A key/value object to store custom metadata about a task.
+  google.protobuf.Struct metadata = 6;
+}
+
+// Artifacts are the container for task completed results. These are similar
+// to Messages but are intended to be the product of a task, as opposed to
+// point-to-point communication.
+message Artifact {
+  // Unique id for the artifact. It must be at least unique within a task.
+  string artifact_id = 1;
+  // A human readable name for the artifact.
+  string name = 3;
+  // A human readable description of the artifact, optional.
+  string description = 4;
+  // The content of the artifact.
+  repeated Part parts = 5;
+  // Optional metadata included with the artifact.
+  google.protobuf.Struct metadata = 6;
+  // The URIs of extensions that are present or contributed to this Artifact.
+  repeated string extensions = 7;
+}
+
+// A container for the status of a task
+message TaskStatus {
+  // The current state of this task
+  TaskState state = 1;
+  // A message associated with the status.
+  Message update = 2;
+  // Timestamp when the status was recorded.
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+// The set of states a Task can be in.
+enum TaskState {
+  TASK_STATE_UNSPECIFIED = 0;
+  // Represents the status that acknowledges a task is created
+  TASK_STATE_SUBMITTED = 1;
+  // Represents the status that a task is actively being processed
+  TASK_STATE_WORKING = 2;
+  // Represents the status a task is finished. This is a terminal state
+  TASK_STATE_COMPLETED = 3;
+  // Represents the status a task is done but failed. This is a terminal state
+  TASK_STATE_FAILED = 4;
+  // Represents the status a task was cancelled before it finished.
+  // This is a terminal state.
+  TASK_STATE_CANCELLED = 5;
+  // Represents the status that the task requires information to complete.
+  // This is an interrupted state.
+  TASK_STATE_INPUT_REQUIRED = 6;
+  // Represents the status that the agent has decided to not perform the task.
+  // This may be done during initial task creation or later once an agent
+  // has determined it can't or won't proceed. This is a terminal state.
+  TASK_STATE_REJECTED = 7;
+  // Represents the state that some authentication is needed from the upstream
+  // client. Authentication is expected to come out-of-band thus this is not
+  // an interrupted or terminal state.
+  TASK_STATE_AUTH_REQUIRED = 8;
+}

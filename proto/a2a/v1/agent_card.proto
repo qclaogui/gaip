@@ -1,0 +1,216 @@
+syntax = "proto3";
+
+package a2a.v1;
+
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb";
+
+// AgentCard conveys key information:
+// - Overall details (version, name, description, uses)
+// - Skills; a set of actions/solutions the agent can perform
+// - Default modalities/content types supported by the agent.
+// - Authentication requirements
+message AgentCard {
+  // A human readable name for the agent.
+  string name = 1;
+  // A description of the agents domain of action/solution space.
+  string description = 2;
+  // The base url to interact with the agent at.
+  string url = 3;
+  // Information about the service provider of the agent.
+  AgentProvider provider = 4;
+  // The version of the agent.
+  string version = 5;
+  // A url to provide additional documentation about the agent.
+  string documentation_url = 6;
+  // A2A Capability set supported by the agent.
+  AgentCapabilities capabilities = 7;
+  // The security scheme details used for authenticating with this agent.
+  map<string, SecurityScheme> security_schemes = 8;
+  // Security requirements for contacting the agent.
+  repeated Security security = 9;
+  // The set of interaction modes that the agent supports across all skills.
+  // This can be overridden per skill. Defined as mime types.
+  repeated string default_input_modes = 10;
+  // The mime types supported as outputs from this agent.
+  repeated string default_output_modes = 11;
+  // Skills represent a unit of ability an agent can perform. This may
+  // somewhat abstract but represents a more focused set of actions that the
+  // agent is highly likely to succeed at.
+  repeated AgentSkill skills = 12;
+  // Whether the agent supports providing an extended agent card when
+  // the user is authenticated, i.e. is the card from .well-known
+  // different than the card from GetAgentCard.
+  bool supports_authenticated_extended_card = 13;
+}
+
+// Represents information about the service provider of an agent.
+message AgentProvider {
+  // The providers reference url
+  string url = 1;
+  // The providers organization name
+  string organization = 2;
+}
+
+// Defines the A2A feature set supported by the agent
+message AgentCapabilities {
+  // If the agent will support streaming responses
+  bool streaming = 1;
+  // If the agent can send push notifications to the clients webhook
+  bool push_notifications = 2;
+  // Extensions supported by this agent.
+  repeated AgentExtension extensions = 3;
+}
+
+// A declaration of an extension supported by an Agent.
+message AgentExtension {
+  // The URI of the extension.
+  string uri = 1;
+  // A description of how this agent uses this extension.
+  string description = 2;
+  // Whether the client must follow specific requirements of the extension.
+  bool required = 3;
+  // Optional configuration for the extension.
+  google.protobuf.Struct params = 4;
+}
+
+// AgentSkill represents a unit of action/solution that the agent can perform.
+// One can think of this as a type of highly reliable solution that an agent
+// can be tasked to provide. Agents have the autonomy to choose how and when
+// to use specific skills, but clients should have confidence that if the
+// skill is defined that unit of action can be reliably performed.
+message AgentSkill {
+  // Unique id of the skill within this agent.
+  string id = 1;
+  // A human readable name for the skill.
+  string name = 2;
+  // A human (or llm) readable description of the skill
+  // details and behaviors.
+  string description = 3;
+  // A set of tags for the skill to enhance categorization/utilization.
+  repeated string tags = 4;
+  // A set of example queries that this skill is designed to address.
+  // These examples should help the caller to understand how to craft requests
+  // to the agent to achieve specific goals.
+  repeated string examples = 5;
+  // Possible input modalities supported.
+  repeated string input_modes = 6;
+  // Possible output modalities produced
+  repeated string output_modes = 7;
+}
+
+message StringList {
+  repeated string list = 1;
+}
+
+message Security {
+  map<string, StringList> schemes = 1;
+}
+
+message SecurityScheme {
+  oneof scheme {
+    APIKeySecurityScheme api_key_security_scheme = 1;
+    HTTPAuthSecurityScheme http_auth_security_scheme = 2;
+    OAuth2SecurityScheme oauth2_security_scheme = 3;
+    OpenIdConnectSecurityScheme open_id_connect_security_scheme = 4;
+  }
+}
+
+message APIKeySecurityScheme {
+  // Description of this security scheme.
+  string description = 1;
+  // Location of the API key, valid values are "query", "header", or "cookie"
+  string location = 2;
+  // Name of the header, query or cookie parameter to be used.
+  string name = 3;
+}
+
+message HTTPAuthSecurityScheme {
+  // Description of this security scheme.
+  string description = 1;
+  // The name of the HTTP Authentication scheme to be used in the
+  // Authorization header as defined in RFC7235. The values used SHOULD be
+  // registered in the IANA Authentication Scheme registry.
+  // The value is case-insensitive, as defined in RFC7235.
+  string scheme = 2;
+  // A hint to the client to identify how the bearer token is formatted.
+  // Bearer tokens are usually generated by an authorization server, so
+  // this information is primarily for documentation purposes.
+  string bearer_format = 3;
+}
+
+message OAuth2SecurityScheme {
+  // Description of this security scheme.
+  string description = 1;
+  // An object containing configuration information for the flow types supported
+  OAuthFlows flows = 2;
+}
+
+message OpenIdConnectSecurityScheme {
+  // Description of this security scheme.
+  string description = 1;
+  // Well-known URL to discover the [[OpenID-Connect-Discovery]] provider
+  // metadata.
+  string open_id_connect_url = 2;
+}
+
+message OAuthFlows {
+  oneof flow {
+    AuthorizationCodeOAuthFlow authorization_code = 1;
+    ClientCredentialsOAuthFlow client_credentials = 2;
+    ImplicitOAuthFlow implicit = 3;
+    PasswordOAuthFlow password = 4;
+  }
+}
+
+message AuthorizationCodeOAuthFlow {
+  // The authorization URL to be used for this flow. This MUST be in the
+  // form of a URL. The OAuth2 standard requires the use of TLS
+  string authorization_url = 1;
+  // The token URL to be used for this flow. This MUST be in the form of a URL.
+  // The OAuth2 standard requires the use of TLS.
+  string token_url = 2;
+  // The URL to be used for obtaining refresh tokens. This MUST be in the
+  // form of a URL. The OAuth2 standard requires the use of TLS.
+  string refresh_url = 3;
+  // The available scopes for the OAuth2 security scheme. A map between the
+  // scope name and a short description for it. The map MAY be empty.
+  map<string, string> scopes = 4;
+}
+
+message ClientCredentialsOAuthFlow {
+  // The token URL to be used for this flow. This MUST be in the form of a URL.
+  // The OAuth2 standard requires the use of TLS.
+  string token_url = 1;
+  // The URL to be used for obtaining refresh tokens. This MUST be in the
+  // form of a URL. The OAuth2 standard requires the use of TLS.
+  string refresh_url = 2;
+  // The available scopes for the OAuth2 security scheme. A map between the
+  // scope name and a short description for it. The map MAY be empty.
+  map<string, string> scopes = 3;
+}
+
+message ImplicitOAuthFlow {
+  // The authorization URL to be used for this flow. This MUST be in the
+  // form of a URL. The OAuth2 standard requires the use of TLS
+  string authorization_url = 1;
+  // The URL to be used for obtaining refresh tokens. This MUST be in the
+  // form of a URL. The OAuth2 standard requires the use of TLS.
+  string refresh_url = 2;
+  // The available scopes for the OAuth2 security scheme. A map between the
+  // scope name and a short description for it. The map MAY be empty.
+  map<string, string> scopes = 3;
+}
+
+message PasswordOAuthFlow {
+  // The token URL to be used for this flow. This MUST be in the form of a URL.
+  // The OAuth2 standard requires the use of TLS.
+  string token_url = 1;
+  // The URL to be used for obtaining refresh tokens. This MUST be in the
+  // form of a URL. The OAuth2 standard requires the use of TLS.
+  string refresh_url = 2;
+  // The available scopes for the OAuth2 security scheme. A map between the
+  // scope name and a short description for it. The map MAY be empty.
+  map<string, string> scopes = 3;
+}

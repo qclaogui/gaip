@@ -1,0 +1,26 @@
+type: google.api.Service
+config_version: 3
+name: a2a.qclaogui.com
+title: A2AService defines the gRPC version of the A2A protocol
+
+apis:
+- name: a2a.v1.A2AService
+- name: google.longrunning.Operations
+
+documentation:
+  summary: |-
+    A2AService defines the gRPC version of the A2A protocol. This has a slightly
+    different focus compared to the REST version, with optimizations for gRPC's
+    streaming capabilities and binary data handling.
+
+http:
+  rules:
+  - selector: google.longrunning.Operations.CancelOperation
+    post: '/v1/{name=tunedModels/*/operations/*}:cancel'
+    body: '*'
+  - selector: google.longrunning.Operations.GetOperation
+    get: '/v1/{name=tunedModels/*/operations/*}'
+  - selector: google.longrunning.Operations.ListOperations
+    get: '/v1/{name=operations}'
+    additional_bindings:
+    - get: '/v1/{name=tunedModels/*}/operations'
