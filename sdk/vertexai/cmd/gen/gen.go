@@ -10,11 +10,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	genai2 "github.com/qclaogui/gaip/sdk/vertexai/genai"
 	"log"
 	"os"
 	"strings"
-
-	"github.com/qclaogui/gaip/vertexai/genai"
 
 	"google.golang.org/api/iterator"
 )
@@ -33,27 +32,27 @@ func main() {
 	}
 
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, *project, *location)
+	client, err := genai2.NewClient(ctx, *project, *location)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Close()
 
 	model := client.GenerativeModel(*model)
-	model.SafetySettings = []*genai.SafetySetting{
+	model.SafetySettings = []*genai2.SafetySetting{
 		{
-			Category:  genai.HarmCategorySexuallyExplicit,
-			Threshold: genai.HarmBlockLowAndAbove,
+			Category:  genai2.HarmCategorySexuallyExplicit,
+			Threshold: genai2.HarmBlockLowAndAbove,
 		},
 		{
-			Category:  genai.HarmCategoryDangerousContent,
-			Threshold: genai.HarmBlockLowAndAbove,
+			Category:  genai2.HarmCategoryDangerousContent,
+			Threshold: genai2.HarmBlockLowAndAbove,
 		},
 	}
 
 	text := strings.Join(flag.Args(), " ")
 	if *streaming {
-		iter := model.GenerateContentStream(ctx, genai.Text(text))
+		iter := model.GenerateContentStream(ctx, genai2.Text(text))
 		for {
 			res, err := iter.Next()
 			if errors.Is(err, iterator.Done) {
@@ -66,7 +65,7 @@ func main() {
 			fmt.Println("---")
 		}
 	} else {
-		res, err := model.GenerateContent(ctx, genai.Text(text))
+		res, err := model.GenerateContent(ctx, genai2.Text(text))
 		if err != nil {
 			showError(err)
 		}
@@ -83,7 +82,7 @@ func showJSON(x any) {
 }
 
 func showError(err error) {
-	var berr *genai.BlockedError
+	var berr *genai2.BlockedError
 	if errors.As(err, &berr) {
 		fmt.Println("ERROR:")
 		showJSON(err)

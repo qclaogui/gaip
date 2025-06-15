@@ -7,12 +7,12 @@ package genai
 import (
 	"context"
 	"fmt"
+	"github.com/qclaogui/gaip/sdk/vertexai/internal"
 	"os"
 
 	"google.golang.org/api/option"
 
 	aiplatform "github.com/qclaogui/gaip/genproto/aiplatform/apiv1beta1"
-	"github.com/qclaogui/gaip/vertexai/internal"
 )
 
 // A Client is a Google Vertex AI client.
