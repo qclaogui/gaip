@@ -45,10 +45,7 @@
       { "service": "qclaogui.generativelanguage.v1beta.TextService", "method": "GenerateText" },
       { "service": "qclaogui.generativelanguage.v1beta.TextService", "method": "EmbedText" },
       { "service": "qclaogui.generativelanguage.v1beta.TextService", "method": "BatchEmbedText" },
-      { "service": "qclaogui.generativelanguage.v1beta.TextService", "method": "CountTextTokens" },
-      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "EmbedContent" },
-      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "BatchEmbedContents" },
-      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "CountTokens" }
+      { "service": "qclaogui.generativelanguage.v1beta.TextService", "method": "CountTextTokens" }
     ],
     "timeout": "60s",
     "retryPolicy": {
@@ -62,9 +59,7 @@
   {
     "name": [
       { "service": "qclaogui.generativelanguage.v1beta.GenerativeService", "method": "GenerateContent" },
-      { "service": "qclaogui.generativelanguage.v1beta.GenerativeService", "method": "StreamGenerateContent" },
-      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "GenerateContent" },
-      { "service": "qclaogui.generativelanguage.v1.GenerativeService", "method": "StreamGenerateContent" }
+      { "service": "qclaogui.generativelanguage.v1beta.GenerativeService", "method": "StreamGenerateContent" }
     ],
     "timeout": "600s",
     "retryPolicy": {

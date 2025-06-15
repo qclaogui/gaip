@@ -124,7 +124,7 @@ func (m *GenerativeModel) newGenerateContentRequest(contents ...*Content) (*pb.G
 			SafetySettings:    pvTransformSlice(m.SafetySettings, (*SafetySetting).toProto),
 			Tools:             pvTransformSlice(m.Tools, (*Tool).toProto),
 			ToolConfig:        m.ToolConfig.toProto(),
-			GenerationConfig:  m.GenerationConfig.toProto(),
+			GenerationConfig:  m.toProto(),
 			SystemInstruction: m.SystemInstruction.toProto(),
 			CachedContent:     *cc,
 		}

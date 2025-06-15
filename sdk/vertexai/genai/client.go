@@ -7,8 +7,9 @@ package genai
 import (
 	"context"
 	"fmt"
-	"github.com/qclaogui/gaip/sdk/vertexai/internal"
 	"os"
+
+	"github.com/qclaogui/gaip/sdk/vertexai/internal"
 
 	"google.golang.org/api/option"
 

@@ -1,20 +1,6 @@
-# Copyright © Weifeng Wang <qclaogui@gmail.com>
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # Configuration for the protoveneer tool.
 
-package: generativelanguage
+package: genai
 
 protoImportPath: github.com/qclaogui/gaip/genproto/generativelanguage/apiv1beta/generativelanguagepb
 
@@ -52,13 +38,42 @@ types:
     Content:
       fields:
         Parts:
-          type: '[]Part'
+          type: '[]*Part'
+
+    Part:
+      populateToFrom: populatePartTo, populatePartFrom
+      fields:
+        Data:
+          omit: true
+        Text:
+          add: true
+          type: string
+        InlineData:
+          add: true
+          type: '*Blob'
+          doc: 'Optional. Inlined bytes data.'
+        FileData:
+          add: true
+          type: '*FileData'
+        FunctionCall:
+          add: true
+          type: '*FunctionCall'
+        FunctionResponse:
+          add: true
+          type: '*FunctionResponse'
+        ExecutableCode:
+          add: true
+          type: '*ExecutableCode'
+        CodeExecutionResult:
+          add: true
+          type: '*CodeExecutionResult'
 
     Blob:
       fields:
         MimeType:
           name: MIMEType
-      docVerb: contains
+      doc: 'contains binary data like images. Use [Text] for text.'
+      removeOtherDoc: true
 
     FileData:
       fields:
@@ -72,13 +87,21 @@ types:
             
             [this page]: https://ai.google.dev/gemini-api/docs/prompting_with_media?lang=go#supported_file_formats
         FileUri:
-          name: URI
+          name: FileURI
           doc: 'The URI returned from UploadFile or GetFile.'
 
     GenerationConfig:
       fields:
         ResponseMimeType:
           name: ResponseMIMEType
+        ResponseModalities:
+          omit: true
+        MediaResolution:
+          omit: true
+        SpeechConfig:
+          omit: true
+        ThinkingConfig:
+          omit: true
 
     SafetySetting:
 
@@ -101,12 +124,21 @@ types:
           type: int32
         GroundingAttributions:
           omit: true
+        GroundingMetadata:
+          omit: true
+        LogprobsResult:
+          omit: true
 
     GenerateContentResponse_PromptFeedback:
       name: PromptFeedback
       docVerb: contains
 
     CountTokensResponse:
+      fields:
+        PromptTokensDetails:
+          omit: true
+        CacheTokensDetails:
+          omit: true
 
     TaskType:
       protoPrefix: TaskType
@@ -142,6 +174,11 @@ types:
             part with arguments to the client side for execution. The next conversation
             turn may contain a [FunctionResponse] with the role "function" generation
             context for the next model turn.
+        GoogleSearchRetrieval:
+          omit: true
+        GoogleSearch:
+          omit: true
+
     ToolConfig:
     FunctionDeclaration:
     FunctionCall:
@@ -186,7 +223,18 @@ types:
       veneerPrefix: FileState
       valueNames:
         File_STATE_UNSPECIFIED: FileStateUnspecified
-      
+
+    File_Source:
+      name: FileSource
+      docVerb: represents
+      protoPrefix: File
+      veneerPrefix: FileSource
+      valueNames:
+        File_SOURCE_UNSPECIFIED: FileSourceUnspecified
+
+    Modality:
+    ModalityTokenCount:
+
     GenerateContentResponse_UsageMetadata:
       name: UsageMetadata
       fields:
@@ -233,5 +281,5 @@ types:
 omitTypes:
   - '*'
 
-converters:
-  Part: partToProto, partFromProto
+# converters:
+#   Part: partToProto, partFromProto

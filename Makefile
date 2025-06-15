@@ -351,10 +351,12 @@ protoc-gen: protoc-install $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC) $(PROTOC_GEN_G
 #    go install ./internal/protoveneer/cmd/protoveneer
 #
 protoveneer-gen: $(PROTOVENEER)
-	@$(PROTOVENEER) -license LICENSE -outdir vertexai/genai vertexai/genai/protoveneer.yaml genproto/aiplatform/apiv1beta1/aiplatformpb
+	@$(PROTOVENEER) -license LICENSE -outdir sdk/generativeai/genai sdk/generativeai/genai/protoveneer.yaml genproto/generativelanguage/apiv1beta/generativelanguagepb
+	@$(PROTOVENEER) -license LICENSE -outdir sdk/vertexai/genai sdk/vertexai/genai/protoveneer.yaml genproto/aiplatform/apiv1beta1/aiplatformpb
 
 gen-info:
 	tools/scripts/gen_info.sh genproto/aiplatform/apiv1beta1 aiplatform
+	tools/scripts/gen_info.sh genproto/generativelanguage/apiv1beta generativelanguage
 
 ##@ Testing Lint & Fmt
 

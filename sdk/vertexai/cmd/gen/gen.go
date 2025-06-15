@@ -10,10 +10,11 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	genai2 "github.com/qclaogui/gaip/sdk/vertexai/genai"
 	"log"
 	"os"
 	"strings"
+
+	genai2 "github.com/qclaogui/gaip/sdk/vertexai/genai"
 
 	"google.golang.org/api/iterator"
 )
