@@ -1,7 +1,7 @@
 ariga.io/atlas v0.34.0 h1:4hdy+2x+xNs6Lx2anuJ/4Q7lCaqddbEj5CtRDVOBu0M=
 ariga.io/atlas v0.34.0/go.mod h1:WJesu2UCpGQvgUh3oVP94EiRT61nNy1W/VN5g+vqP1I=
-buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250613055000-fd99550722dc.1 h1:27bzfkfQ3baaLXt1yrLOUplBRUqy8sptpNqRl+Pb5/A=
-buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250613055000-fd99550722dc.1/go.mod h1:avRlCjnFzl98VPaeCtJ24RrV/wwHFzB8sWXhj26+n/U=
+buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250613105001-9f2d3c737feb.1 h1:AUL6VF5YWL01j/1H/DQbPUSDkEwYqwVCNw7yhbpOxSQ=
+buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250613105001-9f2d3c737feb.1/go.mod h1:avRlCjnFzl98VPaeCtJ24RrV/wwHFzB8sWXhj26+n/U=
 cel.dev/expr v0.24.0 h1:56OvJKSH3hDGL0ml5uSxZmz3/3Pq4tJ+fb1unVLAFcY=
 cel.dev/expr v0.24.0/go.mod h1:hLPLo1W4QUmuYdA72RBX06QTs6MXw941piREPl3Yfiw=
 cloud.google.com/go v0.121.2 h1:v2qQpN6Dx9x2NmwrqlesOt3Ys4ol5/lFZ6Mg1B7OJCg=
