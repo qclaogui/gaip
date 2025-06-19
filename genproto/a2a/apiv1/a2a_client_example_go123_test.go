@@ -25,7 +25,7 @@ import (
 	a2apb "github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb"
 )
 
-func ExampleClient_ListTaskPushNotification_all() {
+func ExampleClient_ListTaskPushNotificationConfig_all() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -38,11 +38,11 @@ func ExampleClient_ListTaskPushNotification_all() {
 	}
 	defer c.Close()
 
-	req := &a2apb.ListTaskPushNotificationRequest{
+	req := &a2apb.ListTaskPushNotificationConfigRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#ListTaskPushNotificationRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#ListTaskPushNotificationConfigRequest.
 	}
-	for resp, err := range c.ListTaskPushNotification(ctx, req).All() {
+	for resp, err := range c.ListTaskPushNotificationConfig(ctx, req).All() {
 		if err != nil {
 			// TODO: Handle error and break/return/continue. Iteration will stop after any error.
 		}

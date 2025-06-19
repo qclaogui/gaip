@@ -1540,13 +1540,13 @@ func (ModelInfo) fromProto(p *pb.Model) *ModelInfo {
 type Part struct {
 	// Optional. Indicates if the part is thought from the model.
 	Thought             bool
+	FunctionResponse    *FunctionResponse
+	ExecutableCode      *ExecutableCode
+	CodeExecutionResult *CodeExecutionResult
 	Text                string
 	InlineData          *Blob
 	FileData            *FileData
 	FunctionCall        *FunctionCall
-	FunctionResponse    *FunctionResponse
-	ExecutableCode      *ExecutableCode
-	CodeExecutionResult *CodeExecutionResult
 }
 
 func (v *Part) toProto() *pb.Part {

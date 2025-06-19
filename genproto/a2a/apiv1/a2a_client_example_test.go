@@ -83,7 +83,7 @@ func ExampleClient_CancelTask() {
 	_ = resp
 }
 
-func ExampleClient_CreateTaskPushNotification() {
+func ExampleClient_CreateTaskPushNotificationConfig() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -96,16 +96,39 @@ func ExampleClient_CreateTaskPushNotification() {
 	}
 	defer c.Close()
 
-	req := &a2apb.CreateTaskPushNotificationRequest{
+	req := &a2apb.CreateTaskPushNotificationConfigRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#CreateTaskPushNotificationRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#CreateTaskPushNotificationConfigRequest.
 	}
-	resp, err := c.CreateTaskPushNotification(ctx, req)
+	resp, err := c.CreateTaskPushNotificationConfig(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
 	// TODO: Use resp.
 	_ = resp
+}
+
+func ExampleClient_DeleteTaskPushNotificationConfig() {
+	ctx := context.Background()
+	// This snippet has been automatically generated and should be regarded as a code template only.
+	// It will require modifications to work:
+	// - It may require correct/in-range values for request initialization.
+	// - It may require specifying regional endpoints when creating the service client as shown in:
+	//   https://pkg.go.dev/cloud.google.com/go#hdr-Client_Options
+	c, err := a2a.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &a2apb.DeleteTaskPushNotificationConfigRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#DeleteTaskPushNotificationConfigRequest.
+	}
+	err = c.DeleteTaskPushNotificationConfig(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
 }
 
 func ExampleClient_GetAgentCard() {
@@ -158,7 +181,7 @@ func ExampleClient_GetTask() {
 	_ = resp
 }
 
-func ExampleClient_GetTaskPushNotification() {
+func ExampleClient_GetTaskPushNotificationConfig() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -171,11 +194,11 @@ func ExampleClient_GetTaskPushNotification() {
 	}
 	defer c.Close()
 
-	req := &a2apb.GetTaskPushNotificationRequest{
+	req := &a2apb.GetTaskPushNotificationConfigRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#GetTaskPushNotificationRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#GetTaskPushNotificationConfigRequest.
 	}
-	resp, err := c.GetTaskPushNotification(ctx, req)
+	resp, err := c.GetTaskPushNotificationConfig(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
@@ -183,7 +206,7 @@ func ExampleClient_GetTaskPushNotification() {
 	_ = resp
 }
 
-func ExampleClient_ListTaskPushNotification() {
+func ExampleClient_ListTaskPushNotificationConfig() {
 	ctx := context.Background()
 	// This snippet has been automatically generated and should be regarded as a code template only.
 	// It will require modifications to work:
@@ -196,11 +219,11 @@ func ExampleClient_ListTaskPushNotification() {
 	}
 	defer c.Close()
 
-	req := &a2apb.ListTaskPushNotificationRequest{
+	req := &a2apb.ListTaskPushNotificationConfigRequest{
 		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#ListTaskPushNotificationRequest.
+		// See https://pkg.go.dev/github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb#ListTaskPushNotificationConfigRequest.
 	}
-	it := c.ListTaskPushNotification(ctx, req)
+	it := c.ListTaskPushNotificationConfig(ctx, req)
 	for {
 		resp, err := it.Next()
 		if err == iterator.Done {
@@ -216,7 +239,7 @@ func ExampleClient_ListTaskPushNotification() {
 		// you can do so by casting the `Response` as below.
 		// Otherwise, remove this line. Only populated after
 		// first call to Next(). Not safe for concurrent access.
-		_ = it.Response.(*a2apb.ListTaskPushNotificationResponse)
+		_ = it.Response.(*a2apb.ListTaskPushNotificationConfigResponse)
 	}
 }
 

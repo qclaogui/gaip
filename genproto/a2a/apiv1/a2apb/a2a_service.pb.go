@@ -14,6 +14,7 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 )
 
@@ -23,256 +24,6 @@ const (
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
-
-type TaskSubscriptionRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// name=tasks/{id}
-	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TaskSubscriptionRequest) Reset() {
-	*x = TaskSubscriptionRequest{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TaskSubscriptionRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TaskSubscriptionRequest) ProtoMessage() {}
-
-func (x *TaskSubscriptionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TaskSubscriptionRequest.ProtoReflect.Descriptor instead.
-func (*TaskSubscriptionRequest) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *TaskSubscriptionRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-type CreateTaskPushNotificationRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// The task resource for this config.
-	// Format: tasks/{id}
-	Parent        string                      `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
-	ConfigId      string                      `protobuf:"bytes,2,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`
-	Config        *TaskPushNotificationConfig `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CreateTaskPushNotificationRequest) Reset() {
-	*x = CreateTaskPushNotificationRequest{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CreateTaskPushNotificationRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateTaskPushNotificationRequest) ProtoMessage() {}
-
-func (x *CreateTaskPushNotificationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateTaskPushNotificationRequest.ProtoReflect.Descriptor instead.
-func (*CreateTaskPushNotificationRequest) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *CreateTaskPushNotificationRequest) GetParent() string {
-	if x != nil {
-		return x.Parent
-	}
-	return ""
-}
-
-func (x *CreateTaskPushNotificationRequest) GetConfigId() string {
-	if x != nil {
-		return x.ConfigId
-	}
-	return ""
-}
-
-func (x *CreateTaskPushNotificationRequest) GetConfig() *TaskPushNotificationConfig {
-	if x != nil {
-		return x.Config
-	}
-	return nil
-}
-
-type GetTaskPushNotificationRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// name=tasks/{id}/pushNotifications/{push_id}
-	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetTaskPushNotificationRequest) Reset() {
-	*x = GetTaskPushNotificationRequest{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetTaskPushNotificationRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetTaskPushNotificationRequest) ProtoMessage() {}
-
-func (x *GetTaskPushNotificationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetTaskPushNotificationRequest.ProtoReflect.Descriptor instead.
-func (*GetTaskPushNotificationRequest) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *GetTaskPushNotificationRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-type GetTaskRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// name=tasks/{id}
-	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	HistoryLength int32  `protobuf:"varint,2,opt,name=history_length,json=historyLength,proto3" json:"history_length,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetTaskRequest) Reset() {
-	*x = GetTaskRequest{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetTaskRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetTaskRequest) ProtoMessage() {}
-
-func (x *GetTaskRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetTaskRequest.ProtoReflect.Descriptor instead.
-func (*GetTaskRequest) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *GetTaskRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *GetTaskRequest) GetHistoryLength() int32 {
-	if x != nil {
-		return x.HistoryLength
-	}
-	return 0
-}
-
-type CancelTaskRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// name=tasks/{id}
-	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CancelTaskRequest) Reset() {
-	*x = CancelTaskRequest{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CancelTaskRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CancelTaskRequest) ProtoMessage() {}
-
-func (x *CancelTaskRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CancelTaskRequest.ProtoReflect.Descriptor instead.
-func (*CancelTaskRequest) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *CancelTaskRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
 
 type SendMessageRequest struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
@@ -285,7 +36,7 @@ type SendMessageRequest struct {
 
 func (x *SendMessageRequest) Reset() {
 	*x = SendMessageRequest{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[5]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -297,7 +48,7 @@ func (x *SendMessageRequest) String() string {
 func (*SendMessageRequest) ProtoMessage() {}
 
 func (x *SendMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[5]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -310,7 +61,7 @@ func (x *SendMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendMessageRequest.ProtoReflect.Descriptor instead.
 func (*SendMessageRequest) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{5}
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *SendMessageRequest) GetRequest() *Message {
@@ -347,7 +98,7 @@ type SendMessageResponse struct {
 
 func (x *SendMessageResponse) Reset() {
 	*x = SendMessageResponse{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[6]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -359,7 +110,7 @@ func (x *SendMessageResponse) String() string {
 func (*SendMessageResponse) ProtoMessage() {}
 
 func (x *SendMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[6]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -372,7 +123,7 @@ func (x *SendMessageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendMessageResponse.ProtoReflect.Descriptor instead.
 func (*SendMessageResponse) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{6}
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SendMessageResponse) GetPayload() isSendMessageResponse_Payload {
@@ -416,6 +167,83 @@ func (*SendMessageResponse_Task) isSendMessageResponse_Payload() {}
 
 func (*SendMessageResponse_Msg) isSendMessageResponse_Payload() {}
 
+// Configuration of a send message request.
+type SendMessageConfiguration struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The output modes that the agent is expected to respond with.
+	AcceptedOutputModes []string `protobuf:"bytes,1,rep,name=accepted_output_modes,json=acceptedOutputModes,proto3" json:"accepted_output_modes,omitempty"`
+	// A configuration of a webhook that can be used to receive updates
+	PushNotification *PushNotificationConfig `protobuf:"bytes,2,opt,name=push_notification,json=pushNotification,proto3" json:"push_notification,omitempty"`
+	// The maximum number of messages to include in the history. if 0, the
+	// history will be unlimited.
+	HistoryLength int32 `protobuf:"varint,3,opt,name=history_length,json=historyLength,proto3" json:"history_length,omitempty"`
+	// If true, the message will be blocking until the task is completed. If
+	// false, the message will be non-blocking and the task will be returned
+	// immediately. It is the caller's responsibility to check for any task
+	// updates.
+	Blocking      bool `protobuf:"varint,4,opt,name=blocking,proto3" json:"blocking,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendMessageConfiguration) Reset() {
+	*x = SendMessageConfiguration{}
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendMessageConfiguration) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendMessageConfiguration) ProtoMessage() {}
+
+func (x *SendMessageConfiguration) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendMessageConfiguration.ProtoReflect.Descriptor instead.
+func (*SendMessageConfiguration) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SendMessageConfiguration) GetAcceptedOutputModes() []string {
+	if x != nil {
+		return x.AcceptedOutputModes
+	}
+	return nil
+}
+
+func (x *SendMessageConfiguration) GetPushNotification() *PushNotificationConfig {
+	if x != nil {
+		return x.PushNotification
+	}
+	return nil
+}
+
+func (x *SendMessageConfiguration) GetHistoryLength() int32 {
+	if x != nil {
+		return x.HistoryLength
+	}
+	return 0
+}
+
+func (x *SendMessageConfiguration) GetBlocking() bool {
+	if x != nil {
+		return x.Blocking
+	}
+	return false
+}
+
 // The stream response for a message. The stream should be one of the following
 // sequences:
 // If the response is a message, the stream should contain one, and only one,
@@ -440,7 +268,7 @@ type StreamResponse struct {
 
 func (x *StreamResponse) Reset() {
 	*x = StreamResponse{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[7]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -452,7 +280,7 @@ func (x *StreamResponse) String() string {
 func (*StreamResponse) ProtoMessage() {}
 
 func (x *StreamResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[7]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -465,7 +293,7 @@ func (x *StreamResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamResponse.ProtoReflect.Descriptor instead.
 func (*StreamResponse) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{7}
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *StreamResponse) GetPayload() isStreamResponse_Payload {
@@ -559,7 +387,7 @@ type TaskStatusUpdateEvent struct {
 
 func (x *TaskStatusUpdateEvent) Reset() {
 	*x = TaskStatusUpdateEvent{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[8]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -571,7 +399,7 @@ func (x *TaskStatusUpdateEvent) String() string {
 func (*TaskStatusUpdateEvent) ProtoMessage() {}
 
 func (x *TaskStatusUpdateEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[8]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -584,7 +412,7 @@ func (x *TaskStatusUpdateEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskStatusUpdateEvent.ProtoReflect.Descriptor instead.
 func (*TaskStatusUpdateEvent) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{8}
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *TaskStatusUpdateEvent) GetTaskId() string {
@@ -644,7 +472,7 @@ type TaskArtifactUpdateEvent struct {
 
 func (x *TaskArtifactUpdateEvent) Reset() {
 	*x = TaskArtifactUpdateEvent{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[9]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -656,7 +484,7 @@ func (x *TaskArtifactUpdateEvent) String() string {
 func (*TaskArtifactUpdateEvent) ProtoMessage() {}
 
 func (x *TaskArtifactUpdateEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[9]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -669,7 +497,7 @@ func (x *TaskArtifactUpdateEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskArtifactUpdateEvent.ProtoReflect.Descriptor instead.
 func (*TaskArtifactUpdateEvent) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{9}
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *TaskArtifactUpdateEvent) GetTaskId() string {
@@ -714,39 +542,233 @@ func (x *TaskArtifactUpdateEvent) GetMetadata() *structpb.Struct {
 	return nil
 }
 
-// Configuration of a send message request.
-type SendMessageConfiguration struct {
+type GetTaskRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// The output modes that the agent is expected to respond with.
-	AcceptedOutputModes []string `protobuf:"bytes,1,rep,name=accepted_output_modes,json=acceptedOutputModes,proto3" json:"accepted_output_modes,omitempty"`
-	// A configuration of a webhook that can be used to receive updates
-	PushNotification *PushNotificationConfig `protobuf:"bytes,2,opt,name=push_notification,json=pushNotification,proto3" json:"push_notification,omitempty"`
-	// The maximum number of messages to include in the history. if 0, the
-	// history will be unlimited.
-	HistoryLength int32 `protobuf:"varint,3,opt,name=history_length,json=historyLength,proto3" json:"history_length,omitempty"`
-	// If true, the message will be blocking until the task is completed. If
-	// false, the message will be non-blocking and the task will be returned
-	// immediately. It is the caller's responsibility to check for any task
-	// updates.
-	Blocking      bool `protobuf:"varint,4,opt,name=blocking,proto3" json:"blocking,omitempty"`
+	// name=tasks/{id}
+	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	HistoryLength int32  `protobuf:"varint,2,opt,name=history_length,json=historyLength,proto3" json:"history_length,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SendMessageConfiguration) Reset() {
-	*x = SendMessageConfiguration{}
+func (x *GetTaskRequest) Reset() {
+	*x = GetTaskRequest{}
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTaskRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTaskRequest) ProtoMessage() {}
+
+func (x *GetTaskRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTaskRequest.ProtoReflect.Descriptor instead.
+func (*GetTaskRequest) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetTaskRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GetTaskRequest) GetHistoryLength() int32 {
+	if x != nil {
+		return x.HistoryLength
+	}
+	return 0
+}
+
+type CancelTaskRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// name=tasks/{id}
+	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CancelTaskRequest) Reset() {
+	*x = CancelTaskRequest{}
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CancelTaskRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CancelTaskRequest) ProtoMessage() {}
+
+func (x *CancelTaskRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CancelTaskRequest.ProtoReflect.Descriptor instead.
+func (*CancelTaskRequest) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CancelTaskRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type TaskSubscriptionRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// name=tasks/{id}
+	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TaskSubscriptionRequest) Reset() {
+	*x = TaskSubscriptionRequest{}
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskSubscriptionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskSubscriptionRequest) ProtoMessage() {}
+
+func (x *TaskSubscriptionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskSubscriptionRequest.ProtoReflect.Descriptor instead.
+func (*TaskSubscriptionRequest) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *TaskSubscriptionRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type CreateTaskPushNotificationConfigRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The task resource for this config.
+	// Format: tasks/{id}
+	Parent        string                      `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	ConfigId      string                      `protobuf:"bytes,2,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`
+	Config        *TaskPushNotificationConfig `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateTaskPushNotificationConfigRequest) Reset() {
+	*x = CreateTaskPushNotificationConfigRequest{}
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateTaskPushNotificationConfigRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateTaskPushNotificationConfigRequest) ProtoMessage() {}
+
+func (x *CreateTaskPushNotificationConfigRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateTaskPushNotificationConfigRequest.ProtoReflect.Descriptor instead.
+func (*CreateTaskPushNotificationConfigRequest) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CreateTaskPushNotificationConfigRequest) GetParent() string {
+	if x != nil {
+		return x.Parent
+	}
+	return ""
+}
+
+func (x *CreateTaskPushNotificationConfigRequest) GetConfigId() string {
+	if x != nil {
+		return x.ConfigId
+	}
+	return ""
+}
+
+func (x *CreateTaskPushNotificationConfigRequest) GetConfig() *TaskPushNotificationConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+type GetTaskPushNotificationConfigRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// name=tasks/{id}/pushNotificationConfigs/{push_id}
+	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTaskPushNotificationConfigRequest) Reset() {
+	*x = GetTaskPushNotificationConfigRequest{}
 	mi := &file_a2a_v1_a2a_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SendMessageConfiguration) String() string {
+func (x *GetTaskPushNotificationConfigRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SendMessageConfiguration) ProtoMessage() {}
+func (*GetTaskPushNotificationConfigRequest) ProtoMessage() {}
 
-func (x *SendMessageConfiguration) ProtoReflect() protoreflect.Message {
+func (x *GetTaskPushNotificationConfigRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_a2a_v1_a2a_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -758,40 +780,19 @@ func (x *SendMessageConfiguration) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SendMessageConfiguration.ProtoReflect.Descriptor instead.
-func (*SendMessageConfiguration) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetTaskPushNotificationConfigRequest.ProtoReflect.Descriptor instead.
+func (*GetTaskPushNotificationConfigRequest) Descriptor() ([]byte, []int) {
 	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *SendMessageConfiguration) GetAcceptedOutputModes() []string {
+func (x *GetTaskPushNotificationConfigRequest) GetName() string {
 	if x != nil {
-		return x.AcceptedOutputModes
+		return x.Name
 	}
-	return nil
+	return ""
 }
 
-func (x *SendMessageConfiguration) GetPushNotification() *PushNotificationConfig {
-	if x != nil {
-		return x.PushNotification
-	}
-	return nil
-}
-
-func (x *SendMessageConfiguration) GetHistoryLength() int32 {
-	if x != nil {
-		return x.HistoryLength
-	}
-	return 0
-}
-
-func (x *SendMessageConfiguration) GetBlocking() bool {
-	if x != nil {
-		return x.Blocking
-	}
-	return false
-}
-
-type ListTaskPushNotificationRequest struct {
+type ListTaskPushNotificationConfigRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// parent=tasks/{id}
 	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
@@ -799,32 +800,31 @@ type ListTaskPushNotificationRequest struct {
 	// The maximum number of configurations to return.
 	// If unspecified, all configs will be returned.
 	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	// A page token, received from a previous `ListTaskPushNotificationRequest
-	//
-	//	call. Provide this to retrieve the subsequent page.
-	//
+	// A page token received from a previous
+	// ListTaskPushNotificationConfigRequest call.
+	// Provide this to retrieve the subsequent page.
 	// When paginating, all other parameters provided to
-	// `ListTaskPushNotificationRequest` must match the call that provided
+	// `ListTaskPushNotificationConfigRequest` must match the call that provided
 	// the page token.
 	PageToken     string `protobuf:"bytes,3,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListTaskPushNotificationRequest) Reset() {
-	*x = ListTaskPushNotificationRequest{}
+func (x *ListTaskPushNotificationConfigRequest) Reset() {
+	*x = ListTaskPushNotificationConfigRequest{}
 	mi := &file_a2a_v1_a2a_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListTaskPushNotificationRequest) String() string {
+func (x *ListTaskPushNotificationConfigRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListTaskPushNotificationRequest) ProtoMessage() {}
+func (*ListTaskPushNotificationConfigRequest) ProtoMessage() {}
 
-func (x *ListTaskPushNotificationRequest) ProtoReflect() protoreflect.Message {
+func (x *ListTaskPushNotificationConfigRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_a2a_v1_a2a_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -836,30 +836,165 @@ func (x *ListTaskPushNotificationRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListTaskPushNotificationRequest.ProtoReflect.Descriptor instead.
-func (*ListTaskPushNotificationRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ListTaskPushNotificationConfigRequest.ProtoReflect.Descriptor instead.
+func (*ListTaskPushNotificationConfigRequest) Descriptor() ([]byte, []int) {
 	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *ListTaskPushNotificationRequest) GetParent() string {
+func (x *ListTaskPushNotificationConfigRequest) GetParent() string {
 	if x != nil {
 		return x.Parent
 	}
 	return ""
 }
 
-func (x *ListTaskPushNotificationRequest) GetPageSize() int32 {
+func (x *ListTaskPushNotificationConfigRequest) GetPageSize() int32 {
 	if x != nil {
 		return x.PageSize
 	}
 	return 0
 }
 
-func (x *ListTaskPushNotificationRequest) GetPageToken() string {
+func (x *ListTaskPushNotificationConfigRequest) GetPageToken() string {
 	if x != nil {
 		return x.PageToken
 	}
 	return ""
+}
+
+type ListTaskPushNotificationConfigResponse struct {
+	state   protoimpl.MessageState        `protogen:"open.v1"`
+	Configs []*TaskPushNotificationConfig `protobuf:"bytes,1,rep,name=configs,proto3" json:"configs,omitempty"`
+	// A token, which can be sent as `page_token` to retrieve the next page.
+	// If this field is omitted, there are no subsequent pages.
+	NextPageToken string `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTaskPushNotificationConfigResponse) Reset() {
+	*x = ListTaskPushNotificationConfigResponse{}
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTaskPushNotificationConfigResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTaskPushNotificationConfigResponse) ProtoMessage() {}
+
+func (x *ListTaskPushNotificationConfigResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTaskPushNotificationConfigResponse.ProtoReflect.Descriptor instead.
+func (*ListTaskPushNotificationConfigResponse) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ListTaskPushNotificationConfigResponse) GetConfigs() []*TaskPushNotificationConfig {
+	if x != nil {
+		return x.Configs
+	}
+	return nil
+}
+
+func (x *ListTaskPushNotificationConfigResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
+type DeleteTaskPushNotificationConfigRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// name=tasks/{id}/pushNotificationConfigs/{push_id}
+	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteTaskPushNotificationConfigRequest) Reset() {
+	*x = DeleteTaskPushNotificationConfigRequest{}
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteTaskPushNotificationConfigRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteTaskPushNotificationConfigRequest) ProtoMessage() {}
+
+func (x *DeleteTaskPushNotificationConfigRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteTaskPushNotificationConfigRequest.ProtoReflect.Descriptor instead.
+func (*DeleteTaskPushNotificationConfigRequest) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *DeleteTaskPushNotificationConfigRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type GetAgentCardRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAgentCardRequest) Reset() {
+	*x = GetAgentCardRequest{}
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAgentCardRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAgentCardRequest) ProtoMessage() {}
+
+func (x *GetAgentCardRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAgentCardRequest.ProtoReflect.Descriptor instead.
+func (*GetAgentCardRequest) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{14}
 }
 
 // Defines authentication details, used for push notifications.
@@ -875,7 +1010,7 @@ type AuthenticationInfo struct {
 
 func (x *AuthenticationInfo) Reset() {
 	*x = AuthenticationInfo{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[12]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -887,7 +1022,7 @@ func (x *AuthenticationInfo) String() string {
 func (*AuthenticationInfo) ProtoMessage() {}
 
 func (x *AuthenticationInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[12]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -900,7 +1035,7 @@ func (x *AuthenticationInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticationInfo.ProtoReflect.Descriptor instead.
 func (*AuthenticationInfo) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{12}
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *AuthenticationInfo) GetSchemes() []string {
@@ -934,7 +1069,7 @@ type PushNotificationConfig struct {
 
 func (x *PushNotificationConfig) Reset() {
 	*x = PushNotificationConfig{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[13]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -946,7 +1081,7 @@ func (x *PushNotificationConfig) String() string {
 func (*PushNotificationConfig) ProtoMessage() {}
 
 func (x *PushNotificationConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[13]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -959,7 +1094,7 @@ func (x *PushNotificationConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PushNotificationConfig.ProtoReflect.Descriptor instead.
 func (*PushNotificationConfig) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{13}
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *PushNotificationConfig) GetId() string {
@@ -992,7 +1127,7 @@ func (x *PushNotificationConfig) GetAuthentication() *AuthenticationInfo {
 
 type TaskPushNotificationConfig struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// name=tasks/{id}/pushNotifications/{id}
+	// name=tasks/{id}/pushNotificationConfigs/{id}
 	Name                   string                  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	PushNotificationConfig *PushNotificationConfig `protobuf:"bytes,2,opt,name=push_notification_config,json=pushNotificationConfig,proto3" json:"push_notification_config,omitempty"`
 	unknownFields          protoimpl.UnknownFields
@@ -1001,7 +1136,7 @@ type TaskPushNotificationConfig struct {
 
 func (x *TaskPushNotificationConfig) Reset() {
 	*x = TaskPushNotificationConfig{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[14]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1013,7 +1148,7 @@ func (x *TaskPushNotificationConfig) String() string {
 func (*TaskPushNotificationConfig) ProtoMessage() {}
 
 func (x *TaskPushNotificationConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[14]
+	mi := &file_a2a_v1_a2a_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1026,7 +1161,7 @@ func (x *TaskPushNotificationConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskPushNotificationConfig.ProtoReflect.Descriptor instead.
 func (*TaskPushNotificationConfig) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{14}
+	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *TaskPushNotificationConfig) GetName() string {
@@ -1043,114 +1178,11 @@ func (x *TaskPushNotificationConfig) GetPushNotificationConfig() *PushNotificati
 	return nil
 }
 
-type ListTaskPushNotificationResponse struct {
-	state   protoimpl.MessageState        `protogen:"open.v1"`
-	Configs []*TaskPushNotificationConfig `protobuf:"bytes,1,rep,name=configs,proto3" json:"configs,omitempty"`
-	// A token, which can be sent as `page_token` to retrieve the next page.
-	// If this field is omitted, there are no subsequent pages.
-	NextPageToken string `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListTaskPushNotificationResponse) Reset() {
-	*x = ListTaskPushNotificationResponse{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListTaskPushNotificationResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListTaskPushNotificationResponse) ProtoMessage() {}
-
-func (x *ListTaskPushNotificationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListTaskPushNotificationResponse.ProtoReflect.Descriptor instead.
-func (*ListTaskPushNotificationResponse) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{15}
-}
-
-func (x *ListTaskPushNotificationResponse) GetConfigs() []*TaskPushNotificationConfig {
-	if x != nil {
-		return x.Configs
-	}
-	return nil
-}
-
-func (x *ListTaskPushNotificationResponse) GetNextPageToken() string {
-	if x != nil {
-		return x.NextPageToken
-	}
-	return ""
-}
-
-type GetAgentCardRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetAgentCardRequest) Reset() {
-	*x = GetAgentCardRequest{}
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[16]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetAgentCardRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetAgentCardRequest) ProtoMessage() {}
-
-func (x *GetAgentCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_a2a_service_proto_msgTypes[16]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetAgentCardRequest.ProtoReflect.Descriptor instead.
-func (*GetAgentCardRequest) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_a2a_service_proto_rawDescGZIP(), []int{16}
-}
-
 var File_a2a_v1_a2a_service_proto protoreflect.FileDescriptor
 
 const file_a2a_v1_a2a_service_proto_rawDesc = "" +
 	"\n" +
-	"\x18a2a/v1/a2a_service.proto\x12\x06a2a.v1\x1a\x17a2a/v1/agent_card.proto\x1a\x14a2a/v1/message.proto\x1a\x11a2a/v1/task.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1cgoogle/protobuf/struct.proto\"-\n" +
-	"\x17TaskSubscriptionRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"\xa6\x01\n" +
-	"!CreateTaskPushNotificationRequest\x12\x1c\n" +
-	"\x06parent\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x06parent\x12!\n" +
-	"\tconfig_id\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\bconfigId\x12@\n" +
-	"\x06config\x18\x03 \x01(\v2\".a2a.v1.TaskPushNotificationConfigB\x04\xe2A\x01\x02R\x06config\"4\n" +
-	"\x1eGetTaskPushNotificationRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"Q\n" +
-	"\x0eGetTaskRequest\x12\x18\n" +
-	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12%\n" +
-	"\x0ehistory_length\x18\x02 \x01(\x05R\rhistoryLength\"'\n" +
-	"\x11CancelTaskRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"\xc2\x01\n" +
+	"\x18a2a/v1/a2a_service.proto\x12\x06a2a.v1\x1a\x17a2a/v1/agent_card.proto\x1a\x14a2a/v1/message.proto\x1a\x11a2a/v1/task.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xc2\x01\n" +
 	"\x12SendMessageRequest\x12/\n" +
 	"\arequest\x18\x01 \x01(\v2\x0f.a2a.v1.MessageB\x04\xe2A\x01\x02R\arequest\x12F\n" +
 	"\rconfiguration\x18\x02 \x01(\v2 .a2a.v1.SendMessageConfigurationR\rconfiguration\x123\n" +
@@ -1158,7 +1190,12 @@ const file_a2a_v1_a2a_service_proto_rawDesc = "" +
 	"\x13SendMessageResponse\x12\"\n" +
 	"\x04task\x18\x01 \x01(\v2\f.a2a.v1.TaskH\x00R\x04task\x12#\n" +
 	"\x03msg\x18\x02 \x01(\v2\x0f.a2a.v1.MessageH\x00R\x03msgB\t\n" +
-	"\apayload\"\xf6\x01\n" +
+	"\apayload\"\xde\x01\n" +
+	"\x18SendMessageConfiguration\x122\n" +
+	"\x15accepted_output_modes\x18\x01 \x03(\tR\x13acceptedOutputModes\x12K\n" +
+	"\x11push_notification\x18\x02 \x01(\v2\x1e.a2a.v1.PushNotificationConfigR\x10pushNotification\x12%\n" +
+	"\x0ehistory_length\x18\x03 \x01(\x05R\rhistoryLength\x12\x1a\n" +
+	"\bblocking\x18\x04 \x01(\bR\bblocking\"\xf6\x01\n" +
 	"\x0eStreamResponse\x12\"\n" +
 	"\x04task\x18\x01 \x01(\v2\f.a2a.v1.TaskH\x00R\x04task\x12#\n" +
 	"\x03msg\x18\x02 \x01(\v2\x0f.a2a.v1.MessageH\x00R\x03msg\x12D\n" +
@@ -1180,17 +1217,31 @@ const file_a2a_v1_a2a_service_proto_rawDesc = "" +
 	"\x06append\x18\x04 \x01(\bR\x06append\x12\x1d\n" +
 	"\n" +
 	"last_chunk\x18\x05 \x01(\bR\tlastChunk\x123\n" +
-	"\bmetadata\x18\x06 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"\xde\x01\n" +
-	"\x18SendMessageConfiguration\x122\n" +
-	"\x15accepted_output_modes\x18\x01 \x03(\tR\x13acceptedOutputModes\x12K\n" +
-	"\x11push_notification\x18\x02 \x01(\v2\x1e.a2a.v1.PushNotificationConfigR\x10pushNotification\x12%\n" +
-	"\x0ehistory_length\x18\x03 \x01(\x05R\rhistoryLength\x12\x1a\n" +
-	"\bblocking\x18\x04 \x01(\bR\bblocking\"u\n" +
-	"\x1fListTaskPushNotificationRequest\x12\x16\n" +
+	"\bmetadata\x18\x06 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"Q\n" +
+	"\x0eGetTaskRequest\x12\x18\n" +
+	"\x04name\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x04name\x12%\n" +
+	"\x0ehistory_length\x18\x02 \x01(\x05R\rhistoryLength\"'\n" +
+	"\x11CancelTaskRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"-\n" +
+	"\x17TaskSubscriptionRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"\xac\x01\n" +
+	"'CreateTaskPushNotificationConfigRequest\x12\x1c\n" +
+	"\x06parent\x18\x01 \x01(\tB\x04\xe2A\x01\x02R\x06parent\x12!\n" +
+	"\tconfig_id\x18\x02 \x01(\tB\x04\xe2A\x01\x02R\bconfigId\x12@\n" +
+	"\x06config\x18\x03 \x01(\v2\".a2a.v1.TaskPushNotificationConfigB\x04\xe2A\x01\x02R\x06config\":\n" +
+	"$GetTaskPushNotificationConfigRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"{\n" +
+	"%ListTaskPushNotificationConfigRequest\x12\x16\n" +
 	"\x06parent\x18\x01 \x01(\tR\x06parent\x12\x1b\n" +
 	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x1d\n" +
 	"\n" +
-	"page_token\x18\x03 \x01(\tR\tpageToken\"P\n" +
+	"page_token\x18\x03 \x01(\tR\tpageToken\"\x8e\x01\n" +
+	"&ListTaskPushNotificationConfigResponse\x12<\n" +
+	"\aconfigs\x18\x01 \x03(\v2\".a2a.v1.TaskPushNotificationConfigR\aconfigs\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"=\n" +
+	"'DeleteTaskPushNotificationConfigRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"\x15\n" +
+	"\x13GetAgentCardRequest\"P\n" +
 	"\x12AuthenticationInfo\x12\x18\n" +
 	"\aschemes\x18\x01 \x03(\tR\aschemes\x12 \n" +
 	"\vcredentials\x18\x02 \x01(\tR\vcredentials\"\x94\x01\n" +
@@ -1201,11 +1252,8 @@ const file_a2a_v1_a2a_service_proto_rawDesc = "" +
 	"\x0eauthentication\x18\x04 \x01(\v2\x1a.a2a.v1.AuthenticationInfoR\x0eauthentication\"\x8a\x01\n" +
 	"\x1aTaskPushNotificationConfig\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12X\n" +
-	"\x18push_notification_config\x18\x02 \x01(\v2\x1e.a2a.v1.PushNotificationConfigR\x16pushNotificationConfig\"\x88\x01\n" +
-	" ListTaskPushNotificationResponse\x12<\n" +
-	"\aconfigs\x18\x01 \x03(\v2\".a2a.v1.TaskPushNotificationConfigR\aconfigs\x12&\n" +
-	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"\x15\n" +
-	"\x13GetAgentCardRequest2\xe8\b\n" +
+	"\x18push_notification_config\x18\x02 \x01(\v2\x1e.a2a.v1.PushNotificationConfigR\x16pushNotificationConfig2\xce\n" +
+	"\n" +
 	"\n" +
 	"A2AService\x12c\n" +
 	"\vSendMessage\x12\x1a.a2a.v1.SendMessageRequest\x1a\x1b.a2a.v1.SendMessageResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/message:send\x12k\n" +
@@ -1213,10 +1261,11 @@ const file_a2a_v1_a2a_service_proto_rawDesc = "" +
 	"\aGetTask\x12\x16.a2a.v1.GetTaskRequest\x1a\f.a2a.v1.Task\"!\xdaA\x04name\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/{name=tasks/*}\x12[\n" +
 	"\n" +
 	"CancelTask\x12\x19.a2a.v1.CancelTaskRequest\x1a\f.a2a.v1.Task\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/{name=tasks/*}:cancel\x12s\n" +
-	"\x10TaskSubscription\x12\x1f.a2a.v1.TaskSubscriptionRequest\x1a\x16.a2a.v1.StreamResponse\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/v1/{name=tasks/*}:subscribe0\x01\x12\xb2\x01\n" +
-	"\x1aCreateTaskPushNotification\x12).a2a.v1.CreateTaskPushNotificationRequest\x1a\".a2a.v1.TaskPushNotificationConfig\"E\xdaA\rparent,config\x82\xd3\xe4\x93\x02/:\x06config\"%/v1/{parent=task/*/pushNotifications}\x12\x9c\x01\n" +
-	"\x17GetTaskPushNotification\x12&.a2a.v1.GetTaskPushNotificationRequest\x1a\".a2a.v1.TaskPushNotificationConfig\"5\xdaA\x04name\x82\xd3\xe4\x93\x02(\x12&/v1/{name=tasks/*/pushNotifications/*}\x12\xa6\x01\n" +
-	"\x18ListTaskPushNotification\x12'.a2a.v1.ListTaskPushNotificationRequest\x1a(.a2a.v1.ListTaskPushNotificationResponse\"7\xdaA\x06parent\x82\xd3\xe4\x93\x02(\x12&/v1/{parent=tasks/*}/pushNotifications\x12P\n" +
+	"\x10TaskSubscription\x12\x1f.a2a.v1.TaskSubscriptionRequest\x1a\x16.a2a.v1.StreamResponse\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/v1/{name=tasks/*}:subscribe0\x01\x12\xc4\x01\n" +
+	" CreateTaskPushNotificationConfig\x12/.a2a.v1.CreateTaskPushNotificationConfigRequest\x1a\".a2a.v1.TaskPushNotificationConfig\"K\xdaA\rparent,config\x82\xd3\xe4\x93\x025:\x06config\"+/v1/{parent=task/*/pushNotificationConfigs}\x12\xae\x01\n" +
+	"\x1dGetTaskPushNotificationConfig\x12,.a2a.v1.GetTaskPushNotificationConfigRequest\x1a\".a2a.v1.TaskPushNotificationConfig\";\xdaA\x04name\x82\xd3\xe4\x93\x02.\x12,/v1/{name=tasks/*/pushNotificationConfigs/*}\x12\xbe\x01\n" +
+	"\x1eListTaskPushNotificationConfig\x12-.a2a.v1.ListTaskPushNotificationConfigRequest\x1a..a2a.v1.ListTaskPushNotificationConfigResponse\"=\xdaA\x06parent\x82\xd3\xe4\x93\x02.\x12,/v1/{parent=tasks/*}/pushNotificationConfigs\x12\xa7\x01\n" +
+	" DeleteTaskPushNotificationConfig\x12/.a2a.v1.DeleteTaskPushNotificationConfigRequest\x1a\x16.google.protobuf.Empty\":\xdaA\x04name\x82\xd3\xe4\x93\x02-*+/v1/{name=tasks/*/pushNotificationConfig/*}\x12P\n" +
 	"\fGetAgentCard\x12\x1b.a2a.v1.GetAgentCardRequest\x1a\x11.a2a.v1.AgentCard\"\x10\x82\xd3\xe4\x93\x02\n" +
 	"\x12\b/v1/card\x1a\x13\xcaA\x10a2a.qclaogui.comB3Z1github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apbb\x06proto3"
 
@@ -1233,73 +1282,77 @@ func file_a2a_v1_a2a_service_proto_rawDescGZIP() []byte {
 }
 
 var (
-	file_a2a_v1_a2a_service_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+	file_a2a_v1_a2a_service_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 	file_a2a_v1_a2a_service_proto_goTypes  = []any{
-		(*TaskSubscriptionRequest)(nil),           // 0: a2a.v1.TaskSubscriptionRequest
-		(*CreateTaskPushNotificationRequest)(nil), // 1: a2a.v1.CreateTaskPushNotificationRequest
-		(*GetTaskPushNotificationRequest)(nil),    // 2: a2a.v1.GetTaskPushNotificationRequest
-		(*GetTaskRequest)(nil),                    // 3: a2a.v1.GetTaskRequest
-		(*CancelTaskRequest)(nil),                 // 4: a2a.v1.CancelTaskRequest
-		(*SendMessageRequest)(nil),                // 5: a2a.v1.SendMessageRequest
-		(*SendMessageResponse)(nil),               // 6: a2a.v1.SendMessageResponse
-		(*StreamResponse)(nil),                    // 7: a2a.v1.StreamResponse
-		(*TaskStatusUpdateEvent)(nil),             // 8: a2a.v1.TaskStatusUpdateEvent
-		(*TaskArtifactUpdateEvent)(nil),           // 9: a2a.v1.TaskArtifactUpdateEvent
-		(*SendMessageConfiguration)(nil),          // 10: a2a.v1.SendMessageConfiguration
-		(*ListTaskPushNotificationRequest)(nil),   // 11: a2a.v1.ListTaskPushNotificationRequest
-		(*AuthenticationInfo)(nil),                // 12: a2a.v1.AuthenticationInfo
-		(*PushNotificationConfig)(nil),            // 13: a2a.v1.PushNotificationConfig
-		(*TaskPushNotificationConfig)(nil),        // 14: a2a.v1.TaskPushNotificationConfig
-		(*ListTaskPushNotificationResponse)(nil),  // 15: a2a.v1.ListTaskPushNotificationResponse
-		(*GetAgentCardRequest)(nil),               // 16: a2a.v1.GetAgentCardRequest
-		(*Message)(nil),                           // 17: a2a.v1.Message
-		(*structpb.Struct)(nil),                   // 18: google.protobuf.Struct
-		(*Task)(nil),                              // 19: a2a.v1.Task
-		(*TaskStatus)(nil),                        // 20: a2a.v1.TaskStatus
-		(*Artifact)(nil),                          // 21: a2a.v1.Artifact
-		(*AgentCard)(nil),                         // 22: a2a.v1.AgentCard
+		(*SendMessageRequest)(nil),                      // 0: a2a.v1.SendMessageRequest
+		(*SendMessageResponse)(nil),                     // 1: a2a.v1.SendMessageResponse
+		(*SendMessageConfiguration)(nil),                // 2: a2a.v1.SendMessageConfiguration
+		(*StreamResponse)(nil),                          // 3: a2a.v1.StreamResponse
+		(*TaskStatusUpdateEvent)(nil),                   // 4: a2a.v1.TaskStatusUpdateEvent
+		(*TaskArtifactUpdateEvent)(nil),                 // 5: a2a.v1.TaskArtifactUpdateEvent
+		(*GetTaskRequest)(nil),                          // 6: a2a.v1.GetTaskRequest
+		(*CancelTaskRequest)(nil),                       // 7: a2a.v1.CancelTaskRequest
+		(*TaskSubscriptionRequest)(nil),                 // 8: a2a.v1.TaskSubscriptionRequest
+		(*CreateTaskPushNotificationConfigRequest)(nil), // 9: a2a.v1.CreateTaskPushNotificationConfigRequest
+		(*GetTaskPushNotificationConfigRequest)(nil),    // 10: a2a.v1.GetTaskPushNotificationConfigRequest
+		(*ListTaskPushNotificationConfigRequest)(nil),   // 11: a2a.v1.ListTaskPushNotificationConfigRequest
+		(*ListTaskPushNotificationConfigResponse)(nil),  // 12: a2a.v1.ListTaskPushNotificationConfigResponse
+		(*DeleteTaskPushNotificationConfigRequest)(nil), // 13: a2a.v1.DeleteTaskPushNotificationConfigRequest
+		(*GetAgentCardRequest)(nil),                     // 14: a2a.v1.GetAgentCardRequest
+		(*AuthenticationInfo)(nil),                      // 15: a2a.v1.AuthenticationInfo
+		(*PushNotificationConfig)(nil),                  // 16: a2a.v1.PushNotificationConfig
+		(*TaskPushNotificationConfig)(nil),              // 17: a2a.v1.TaskPushNotificationConfig
+		(*Message)(nil),                                 // 18: a2a.v1.Message
+		(*structpb.Struct)(nil),                         // 19: google.protobuf.Struct
+		(*Task)(nil),                                    // 20: a2a.v1.Task
+		(*TaskStatus)(nil),                              // 21: a2a.v1.TaskStatus
+		(*Artifact)(nil),                                // 22: a2a.v1.Artifact
+		(*emptypb.Empty)(nil),                           // 23: google.protobuf.Empty
+		(*AgentCard)(nil),                               // 24: a2a.v1.AgentCard
 	}
 )
 
 var file_a2a_v1_a2a_service_proto_depIdxs = []int32{
-	14, // 0: a2a.v1.CreateTaskPushNotificationRequest.config:type_name -> a2a.v1.TaskPushNotificationConfig
-	17, // 1: a2a.v1.SendMessageRequest.request:type_name -> a2a.v1.Message
-	10, // 2: a2a.v1.SendMessageRequest.configuration:type_name -> a2a.v1.SendMessageConfiguration
-	18, // 3: a2a.v1.SendMessageRequest.metadata:type_name -> google.protobuf.Struct
-	19, // 4: a2a.v1.SendMessageResponse.task:type_name -> a2a.v1.Task
-	17, // 5: a2a.v1.SendMessageResponse.msg:type_name -> a2a.v1.Message
-	19, // 6: a2a.v1.StreamResponse.task:type_name -> a2a.v1.Task
-	17, // 7: a2a.v1.StreamResponse.msg:type_name -> a2a.v1.Message
-	8,  // 8: a2a.v1.StreamResponse.status_update:type_name -> a2a.v1.TaskStatusUpdateEvent
-	9,  // 9: a2a.v1.StreamResponse.artifact_update:type_name -> a2a.v1.TaskArtifactUpdateEvent
-	20, // 10: a2a.v1.TaskStatusUpdateEvent.status:type_name -> a2a.v1.TaskStatus
-	18, // 11: a2a.v1.TaskStatusUpdateEvent.metadata:type_name -> google.protobuf.Struct
-	21, // 12: a2a.v1.TaskArtifactUpdateEvent.artifact:type_name -> a2a.v1.Artifact
-	18, // 13: a2a.v1.TaskArtifactUpdateEvent.metadata:type_name -> google.protobuf.Struct
-	13, // 14: a2a.v1.SendMessageConfiguration.push_notification:type_name -> a2a.v1.PushNotificationConfig
-	12, // 15: a2a.v1.PushNotificationConfig.authentication:type_name -> a2a.v1.AuthenticationInfo
-	13, // 16: a2a.v1.TaskPushNotificationConfig.push_notification_config:type_name -> a2a.v1.PushNotificationConfig
-	14, // 17: a2a.v1.ListTaskPushNotificationResponse.configs:type_name -> a2a.v1.TaskPushNotificationConfig
-	5,  // 18: a2a.v1.A2AService.SendMessage:input_type -> a2a.v1.SendMessageRequest
-	5,  // 19: a2a.v1.A2AService.SendStreamingMessage:input_type -> a2a.v1.SendMessageRequest
-	3,  // 20: a2a.v1.A2AService.GetTask:input_type -> a2a.v1.GetTaskRequest
-	4,  // 21: a2a.v1.A2AService.CancelTask:input_type -> a2a.v1.CancelTaskRequest
-	0,  // 22: a2a.v1.A2AService.TaskSubscription:input_type -> a2a.v1.TaskSubscriptionRequest
-	1,  // 23: a2a.v1.A2AService.CreateTaskPushNotification:input_type -> a2a.v1.CreateTaskPushNotificationRequest
-	2,  // 24: a2a.v1.A2AService.GetTaskPushNotification:input_type -> a2a.v1.GetTaskPushNotificationRequest
-	11, // 25: a2a.v1.A2AService.ListTaskPushNotification:input_type -> a2a.v1.ListTaskPushNotificationRequest
-	16, // 26: a2a.v1.A2AService.GetAgentCard:input_type -> a2a.v1.GetAgentCardRequest
-	6,  // 27: a2a.v1.A2AService.SendMessage:output_type -> a2a.v1.SendMessageResponse
-	7,  // 28: a2a.v1.A2AService.SendStreamingMessage:output_type -> a2a.v1.StreamResponse
-	19, // 29: a2a.v1.A2AService.GetTask:output_type -> a2a.v1.Task
-	19, // 30: a2a.v1.A2AService.CancelTask:output_type -> a2a.v1.Task
-	7,  // 31: a2a.v1.A2AService.TaskSubscription:output_type -> a2a.v1.StreamResponse
-	14, // 32: a2a.v1.A2AService.CreateTaskPushNotification:output_type -> a2a.v1.TaskPushNotificationConfig
-	14, // 33: a2a.v1.A2AService.GetTaskPushNotification:output_type -> a2a.v1.TaskPushNotificationConfig
-	15, // 34: a2a.v1.A2AService.ListTaskPushNotification:output_type -> a2a.v1.ListTaskPushNotificationResponse
-	22, // 35: a2a.v1.A2AService.GetAgentCard:output_type -> a2a.v1.AgentCard
-	27, // [27:36] is the sub-list for method output_type
-	18, // [18:27] is the sub-list for method input_type
+	18, // 0: a2a.v1.SendMessageRequest.request:type_name -> a2a.v1.Message
+	2,  // 1: a2a.v1.SendMessageRequest.configuration:type_name -> a2a.v1.SendMessageConfiguration
+	19, // 2: a2a.v1.SendMessageRequest.metadata:type_name -> google.protobuf.Struct
+	20, // 3: a2a.v1.SendMessageResponse.task:type_name -> a2a.v1.Task
+	18, // 4: a2a.v1.SendMessageResponse.msg:type_name -> a2a.v1.Message
+	16, // 5: a2a.v1.SendMessageConfiguration.push_notification:type_name -> a2a.v1.PushNotificationConfig
+	20, // 6: a2a.v1.StreamResponse.task:type_name -> a2a.v1.Task
+	18, // 7: a2a.v1.StreamResponse.msg:type_name -> a2a.v1.Message
+	4,  // 8: a2a.v1.StreamResponse.status_update:type_name -> a2a.v1.TaskStatusUpdateEvent
+	5,  // 9: a2a.v1.StreamResponse.artifact_update:type_name -> a2a.v1.TaskArtifactUpdateEvent
+	21, // 10: a2a.v1.TaskStatusUpdateEvent.status:type_name -> a2a.v1.TaskStatus
+	19, // 11: a2a.v1.TaskStatusUpdateEvent.metadata:type_name -> google.protobuf.Struct
+	22, // 12: a2a.v1.TaskArtifactUpdateEvent.artifact:type_name -> a2a.v1.Artifact
+	19, // 13: a2a.v1.TaskArtifactUpdateEvent.metadata:type_name -> google.protobuf.Struct
+	17, // 14: a2a.v1.CreateTaskPushNotificationConfigRequest.config:type_name -> a2a.v1.TaskPushNotificationConfig
+	17, // 15: a2a.v1.ListTaskPushNotificationConfigResponse.configs:type_name -> a2a.v1.TaskPushNotificationConfig
+	15, // 16: a2a.v1.PushNotificationConfig.authentication:type_name -> a2a.v1.AuthenticationInfo
+	16, // 17: a2a.v1.TaskPushNotificationConfig.push_notification_config:type_name -> a2a.v1.PushNotificationConfig
+	0,  // 18: a2a.v1.A2AService.SendMessage:input_type -> a2a.v1.SendMessageRequest
+	0,  // 19: a2a.v1.A2AService.SendStreamingMessage:input_type -> a2a.v1.SendMessageRequest
+	6,  // 20: a2a.v1.A2AService.GetTask:input_type -> a2a.v1.GetTaskRequest
+	7,  // 21: a2a.v1.A2AService.CancelTask:input_type -> a2a.v1.CancelTaskRequest
+	8,  // 22: a2a.v1.A2AService.TaskSubscription:input_type -> a2a.v1.TaskSubscriptionRequest
+	9,  // 23: a2a.v1.A2AService.CreateTaskPushNotificationConfig:input_type -> a2a.v1.CreateTaskPushNotificationConfigRequest
+	10, // 24: a2a.v1.A2AService.GetTaskPushNotificationConfig:input_type -> a2a.v1.GetTaskPushNotificationConfigRequest
+	11, // 25: a2a.v1.A2AService.ListTaskPushNotificationConfig:input_type -> a2a.v1.ListTaskPushNotificationConfigRequest
+	13, // 26: a2a.v1.A2AService.DeleteTaskPushNotificationConfig:input_type -> a2a.v1.DeleteTaskPushNotificationConfigRequest
+	14, // 27: a2a.v1.A2AService.GetAgentCard:input_type -> a2a.v1.GetAgentCardRequest
+	1,  // 28: a2a.v1.A2AService.SendMessage:output_type -> a2a.v1.SendMessageResponse
+	3,  // 29: a2a.v1.A2AService.SendStreamingMessage:output_type -> a2a.v1.StreamResponse
+	20, // 30: a2a.v1.A2AService.GetTask:output_type -> a2a.v1.Task
+	20, // 31: a2a.v1.A2AService.CancelTask:output_type -> a2a.v1.Task
+	3,  // 32: a2a.v1.A2AService.TaskSubscription:output_type -> a2a.v1.StreamResponse
+	17, // 33: a2a.v1.A2AService.CreateTaskPushNotificationConfig:output_type -> a2a.v1.TaskPushNotificationConfig
+	17, // 34: a2a.v1.A2AService.GetTaskPushNotificationConfig:output_type -> a2a.v1.TaskPushNotificationConfig
+	12, // 35: a2a.v1.A2AService.ListTaskPushNotificationConfig:output_type -> a2a.v1.ListTaskPushNotificationConfigResponse
+	23, // 36: a2a.v1.A2AService.DeleteTaskPushNotificationConfig:output_type -> google.protobuf.Empty
+	24, // 37: a2a.v1.A2AService.GetAgentCard:output_type -> a2a.v1.AgentCard
+	28, // [28:38] is the sub-list for method output_type
+	18, // [18:28] is the sub-list for method input_type
 	18, // [18:18] is the sub-list for extension type_name
 	18, // [18:18] is the sub-list for extension extendee
 	0,  // [0:18] is the sub-list for field type_name
@@ -1313,11 +1366,11 @@ func file_a2a_v1_a2a_service_proto_init() {
 	file_a2a_v1_agent_card_proto_init()
 	file_a2a_v1_message_proto_init()
 	file_a2a_v1_task_proto_init()
-	file_a2a_v1_a2a_service_proto_msgTypes[6].OneofWrappers = []any{
+	file_a2a_v1_a2a_service_proto_msgTypes[1].OneofWrappers = []any{
 		(*SendMessageResponse_Task)(nil),
 		(*SendMessageResponse_Msg)(nil),
 	}
-	file_a2a_v1_a2a_service_proto_msgTypes[7].OneofWrappers = []any{
+	file_a2a_v1_a2a_service_proto_msgTypes[3].OneofWrappers = []any{
 		(*StreamResponse_Task)(nil),
 		(*StreamResponse_Msg)(nil),
 		(*StreamResponse_StatusUpdate)(nil),
@@ -1329,7 +1382,7 @@ func file_a2a_v1_a2a_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_a2a_v1_a2a_service_proto_rawDesc), len(file_a2a_v1_a2a_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

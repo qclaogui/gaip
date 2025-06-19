@@ -45,15 +45,16 @@ var newClientHook clientHook
 
 // CallOptions contains the retry settings for each method of Client.
 type CallOptions struct {
-	SendMessage                []gax.CallOption
-	SendStreamingMessage       []gax.CallOption
-	GetTask                    []gax.CallOption
-	CancelTask                 []gax.CallOption
-	TaskSubscription           []gax.CallOption
-	CreateTaskPushNotification []gax.CallOption
-	GetTaskPushNotification    []gax.CallOption
-	ListTaskPushNotification   []gax.CallOption
-	GetAgentCard               []gax.CallOption
+	SendMessage                      []gax.CallOption
+	SendStreamingMessage             []gax.CallOption
+	GetTask                          []gax.CallOption
+	CancelTask                       []gax.CallOption
+	TaskSubscription                 []gax.CallOption
+	CreateTaskPushNotificationConfig []gax.CallOption
+	GetTaskPushNotificationConfig    []gax.CallOption
+	ListTaskPushNotificationConfig   []gax.CallOption
+	DeleteTaskPushNotificationConfig []gax.CallOption
+	GetAgentCard                     []gax.CallOption
 }
 
 func defaultGRPCClientOptions() []option.ClientOption {
@@ -73,14 +74,15 @@ func defaultGRPCClientOptions() []option.ClientOption {
 
 func defaultCallOptions() *CallOptions {
 	return &CallOptions{
-		SendMessage:                []gax.CallOption{},
-		SendStreamingMessage:       []gax.CallOption{},
-		GetTask:                    []gax.CallOption{},
-		CancelTask:                 []gax.CallOption{},
-		TaskSubscription:           []gax.CallOption{},
-		CreateTaskPushNotification: []gax.CallOption{},
-		GetTaskPushNotification:    []gax.CallOption{},
-		ListTaskPushNotification:   []gax.CallOption{},
+		SendMessage:                      []gax.CallOption{},
+		SendStreamingMessage:             []gax.CallOption{},
+		GetTask:                          []gax.CallOption{},
+		CancelTask:                       []gax.CallOption{},
+		TaskSubscription:                 []gax.CallOption{},
+		CreateTaskPushNotificationConfig: []gax.CallOption{},
+		GetTaskPushNotificationConfig:    []gax.CallOption{},
+		ListTaskPushNotificationConfig:   []gax.CallOption{},
+		DeleteTaskPushNotificationConfig: []gax.CallOption{},
 		GetAgentCard: []gax.CallOption{
 			gax.WithTimeout(60000 * time.Millisecond),
 			gax.WithRetry(func() gax.Retryer {
@@ -98,14 +100,15 @@ func defaultCallOptions() *CallOptions {
 
 func defaultRESTCallOptions() *CallOptions {
 	return &CallOptions{
-		SendMessage:                []gax.CallOption{},
-		SendStreamingMessage:       []gax.CallOption{},
-		GetTask:                    []gax.CallOption{},
-		CancelTask:                 []gax.CallOption{},
-		TaskSubscription:           []gax.CallOption{},
-		CreateTaskPushNotification: []gax.CallOption{},
-		GetTaskPushNotification:    []gax.CallOption{},
-		ListTaskPushNotification:   []gax.CallOption{},
+		SendMessage:                      []gax.CallOption{},
+		SendStreamingMessage:             []gax.CallOption{},
+		GetTask:                          []gax.CallOption{},
+		CancelTask:                       []gax.CallOption{},
+		TaskSubscription:                 []gax.CallOption{},
+		CreateTaskPushNotificationConfig: []gax.CallOption{},
+		GetTaskPushNotificationConfig:    []gax.CallOption{},
+		ListTaskPushNotificationConfig:   []gax.CallOption{},
+		DeleteTaskPushNotificationConfig: []gax.CallOption{},
 		GetAgentCard: []gax.CallOption{
 			gax.WithTimeout(60000 * time.Millisecond),
 			gax.WithRetry(func() gax.Retryer {
@@ -130,9 +133,10 @@ type internalClient interface {
 	GetTask(context.Context, *a2apb.GetTaskRequest, ...gax.CallOption) (*a2apb.Task, error)
 	CancelTask(context.Context, *a2apb.CancelTaskRequest, ...gax.CallOption) (*a2apb.Task, error)
 	TaskSubscription(context.Context, *a2apb.TaskSubscriptionRequest, ...gax.CallOption) (a2apb.A2AService_TaskSubscriptionClient, error)
-	CreateTaskPushNotification(context.Context, *a2apb.CreateTaskPushNotificationRequest, ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error)
-	GetTaskPushNotification(context.Context, *a2apb.GetTaskPushNotificationRequest, ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error)
-	ListTaskPushNotification(context.Context, *a2apb.ListTaskPushNotificationRequest, ...gax.CallOption) *TaskPushNotificationConfigIterator
+	CreateTaskPushNotificationConfig(context.Context, *a2apb.CreateTaskPushNotificationConfigRequest, ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error)
+	GetTaskPushNotificationConfig(context.Context, *a2apb.GetTaskPushNotificationConfigRequest, ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error)
+	ListTaskPushNotificationConfig(context.Context, *a2apb.ListTaskPushNotificationConfigRequest, ...gax.CallOption) *TaskPushNotificationConfigIterator
+	DeleteTaskPushNotificationConfig(context.Context, *a2apb.DeleteTaskPushNotificationConfigRequest, ...gax.CallOption) error
 	GetAgentCard(context.Context, *a2apb.GetAgentCardRequest, ...gax.CallOption) (*a2apb.AgentCard, error)
 }
 
@@ -142,15 +146,15 @@ type internalClient interface {
 // A2AService defines the gRPC version of the A2A protocol. This has a slightly
 // different shape than the JSONRPC version to better conform to AIP-127,
 // where appropriate. The nouns are AgentCard, Message, Task and
-// TaskPushNotification.
+// TaskPushNotificationConfig.
 //
 //	Messages are not a standard resource so there is no get/delete/update/list
 //	interface, only a send and stream custom methods.
 //
 //	Tasks have a get interface and custom cancel and subscribe methods.
 //
-//	TaskPushNotification are a resource whose parent is a task. They have get,
-//	list and create methods.
+//	TaskPushNotificationConfig are a resource whose parent is a task.
+//	They have get, list and create methods.
 //
 //	AgentCard is a static resource with only a get method.
 //	fields are not present as they don’t comply with AIP rules, and the
@@ -218,19 +222,24 @@ func (c *Client) TaskSubscription(ctx context.Context, req *a2apb.TaskSubscripti
 	return c.internalClient.TaskSubscription(ctx, req, opts...)
 }
 
-// CreateTaskPushNotification set a push notification config for a task.
-func (c *Client) CreateTaskPushNotification(ctx context.Context, req *a2apb.CreateTaskPushNotificationRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
-	return c.internalClient.CreateTaskPushNotification(ctx, req, opts...)
+// CreateTaskPushNotificationConfig set a push notification config for a task.
+func (c *Client) CreateTaskPushNotificationConfig(ctx context.Context, req *a2apb.CreateTaskPushNotificationConfigRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
+	return c.internalClient.CreateTaskPushNotificationConfig(ctx, req, opts...)
 }
 
-// GetTaskPushNotification get a push notification config for a task.
-func (c *Client) GetTaskPushNotification(ctx context.Context, req *a2apb.GetTaskPushNotificationRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
-	return c.internalClient.GetTaskPushNotification(ctx, req, opts...)
+// GetTaskPushNotificationConfig get a push notification config for a task.
+func (c *Client) GetTaskPushNotificationConfig(ctx context.Context, req *a2apb.GetTaskPushNotificationConfigRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
+	return c.internalClient.GetTaskPushNotificationConfig(ctx, req, opts...)
 }
 
-// ListTaskPushNotification get a list of push notifications configured for a task.
-func (c *Client) ListTaskPushNotification(ctx context.Context, req *a2apb.ListTaskPushNotificationRequest, opts ...gax.CallOption) *TaskPushNotificationConfigIterator {
-	return c.internalClient.ListTaskPushNotification(ctx, req, opts...)
+// ListTaskPushNotificationConfig get a list of push notifications configured for a task.
+func (c *Client) ListTaskPushNotificationConfig(ctx context.Context, req *a2apb.ListTaskPushNotificationConfigRequest, opts ...gax.CallOption) *TaskPushNotificationConfigIterator {
+	return c.internalClient.ListTaskPushNotificationConfig(ctx, req, opts...)
+}
+
+// DeleteTaskPushNotificationConfig delete a push notification config for a task.
+func (c *Client) DeleteTaskPushNotificationConfig(ctx context.Context, req *a2apb.DeleteTaskPushNotificationConfigRequest, opts ...gax.CallOption) error {
+	return c.internalClient.DeleteTaskPushNotificationConfig(ctx, req, opts...)
 }
 
 // GetAgentCard getAgentCard returns the agent card for the agent.
@@ -263,15 +272,15 @@ type gRPCClient struct {
 // A2AService defines the gRPC version of the A2A protocol. This has a slightly
 // different shape than the JSONRPC version to better conform to AIP-127,
 // where appropriate. The nouns are AgentCard, Message, Task and
-// TaskPushNotification.
+// TaskPushNotificationConfig.
 //
 //	Messages are not a standard resource so there is no get/delete/update/list
 //	interface, only a send and stream custom methods.
 //
 //	Tasks have a get interface and custom cancel and subscribe methods.
 //
-//	TaskPushNotification are a resource whose parent is a task. They have get,
-//	list and create methods.
+//	TaskPushNotificationConfig are a resource whose parent is a task.
+//	They have get, list and create methods.
 //
 //	AgentCard is a static resource with only a get method.
 //	fields are not present as they don’t comply with AIP rules, and the
@@ -353,15 +362,15 @@ type restClient struct {
 // A2AService defines the gRPC version of the A2A protocol. This has a slightly
 // different shape than the JSONRPC version to better conform to AIP-127,
 // where appropriate. The nouns are AgentCard, Message, Task and
-// TaskPushNotification.
+// TaskPushNotificationConfig.
 //
 //	Messages are not a standard resource so there is no get/delete/update/list
 //	interface, only a send and stream custom methods.
 //
 //	Tasks have a get interface and custom cancel and subscribe methods.
 //
-//	TaskPushNotification are a resource whose parent is a task. They have get,
-//	list and create methods.
+//	TaskPushNotificationConfig are a resource whose parent is a task.
+//	They have get, list and create methods.
 //
 //	AgentCard is a static resource with only a get method.
 //	fields are not present as they don’t comply with AIP rules, and the
@@ -512,16 +521,16 @@ func (c *gRPCClient) TaskSubscription(ctx context.Context, req *a2apb.TaskSubscr
 	return resp, nil
 }
 
-func (c *gRPCClient) CreateTaskPushNotification(ctx context.Context, req *a2apb.CreateTaskPushNotificationRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
+func (c *gRPCClient) CreateTaskPushNotificationConfig(ctx context.Context, req *a2apb.CreateTaskPushNotificationConfigRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent()))}
 
 	hds = append(c.xGoogHeaders, hds...)
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
-	opts = append((*c.CallOptions).CreateTaskPushNotification[0:len((*c.CallOptions).CreateTaskPushNotification):len((*c.CallOptions).CreateTaskPushNotification)], opts...)
+	opts = append((*c.CallOptions).CreateTaskPushNotificationConfig[0:len((*c.CallOptions).CreateTaskPushNotificationConfig):len((*c.CallOptions).CreateTaskPushNotificationConfig)], opts...)
 	var resp *a2apb.TaskPushNotificationConfig
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = executeRPC(ctx, c.client.CreateTaskPushNotification, req, settings.GRPC, c.logger, "CreateTaskPushNotification")
+		resp, err = executeRPC(ctx, c.client.CreateTaskPushNotificationConfig, req, settings.GRPC, c.logger, "CreateTaskPushNotificationConfig")
 		return err
 	}, opts...)
 	if err != nil {
@@ -530,16 +539,16 @@ func (c *gRPCClient) CreateTaskPushNotification(ctx context.Context, req *a2apb.
 	return resp, nil
 }
 
-func (c *gRPCClient) GetTaskPushNotification(ctx context.Context, req *a2apb.GetTaskPushNotificationRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
+func (c *gRPCClient) GetTaskPushNotificationConfig(ctx context.Context, req *a2apb.GetTaskPushNotificationConfigRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
 
 	hds = append(c.xGoogHeaders, hds...)
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
-	opts = append((*c.CallOptions).GetTaskPushNotification[0:len((*c.CallOptions).GetTaskPushNotification):len((*c.CallOptions).GetTaskPushNotification)], opts...)
+	opts = append((*c.CallOptions).GetTaskPushNotificationConfig[0:len((*c.CallOptions).GetTaskPushNotificationConfig):len((*c.CallOptions).GetTaskPushNotificationConfig)], opts...)
 	var resp *a2apb.TaskPushNotificationConfig
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		resp, err = executeRPC(ctx, c.client.GetTaskPushNotification, req, settings.GRPC, c.logger, "GetTaskPushNotification")
+		resp, err = executeRPC(ctx, c.client.GetTaskPushNotificationConfig, req, settings.GRPC, c.logger, "GetTaskPushNotificationConfig")
 		return err
 	}, opts...)
 	if err != nil {
@@ -548,16 +557,16 @@ func (c *gRPCClient) GetTaskPushNotification(ctx context.Context, req *a2apb.Get
 	return resp, nil
 }
 
-func (c *gRPCClient) ListTaskPushNotification(ctx context.Context, req *a2apb.ListTaskPushNotificationRequest, opts ...gax.CallOption) *TaskPushNotificationConfigIterator {
+func (c *gRPCClient) ListTaskPushNotificationConfig(ctx context.Context, req *a2apb.ListTaskPushNotificationConfigRequest, opts ...gax.CallOption) *TaskPushNotificationConfigIterator {
 	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent()))}
 
 	hds = append(c.xGoogHeaders, hds...)
 	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
-	opts = append((*c.CallOptions).ListTaskPushNotification[0:len((*c.CallOptions).ListTaskPushNotification):len((*c.CallOptions).ListTaskPushNotification)], opts...)
+	opts = append((*c.CallOptions).ListTaskPushNotificationConfig[0:len((*c.CallOptions).ListTaskPushNotificationConfig):len((*c.CallOptions).ListTaskPushNotificationConfig)], opts...)
 	it := &TaskPushNotificationConfigIterator{}
-	req = proto.Clone(req).(*a2apb.ListTaskPushNotificationRequest)
+	req = proto.Clone(req).(*a2apb.ListTaskPushNotificationConfigRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*a2apb.TaskPushNotificationConfig, string, error) {
-		resp := &a2apb.ListTaskPushNotificationResponse{}
+		resp := &a2apb.ListTaskPushNotificationConfigResponse{}
 		if pageToken != "" {
 			req.PageToken = pageToken
 		}
@@ -568,7 +577,7 @@ func (c *gRPCClient) ListTaskPushNotification(ctx context.Context, req *a2apb.Li
 		}
 		err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 			var err error
-			resp, err = executeRPC(ctx, c.client.ListTaskPushNotification, req, settings.GRPC, c.logger, "ListTaskPushNotification")
+			resp, err = executeRPC(ctx, c.client.ListTaskPushNotificationConfig, req, settings.GRPC, c.logger, "ListTaskPushNotificationConfig")
 			return err
 		}, opts...)
 		if err != nil {
@@ -592,6 +601,20 @@ func (c *gRPCClient) ListTaskPushNotification(ctx context.Context, req *a2apb.Li
 	it.pageInfo.Token = req.GetPageToken()
 
 	return it
+}
+
+func (c *gRPCClient) DeleteTaskPushNotificationConfig(ctx context.Context, req *a2apb.DeleteTaskPushNotificationConfigRequest, opts ...gax.CallOption) error {
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	ctx = gax.InsertMetadataIntoOutgoingContext(ctx, hds...)
+	opts = append((*c.CallOptions).DeleteTaskPushNotificationConfig[0:len((*c.CallOptions).DeleteTaskPushNotificationConfig):len((*c.CallOptions).DeleteTaskPushNotificationConfig)], opts...)
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		_, err = executeRPC(ctx, c.client.DeleteTaskPushNotificationConfig, req, settings.GRPC, c.logger, "DeleteTaskPushNotificationConfig")
+		return err
+	}, opts...)
+	return err
 }
 
 func (c *gRPCClient) GetAgentCard(ctx context.Context, req *a2apb.GetAgentCardRequest, opts ...gax.CallOption) (*a2apb.AgentCard, error) {
@@ -951,8 +974,8 @@ func (c *taskSubscriptionRESTStreamClient) RecvMsg(m interface{}) error {
 	return errors.New("this method is not implemented, use Recv")
 }
 
-// CreateTaskPushNotification set a push notification config for a task.
-func (c *restClient) CreateTaskPushNotification(ctx context.Context, req *a2apb.CreateTaskPushNotificationRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
+// CreateTaskPushNotificationConfig set a push notification config for a task.
+func (c *restClient) CreateTaskPushNotificationConfig(ctx context.Context, req *a2apb.CreateTaskPushNotificationConfigRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
 	m := protojson.MarshalOptions{AllowPartial: true, UseEnumNumbers: true}
 	body := req.GetConfig()
 	jsonReq, err := m.Marshal(body)
@@ -977,7 +1000,7 @@ func (c *restClient) CreateTaskPushNotification(ctx context.Context, req *a2apb.
 	hds = append(c.xGoogHeaders, hds...)
 	hds = append(hds, "Content-Type", "application/json")
 	headers := gax.BuildHeaders(ctx, hds...)
-	opts = append((*c.CallOptions).CreateTaskPushNotification[0:len((*c.CallOptions).CreateTaskPushNotification):len((*c.CallOptions).CreateTaskPushNotification)], opts...)
+	opts = append((*c.CallOptions).CreateTaskPushNotificationConfig[0:len((*c.CallOptions).CreateTaskPushNotificationConfig):len((*c.CallOptions).CreateTaskPushNotificationConfig)], opts...)
 	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
 	resp := &a2apb.TaskPushNotificationConfig{}
 	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -991,7 +1014,7 @@ func (c *restClient) CreateTaskPushNotification(ctx context.Context, req *a2apb.
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "CreateTaskPushNotification")
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, jsonReq, "CreateTaskPushNotificationConfig")
 		if err != nil {
 			return err
 		}
@@ -1008,8 +1031,8 @@ func (c *restClient) CreateTaskPushNotification(ctx context.Context, req *a2apb.
 	return resp, nil
 }
 
-// GetTaskPushNotification get a push notification config for a task.
-func (c *restClient) GetTaskPushNotification(ctx context.Context, req *a2apb.GetTaskPushNotificationRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
+// GetTaskPushNotificationConfig get a push notification config for a task.
+func (c *restClient) GetTaskPushNotificationConfig(ctx context.Context, req *a2apb.GetTaskPushNotificationConfigRequest, opts ...gax.CallOption) (*a2apb.TaskPushNotificationConfig, error) {
 	baseUrl, err := url.Parse(c.endpoint)
 	if err != nil {
 		return nil, err
@@ -1022,7 +1045,7 @@ func (c *restClient) GetTaskPushNotification(ctx context.Context, req *a2apb.Get
 	hds = append(c.xGoogHeaders, hds...)
 	hds = append(hds, "Content-Type", "application/json")
 	headers := gax.BuildHeaders(ctx, hds...)
-	opts = append((*c.CallOptions).GetTaskPushNotification[0:len((*c.CallOptions).GetTaskPushNotification):len((*c.CallOptions).GetTaskPushNotification)], opts...)
+	opts = append((*c.CallOptions).GetTaskPushNotificationConfig[0:len((*c.CallOptions).GetTaskPushNotificationConfig):len((*c.CallOptions).GetTaskPushNotificationConfig)], opts...)
 	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
 	resp := &a2apb.TaskPushNotificationConfig{}
 	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -1036,7 +1059,7 @@ func (c *restClient) GetTaskPushNotification(ctx context.Context, req *a2apb.Get
 		httpReq = httpReq.WithContext(ctx)
 		httpReq.Header = headers
 
-		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetTaskPushNotification")
+		buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "GetTaskPushNotificationConfig")
 		if err != nil {
 			return err
 		}
@@ -1053,13 +1076,13 @@ func (c *restClient) GetTaskPushNotification(ctx context.Context, req *a2apb.Get
 	return resp, nil
 }
 
-// ListTaskPushNotification get a list of push notifications configured for a task.
-func (c *restClient) ListTaskPushNotification(ctx context.Context, req *a2apb.ListTaskPushNotificationRequest, opts ...gax.CallOption) *TaskPushNotificationConfigIterator {
+// ListTaskPushNotificationConfig get a list of push notifications configured for a task.
+func (c *restClient) ListTaskPushNotificationConfig(ctx context.Context, req *a2apb.ListTaskPushNotificationConfigRequest, opts ...gax.CallOption) *TaskPushNotificationConfigIterator {
 	it := &TaskPushNotificationConfigIterator{}
-	req = proto.Clone(req).(*a2apb.ListTaskPushNotificationRequest)
+	req = proto.Clone(req).(*a2apb.ListTaskPushNotificationConfigRequest)
 	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*a2apb.TaskPushNotificationConfig, string, error) {
-		resp := &a2apb.ListTaskPushNotificationResponse{}
+		resp := &a2apb.ListTaskPushNotificationConfigResponse{}
 		if pageToken != "" {
 			req.PageToken = pageToken
 		}
@@ -1072,7 +1095,7 @@ func (c *restClient) ListTaskPushNotification(ctx context.Context, req *a2apb.Li
 		if err != nil {
 			return nil, "", err
 		}
-		baseUrl.Path += fmt.Sprintf("/v1/%v/pushNotifications", req.GetParent())
+		baseUrl.Path += fmt.Sprintf("/v1/%v/pushNotificationConfigs", req.GetParent())
 
 		params := url.Values{}
 		if req.GetPageSize() != 0 {
@@ -1097,7 +1120,7 @@ func (c *restClient) ListTaskPushNotification(ctx context.Context, req *a2apb.Li
 			}
 			httpReq.Header = headers
 
-			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListTaskPushNotification")
+			buf, err := executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "ListTaskPushNotificationConfig")
 			if err != nil {
 				return err
 			}
@@ -1128,6 +1151,36 @@ func (c *restClient) ListTaskPushNotification(ctx context.Context, req *a2apb.Li
 	it.pageInfo.Token = req.GetPageToken()
 
 	return it
+}
+
+// DeleteTaskPushNotificationConfig delete a push notification config for a task.
+func (c *restClient) DeleteTaskPushNotificationConfig(ctx context.Context, req *a2apb.DeleteTaskPushNotificationConfigRequest, opts ...gax.CallOption) error {
+	baseUrl, err := url.Parse(c.endpoint)
+	if err != nil {
+		return err
+	}
+	baseUrl.Path += fmt.Sprintf("/v1/%v", req.GetName())
+
+	// Build HTTP headers from client and context metadata.
+	hds := []string{"x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName()))}
+
+	hds = append(c.xGoogHeaders, hds...)
+	hds = append(hds, "Content-Type", "application/json")
+	headers := gax.BuildHeaders(ctx, hds...)
+	return gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		if settings.Path != "" {
+			baseUrl.Path = settings.Path
+		}
+		httpReq, err := http.NewRequest("DELETE", baseUrl.String(), nil)
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		_, err = executeHTTPRequest(ctx, c.httpClient, httpReq, c.logger, nil, "DeleteTaskPushNotificationConfig")
+		return err
+	}, opts...)
 }
 
 // GetAgentCard getAgentCard returns the agent card for the agent.

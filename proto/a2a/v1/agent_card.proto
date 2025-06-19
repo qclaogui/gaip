@@ -18,7 +18,12 @@ message AgentCard {
   string description = 2;
   // The base url to interact with the agent at.
   string url = 3;
-  // Information about the service provider of the agent.
+  // The transport of the preferred endpoint. If empty, defaults to JSONRPC.
+  string preferred_transport = 14;
+  // Announcement of additional supported transports. Client can use any of
+  // the supported transports.
+  repeated AgentInterface additional_interfaces = 15;
+  // The service provider of the agent.
   AgentProvider provider = 4;
   // The version of the agent.
   string version = 5;
@@ -43,6 +48,16 @@ message AgentCard {
   // the user is authenticated, i.e. is the card from .well-known
   // different than the card from GetAgentCard.
   bool supports_authenticated_extended_card = 13;
+}
+
+// Defines additional transport information for the agent.
+message AgentInterface {
+  // The url this interface is found at.
+  string url = 1;
+  // The transport supported this url. This is an open form string, to be
+  // easily extended for many transport protocols. The core ones officially
+  // supported are JSONRPC, GRPC and HTTP+JSON.
+  string transport = 2;
 }
 
 // Represents information about the service provider of an agent.

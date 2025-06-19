@@ -36,7 +36,12 @@ type AgentCard struct {
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	// The base url to interact with the agent at.
 	Url string `protobuf:"bytes,3,opt,name=url,proto3" json:"url,omitempty"`
-	// Information about the service provider of the agent.
+	// The transport of the preferred endpoint. If empty, defaults to JSONRPC.
+	PreferredTransport string `protobuf:"bytes,14,opt,name=preferred_transport,json=preferredTransport,proto3" json:"preferred_transport,omitempty"`
+	// Announcement of additional supported transports. Client can use any of
+	// the supported transports.
+	AdditionalInterfaces []*AgentInterface `protobuf:"bytes,15,rep,name=additional_interfaces,json=additionalInterfaces,proto3" json:"additional_interfaces,omitempty"`
+	// The service provider of the agent.
 	Provider *AgentProvider `protobuf:"bytes,4,opt,name=provider,proto3" json:"provider,omitempty"`
 	// The version of the agent.
 	Version string `protobuf:"bytes,5,opt,name=version,proto3" json:"version,omitempty"`
@@ -116,6 +121,20 @@ func (x *AgentCard) GetUrl() string {
 	return ""
 }
 
+func (x *AgentCard) GetPreferredTransport() string {
+	if x != nil {
+		return x.PreferredTransport
+	}
+	return ""
+}
+
+func (x *AgentCard) GetAdditionalInterfaces() []*AgentInterface {
+	if x != nil {
+		return x.AdditionalInterfaces
+	}
+	return nil
+}
+
 func (x *AgentCard) GetProvider() *AgentProvider {
 	if x != nil {
 		return x.Provider
@@ -186,6 +205,63 @@ func (x *AgentCard) GetSupportsAuthenticatedExtendedCard() bool {
 	return false
 }
 
+// Defines additional transport information for the agent.
+type AgentInterface struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The url this interface is found at.
+	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	// The transport supported this url. This is an open form string, to be
+	// easily extended for many transport protocols. The core ones officially
+	// supported are JSONRPC, GRPC and HTTP+JSON.
+	Transport     string `protobuf:"bytes,2,opt,name=transport,proto3" json:"transport,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AgentInterface) Reset() {
+	*x = AgentInterface{}
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AgentInterface) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AgentInterface) ProtoMessage() {}
+
+func (x *AgentInterface) ProtoReflect() protoreflect.Message {
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AgentInterface.ProtoReflect.Descriptor instead.
+func (*AgentInterface) Descriptor() ([]byte, []int) {
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AgentInterface) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *AgentInterface) GetTransport() string {
+	if x != nil {
+		return x.Transport
+	}
+	return ""
+}
+
 // Represents information about the service provider of an agent.
 type AgentProvider struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -199,7 +275,7 @@ type AgentProvider struct {
 
 func (x *AgentProvider) Reset() {
 	*x = AgentProvider{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[1]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -211,7 +287,7 @@ func (x *AgentProvider) String() string {
 func (*AgentProvider) ProtoMessage() {}
 
 func (x *AgentProvider) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[1]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -224,7 +300,7 @@ func (x *AgentProvider) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AgentProvider.ProtoReflect.Descriptor instead.
 func (*AgentProvider) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{1}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *AgentProvider) GetUrl() string {
@@ -256,7 +332,7 @@ type AgentCapabilities struct {
 
 func (x *AgentCapabilities) Reset() {
 	*x = AgentCapabilities{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[2]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -268,7 +344,7 @@ func (x *AgentCapabilities) String() string {
 func (*AgentCapabilities) ProtoMessage() {}
 
 func (x *AgentCapabilities) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[2]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -281,7 +357,7 @@ func (x *AgentCapabilities) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AgentCapabilities.ProtoReflect.Descriptor instead.
 func (*AgentCapabilities) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{2}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *AgentCapabilities) GetStreaming() bool {
@@ -322,7 +398,7 @@ type AgentExtension struct {
 
 func (x *AgentExtension) Reset() {
 	*x = AgentExtension{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[3]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -334,7 +410,7 @@ func (x *AgentExtension) String() string {
 func (*AgentExtension) ProtoMessage() {}
 
 func (x *AgentExtension) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[3]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -347,7 +423,7 @@ func (x *AgentExtension) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AgentExtension.ProtoReflect.Descriptor instead.
 func (*AgentExtension) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{3}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *AgentExtension) GetUri() string {
@@ -408,7 +484,7 @@ type AgentSkill struct {
 
 func (x *AgentSkill) Reset() {
 	*x = AgentSkill{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[4]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -420,7 +496,7 @@ func (x *AgentSkill) String() string {
 func (*AgentSkill) ProtoMessage() {}
 
 func (x *AgentSkill) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[4]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -433,7 +509,7 @@ func (x *AgentSkill) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AgentSkill.ProtoReflect.Descriptor instead.
 func (*AgentSkill) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{4}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *AgentSkill) GetId() string {
@@ -494,7 +570,7 @@ type StringList struct {
 
 func (x *StringList) Reset() {
 	*x = StringList{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[5]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -506,7 +582,7 @@ func (x *StringList) String() string {
 func (*StringList) ProtoMessage() {}
 
 func (x *StringList) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[5]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -519,7 +595,7 @@ func (x *StringList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StringList.ProtoReflect.Descriptor instead.
 func (*StringList) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{5}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *StringList) GetList() []string {
@@ -538,7 +614,7 @@ type Security struct {
 
 func (x *Security) Reset() {
 	*x = Security{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[6]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -550,7 +626,7 @@ func (x *Security) String() string {
 func (*Security) ProtoMessage() {}
 
 func (x *Security) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[6]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -563,7 +639,7 @@ func (x *Security) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Security.ProtoReflect.Descriptor instead.
 func (*Security) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{6}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Security) GetSchemes() map[string]*StringList {
@@ -588,7 +664,7 @@ type SecurityScheme struct {
 
 func (x *SecurityScheme) Reset() {
 	*x = SecurityScheme{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[7]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -600,7 +676,7 @@ func (x *SecurityScheme) String() string {
 func (*SecurityScheme) ProtoMessage() {}
 
 func (x *SecurityScheme) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[7]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -613,7 +689,7 @@ func (x *SecurityScheme) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecurityScheme.ProtoReflect.Descriptor instead.
 func (*SecurityScheme) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{7}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *SecurityScheme) GetScheme() isSecurityScheme_Scheme {
@@ -701,7 +777,7 @@ type APIKeySecurityScheme struct {
 
 func (x *APIKeySecurityScheme) Reset() {
 	*x = APIKeySecurityScheme{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[8]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -713,7 +789,7 @@ func (x *APIKeySecurityScheme) String() string {
 func (*APIKeySecurityScheme) ProtoMessage() {}
 
 func (x *APIKeySecurityScheme) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[8]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -726,7 +802,7 @@ func (x *APIKeySecurityScheme) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use APIKeySecurityScheme.ProtoReflect.Descriptor instead.
 func (*APIKeySecurityScheme) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{8}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *APIKeySecurityScheme) GetDescription() string {
@@ -769,7 +845,7 @@ type HTTPAuthSecurityScheme struct {
 
 func (x *HTTPAuthSecurityScheme) Reset() {
 	*x = HTTPAuthSecurityScheme{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[9]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -781,7 +857,7 @@ func (x *HTTPAuthSecurityScheme) String() string {
 func (*HTTPAuthSecurityScheme) ProtoMessage() {}
 
 func (x *HTTPAuthSecurityScheme) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[9]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -794,7 +870,7 @@ func (x *HTTPAuthSecurityScheme) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HTTPAuthSecurityScheme.ProtoReflect.Descriptor instead.
 func (*HTTPAuthSecurityScheme) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{9}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *HTTPAuthSecurityScheme) GetDescription() string {
@@ -830,7 +906,7 @@ type OAuth2SecurityScheme struct {
 
 func (x *OAuth2SecurityScheme) Reset() {
 	*x = OAuth2SecurityScheme{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[10]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -842,7 +918,7 @@ func (x *OAuth2SecurityScheme) String() string {
 func (*OAuth2SecurityScheme) ProtoMessage() {}
 
 func (x *OAuth2SecurityScheme) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[10]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -855,7 +931,7 @@ func (x *OAuth2SecurityScheme) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OAuth2SecurityScheme.ProtoReflect.Descriptor instead.
 func (*OAuth2SecurityScheme) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{10}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *OAuth2SecurityScheme) GetDescription() string {
@@ -885,7 +961,7 @@ type OpenIdConnectSecurityScheme struct {
 
 func (x *OpenIdConnectSecurityScheme) Reset() {
 	*x = OpenIdConnectSecurityScheme{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[11]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -897,7 +973,7 @@ func (x *OpenIdConnectSecurityScheme) String() string {
 func (*OpenIdConnectSecurityScheme) ProtoMessage() {}
 
 func (x *OpenIdConnectSecurityScheme) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[11]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -910,7 +986,7 @@ func (x *OpenIdConnectSecurityScheme) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OpenIdConnectSecurityScheme.ProtoReflect.Descriptor instead.
 func (*OpenIdConnectSecurityScheme) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{11}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *OpenIdConnectSecurityScheme) GetDescription() string {
@@ -942,7 +1018,7 @@ type OAuthFlows struct {
 
 func (x *OAuthFlows) Reset() {
 	*x = OAuthFlows{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[12]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -954,7 +1030,7 @@ func (x *OAuthFlows) String() string {
 func (*OAuthFlows) ProtoMessage() {}
 
 func (x *OAuthFlows) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[12]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -967,7 +1043,7 @@ func (x *OAuthFlows) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OAuthFlows.ProtoReflect.Descriptor instead.
 func (*OAuthFlows) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{12}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *OAuthFlows) GetFlow() isOAuthFlows_Flow {
@@ -1061,7 +1137,7 @@ type AuthorizationCodeOAuthFlow struct {
 
 func (x *AuthorizationCodeOAuthFlow) Reset() {
 	*x = AuthorizationCodeOAuthFlow{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[13]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1073,7 +1149,7 @@ func (x *AuthorizationCodeOAuthFlow) String() string {
 func (*AuthorizationCodeOAuthFlow) ProtoMessage() {}
 
 func (x *AuthorizationCodeOAuthFlow) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[13]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1086,7 +1162,7 @@ func (x *AuthorizationCodeOAuthFlow) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthorizationCodeOAuthFlow.ProtoReflect.Descriptor instead.
 func (*AuthorizationCodeOAuthFlow) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{13}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *AuthorizationCodeOAuthFlow) GetAuthorizationUrl() string {
@@ -1134,7 +1210,7 @@ type ClientCredentialsOAuthFlow struct {
 
 func (x *ClientCredentialsOAuthFlow) Reset() {
 	*x = ClientCredentialsOAuthFlow{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[14]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1146,7 +1222,7 @@ func (x *ClientCredentialsOAuthFlow) String() string {
 func (*ClientCredentialsOAuthFlow) ProtoMessage() {}
 
 func (x *ClientCredentialsOAuthFlow) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[14]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1159,7 +1235,7 @@ func (x *ClientCredentialsOAuthFlow) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientCredentialsOAuthFlow.ProtoReflect.Descriptor instead.
 func (*ClientCredentialsOAuthFlow) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{14}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ClientCredentialsOAuthFlow) GetTokenUrl() string {
@@ -1200,7 +1276,7 @@ type ImplicitOAuthFlow struct {
 
 func (x *ImplicitOAuthFlow) Reset() {
 	*x = ImplicitOAuthFlow{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[15]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1212,7 +1288,7 @@ func (x *ImplicitOAuthFlow) String() string {
 func (*ImplicitOAuthFlow) ProtoMessage() {}
 
 func (x *ImplicitOAuthFlow) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[15]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1225,7 +1301,7 @@ func (x *ImplicitOAuthFlow) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImplicitOAuthFlow.ProtoReflect.Descriptor instead.
 func (*ImplicitOAuthFlow) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{15}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ImplicitOAuthFlow) GetAuthorizationUrl() string {
@@ -1266,7 +1342,7 @@ type PasswordOAuthFlow struct {
 
 func (x *PasswordOAuthFlow) Reset() {
 	*x = PasswordOAuthFlow{}
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[16]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1278,7 +1354,7 @@ func (x *PasswordOAuthFlow) String() string {
 func (*PasswordOAuthFlow) ProtoMessage() {}
 
 func (x *PasswordOAuthFlow) ProtoReflect() protoreflect.Message {
-	mi := &file_a2a_v1_agent_card_proto_msgTypes[16]
+	mi := &file_a2a_v1_agent_card_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1291,7 +1367,7 @@ func (x *PasswordOAuthFlow) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordOAuthFlow.ProtoReflect.Descriptor instead.
 func (*PasswordOAuthFlow) Descriptor() ([]byte, []int) {
-	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{16}
+	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *PasswordOAuthFlow) GetTokenUrl() string {
@@ -1319,11 +1395,13 @@ var File_a2a_v1_agent_card_proto protoreflect.FileDescriptor
 
 const file_a2a_v1_agent_card_proto_rawDesc = "" +
 	"\n" +
-	"\x17a2a/v1/agent_card.proto\x12\x06a2a.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xc8\x05\n" +
+	"\x17a2a/v1/agent_card.proto\x12\x06a2a.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xc6\x06\n" +
 	"\tAgentCard\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x10\n" +
-	"\x03url\x18\x03 \x01(\tR\x03url\x121\n" +
+	"\x03url\x18\x03 \x01(\tR\x03url\x12/\n" +
+	"\x13preferred_transport\x18\x0e \x01(\tR\x12preferredTransport\x12K\n" +
+	"\x15additional_interfaces\x18\x0f \x03(\v2\x16.a2a.v1.AgentInterfaceR\x14additionalInterfaces\x121\n" +
 	"\bprovider\x18\x04 \x01(\v2\x15.a2a.v1.AgentProviderR\bprovider\x12\x18\n" +
 	"\aversion\x18\x05 \x01(\tR\aversion\x12+\n" +
 	"\x11documentation_url\x18\x06 \x01(\tR\x10documentationUrl\x12=\n" +
@@ -1337,7 +1415,10 @@ const file_a2a_v1_agent_card_proto_rawDesc = "" +
 	"$supports_authenticated_extended_card\x18\r \x01(\bR!supportsAuthenticatedExtendedCard\x1aZ\n" +
 	"\x14SecuritySchemesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12,\n" +
-	"\x05value\x18\x02 \x01(\v2\x16.a2a.v1.SecuritySchemeR\x05value:\x028\x01\"E\n" +
+	"\x05value\x18\x02 \x01(\v2\x16.a2a.v1.SecuritySchemeR\x05value:\x028\x01\"@\n" +
+	"\x0eAgentInterface\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12\x1c\n" +
+	"\ttransport\x18\x02 \x01(\tR\ttransport\"E\n" +
 	"\rAgentProvider\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12\"\n" +
 	"\forganization\x18\x02 \x01(\tR\forganization\"\x98\x01\n" +
@@ -1444,64 +1525,66 @@ func file_a2a_v1_agent_card_proto_rawDescGZIP() []byte {
 }
 
 var (
-	file_a2a_v1_agent_card_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+	file_a2a_v1_agent_card_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 	file_a2a_v1_agent_card_proto_goTypes  = []any{
 		(*AgentCard)(nil),                   // 0: a2a.v1.AgentCard
-		(*AgentProvider)(nil),               // 1: a2a.v1.AgentProvider
-		(*AgentCapabilities)(nil),           // 2: a2a.v1.AgentCapabilities
-		(*AgentExtension)(nil),              // 3: a2a.v1.AgentExtension
-		(*AgentSkill)(nil),                  // 4: a2a.v1.AgentSkill
-		(*StringList)(nil),                  // 5: a2a.v1.StringList
-		(*Security)(nil),                    // 6: a2a.v1.Security
-		(*SecurityScheme)(nil),              // 7: a2a.v1.SecurityScheme
-		(*APIKeySecurityScheme)(nil),        // 8: a2a.v1.APIKeySecurityScheme
-		(*HTTPAuthSecurityScheme)(nil),      // 9: a2a.v1.HTTPAuthSecurityScheme
-		(*OAuth2SecurityScheme)(nil),        // 10: a2a.v1.OAuth2SecurityScheme
-		(*OpenIdConnectSecurityScheme)(nil), // 11: a2a.v1.OpenIdConnectSecurityScheme
-		(*OAuthFlows)(nil),                  // 12: a2a.v1.OAuthFlows
-		(*AuthorizationCodeOAuthFlow)(nil),  // 13: a2a.v1.AuthorizationCodeOAuthFlow
-		(*ClientCredentialsOAuthFlow)(nil),  // 14: a2a.v1.ClientCredentialsOAuthFlow
-		(*ImplicitOAuthFlow)(nil),           // 15: a2a.v1.ImplicitOAuthFlow
-		(*PasswordOAuthFlow)(nil),           // 16: a2a.v1.PasswordOAuthFlow
-		nil,                                 // 17: a2a.v1.AgentCard.SecuritySchemesEntry
-		nil,                                 // 18: a2a.v1.Security.SchemesEntry
-		nil,                                 // 19: a2a.v1.AuthorizationCodeOAuthFlow.ScopesEntry
-		nil,                                 // 20: a2a.v1.ClientCredentialsOAuthFlow.ScopesEntry
-		nil,                                 // 21: a2a.v1.ImplicitOAuthFlow.ScopesEntry
-		nil,                                 // 22: a2a.v1.PasswordOAuthFlow.ScopesEntry
-		(*structpb.Struct)(nil),             // 23: google.protobuf.Struct
+		(*AgentInterface)(nil),              // 1: a2a.v1.AgentInterface
+		(*AgentProvider)(nil),               // 2: a2a.v1.AgentProvider
+		(*AgentCapabilities)(nil),           // 3: a2a.v1.AgentCapabilities
+		(*AgentExtension)(nil),              // 4: a2a.v1.AgentExtension
+		(*AgentSkill)(nil),                  // 5: a2a.v1.AgentSkill
+		(*StringList)(nil),                  // 6: a2a.v1.StringList
+		(*Security)(nil),                    // 7: a2a.v1.Security
+		(*SecurityScheme)(nil),              // 8: a2a.v1.SecurityScheme
+		(*APIKeySecurityScheme)(nil),        // 9: a2a.v1.APIKeySecurityScheme
+		(*HTTPAuthSecurityScheme)(nil),      // 10: a2a.v1.HTTPAuthSecurityScheme
+		(*OAuth2SecurityScheme)(nil),        // 11: a2a.v1.OAuth2SecurityScheme
+		(*OpenIdConnectSecurityScheme)(nil), // 12: a2a.v1.OpenIdConnectSecurityScheme
+		(*OAuthFlows)(nil),                  // 13: a2a.v1.OAuthFlows
+		(*AuthorizationCodeOAuthFlow)(nil),  // 14: a2a.v1.AuthorizationCodeOAuthFlow
+		(*ClientCredentialsOAuthFlow)(nil),  // 15: a2a.v1.ClientCredentialsOAuthFlow
+		(*ImplicitOAuthFlow)(nil),           // 16: a2a.v1.ImplicitOAuthFlow
+		(*PasswordOAuthFlow)(nil),           // 17: a2a.v1.PasswordOAuthFlow
+		nil,                                 // 18: a2a.v1.AgentCard.SecuritySchemesEntry
+		nil,                                 // 19: a2a.v1.Security.SchemesEntry
+		nil,                                 // 20: a2a.v1.AuthorizationCodeOAuthFlow.ScopesEntry
+		nil,                                 // 21: a2a.v1.ClientCredentialsOAuthFlow.ScopesEntry
+		nil,                                 // 22: a2a.v1.ImplicitOAuthFlow.ScopesEntry
+		nil,                                 // 23: a2a.v1.PasswordOAuthFlow.ScopesEntry
+		(*structpb.Struct)(nil),             // 24: google.protobuf.Struct
 	}
 )
 
 var file_a2a_v1_agent_card_proto_depIdxs = []int32{
-	1,  // 0: a2a.v1.AgentCard.provider:type_name -> a2a.v1.AgentProvider
-	2,  // 1: a2a.v1.AgentCard.capabilities:type_name -> a2a.v1.AgentCapabilities
-	17, // 2: a2a.v1.AgentCard.security_schemes:type_name -> a2a.v1.AgentCard.SecuritySchemesEntry
-	6,  // 3: a2a.v1.AgentCard.security:type_name -> a2a.v1.Security
-	4,  // 4: a2a.v1.AgentCard.skills:type_name -> a2a.v1.AgentSkill
-	3,  // 5: a2a.v1.AgentCapabilities.extensions:type_name -> a2a.v1.AgentExtension
-	23, // 6: a2a.v1.AgentExtension.params:type_name -> google.protobuf.Struct
-	18, // 7: a2a.v1.Security.schemes:type_name -> a2a.v1.Security.SchemesEntry
-	8,  // 8: a2a.v1.SecurityScheme.api_key_security_scheme:type_name -> a2a.v1.APIKeySecurityScheme
-	9,  // 9: a2a.v1.SecurityScheme.http_auth_security_scheme:type_name -> a2a.v1.HTTPAuthSecurityScheme
-	10, // 10: a2a.v1.SecurityScheme.oauth2_security_scheme:type_name -> a2a.v1.OAuth2SecurityScheme
-	11, // 11: a2a.v1.SecurityScheme.open_id_connect_security_scheme:type_name -> a2a.v1.OpenIdConnectSecurityScheme
-	12, // 12: a2a.v1.OAuth2SecurityScheme.flows:type_name -> a2a.v1.OAuthFlows
-	13, // 13: a2a.v1.OAuthFlows.authorization_code:type_name -> a2a.v1.AuthorizationCodeOAuthFlow
-	14, // 14: a2a.v1.OAuthFlows.client_credentials:type_name -> a2a.v1.ClientCredentialsOAuthFlow
-	15, // 15: a2a.v1.OAuthFlows.implicit:type_name -> a2a.v1.ImplicitOAuthFlow
-	16, // 16: a2a.v1.OAuthFlows.password:type_name -> a2a.v1.PasswordOAuthFlow
-	19, // 17: a2a.v1.AuthorizationCodeOAuthFlow.scopes:type_name -> a2a.v1.AuthorizationCodeOAuthFlow.ScopesEntry
-	20, // 18: a2a.v1.ClientCredentialsOAuthFlow.scopes:type_name -> a2a.v1.ClientCredentialsOAuthFlow.ScopesEntry
-	21, // 19: a2a.v1.ImplicitOAuthFlow.scopes:type_name -> a2a.v1.ImplicitOAuthFlow.ScopesEntry
-	22, // 20: a2a.v1.PasswordOAuthFlow.scopes:type_name -> a2a.v1.PasswordOAuthFlow.ScopesEntry
-	7,  // 21: a2a.v1.AgentCard.SecuritySchemesEntry.value:type_name -> a2a.v1.SecurityScheme
-	5,  // 22: a2a.v1.Security.SchemesEntry.value:type_name -> a2a.v1.StringList
-	23, // [23:23] is the sub-list for method output_type
-	23, // [23:23] is the sub-list for method input_type
-	23, // [23:23] is the sub-list for extension type_name
-	23, // [23:23] is the sub-list for extension extendee
-	0,  // [0:23] is the sub-list for field type_name
+	1,  // 0: a2a.v1.AgentCard.additional_interfaces:type_name -> a2a.v1.AgentInterface
+	2,  // 1: a2a.v1.AgentCard.provider:type_name -> a2a.v1.AgentProvider
+	3,  // 2: a2a.v1.AgentCard.capabilities:type_name -> a2a.v1.AgentCapabilities
+	18, // 3: a2a.v1.AgentCard.security_schemes:type_name -> a2a.v1.AgentCard.SecuritySchemesEntry
+	7,  // 4: a2a.v1.AgentCard.security:type_name -> a2a.v1.Security
+	5,  // 5: a2a.v1.AgentCard.skills:type_name -> a2a.v1.AgentSkill
+	4,  // 6: a2a.v1.AgentCapabilities.extensions:type_name -> a2a.v1.AgentExtension
+	24, // 7: a2a.v1.AgentExtension.params:type_name -> google.protobuf.Struct
+	19, // 8: a2a.v1.Security.schemes:type_name -> a2a.v1.Security.SchemesEntry
+	9,  // 9: a2a.v1.SecurityScheme.api_key_security_scheme:type_name -> a2a.v1.APIKeySecurityScheme
+	10, // 10: a2a.v1.SecurityScheme.http_auth_security_scheme:type_name -> a2a.v1.HTTPAuthSecurityScheme
+	11, // 11: a2a.v1.SecurityScheme.oauth2_security_scheme:type_name -> a2a.v1.OAuth2SecurityScheme
+	12, // 12: a2a.v1.SecurityScheme.open_id_connect_security_scheme:type_name -> a2a.v1.OpenIdConnectSecurityScheme
+	13, // 13: a2a.v1.OAuth2SecurityScheme.flows:type_name -> a2a.v1.OAuthFlows
+	14, // 14: a2a.v1.OAuthFlows.authorization_code:type_name -> a2a.v1.AuthorizationCodeOAuthFlow
+	15, // 15: a2a.v1.OAuthFlows.client_credentials:type_name -> a2a.v1.ClientCredentialsOAuthFlow
+	16, // 16: a2a.v1.OAuthFlows.implicit:type_name -> a2a.v1.ImplicitOAuthFlow
+	17, // 17: a2a.v1.OAuthFlows.password:type_name -> a2a.v1.PasswordOAuthFlow
+	20, // 18: a2a.v1.AuthorizationCodeOAuthFlow.scopes:type_name -> a2a.v1.AuthorizationCodeOAuthFlow.ScopesEntry
+	21, // 19: a2a.v1.ClientCredentialsOAuthFlow.scopes:type_name -> a2a.v1.ClientCredentialsOAuthFlow.ScopesEntry
+	22, // 20: a2a.v1.ImplicitOAuthFlow.scopes:type_name -> a2a.v1.ImplicitOAuthFlow.ScopesEntry
+	23, // 21: a2a.v1.PasswordOAuthFlow.scopes:type_name -> a2a.v1.PasswordOAuthFlow.ScopesEntry
+	8,  // 22: a2a.v1.AgentCard.SecuritySchemesEntry.value:type_name -> a2a.v1.SecurityScheme
+	6,  // 23: a2a.v1.Security.SchemesEntry.value:type_name -> a2a.v1.StringList
+	24, // [24:24] is the sub-list for method output_type
+	24, // [24:24] is the sub-list for method input_type
+	24, // [24:24] is the sub-list for extension type_name
+	24, // [24:24] is the sub-list for extension extendee
+	0,  // [0:24] is the sub-list for field type_name
 }
 
 func init() { file_a2a_v1_agent_card_proto_init() }
@@ -1509,13 +1592,13 @@ func file_a2a_v1_agent_card_proto_init() {
 	if File_a2a_v1_agent_card_proto != nil {
 		return
 	}
-	file_a2a_v1_agent_card_proto_msgTypes[7].OneofWrappers = []any{
+	file_a2a_v1_agent_card_proto_msgTypes[8].OneofWrappers = []any{
 		(*SecurityScheme_ApiKeySecurityScheme)(nil),
 		(*SecurityScheme_HttpAuthSecurityScheme)(nil),
 		(*SecurityScheme_Oauth2SecurityScheme)(nil),
 		(*SecurityScheme_OpenIdConnectSecurityScheme)(nil),
 	}
-	file_a2a_v1_agent_card_proto_msgTypes[12].OneofWrappers = []any{
+	file_a2a_v1_agent_card_proto_msgTypes[13].OneofWrappers = []any{
 		(*OAuthFlows_AuthorizationCode)(nil),
 		(*OAuthFlows_ClientCredentials)(nil),
 		(*OAuthFlows_Implicit)(nil),
@@ -1527,7 +1610,7 @@ func file_a2a_v1_agent_card_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_a2a_v1_agent_card_proto_rawDesc), len(file_a2a_v1_agent_card_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   23,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
