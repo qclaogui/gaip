@@ -1,0 +1,91 @@
+# Configuration for the protoveneer tool.
+
+package: a2a
+
+protoImportPath: github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb
+
+types:
+    AgentCard:
+      fields:
+        SecuritySchemes:
+          type: 'map[string]SecurityScheme'
+    AgentInterface:
+    AgentProvider:
+    AgentCapabilities:
+
+    Security:
+    StringList:
+
+    AgentSkill:
+    AgentExtension:
+    APIKeySecurityScheme:
+    HTTPAuthSecurityScheme:
+    OAuth2SecurityScheme:
+      fields:
+        Flows:
+          type: OAuthFlows
+    
+    AuthorizationCodeOAuthFlow:
+    ClientCredentialsOAuthFlow:
+    ImplicitOAuthFlow:
+    PasswordOAuthFlow:
+
+    OpenIdConnectSecurityScheme:
+
+    Message:
+      fields:
+        Content:
+          type: '[]Part'
+      
+    FilePart:
+      populateToFrom: populateFilePartTo, populateFilePartFrom
+      fields:
+        MimeType:
+          name: MIMEType
+        File:
+          type: '*FilePartData'
+          noConvert: true
+    DataPart:
+
+    Role:
+      protoPrefix: Role_
+      veneerPrefix: ''
+
+    Task:
+    TaskStatus:
+    Artifact:
+      fields:
+        Parts:
+          type: '[]Part'
+    TaskState:
+
+    SendMessageConfiguration:
+    PushNotificationConfig:
+    AuthenticationInfo:
+
+    SendMessageResponse:
+      populateToFrom: populateMessageResponseTo, populateMessageResponseFrom
+      fields:
+        Payload:
+          type: '*MessageResponsePayload'
+          noConvert: true
+    StreamResponse:
+      populateToFrom: populateStreamResponseTo, populateStreamResponseFrom
+      fields:
+        Payload:
+          type: '*StreamResponsePayload'
+          noConvert: true
+    TaskStatusUpdateEvent:
+    TaskArtifactUpdateEvent:
+
+    TaskPushNotificationConfig:
+    ListTaskPushNotificationConfigResponse:
+
+# Omit everything not explicitly configured.
+omitTypes:
+  - '*'
+
+converters:
+  Part: partToProto, partFromProto
+  SecurityScheme: securitySchemeToProto, securitySchemeFromProto
+  OAuthFlows: oAuthFlowsToProto, oAuthFlowsFromProto

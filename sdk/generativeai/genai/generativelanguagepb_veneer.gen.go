@@ -1,7 +1,3 @@
-// Copyright © Weifeng Wang <qclaogui@gmail.com>
-//
-// Licensed under the Apache License 2.0.
-
 // Copyright 2024 Weifeng Wang <qclaogui@gmail.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -360,7 +356,8 @@ func (CitationSource) fromProto(p *pb.CitationSource) *CitationSource {
 //
 // See also `ExecutableCode` and `CodeExecutionResult` which are only generated
 // when using this tool.
-type CodeExecution struct{}
+type CodeExecution struct {
+}
 
 func (v *CodeExecution) toProto() *pb.CodeExecution {
 	if v == nil {
@@ -1540,13 +1537,13 @@ func (ModelInfo) fromProto(p *pb.Model) *ModelInfo {
 type Part struct {
 	// Optional. Indicates if the part is thought from the model.
 	Thought             bool
-	FunctionResponse    *FunctionResponse
-	ExecutableCode      *ExecutableCode
-	CodeExecutionResult *CodeExecutionResult
 	Text                string
 	InlineData          *Blob
 	FileData            *FileData
 	FunctionCall        *FunctionCall
+	FunctionResponse    *FunctionResponse
+	ExecutableCode      *ExecutableCode
+	CodeExecutionResult *CodeExecutionResult
 }
 
 func (v *Part) toProto() *pb.Part {

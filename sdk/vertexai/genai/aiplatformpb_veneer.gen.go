@@ -1,7 +1,3 @@
-// Copyright © Weifeng Wang <qclaogui@gmail.com>
-//
-// Licensed under the Apache License 2.0.
-
 // Copyright 2024 Weifeng Wang <qclaogui@gmail.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
