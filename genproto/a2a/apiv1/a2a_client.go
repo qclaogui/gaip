@@ -59,11 +59,11 @@ type CallOptions struct {
 
 func defaultGRPCClientOptions() []option.ClientOption {
 	return []option.ClientOption{
-		internaloption.WithDefaultEndpoint("a2a.qclaogui.com:443"),
-		internaloption.WithDefaultEndpointTemplate("a2a.qclaogui.com:443"),
-		internaloption.WithDefaultMTLSEndpoint("a2a.qclaogui.com:443"),
+		internaloption.WithDefaultEndpoint("localhost:9095"),
+		internaloption.WithDefaultEndpointTemplate("localhost:9095"),
+		internaloption.WithDefaultMTLSEndpoint("localhost:9095"),
 		internaloption.WithDefaultUniverseDomain("googleapis.com"),
-		internaloption.WithDefaultAudience("https://a2a.qclaogui.com/"),
+		internaloption.WithDefaultAudience("https://localhost/"),
 		internaloption.WithDefaultScopes(DefaultAuthScopes()...),
 		internaloption.EnableJwtWithScope(),
 		internaloption.EnableNewAuthLibrary(),
@@ -397,11 +397,11 @@ func NewRESTClient(ctx context.Context, opts ...option.ClientOption) (*Client, e
 
 func defaultRESTClientOptions() []option.ClientOption {
 	return []option.ClientOption{
-		internaloption.WithDefaultEndpoint("https://a2a.qclaogui.com"),
-		internaloption.WithDefaultEndpointTemplate("https://a2a.qclaogui.com"),
-		internaloption.WithDefaultMTLSEndpoint("https://a2a.qclaogui.com"),
+		internaloption.WithDefaultEndpoint("https://localhost:9095"),
+		internaloption.WithDefaultEndpointTemplate("https://localhost:9095"),
+		internaloption.WithDefaultMTLSEndpoint("https://localhost:9095"),
 		internaloption.WithDefaultUniverseDomain("googleapis.com"),
-		internaloption.WithDefaultAudience("https://a2a.qclaogui.com/"),
+		internaloption.WithDefaultAudience("https://localhost/"),
 		internaloption.WithDefaultScopes(DefaultAuthScopes()...),
 		internaloption.EnableNewAuthLibrary(),
 	}

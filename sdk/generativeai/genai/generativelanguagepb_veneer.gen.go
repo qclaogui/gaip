@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2024 Weifeng Wang <qclaogui@gmail.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -356,8 +360,7 @@ func (CitationSource) fromProto(p *pb.CitationSource) *CitationSource {
 //
 // See also `ExecutableCode` and `CodeExecutionResult` which are only generated
 // when using this tool.
-type CodeExecution struct {
-}
+type CodeExecution struct{}
 
 func (v *CodeExecution) toProto() *pb.CodeExecution {
 	if v == nil {

@@ -42,6 +42,7 @@ linters:
       - examples$
       - "sdk/generativeai"
       - "sdk/vertexai"
+      - "sdk/a2a-go"
       - "cmd/protoveneer"
 formatters:
   enable:

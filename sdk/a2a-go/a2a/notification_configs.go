@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package a2a
 
 import (
@@ -21,6 +25,7 @@ func (n NotificationConfigs) CreateNotificationConfig(ctx context.Context) (*Tas
 	}
 	return fromProto[TaskPushNotificationConfig](res)
 }
+
 func (n NotificationConfigs) GetNotificationConfig(ctx context.Context) (*TaskPushNotificationConfig, error) {
 	req := &pb.GetTaskPushNotificationConfigRequest{}
 	debugPrint(req)

@@ -112,9 +112,9 @@ func (TaskState) EnumDescriptor() ([]byte, []int) {
 // history.
 type Task struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Unique identifer for a task, created by the A2A server.
+	// Unique identifier for a task, created by the A2A server.
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	// Unique identifer for the contextual collection of interactions (tasks
+	// Unique identifier for the contextual collection of interactions (tasks
 	// and messages). Created by the A2A server.
 	ContextId string `protobuf:"bytes,2,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
 	// The current status of a Task, including state and a message.
@@ -304,6 +304,7 @@ type TaskStatus struct {
 	// A message associated with the status.
 	Update *Message `protobuf:"bytes,2,opt,name=update,proto3" json:"update,omitempty"`
 	// Timestamp when the status was recorded.
+	// Example: "2023-10-27T10:00:00Z"
 	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache

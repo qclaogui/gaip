@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 // Copyright 2024 Weifeng Wang <qclaogui@gmail.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,9 +98,13 @@ func (AgentCapabilities) fromProto(p *pb.AgentCapabilities) *AgentCapabilities {
 // - Default modalities/content types supported by the agent.
 // - Authentication requirements
 type AgentCard struct {
+	// The version of the A2A protocol this agent supports.
+	ProtocolVersion string
 	// A human readable name for the agent.
+	// Example: "Recipe Agent"
 	Name string
-	// A description of the agents domain of action/solution space.
+	// A description of the agent's domain of action/solution space.
+	// Example: "Agent that helps users with recipes and cooking."
 	Description string
 	// The base url to interact with the agent at.
 	Url string
@@ -108,6 +116,7 @@ type AgentCard struct {
 	// The service provider of the agent.
 	Provider *AgentProvider
 	// The version of the agent.
+	// Example: "1.0.0"
 	Version string
 	// A url to provide additional documentation about the agent.
 	DocumentationUrl string
@@ -137,6 +146,7 @@ func (v *AgentCard) toProto() *pb.AgentCard {
 		return nil
 	}
 	return &pb.AgentCard{
+		ProtocolVersion:                   v.ProtocolVersion,
 		Name:                              v.Name,
 		Description:                       v.Description,
 		Url:                               v.Url,
@@ -160,6 +170,7 @@ func (AgentCard) fromProto(p *pb.AgentCard) *AgentCard {
 		return nil
 	}
 	return &AgentCard{
+		ProtocolVersion:                   p.ProtocolVersion,
 		Name:                              p.Name,
 		Description:                       p.Description,
 		Url:                               p.Url,
@@ -181,10 +192,13 @@ func (AgentCard) fromProto(p *pb.AgentCard) *AgentCard {
 // AgentExtension is a declaration of an extension supported by an Agent.
 type AgentExtension struct {
 	// The URI of the extension.
+	// Example: "https://developers.google.com/identity/protocols/oauth2"
 	Uri string
 	// A description of how this agent uses this extension.
+	// Example: "Google OAuth 2.0 authentication"
 	Description string
 	// Whether the client must follow specific requirements of the extension.
+	// Example: false
 	Required bool
 	// Optional configuration for the extension.
 	Params map[string]any
@@ -247,8 +261,10 @@ func (AgentInterface) fromProto(p *pb.AgentInterface) *AgentInterface {
 // AgentProvider is represents information about the service provider of an agent.
 type AgentProvider struct {
 	// The providers reference url
+	// Example: "https://ai.google.dev"
 	Url string
 	// The providers organization name
+	// Example: "Google"
 	Organization string
 }
 
@@ -286,10 +302,12 @@ type AgentSkill struct {
 	// details and behaviors.
 	Description string
 	// A set of tags for the skill to enhance categorization/utilization.
+	// Example: ["cooking", "customer support", "billing"]
 	Tags []string
 	// A set of example queries that this skill is designed to address.
 	// These examples should help the caller to understand how to craft requests
 	// to the agent to achieve specific goals.
+	// Example: ["I need a recipe for bread"]
 	Examples []string
 	// Possible input modalities supported.
 	InputModes []string
@@ -986,9 +1004,9 @@ func (StringList) fromProto(p *pb.StringList) *StringList {
 // artifact. If there are multiple turns for a task, these are stored in
 // history.
 type Task struct {
-	// Unique identifer for a task, created by the A2A server.
+	// Unique identifier for a task, created by the A2A server.
 	Id string
-	// Unique identifer for the contextual collection of interactions (tasks
+	// Unique identifier for the contextual collection of interactions (tasks
 	// and messages). Created by the A2A server.
 	ContextId string
 	// The current status of a Task, including state and a message.
@@ -1157,6 +1175,7 @@ type TaskStatus struct {
 	// A message associated with the status.
 	Update *Message
 	// Timestamp when the status was recorded.
+	// Example: "2023-10-27T10:00:00Z"
 	Timestamp time.Time
 }
 

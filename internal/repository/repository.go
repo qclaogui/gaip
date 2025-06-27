@@ -6,6 +6,7 @@ package repository
 
 import (
 	"github.com/pkg/errors"
+	"github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb"
 	"github.com/qclaogui/gaip/genproto/bookstore/apiv1alpha1/bookstorepb"
 	"github.com/qclaogui/gaip/genproto/generativelanguage/apiv1/generativelanguagepb"
 	"github.com/qclaogui/gaip/genproto/library/apiv1/librarypb"
@@ -104,6 +105,17 @@ func NewTasks(cfg Config) (taskpb.TasksServiceServer, error) {
 		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
 	case DriverMemory:
 		return memory.NewTasks(cfg.MemoryCfg)
+	default:
+		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
+	}
+}
+
+func NewA2A(cfg Config) (a2apb.A2AServiceServer, error) {
+	switch cfg.Driver {
+	case "":
+		return nil, errors.Errorf("empty database driver %s", cfg.Driver)
+	case DriverMemory:
+		return memory.NewA2A()
 	default:
 		return nil, errors.Errorf("unsupported driver for database %s", cfg.Driver)
 	}

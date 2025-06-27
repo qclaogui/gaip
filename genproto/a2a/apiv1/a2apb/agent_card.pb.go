@@ -30,9 +30,13 @@ const (
 // - Authentication requirements
 type AgentCard struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// The version of the A2A protocol this agent supports.
+	ProtocolVersion string `protobuf:"bytes,16,opt,name=protocol_version,json=protocolVersion,proto3" json:"protocol_version,omitempty"`
 	// A human readable name for the agent.
+	// Example: "Recipe Agent"
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// A description of the agents domain of action/solution space.
+	// A description of the agent's domain of action/solution space.
+	// Example: "Agent that helps users with recipes and cooking."
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	// The base url to interact with the agent at.
 	Url string `protobuf:"bytes,3,opt,name=url,proto3" json:"url,omitempty"`
@@ -44,6 +48,7 @@ type AgentCard struct {
 	// The service provider of the agent.
 	Provider *AgentProvider `protobuf:"bytes,4,opt,name=provider,proto3" json:"provider,omitempty"`
 	// The version of the agent.
+	// Example: "1.0.0"
 	Version string `protobuf:"bytes,5,opt,name=version,proto3" json:"version,omitempty"`
 	// A url to provide additional documentation about the agent.
 	DocumentationUrl string `protobuf:"bytes,6,opt,name=documentation_url,json=documentationUrl,proto3" json:"documentation_url,omitempty"`
@@ -98,6 +103,13 @@ func (x *AgentCard) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AgentCard.ProtoReflect.Descriptor instead.
 func (*AgentCard) Descriptor() ([]byte, []int) {
 	return file_a2a_v1_agent_card_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AgentCard) GetProtocolVersion() string {
+	if x != nil {
+		return x.ProtocolVersion
+	}
+	return ""
 }
 
 func (x *AgentCard) GetName() string {
@@ -266,8 +278,10 @@ func (x *AgentInterface) GetTransport() string {
 type AgentProvider struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The providers reference url
+	// Example: "https://ai.google.dev"
 	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	// The providers organization name
+	// Example: "Google"
 	Organization  string `protobuf:"bytes,2,opt,name=organization,proto3" json:"organization,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -385,10 +399,13 @@ func (x *AgentCapabilities) GetExtensions() []*AgentExtension {
 type AgentExtension struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The URI of the extension.
+	// Example: "https://developers.google.com/identity/protocols/oauth2"
 	Uri string `protobuf:"bytes,1,opt,name=uri,proto3" json:"uri,omitempty"`
 	// A description of how this agent uses this extension.
+	// Example: "Google OAuth 2.0 authentication"
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	// Whether the client must follow specific requirements of the extension.
+	// Example: false
 	Required bool `protobuf:"varint,3,opt,name=required,proto3" json:"required,omitempty"`
 	// Optional configuration for the extension.
 	Params        *structpb.Struct `protobuf:"bytes,4,opt,name=params,proto3" json:"params,omitempty"`
@@ -469,10 +486,12 @@ type AgentSkill struct {
 	// details and behaviors.
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
 	// A set of tags for the skill to enhance categorization/utilization.
+	// Example: ["cooking", "customer support", "billing"]
 	Tags []string `protobuf:"bytes,4,rep,name=tags,proto3" json:"tags,omitempty"`
 	// A set of example queries that this skill is designed to address.
 	// These examples should help the caller to understand how to craft requests
 	// to the agent to achieve specific goals.
+	// Example: ["I need a recipe for bread"]
 	Examples []string `protobuf:"bytes,5,rep,name=examples,proto3" json:"examples,omitempty"`
 	// Possible input modalities supported.
 	InputModes []string `protobuf:"bytes,6,rep,name=input_modes,json=inputModes,proto3" json:"input_modes,omitempty"`
@@ -1395,8 +1414,9 @@ var File_a2a_v1_agent_card_proto protoreflect.FileDescriptor
 
 const file_a2a_v1_agent_card_proto_rawDesc = "" +
 	"\n" +
-	"\x17a2a/v1/agent_card.proto\x12\x06a2a.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xc6\x06\n" +
-	"\tAgentCard\x12\x12\n" +
+	"\x17a2a/v1/agent_card.proto\x12\x06a2a.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xf1\x06\n" +
+	"\tAgentCard\x12)\n" +
+	"\x10protocol_version\x18\x10 \x01(\tR\x0fprotocolVersion\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x10\n" +
 	"\x03url\x18\x03 \x01(\tR\x03url\x12/\n" +

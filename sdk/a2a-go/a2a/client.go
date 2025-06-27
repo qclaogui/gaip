@@ -1,9 +1,15 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package a2a
 
 import (
 	"context"
 	"errors"
 	"os"
+
+	"google.golang.org/api/option"
 )
 
 // A Client is a A2A client.
@@ -29,7 +35,7 @@ func defaultEnvVarProvider() map[string]string {
 }
 
 // NewClient creates a new A2A client with the provided configuration.
-func NewClient(ctx context.Context, cc *ClientConfig) (*Client, error) {
+func NewClient(ctx context.Context, cc *ClientConfig, opts ...option.ClientOption) (*Client, error) {
 	if cc == nil {
 		cc = &ClientConfig{}
 	}
@@ -39,7 +45,7 @@ func NewClient(ctx context.Context, cc *ClientConfig) (*Client, error) {
 	envVars := cc.envVarProvider()
 	_ = envVars
 
-	ac, err := newAPIClient(ctx)
+	ac, err := newAPIClient(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}

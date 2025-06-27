@@ -4,16 +4,11 @@
 
 package memory
 
-import "google.golang.org/protobuf/reflect/protoreflect"
+import (
+	"slices"
 
-func strContains(haystack []string, needle string) bool {
-	for _, s := range haystack {
-		if s == needle {
-			return true
-		}
-	}
-	return false
-}
+	"google.golang.org/protobuf/reflect/protoreflect"
+)
 
 // applyFieldMask applies the values from the src message to the values of the
 // dst message according to the contents of the given field mask paths.
@@ -22,7 +17,7 @@ func strContains(haystack []string, needle string) bool {
 // TODO: Does not support nested message paths. Currently only used with flat
 // resource messages.
 func applyFieldMask(src, dst protoreflect.Message, paths []string) {
-	fullUpdate := len(paths) == 0 || strContains(paths, "*")
+	fullUpdate := len(paths) == 0 || slices.Contains(paths, "*")
 
 	fields := dst.Descriptor().Fields()
 	for i := 0; i < fields.Len(); i++ {
@@ -31,7 +26,7 @@ func applyFieldMask(src, dst protoreflect.Message, paths []string) {
 
 		// Set field in dst with value from src, skipping true oneofs, while
 		// handling proto3_optional fields represented as synthetic oneofs.
-		if (fullUpdate || strContains(paths, string(field.Name()))) && !isOneof {
+		if (fullUpdate || slices.Contains(paths, string(field.Name()))) && !isOneof {
 			dst.Set(field, src.Get(field))
 		}
 	}
@@ -52,7 +47,7 @@ func applyFieldMask(src, dst protoreflect.Message, paths []string) {
 			for j := 0; j < fields.Len(); j++ {
 				dst.Clear(fields.Get(j))
 			}
-		} else if setOneof != nil && (fullUpdate || strContains(paths, string(setOneof.Name()))) {
+		} else if setOneof != nil && (fullUpdate || slices.Contains(paths, string(setOneof.Name()))) {
 			// Full update or targeted updated with a field set in this oneof of
 			// src means set that field for the same oneof in dst, which implicitly
 			// clears any previously set field for this oneof.

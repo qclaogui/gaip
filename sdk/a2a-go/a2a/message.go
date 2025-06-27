@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package a2a
 
 import (
@@ -144,7 +148,8 @@ type Text string
 func (t Text) toPart() *pb.Part {
 	return &pb.Part{
 		Part: &pb.Part_Text{
-			Text: string(t)},
+			Text: string(t),
+		},
 	}
 }
 
@@ -217,6 +222,7 @@ func populateMessageResponseTo(p *pb.SendMessageResponse, v *SendMessageResponse
 	}
 	// If both fields of v.Payload are nil, leave p.Payload unset.
 }
+
 func populateMessageResponseFrom(v *SendMessageResponse, p *pb.SendMessageResponse) {
 	if p.Payload == nil {
 		return
@@ -259,6 +265,7 @@ func populateStreamResponseTo(p *pb.StreamResponse, v *StreamResponse) {
 	}
 	// If both fields of v.Payload are nil, leave p.Payload unset.
 }
+
 func populateStreamResponseFrom(v *StreamResponse, p *pb.StreamResponse) {
 	if p.Payload == nil {
 		return

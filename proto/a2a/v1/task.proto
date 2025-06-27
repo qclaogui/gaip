@@ -13,9 +13,9 @@ option go_package = "github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb";
 // artifact. If there are multiple turns for a task, these are stored in
 // history.
 message Task {
-  // Unique identifer for a task, created by the A2A server.
+  // Unique identifier for a task, created by the A2A server.
   string id = 1;
-  // Unique identifer for the contextual collection of interactions (tasks
+  // Unique identifier for the contextual collection of interactions (tasks
   // and messages). Created by the A2A server.
   string context_id = 2;
   // The current status of a Task, including state and a message.
@@ -55,6 +55,7 @@ message TaskStatus {
   // A message associated with the status.
   Message update = 2;
   // Timestamp when the status was recorded.
+  // Example: "2023-10-27T10:00:00Z"
   google.protobuf.Timestamp timestamp = 3;
 }
 

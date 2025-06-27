@@ -1,3 +1,7 @@
+// Copyright © Weifeng Wang <qclaogui@gmail.com>
+//
+// Licensed under the Apache License 2.0.
+
 package a2a
 
 import (
@@ -50,5 +54,4 @@ func setGAPICClient[ClientType sgci](ctx context.Context, pf *ClientType, conf c
 	c.SetGoogleClientInfo(kvs...)
 	*pf = c
 	return nil
-
 }

@@ -188,5 +188,9 @@ func (g *Gaip) registerServices() error {
 		return err
 	}
 
+	if err = g.initA2A(); err != nil {
+		return err
+	}
+
 	return nil
 }

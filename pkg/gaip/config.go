@@ -11,6 +11,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/qclaogui/gaip/internal/repository"
 	"github.com/qclaogui/gaip/pkg/service"
+	"github.com/qclaogui/gaip/pkg/service/a2a"
 	"github.com/qclaogui/gaip/pkg/service/bookstore"
 	"github.com/qclaogui/gaip/pkg/service/generativeai"
 	"github.com/qclaogui/gaip/pkg/service/library"
@@ -36,6 +37,7 @@ type Config struct {
 	ShowcaseCfg  showcase.Config     `yaml:"showcase"`
 	TodoCfg      todo.Config         `yaml:"todo"`
 	TaskCfg      task.Config         `yaml:"task"`
+	A2ACfg       a2a.Config          `yaml:"a2a"`
 
 	VaultCfg vault.Config `yaml:"vault"`
 }
@@ -64,6 +66,7 @@ func (c *Config) RegisterFlags(fs *flag.FlagSet) {
 	c.ShowcaseCfg.RegisterFlags(fs)
 	c.TodoCfg.RegisterFlags(fs)
 	c.TaskCfg.RegisterFlags(fs)
+	c.A2ACfg.RegisterFlags(fs)
 
 	// Register Vault Config
 	c.VaultCfg.RegisterFlags(fs)
@@ -93,6 +96,10 @@ func (c *Config) Validate() error {
 
 	if err := c.VaultCfg.Validate(); err != nil {
 		return errors.Wrap(err, "invalid Vault config")
+	}
+
+	if err := c.A2ACfg.Validate(); err != nil {
+		return errors.Wrap(err, "invalid A2A config")
 	}
 
 	return nil

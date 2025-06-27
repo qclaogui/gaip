@@ -1252,7 +1252,7 @@ const file_a2a_v1_a2a_service_proto_rawDesc = "" +
 	"\x0eauthentication\x18\x04 \x01(\v2\x1a.a2a.v1.AuthenticationInfoR\x0eauthentication\"\x8a\x01\n" +
 	"\x1aTaskPushNotificationConfig\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12X\n" +
-	"\x18push_notification_config\x18\x02 \x01(\v2\x1e.a2a.v1.PushNotificationConfigR\x16pushNotificationConfig2\xce\n" +
+	"\x18push_notification_config\x18\x02 \x01(\v2\x1e.a2a.v1.PushNotificationConfigR\x16pushNotificationConfig2\xcd\n" +
 	"\n" +
 	"\n" +
 	"A2AService\x12c\n" +
@@ -1264,10 +1264,10 @@ const file_a2a_v1_a2a_service_proto_rawDesc = "" +
 	"\x10TaskSubscription\x12\x1f.a2a.v1.TaskSubscriptionRequest\x1a\x16.a2a.v1.StreamResponse\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/v1/{name=tasks/*}:subscribe0\x01\x12\xc4\x01\n" +
 	" CreateTaskPushNotificationConfig\x12/.a2a.v1.CreateTaskPushNotificationConfigRequest\x1a\".a2a.v1.TaskPushNotificationConfig\"K\xdaA\rparent,config\x82\xd3\xe4\x93\x025:\x06config\"+/v1/{parent=task/*/pushNotificationConfigs}\x12\xae\x01\n" +
 	"\x1dGetTaskPushNotificationConfig\x12,.a2a.v1.GetTaskPushNotificationConfigRequest\x1a\".a2a.v1.TaskPushNotificationConfig\";\xdaA\x04name\x82\xd3\xe4\x93\x02.\x12,/v1/{name=tasks/*/pushNotificationConfigs/*}\x12\xbe\x01\n" +
-	"\x1eListTaskPushNotificationConfig\x12-.a2a.v1.ListTaskPushNotificationConfigRequest\x1a..a2a.v1.ListTaskPushNotificationConfigResponse\"=\xdaA\x06parent\x82\xd3\xe4\x93\x02.\x12,/v1/{parent=tasks/*}/pushNotificationConfigs\x12\xa7\x01\n" +
-	" DeleteTaskPushNotificationConfig\x12/.a2a.v1.DeleteTaskPushNotificationConfigRequest\x1a\x16.google.protobuf.Empty\":\xdaA\x04name\x82\xd3\xe4\x93\x02-*+/v1/{name=tasks/*/pushNotificationConfig/*}\x12P\n" +
+	"\x1eListTaskPushNotificationConfig\x12-.a2a.v1.ListTaskPushNotificationConfigRequest\x1a..a2a.v1.ListTaskPushNotificationConfigResponse\"=\xdaA\x06parent\x82\xd3\xe4\x93\x02.\x12,/v1/{parent=tasks/*}/pushNotificationConfigs\x12\xa8\x01\n" +
+	" DeleteTaskPushNotificationConfig\x12/.a2a.v1.DeleteTaskPushNotificationConfigRequest\x1a\x16.google.protobuf.Empty\";\xdaA\x04name\x82\xd3\xe4\x93\x02.*,/v1/{name=tasks/*/pushNotificationConfigs/*}\x12P\n" +
 	"\fGetAgentCard\x12\x1b.a2a.v1.GetAgentCardRequest\x1a\x11.a2a.v1.AgentCard\"\x10\x82\xd3\xe4\x93\x02\n" +
-	"\x12\b/v1/card\x1a\x13\xcaA\x10a2a.qclaogui.comB3Z1github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apbb\x06proto3"
+	"\x12\b/v1/card\x1a\x11\xcaA\x0elocalhost:9095B3Z1github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apbb\x06proto3"
 
 var (
 	file_a2a_v1_a2a_service_proto_rawDescOnce sync.Once

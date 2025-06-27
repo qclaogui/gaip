@@ -12,9 +12,13 @@ option go_package = "github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb";
 // - Default modalities/content types supported by the agent.
 // - Authentication requirements
 message AgentCard {
+  // The version of the A2A protocol this agent supports.
+  string protocol_version = 16;
   // A human readable name for the agent.
+  // Example: "Recipe Agent"
   string name = 1;
-  // A description of the agents domain of action/solution space.
+  // A description of the agent's domain of action/solution space.
+  // Example: "Agent that helps users with recipes and cooking."
   string description = 2;
   // The base url to interact with the agent at.
   string url = 3;
@@ -26,6 +30,7 @@ message AgentCard {
   // The service provider of the agent.
   AgentProvider provider = 4;
   // The version of the agent.
+  // Example: "1.0.0"
   string version = 5;
   // A url to provide additional documentation about the agent.
   string documentation_url = 6;
@@ -63,8 +68,10 @@ message AgentInterface {
 // Represents information about the service provider of an agent.
 message AgentProvider {
   // The providers reference url
+  // Example: "https://ai.google.dev"
   string url = 1;
   // The providers organization name
+  // Example: "Google"
   string organization = 2;
 }
 
@@ -81,10 +88,13 @@ message AgentCapabilities {
 // A declaration of an extension supported by an Agent.
 message AgentExtension {
   // The URI of the extension.
+  // Example: "https://developers.google.com/identity/protocols/oauth2"
   string uri = 1;
   // A description of how this agent uses this extension.
+  // Example: "Google OAuth 2.0 authentication"
   string description = 2;
   // Whether the client must follow specific requirements of the extension.
+  // Example: false
   bool required = 3;
   // Optional configuration for the extension.
   google.protobuf.Struct params = 4;
@@ -104,10 +114,12 @@ message AgentSkill {
   // details and behaviors.
   string description = 3;
   // A set of tags for the skill to enhance categorization/utilization.
+  // Example: ["cooking", "customer support", "billing"]
   repeated string tags = 4;
   // A set of example queries that this skill is designed to address.
   // These examples should help the caller to understand how to craft requests
   // to the agent to achieve specific goals.
+  // Example: ["I need a recipe for bread"]
   repeated string examples = 5;
   // Possible input modalities supported.
   repeated string input_modes = 6;
