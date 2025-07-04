@@ -8,6 +8,7 @@ import (
 	"context"
 	"sync"
 
+	"github.com/google/uuid"
 	"github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -33,9 +34,30 @@ type a2aImpl struct {
 }
 
 func (s *a2aImpl) SendMessage(_ context.Context, req *a2apb.SendMessageRequest) (*a2apb.SendMessageResponse, error) {
+	incomingMessage := req.GetRequest()
+	if incomingMessage.GetMessageId() == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "message.messageId is required.")
+	}
+
+	// Default to blocking behavior if 'blocking' is not explicitly false.
+	isBlocking := req.GetConfiguration().GetBlocking()
+	taskId := incomingMessage.GetTaskId()
+	_ = isBlocking
+	// incomingMessage would contain taskId, if a task already exists.
+	if taskId != "" {
+		task := s.taskStore[taskId]
+
+		return &a2apb.SendMessageResponse{
+			Payload: &a2apb.SendMessageResponse_Task{
+				Task: task,
+			},
+		}, nil
+
+	}
+
 	// Create new task
 	task := &a2apb.Task{
-		Id: req.Request.TaskId,
+		Id: uuid.NewString(),
 		Status: &a2apb.TaskStatus{
 			State: a2apb.TaskState_TASK_STATE_WORKING,
 		},

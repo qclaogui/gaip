@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/google/uuid"
 	pb "github.com/qclaogui/gaip/genproto/a2a/apiv1/a2apb"
 	"google.golang.org/api/iterator"
 )
@@ -99,7 +100,7 @@ func NewUserMessageFromParts(parts ...Part) *Message {
 // NewMessageFromParts returns a *Message with the specified role and one or more parts.
 // This is a convenience function for creating messages with different roles.
 func NewMessageFromParts(role Role, parts ...Part) *Message {
-	message := &Message{Role: role, Content: make([]Part, 0, len(parts))}
+	message := &Message{MessageId: uuid.NewString(), Role: role, Content: make([]Part, 0, len(parts))}
 	message.Content = append(message.Content, parts...)
 	return message
 }

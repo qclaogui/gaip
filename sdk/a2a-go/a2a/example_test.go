@@ -39,10 +39,15 @@ func ExampleMessages_SendMessage_textOnly() {
 	defer client.Close()
 
 	// Construct the user message contents.
-	message := a2a.NewUserMessageFromText("Good morning! How are you?")
+	message := a2a.NewUserMessageFromText("Hello, agent!")
+
+	config := &a2a.SendMessageConfiguration{
+		Blocking:            true,
+		AcceptedOutputModes: []string{"text/plain"},
+	}
 
 	// Call the SendMessage method with a text-only message
-	resp, err := client.Messages.SendMessage(ctx, message, nil)
+	resp, err := client.Messages.SendMessage(ctx, message, config)
 	if err != nil {
 		log.Fatalf("Failed to send message: %v", err)
 	}
@@ -88,13 +93,22 @@ func printStreamResponse(resp *a2a.StreamResponse) {
 	fmt.Println("---")
 }
 
-// printResponse Helping for printing the response.
+// printResponse Helping for printing the response. the
+// result can be a Task or a Message. Check which one it is.
 func printResponse(resp *a2a.SendMessageResponse) {
-	msg := resp.Payload.Msg
-	if msg != nil && msg.Content != nil {
+	// The agent created a task.
+	if task := resp.Payload.Task; task != nil {
+		fmt.Printf("Send Message Result (Task): %v", task)
+		// Save the task ID for the next call
+	}
+
+	// The agent responded with a direct message.
+	if msg := resp.Payload.Msg; msg != nil && msg.Content != nil {
 		for _, part := range msg.Content {
-			fmt.Println(part)
+			fmt.Printf("Send Message Result (Direct Message): %v", part)
+			// No task was created, so we can't get task status.
 		}
 	}
+
 	fmt.Println("---")
 }
