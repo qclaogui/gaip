@@ -31,9 +31,7 @@ type bookstoreImpl struct {
 func NewBookstore(cfg Config) (bookstorepb.BookstoreServiceServer, error) {
 	// add MySQL driver specific parameter to parse date/time
 	// Drop it for another database
-	param := "parseTime=true"
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?%s", cfg.User, cfg.Password, cfg.Host, cfg.Schema, param)
-
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", cfg.User, cfg.Password, cfg.Host, cfg.Schema)
 	client, err := ent.Open(dialect.MySQL, dsn)
 	if err != nil {
 		return nil, fmt.Errorf("failed opening connection to mysql: %v", err)
