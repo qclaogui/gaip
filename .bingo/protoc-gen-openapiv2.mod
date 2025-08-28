@@ -4,4 +4,4 @@ go 1.23.0
 
 toolchain go1.24.1
 
-require github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3 // protoc-gen-openapiv2
+require github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.2 // protoc-gen-openapiv2
