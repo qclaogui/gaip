@@ -41,11 +41,11 @@ func (s *a2aImpl) SendMessage(_ context.Context, req *a2apb.SendMessageRequest) 
 
 	// Default to blocking behavior if 'blocking' is not explicitly false.
 	isBlocking := req.GetConfiguration().GetBlocking()
-	taskId := incomingMessage.GetTaskId()
+	taskID := incomingMessage.GetTaskId()
 	_ = isBlocking
 	// incomingMessage would contain taskId, if a task already exists.
-	if taskId != "" {
-		task := s.taskStore[taskId]
+	if taskID != "" {
+		task := s.taskStore[taskID]
 
 		return &a2apb.SendMessageResponse{
 			Payload: &a2apb.SendMessageResponse_Task{

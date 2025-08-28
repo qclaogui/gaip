@@ -1,4 +1,6 @@
 # https://goreleaser.com/customization/docker/
+version: 2
+
 dockers:
 - image_templates:
   - "qclaogui/gaip:{{.Version}}-amd64"
