@@ -4,4 +4,4 @@ go 1.23.0
 
 toolchain go1.24.6
 
-require github.com/googleapis/api-linter v1.70.2 // cmd/api-linter
+require github.com/googleapis/api-linter v1.71.0 // cmd/api-linter
