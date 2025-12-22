@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go v0.121.2
 	cloud.google.com/go/iam v1.5.2
 	cloud.google.com/go/longrunning v0.6.7
-	entgo.io/ent v0.14.4
+	entgo.io/ent v0.14.5
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/bufbuild/protovalidate-go v0.10.1
 	github.com/dave/jennifer v1.7.1
