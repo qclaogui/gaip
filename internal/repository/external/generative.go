@@ -6,16 +6,16 @@ package external
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/google/generative-ai-go/genai"
 	"github.com/qclaogui/gaip/genproto/generativelanguage/apiv1/generativelanguagepb"
-	"google.golang.org/api/option"
+	"google.golang.org/genai"
 )
 
 func NewGenerativeAI(APIKey string) (generativelanguagepb.GenerativeServiceServer, error) {
-	// client, err := genai.NewClient(context.Background(), option.WithAPIKey(os.Getenv("API_KEY")))
-	client, err := genai.NewClient(context.Background(), option.WithAPIKey(APIKey))
+	client, err := genai.NewClient(context.Background(), &genai.ClientConfig{
+		APIKey:  APIKey,
+		Backend: genai.BackendGeminiAPI,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -52,30 +52,19 @@ type generativeImpl struct {
 //	panic("implement me")
 //}
 
-func partFromProto(p *generativelanguagepb.Part) genai.Part {
-	switch d := p.Data.(type) {
-	case *generativelanguagepb.Part_Text:
-		return genai.Text(d.Text)
-	case *generativelanguagepb.Part_InlineData:
-		return genai.Blob{
-			MIMEType: d.InlineData.MimeType,
-			Data:     d.InlineData.Data,
-		}
-	default:
-		panic(fmt.Errorf("unknown Part.Data type %T", p.Data))
-	}
-}
-
 func (g *generativeImpl) CountTokens(ctx context.Context, req *generativelanguagepb.CountTokensRequest) (*generativelanguagepb.CountTokensResponse, error) {
-	var parts []genai.Part
+	// Collect all parts from all contents in the request.
+	parts := make([]*genai.Part, 0, len(req.GetContents()))
 	for _, content := range req.GetContents() {
 		for _, part := range content.GetParts() {
-			parts = append(parts, partFromProto(part))
+			parts = append(parts, &genai.Part{
+				Text: part.GetText(),
+			})
 		}
 	}
 
-	model := g.genaiClient.GenerativeModel(req.GetModel())
-	resp, err := model.CountTokens(ctx, parts...)
+	// Call CountTokens once with the aggregated parts.
+	resp, err := g.genaiClient.Models.CountTokens(ctx, req.GetModel(), []*genai.Content{{Parts: parts}}, nil)
 	if err != nil {
 		return nil, err
 	}
