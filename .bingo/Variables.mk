@@ -29,12 +29,6 @@ $(API_LINTER): $(BINGO_DIR)/api-linter.mod
 	@echo "(re)installing $(GOBIN)/api-linter-v1.72.0"
 	@cd $(BINGO_DIR) && GOWORK=off GOOS=$(GOHOSTOS) GOARCH=$(GOHOSTARCH) GOARM=$(GOHOSTARM) $(GO) build -mod=mod -modfile=api-linter.mod -o=$(GOBIN)/api-linter-v1.72.0 "github.com/googleapis/api-linter/cmd/api-linter"
 
-ATLAS := $(GOBIN)/atlas-v0.13.1
-$(ATLAS): $(BINGO_DIR)/atlas.mod
-	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/atlas-v0.13.1"
-	@cd $(BINGO_DIR) && GOWORK=off GOOS=$(GOHOSTOS) GOARCH=$(GOHOSTARCH) GOARM=$(GOHOSTARM) $(GO) build -mod=mod -modfile=atlas.mod -o=$(GOBIN)/atlas-v0.13.1 "ariga.io/atlas/cmd/atlas"
-
 BINGO := $(GOBIN)/bingo-v0.10.0
 $(BINGO): $(BINGO_DIR)/bingo.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.

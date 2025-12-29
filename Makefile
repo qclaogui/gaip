@@ -103,24 +103,24 @@ ent-gen: ## Regenerate schema
 ent-describe: $(ENT) ## Get a description of graph schema
 	@$(ENT) describe ./internal/ent/schema
 
-atlas-lint: $(ATLAS) ## Verifying and linting migrations
-	@$(ATLAS) migrate lint \
+atlas-lint: ## Verifying and linting migrations
+	@atlas migrate lint \
       --dir "file://migrations" \
       --dev-url "docker://mysql/8/test" \
       --latest 1
 
 # Generating Versioned Migration Files
 .PHONY: atlas-diff
-atlas-diff: $(ATLAS)
-	@$(ATLAS) migrate diff migration_name \
+atlas-diff:
+	@atlas migrate diff migration_name \
       --dir "file://migrations" \
       --to "ent://internal/ent/schema" \
       --dev-url "docker://mysql/8/ent"
 
 # Apply generated migration files onto the database
 .PHONY: atlas-apply
-atlas-apply: $(ATLAS)
-	@$(ATLAS) migrate apply \
+atlas-apply:
+	@atlas migrate apply \
       --dir="file://migrations" \
       --url="mysql://root:pass@localhost:3306/example"
 
