@@ -86,7 +86,7 @@ check-go-mod: go-mod ## Ensures fresh go.mod and go.sum.
 install-build-deps: ## Install dependencies tools
 	$(info ******************** downloading dependencies ********************)
 	@echo ">> building bingo and setup dependencies tools"
-	@go install github.com/bwplotka/bingo@v0.9.0
+	@go install github.com/bwplotka/bingo@v0.10.0
 
 
 ##@ Ent Schema
