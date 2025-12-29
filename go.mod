@@ -23,7 +23,7 @@ require (
 	github.com/grafana/dskit v0.0.0-20251218155159-03c38747d0d9
 	github.com/grafana/pyroscope-go/godeltaprof v0.1.9
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.3
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.4
 	github.com/hashicorp/vault/api v1.22.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/jackc/pgx/v5 v5.7.6
@@ -44,9 +44,9 @@ require (
 	google.golang.org/api v0.258.0
 	google.golang.org/genai v1.40.0
 	google.golang.org/genproto v0.0.0-20251213004720-97cd9d5aeac2
-	google.golang.org/genproto/googleapis/api v0.0.0-20251213004720-97cd9d5aeac2
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20251213004720-97cd9d5aeac2
-	google.golang.org/grpc v1.77.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20251222181119-0a764e51fe1b
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251222181119-0a764e51fe1b
+	google.golang.org/grpc v1.78.0
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
