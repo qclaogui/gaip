@@ -7,7 +7,7 @@ agents: 1
 kubeAPI:
   hostIP: "127.0.0.1"
   hostPort: "6556"
-image: rancher/k3s:v1.34.3-k3s1
+image: rancher/k3s:v1.35.0-k3s1
 ports:
 # mapping the ingress port 80 to localhost:5080
 - port: 5080:80
